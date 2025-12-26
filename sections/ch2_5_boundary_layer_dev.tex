@@ -1,0 +1,512 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{邊界層發展、紊流}
+\begin{itemize}
+  \item Hydrodynamic Boundary Layer，流體在固體表面附近會形成一層薄薄的邊界層\\
+  過了邊界層，流體的速度會趨近於自由流速
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (2,0) -- (12,0);
+      \draw[blue] (0.5,0) -- (0.5,4);
+      \draw[blue, dashed] (1.5,0) -- (1.5,4);
+      \draw[->, blue, dashed] (0.5,0) -- (1.5,0);
+      \draw[->, blue, dashed] (0.5,0.5) -- (1.5,0.5);
+      \draw[->, blue, dashed] (0.5,1) -- (1.5,1);
+      \draw[->, blue, dashed] (0.5,1.5) -- (1.5,1.5);
+      \draw[->, blue, dashed] (0.5,2) -- (1.5,2);
+      \draw[->, blue, dashed] (0.5,2.5) -- (1.5,2.5);
+      \draw[->, blue, dashed] (0.5,3) -- (1.5,3);
+      \draw[->, blue, dashed] (0.5,3.5) -- (1.5,3.5);
+      \draw[->, blue, dashed] (0.5,4) -- (1.5,4);
+      \node[anchor=south, blue] at (1,4) {U};
+      \draw[->] (13,0) -- (13,1) node[above] {$y$};
+      \draw[->] (13,0) -- (14,0) node[right] {$x$};
+      \draw[red] (2,0) .. controls (5,3) and (10,3.72) .. (15.6,4.24);
+      \path[name path=B] (2,0) .. controls (5,3) and (10,3.72) .. (15.6,4.24);
+      \path[name path=C] (11,0) -- (11,4);
+      \path[name intersections={of=B and C, by=D}];
+      \draw[red, dashed,<->] (11,0) -- (D) node[midway, right] {$\delta(x)$};
+      \node at (9.5, 3.8) {Free Stream};
+      \draw[dashed, blue] (4,0) ..controls (4.8,0) and (5, 2.6) .. (5,4);
+      \path[name path=P1] (4,0) ..controls (4.8,0) and (5, 2.6) .. (5,4);
+      \draw[blue] (4,0) -- (4,4);
+      \path[name path=Pa] (4,0.5) -- (5,0.5);
+      \path[name intersections={of=P1 and Pa, by=I1}];
+      \draw[->, blue, dashed] (4,0.5) -- (I1);
+      \path[name path=Pb] (4,1) -- (5,1);
+      \path[name intersections={of=P1 and Pb, by=I2}];
+      \draw[->, blue, dashed] (4,1) -- (I2);
+      \path[name path=Pc] (4,1.5) -- (5,1.5);
+      \path[name intersections={of=P1 and Pc, by=I3}];
+      \draw[->, blue, dashed] (4,1.5) -- (I3);
+      \path[name path=Pd] (4,2) -- (5,2);
+      \path[name intersections={of=P1 and Pd, by=I4}];
+      \draw[->, blue, dashed] (4,2) -- (I4);
+      \path[name path=Pe] (4,2.5) -- (5,2.5);
+      \path[name intersections={of=P1 and Pe, by=I5}];
+      \draw[->, blue, dashed] (4,2.5) -- (I5);
+      \path[name path=Pf] (4,3) -- (5,3);
+      \path[name intersections={of=P1 and Pf, by=I6}];
+      \draw[->, blue, dashed] (4,3) -- (I6);
+      \path[name path=Pg] (4,3.5) -- (5,3.5);
+      \path[name intersections={of=P1 and Pg, by=I7}];
+      \draw[->, blue, dashed] (4,3.5) -- (I7);
+      \path[name path=Ph] (4,4) -- (5,4);
+      \path[name intersections={of=P1 and Ph, by=I8}];
+      \draw[->, blue, dashed] (4,4) -- (I8);
+      \draw[dashed, blue] (7,0) ..controls (7.6,0) and (8,3.4) .. (8,4);
+      \path[name path=P2] (7,0) ..controls (7.6,0) and (8,3.4) .. (8,4);
+      \path[name path=Qa] (7,0.5) -- (8,0.5);
+      \path[name intersections={of=P2 and Qa, by=J1}];
+      \draw[->, blue, dashed] (7,0.5) -- (J1);
+      \path[name path=Qb] (7,1) -- (8,1);
+      \path[name intersections={of=P2 and Qb, by=J2}];
+      \draw[->, blue, dashed] (7,1) -- (J2);
+      \path[name path=Qc] (7,1.5) -- (8,1.5);
+      \path[name intersections={of=P2 and Qc, by=J3}];
+      \draw[->, blue, dashed] (7,1.5) -- (J3);
+      \path[name path=Qd] (7,2) -- (8,2);
+      \path[name intersections={of=P2 and Qd, by=J4}];
+      \draw[->, blue, dashed] (7,2) -- (J4);
+      \path[name path=Qe] (7,2.5) -- (8,2.5);
+      \path[name intersections={of=P2 and Qe, by=J5}];
+      \draw[->, blue, dashed] (7,2.5) -- (J5);
+      \path[name path=Qf] (7,3) -- (8,3);
+      \path[name intersections={of=P2 and Qf, by=J6}];
+      \draw[->, blue, dashed] (7,3) -- (J6);
+      \path[name path=Qg] (7,3.5) -- (8,3.5);
+      \path[name intersections={of=P2 and Qg, by=J7}];
+      \draw[->, blue, dashed] (7,3.5) -- (J7);
+      \path[name path=Qh] (7,4) -- (8,4);
+      \path[name intersections={of=P2 and Qh, by=J8}];
+      \draw[->, blue, dashed] (7,4) -- (J8);
+      \draw[blue] (7,0) -- (7,4);
+    \end{tikzpicture}
+    \caption{Boundary Layer Development}
+    \label{fig:ch2_5_boundary_layer_development}
+  \end{figure}
+  \begin{itemize}
+    \item 假設:
+    \begin{enumerate}
+      \item Steady State
+      \item Incompressible Flow
+      \item Newtonian Fluid
+      \item 平板無限長且無厚度
+      \item 無壓力梯度(平行流)
+      \item 二維流動
+      \item Isothermal
+      \item No Slip
+      \item Potential Flow在邊界層外(不受重力影響)
+    \end{enumerate}
+    \item 無因次化及Goldilocks Argument:\\
+    還是先假設有一個長度，只是這個長度相較於$\delta$來說很大:
+    \begin{equation}
+      \frac{\delta}{L} \ll 1
+    \end{equation}
+    各方向上的特徵長度
+    \begin{align}
+      x^\ast &= \frac{x}{L}\\
+      y^\ast &= \frac{y}{\delta}\\
+      u_x^\ast &= \frac{u_x}{U} \\
+      u_y^\ast &= \frac{u_y}{\boxed{V}}
+    \end{align}
+    而$V$目前不知道，透過代入連續方程式，可以觀察得到關係\\
+    P.S.這邊不能假設$u_y=0$或任何常數，不然Boundary Layer就不會長了\\
+    代入連續方程式:
+    \begin{equation}
+      \frac{\partial u_x}{\partial x} + \frac{\partial u_y}{\partial y} = 0
+    \end{equation}
+    變成:
+    \begin{align}
+      &\frac{U}{L} \frac{\partial u_x^\ast}{\partial x^\ast} + \frac{V}{\delta} \frac{\partial u_y^\ast}{\partial y^\ast} = 0
+      \nonumber\\
+      &\boxed{\frac{U\delta}{VL}} \frac{\partial u_x^\ast}{\partial x^\ast} + \frac{\partial u_y^\ast}{\partial y^\ast} = 0
+    \end{align}
+    因此Goldilocks Argument告訴我們\\
+    如果$\frac{U\delta}{VL} \gg 1$，則$\frac{\partial u_y^\ast}{\partial y^\ast}$會趨近於0\\
+    表示垂直方向上沒有速度變化，表示沒有邊界層\\
+    如果$\frac{U\delta}{VL} \ll 1$，則$\frac{\partial u_x^\ast}{\partial x^\ast}$會趨近於0\\
+    表示水平方向上沒有速度變化，表示沒有邊界層\\
+    而Goldilocks Argument告訴我們，必須要差不多是1，才能有邊界層的發展\\
+    因此可以得到:
+    \begin{equation}
+      \frac{U\delta}{VL} \approx 1 \implies V \sim \frac{U\delta}{L}
+    \end{equation}
+    \item 觀察動量方程式:
+    \begin{equation}
+      \rho\left(
+        v_x \frac{\partial u_x}{\partial x} +
+        v_y \frac{\partial u_x}{\partial y}
+      \right) = \mu\left[
+        \frac{\partial^2 u_x}{\partial x^2} +
+        \frac{\partial^2 u_x}{\partial y^2}
+      \right]
+    \end{equation}
+    代入無因次化的變數:
+    \begin{align}
+      &\rho
+        \frac{U^2}{L} u_x^\ast \frac{\partial u_x^\ast}{\partial x^\ast} +
+       \rho \frac{UV}{\delta} u_y^\ast \frac{\partial u_x^\ast}{\partial y^\ast}  = 
+        \mu \frac{U}{L^2} \frac{\partial^2 u_x^\ast}{\partial {x^\ast}^2} +
+        \mu \frac{U}{\delta^2} \frac{\partial^2 u_x^\ast}{\partial {y^\ast}^2}
+      \nonumber\\
+      \implies&\rho
+        \frac{U^2}{L} u_x^\ast \frac{\partial u_x^\ast}{\partial x^\ast} +
+       \rho \frac{U^2 \delta}{\delta L} u_y^\ast \frac{\partial u_x^\ast}{\partial y^\ast}  = 
+        \mu \frac{U}{L^2} \frac{\partial^2 u_x^\ast}{\partial {x^\ast}^2} +
+        \mu \frac{U}{\delta^2} \frac{\partial^2 u_x^\ast}{\partial {y^\ast}^2}
+      \nonumber\\
+     (\times \delta^2)\implies &\rho
+        \frac{U^2\delta^2}{L} \left(
+          u_x^\ast \frac{\partial u_x^\ast}{\partial x^\ast} +
+          u_y^\ast \frac{\partial u_x^\ast}{\partial y^\ast}
+        \right) =
+        \mu U \left(
+          \frac{\delta^2}{L^2} \frac{\partial^2 u_x^\ast}{\partial {x^\ast}^2} +
+          \frac{\partial^2 u_x^\ast}{\partial {y^\ast}^2}
+        \right)
+    \end{align}
+    由於$\frac{\delta}{L} \ll 1$，因此可以忽略掉右邊的第一項
+    \begin{equation}
+      \frac{U^2\delta^2}{L} \left(
+          u_x^\ast \frac{\partial u_x^\ast}{\partial x^\ast} +
+          u_y^\ast \frac{\partial u_x^\ast}{\partial y^\ast}
+        \right) =
+        \mu U \frac{\partial^2 u_x^\ast}{\partial {y^\ast}^2}
+    \end{equation}
+    把變數全部扔到左邊
+    \begin{equation}
+      \frac{\rho U\delta^2}{\mu L}\left(
+        u_x^\ast \frac{\partial u_x^\ast}{\partial x^\ast} +
+        u_y^\ast \frac{\partial u_x^\ast}{\partial y^\ast}
+      \right) = \frac{\partial^2 u_x^\ast}{\partial {y^\ast}^2}
+    \end{equation}
+  \item 又有了Goldilocks Argument:\\
+  如果$\frac{\rho U\delta^2}{\mu L} \gg 1$，則代表慣性力遠大於黏滯力\\
+  等式右側的$\frac{\partial^2 u_x^\ast}{\partial {y^\ast}^2}$會很大\\
+  代表流體不想水平的待著，會違反No slip\\
+  如果$\frac{\rho U\delta^2}{\mu L} \ll 1$，則代表黏滯力遠大於慣性力\\
+  會沒有Free Stream的現象，邊界層無法發展\\
+  因此必須要差不多是1，才能有邊界層的發展\\
+  因此可以得到:
+  \begin{equation}
+    \frac{\rho U\delta^2}{\mu L} \approx 1 \implies \boxed{\delta(x) \sim \sqrt{\frac{\mu L}{\rho U}} \propto \sqrt{L}}
+  \end{equation}
+  也就是說，上圖的紅色線，大概會是$\delta(x) = C\sqrt{x}$的形式
+  \item 回到一開始的問題，因為實際上沒有$L$這個長度，因此只能用$x$來表示
+  \begin{enumerate}
+    \item Governing Equation:
+    \begin{align}
+      \text{Continuity:}\quad & \frac{\partial u_x}{\partial x} + \frac{\partial u_y}{\partial y} = 0\nonumber\\
+      \text{X-Motion:} \quad & \rho\left(
+        u_x \frac{\partial u_x}{\partial x} +
+        u_y \frac{\partial u_x}{\partial y}
+      \right) = \mu \frac{\partial^2 u_x}{\partial y^2}
+    \end{align}
+    \item Boundary Conditions:
+    \begin{align}
+      &u_x(x,0) = 0 \\
+      &u_x(x,\infty) = U \\
+      &u_x(0,y) = U\\
+      &u_y(x,0) = 0\\
+      &u_y(x,\infty) = 0\\
+      &u_y(0,y) = 0
+    \end{align}
+    \item 想要找到一個$\eta$，使得可以將偏微分方程式轉成常微分方程式\\
+    這個$\eta$如同similarity approach一樣，希望能是$x$與$y$的函數\\
+    但因為$x,y$都是同樣單位，所以就沒必要做無因次化了\\
+    由剛剛的Goldilocks Argument，可以猜測$\eta$的形式為:
+    \begin{equation}
+      \eta = \frac{y}{\delta(x)} = y\left(
+        \frac{\mu x}{\rho U}
+      \right)^{-\frac{1}{2}}
+    \end{equation}
+    定義:
+    \begin{equation}
+      \frac{u_x}{U} = F'(\eta)
+    \end{equation}
+    這邊定義$F'(\eta)$是為了之後方便積分而已\\
+    因為可以由Equation of Continuity，將$u_y$換成$u_x$的函數\\
+    可是Equation of Continuity是說兩個變數的微分相同，所以定$F'(\eta)$會比較方便
+    \item 先從Equation of Motion 把$u_x$算出來:\\
+    一樣記得要把多出來的東西想辦法換成$\eta$的函數
+    \begin{itemize}
+      \item $\frac{\partial u_x}{\partial x}$:
+      \begin{align}
+        \frac{\partial u_x}{\partial x} &= U \frac{\partial F'(\eta)}{\partial x} \nonumber\\
+        &= U \frac{d F'(\eta)}{d \eta} \frac{\partial \eta}{\partial x} \nonumber\\
+        &= U \left[
+          F''(\eta) - \frac{1}{2}y \left(
+            \frac{\mu x}{\rho U}
+          \right)^{-\frac{1}{2}}x^{-1}
+        \right] \nonumber\\
+        &= -\frac{U}{2x} \eta F''(\eta)
+      \end{align}
+      然後這條可以拿去Equation of Continuity算$u_y$
+      \begin{align}
+        \frac{\partial u_y}{\partial y} &= -\frac{\partial u_x}{\partial x} \nonumber\\
+        &= \frac{U}{2x} \eta F''(\eta)
+      \end{align}
+      積分得到:(由於$\eta = \frac{y}{\delta(x)}$，記得要換出來($\delta(x)d\eta = dy$))
+      \begin{align}
+        u_y &= \int \frac{U}{2x} \eta F''(\eta) dy \nonumber\\
+        &= \frac{U}{2x}\delta(x) \int \eta F''(\eta) d\eta + G(x) \nonumber\\
+        &= \frac{U}{2x}\delta(x) \left(
+          \eta F'(\eta) - \int F'(\eta) d\eta
+        \right) + G(x)
+      \end{align}
+      這裡就是為什麼要定$F'(\eta)$的原因，因為這樣積分會比較簡單
+      \begin{equation}
+        \boxed{u_y = \frac{U}{2x}\delta(x) \left(\eta F'(\eta) - F(\eta)\right) + G(x)}
+      \end{equation}
+      這裡有個支線任務，我們能帶入邊界條件$u_y(x,0) = 0$來求出$G(x)$
+      \begin{align}
+        u_y(x,0) &= 0 \nonumber\\
+        \implies 0 &= \frac{U}{2x}\delta(x) \left(\eta F'(\eta) - F(\eta)\right)+ G(x) \nonumber\\
+        \implies G(x) &= -\frac{U}{2x}\delta(x) \left(\eta F'(\eta) - F(\eta)\right)
+      \end{align}
+      而根據No slip的Boundary Condition，$F'(0)=0$
+      \begin{equation}
+        G(x) = \frac{U}{2x}\delta(x) F(0) = \frac{F(0)}{2}\sqrt{\frac{\mu U}{\rho x}}
+      \end{equation}
+      寫進去$u_y$:
+      \begin{equation}
+        u_y = \frac{U}{2x}\delta(x) \left(\eta F'(\eta) - F(\eta) + F(0)\right)
+      \end{equation}
+      至於$F(0)$的話，我們把他認為是\fbox{Arbitrary Constant}\\
+      所以就讓$F(0)=0$，原話如下:
+      \begin{quote}
+        With no loss in generality given the functional form of $f$ can compenstate
+      \end{quote}
+      所以$G(x)$就消失了!
+      \begin{equation}
+        \boxed{u_y = \frac{U}{2x}\delta(x) \left(\eta F'(\eta) - F(\eta)\right)}
+      \end{equation}
+      \item $\frac{\partial u_x}{\partial y}$:
+      \begin{align}
+        \frac{\partial u_x}{\partial y} &= U \frac{\partial F'(\eta)}{\partial y} \nonumber\\
+        &= U \frac{d F'(\eta)}{d \eta} \frac{\partial \eta}{\partial y} \nonumber\\
+        &= U F''(\eta) \left(
+          \frac{\mu x}{\rho U}
+        \right)^{-\frac{1}{2}} \nonumber\\
+        &= U F''(\eta) \frac{1}{\delta(x)} \nonumber\\
+        &= \frac{U}{y} \eta F''(\eta)
+      \end{align}
+      \item $\frac{\partial^2 u_x}{\partial y^2}$:
+      \begin{align}
+        \frac{\partial^2 u_x}{\partial y^2} &= \frac{\partial}{\partial y} \left(
+          \frac{\partial u_x}{\partial y}
+        \right) \nonumber\\
+        &= \frac{\partial}{\partial y} \left(
+          \frac{U}{\delta(x)} F''(\eta)
+        \right) \nonumber\\
+        &= \frac{U}{\delta(x)} \frac{d F''(\eta)}{d \eta} \frac{\partial \eta}{\partial y} \nonumber\\
+        & = \frac{U}{\delta(x)^2} F'''(\eta) \nonumber\\
+        &= \frac{U\eta^2}{y^2} F'''(\eta)
+      \end{align}
+    \end{itemize}
+    \item 把以上三個結果，還有$u_y$，代回Equation of Motion:
+      \begin{align}
+        & \rho\left[
+          u_x \frac{\partial u_x}{\partial x} +
+          u_y \frac{\partial u_x}{\partial y}
+        \right] = \mu \frac{\partial^2 u_x}{\partial y^2} \nonumber\\
+        \implies & \rho \left[
+          U F'(\eta) \left(
+            -\frac{U}{2x} \eta F''(\eta)
+          \right) +
+          \frac{U}{2x}\delta(x) \left(
+            \eta F'(\eta) - F(\eta)
+          \right) \frac{U}{\delta(x)} F''(\eta)
+        \right] = \mu \frac{U}{\delta(x)^2} F'''(\eta)
+      \end{align}
+      由於一直寫$F(\eta)$很麻煩，所以簡寫成$F$\\
+      $\delta(x)$用$\left(
+        \frac{\mu x}{\rho U}
+      \right)^{\frac{1}{2}}$代入\\
+      $\eta$用$y\left(
+        \frac{\mu x}{\rho U}
+      \right)^{-\frac{1}{2}}$代入
+      \begin{align}
+         & \rho \left[
+          U F' \left(
+            -\frac{U}{2x} \eta F''
+          \right) +
+          \frac{U}{2x}\delta(x) \left(
+            \eta F' - F
+          \right) \frac{U}{\delta(x)} F''
+        \right] = \mu \frac{U}{\delta(x)^2} F''' \nonumber\\
+        (\div U) \implies & \rho \left[
+          F' \left(
+            -\frac{U}{2x} \eta F''
+          \right) +
+          \frac{1}{2x}\delta(x) \left(
+            \eta F' - F
+          \right) \frac{U}{\delta(x)} F''
+        \right] = \mu \frac{1}{\delta(x)^2} F''' \nonumber\\
+        (\text{換}\eta,\delta) \implies & \rho \left[
+          F' \left(
+            -\frac{U}{2x} y\left(
+              \frac{\mu x}{\rho U}
+            \right)^{-\frac{1}{2}} F''
+          \right) \right. \nonumber\\
+          &\phantom{\rho\quad}\left. +
+          \frac{1}{2x}\left(
+            \frac{\mu x}{\rho U}
+          \right)^{\frac{1}{2}} \left(
+            y\left(
+              \frac{\mu x}{\rho U}
+            \right)^{-\frac{1}{2}} F' - F
+          \right) \frac{U}{\left(
+            \frac{\mu x}{\rho U}
+          \right)^{\frac{1}{2}}} F''
+        \right] = \mu \frac{1}{\left(
+          \frac{\mu x}{\rho U}
+        \right)} F''' \nonumber\\
+        \implies & \rho \left[
+          F' \left(
+            -\frac{U}{2x} y\left(
+              \frac{\rho U}{\mu x}
+            \right)^{\frac{1}{2}} F''
+          \right) +
+          \frac{1}{2}\left(
+            \frac{\mu}{\rho U x}
+          \right)^{\frac{1}{2}} \left(
+            y\left(
+              \frac{\rho U}{\mu x}
+            \right)^{\frac{1}{2}} F' - F
+          \right)\left(
+            \frac{\rho U^3}{\mu x}
+          \right)^{\frac{1}{2}} F''
+        \right] \nonumber\\
+        &= \mu \frac{\rho U}{\mu x} F''' \nonumber\\
+        \implies & \rho \left[ F' \left(
+            -\frac{1}{2} y\left(
+              \frac{\rho U^3}{\mu x^3}
+            \right)^{\frac{1}{2}} F''
+          \right) +
+          \frac{U}{2x} \left(
+            \left(
+              \frac{\rho U y^2}{\mu x}
+            \right)^{\frac{1}{2}} F' - F
+          \right) F''
+        \right] = \frac{\rho U}{x} F'''\nonumber
+      \end{align}
+      再整理(分頁用)
+      \begin{align}
+        (\div \mu)\implies &  F' \left(
+            -\frac{1}{2} y\left(
+              \frac{\rho U^3}{\mu x^3}
+            \right)^{\frac{1}{2}} F''
+          \right) +
+          \frac{U}{2x} \left(
+            \left(
+              \frac{\rho U y^2}{\mu x}
+            \right)^{\frac{1}{2}} F' - F
+          \right) F''= \frac{U}{x} F''' \nonumber\\
+       (\div \frac{U}{x}) \implies &  F' \left(
+            -\frac{1}{2} y\left(
+              \frac{\rho U}{\mu x}
+            \right)^{\frac{1}{2}} F''
+          \right) +
+          \frac{1}{2} \left(
+            \left(
+              \frac{\rho U y^2}{\mu x}
+            \right)^{\frac{1}{2}} F' - F
+          \right) F''= F''' \nonumber\\
+        \implies & 
+        \cancel{-\frac{1}{2}\left(
+          \frac{\rho Uy^2}{\mu x}
+        \right)^{\frac{1}{2}} F' F'' +
+        \frac{1}{2}\left(
+          \frac{\rho Uy^2}{\mu x}
+        \right)^{\frac{1}{2}} F' F''} -
+        \frac{1}{2} F F'' = F''' \nonumber\\
+        \implies & F''' + \frac{1}{2} F F'' = 0\nonumber\\
+        &\boxed{2F''' + F F'' = 0}
+      \end{align}
+      很開心對吧？但這個是Blasius Equation，到現在沒人解出來哦！
+    \item  加上邊界條件:
+    \begin{align}
+      &F'(0) = 0 \\
+      &F'(\infty) = 1 \\
+      &F(0) = 0
+    \end{align}
+    \item Blasius Equation的數值解:
+    \begin{itemize}
+      \item 定義邊界層厚度$\delta$為$u_x = 0.99U$的位置\\
+      厚度:
+      \begin{equation}
+        y = \delta(x) \approx 5\sqrt{\frac{\mu x}{\rho U}}
+      \end{equation}
+      \item Drag Coefficient:
+      \begin{equation}
+        F_x = -2 w\int_0^L \tau_{yx} dx
+      \end{equation}
+      其中$\tau_{yx} = \mu \left(\frac{\partial u_x}{\partial y}+ \frac{\partial u_y}{\partial x}\right)$\\
+      由於邊界層很薄，$\frac{\partial u_x}{\partial y} \gg \frac{\partial u_y}{\partial x}$
+      或者寫成特徵長度模式:
+      \begin{equation}
+        -\mu\left(\frac{U}{\delta}+\cancel{\frac{V}{L}}\right),L\gg \delta \ll L
+      \end{equation}
+      因此可以忽略掉$\frac{\partial u_y}{\partial x}$\\
+      所以:
+      \begin{equation}
+        \tau_{yx} = -\mu U\sqrt{\frac{\rho U}{\mu x}} F''(0)
+      \end{equation}
+      代入Drag Force:
+      \begin{align}
+        F_x &= -2w \int_0^L -\mu U \sqrt{\frac{\rho U}{\mu x}} F''(0) dx \nonumber\\
+        &= 2w \mu U F''(0) \sqrt{\frac{\rho U}{\mu}} \int_0^L x^{-\frac{1}{2}} dx \nonumber\\
+        &= 2w \mu U F''(0) \sqrt{\frac{\rho U}{\mu}} \left[
+          2L^{\frac{1}{2}}
+        \right] \nonumber\\
+        &= 4w F''(0) \sqrt{\rho \mu U^3 L} \propto \sqrt{L}
+      \end{align}
+      解析數值:
+      \begin{equation}
+        F_x = 1.328 \sqrt{w^2 \rho \mu U^3 L}
+      \end{equation}
+      P.S. Scalmg 做實驗說:
+      \begin{equation}
+        F_x \approx 4.0 \sqrt{w^2 \rho \mu U^3 L}
+      \end{equation}
+      就是跟我們的有個只差係數的誤差
+      \item Drag Coefficient
+      \begin{align}
+        C_D &= \frac{F_X}{\text{A}\cdot \text{KE}} \nonumber\\
+        &= \frac{1.328 \sqrt{w^2 \rho \mu U^3 L}}{2wL \cdot \frac{1}{2}\rho U^2} \nonumber\\
+        &= \frac{1.328}{\sqrt{\text{Re}_x}} 
+      \end{align}
+      P.S. 會是$2wL$是因為又假設有上板了
+      \item 衍生，管中的Entrance Length:\\
+      假設一個圓管，定義Fully Developed的時候是邊界層互相接觸的時候\\
+      也就是邊界層$\delta = \frac{D}{2}$的時候\\
+      我們想要找到要進去多深的$x$，稱作Entrance Length $L_e$\\
+      而解析的結果說明:
+      \begin{equation}
+        \delta(L_e) = 5 \sqrt{\frac{\mu L_e}{\rho U}} = \frac{D}{2}
+      \end{equation}
+      解出來:
+      \begin{equation}
+        D^2 = 100 \frac{\mu L_e}{\rho U} \implies L_e = \frac{\rho U D^2}{100 \mu} = 0.01 \text{Re}_D D
+      \end{equation}
+      或者寫成:
+      \begin{equation}
+        \boxed{\frac{L_e}{D} = 0.01 \text{Re}_D}
+      \end{equation}
+      這能充分預估一個直徑為$D$的管子，遇上雷諾數Re的流體\\
+      需要約1\%Re的長度，才能讓流體進入Fully Developed狀態
+    \end{itemize}
+  \end{enumerate}
+  \end{itemize}
+  \item 紊流的經驗假設:
+  \begin{itemize}
+    \item 紊流的整體Shear stress，為$r$為水力半徑時的Shear stress\\
+    注意半徑為$R$的圓管的水力半徑$R_h = \frac{\pi R^2}{2\pi R} = \frac{R}{2}$
+  \end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}

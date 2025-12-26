@@ -1,0 +1,408 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{流體靜力學}
+\begin{itemize}
+  \item 壓力
+    \begin{itemize}
+      \item 固體壓力:$P\equiv \frac{F_n}{A}$
+      \begin{equation}
+          dP_x = Be^{-\frac{mu_x^2}{2k_BT}}du_x
+      \end{equation}
+      \item 氣體壓力:$P\equiv \frac{nRT}{V}$
+      \item 液體壓力:$P\equiv \rho \frac{g}{g_c}$,\\
+      $g_c$ 重力加速度修正因子(公制單位: $g_c=1$,英制單位:$g_c=32.174~
+      \left[\frac{\textrm{lb}_m\cdot\textrm{ft}}
+      {\textrm{lb}_f\cdot s^2}\right]$)
+    \end{itemize}
+  \item 原理: 同一水平面上的兩點，其壓力是相等
+  \item 液壓公式:
+  \begin{equation}
+    P_\textrm{液}=\rho_{液}\frac{g}{g_c}h
+  \end{equation}
+  \item 應用：manometer U形管差壓計
+  \begin{itemize}
+    \item 開口式U形管差壓計：可測量出該點壓力
+    \item 閉口式U形管差壓計：可測量出兩點間之壓差
+  \end{itemize}
+  \item multiplying manometer（微分差壓計）\\
+  目的：當$a$,$b$兩點間壓差極小時，$h$極小\\
+  不易精準觀察，我們可利用此裝置，將$h$放大成$R$，可精準得到壓差
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,6) -- (0,1) arc(180:270:1) -- (4,0) arc(270:360:1) -- (5,6); 
+      \draw (0.3, 6) -- (0.3, 1) arc(180:270:0.7) -- (4,0.3) arc(270:360:0.7) -- (4.7,6);
+      \draw (0,6) -- (-1.5,6) -- (-1.5, 7) -- (0,7) -- (0,7.5) -- (-2, 7.5);
+      \filldraw[white,draw=black] (-2,8) ellipse (0.25 and 0.5);
+      \draw (5,6) -- (6.5,6) -- (6.5,7) -- (5,7) -- (5,7.5) -- (7,7.5) arc(270:450:0.25 and 0.5) -- (-2,8.5);
+      \draw (0.3,6) -- (1.8,6) -- (1.8,7) -- (0.3,7) -- (0.3,7.5) -- (4.7,7.5) -- (4.7,7)
+        -- (3.2,7) -- (3.2,6) -- (4.7,6);
+      \draw [dashed] (-1,2) -- (7,2);
+      \fill[pattern = north west lines, pattern color=red] (0,2) -- (0.3,2) -- (0.3, 1) arc(180:270:0.7) 
+        -- (4,0.3) arc(270:360:0.7) -- (4.7,4) -- (5,4) -- (5,1) arc(360:270:1) -- (1,0) arc(270:180:1) -- cycle;
+      \fill[pattern = north east lines, pattern color=blue] (-1.5,6) rectangle (1.8,6.2);
+      \fill[pattern = north east lines, pattern color=blue] (0,2) rectangle (0.3,6);
+      \fill[pattern = north east lines, pattern color=blue] (3.2,6) rectangle (6.5,6.8);
+      \fill[pattern = north east lines, pattern color=blue] (4.7,4) rectangle (5,6);
+      \draw[dashed] (-1,4) -- (7,4);
+      \draw[dashed] (-1.8,6.2) -- (2.8,6.2);
+      \draw[dashed] (2.1,6.8) -- (6.8,6.8);
+      \draw[<->] (2.6,6.8) -- (2.6,6.2) node[midway,right] {$h$};
+      \draw[<->] (2.6,4) -- (2.6,2) node[midway,right] {$R$};
+      \draw[->] (-3,8) -- (-2,8);
+      \draw[->] (7.25, 8) -- (8.25,8);
+      \draw[dashed] (0.15, 7.5) -- (0.15, 8.5);
+      \draw[dashed] (4.85, 7.5) -- (4.85, 8.5);
+      \fill[white, draw=black] (0.15, 7.5) circle (1.2pt);
+      \fill[white, draw=black] (4.85, 7.5) circle (1.2pt);
+      \node[anchor=west] at (0.15, 8) {$P_a$};
+      \node[anchor=west] at (4.85, 8) {$P_b$};
+      \node at (2.6,8) {$\rho_B$};
+      \draw[<->] (2.6,4) -- (2.6,6.2) node[midway,right] {$d_2$};
+      \draw[<->] (2.6,6.8) -- (2.6,7.5) node[midway,right] {$d_1$};
+      \node[anchor=east,blue] at (0,3) {$\rho_A$};
+      \node[anchor=north,red] at (2.6,0) {$\rho_C$};
+      \node[anchor=west,blue] at (5,5) {$\rho_A$};
+      \fill[white, draw=black] (0.15, 2) circle (1.2pt);
+      \fill[white, draw=black] (4.85, 2) circle (1.2pt);
+      \node[anchor=south west] at (0.3, 2) {$P_L$};
+      \node[anchor=south east] at (4.7, 2) {$P_R$};
+      \node[anchor=west] at (5,2) {參考線};
+    \end{tikzpicture}
+    \caption{微分差壓計}
+    \label{fig:multiplying_manometer}
+  \end{figure}
+  欲求壓差$P_a-P_b$，可由$h$得知，但因$h$太小，以$R$放大\\
+  從參考線上$P_L=P_R$，可得
+  \begin{equation}
+    P_A + \rho_B \frac{g}{g_c}(d_1 +h) + \rho_A \frac{g}{g_c}(d_2+R) = 
+    P_B + \rho_B \frac{g}{g_c}d_1 + \rho_A \frac{g}{g_c}(h+d_2)+ \rho_C \frac{g}{g_c}R \label{eq:ch1_manometer_balance}
+  \end{equation}
+  整理後可發現$d_1,d_2$會相消
+  \begin{equation}
+    P_A - P_B = \left(\rho_C - \rho_A\right)\frac{g}{g_c}R - \left(\rho_B - \rho_A\right)\frac{g}{g_c}h
+  \end{equation}
+  而為了求解，還需要多假設，兩側流體$\rho_A$有相同質量$m_A$\\
+  並且知道大槽表面積為$A$，細管表面積為$a$\\
+  而扣除掉左右兩邊共通的$d_2$段後\\
+  左邊多餘的重量為$\rho_A\frac{g}{g_c}aR$，右邊多餘的重量為$\rho_A\frac{g}{g_c}Ah$\\
+  兩者須相等
+  \begin{equation}
+    \rho_A\frac{g}{g_c}aR = \rho_A\frac{g}{g_c}Ah
+  \end{equation}
+  整理後可得
+  \begin{equation}
+    h = \frac{a}{A}R
+  \end{equation}
+  將$h$代入壓差方程式(\ref{eq:ch1_manometer_balance})中
+  \begin{equation}
+    P_A - P_B = \left(\rho_C - \rho_A\right)\frac{g}{g_c}R - \left(\rho_B - \rho_A\right)\frac{g}{g_c}\frac{a}{A}R
+  \end{equation}
+  \item 壓力的表示方式
+  \begin{itemize}
+    \item 絕對壓力 absolute pressure\\
+    系統的實際壓力 $P_{\textrm{sys}}=P_{\textrm{abs}}$
+    \item 錶壓力 gauge pressure(可使用壓力)\\
+    當系統壓力大於1atm時，其\fbox{超出}部份稱為錶壓力
+    \begin{align}
+      P_{\textrm{sys}} = P_{\textrm{gauge}}+ 1 \textrm{atm}
+    \end{align}
+    \item 真空壓力(vacuum pressure)\\
+    當系統壓力低於1 atm時，其低於部份稱真空壓力(真空度)
+    \begin{align}
+      P_{\textrm{vacuum}}= 1 \textrm{atm} - P_\textrm{sys}
+    \end{align}
+  \end{itemize}
+  \item  壓力單位\\
+  常用： $1 \textrm{atm} \equiv 760\textrm{mmHg} \equiv 760 \textrm{torr}\equiv 10336 \textrm{mmH}_2\textrm{O}\equiv 1.013\times 10^5 \textrm{Pa}\equiv 1.013 \textrm{bar}\equiv 14.7 \textrm{psi}$\\
+  公制單位：Pa, bar, mmH$_2$O, mmHg, torr\\
+  Bar就是大的$Pa$，1 bar = $10^5$ Pa\\
+  PSI分兩種：絕對壓力psi = psia = psi，錶壓力psig
+  \begin{align}
+    \textrm{psia} = \textrm{psig}+14.7
+  \end{align}
+\end{itemize}
+\subsection{流動與動量輸送}
+\begin{itemize}
+  \item 動量傳送現象:\\
+  當系統內流體有速度差，產生動量差，動量就會傳送，傳送方向是由動量大往動量小的方向傳送
+  \begin{equation}
+    \vec {\bm P} = \vec {\bm F} t = m \vec {\bm v}
+  \end{equation}
+  也就是說，系統內有速度改變$\implies$動量有改變$\implies$動量會傳遞\\
+  大動量向小動量傳遞
+  \begin{equation}
+    \Delta \vec {\bm P} = m \Delta \vec {\bm v}
+  \end{equation}
+  \item 名詞與定義:
+  \begin{itemize}
+    \item Flux: 通量，\fbox{單位時間，單位面積，所通過的量}
+      \begin{itemize}
+        \item 質量通量(mass flux): $j_m = \frac{\Delta M}{A t}$
+        \item 動量通量(momentum flux): $\tau = \frac{\Delta \vec {\bm P}}{A t}$
+        \item 熱通量 (heat flux): $\phi_q = \frac{\Delta Q}{A t}$
+      \end{itemize}
+    \item Rate: 速率，\fbox{單位時間，所通過的量}
+      \begin{itemize}
+        \item 速度(velocity): $u = \frac{\Delta \text{length}}{\Delta t}$
+        \item 質量流率(mass flow rate): $\dot m = \frac{\Delta M}{\Delta t}$
+        \item 體積流率(volume flow rate): $Q  = \frac{\Delta V}{\Delta t}$
+        \item 熱傳速率: $q  = \frac{\Delta Q}{\Delta t}$
+      \end{itemize}
+    \item Stress，壓力/應力，\fbox{單位面積，所承受的力}
+      \begin{itemize}
+        \item Inertial Stress，慣性應力:
+        \begin{equation}
+          \rho \vec {\bm u} \vec {\bm u}
+        \end{equation}
+        \item Shear Stress，剪切應力: $\tau$
+          \fbox{單位時間、單位面積所傳送的動量}，稱為Shear stress $\tau$\\
+          所以也可以稱為動量通量(momentum flux)
+          \begin{equation}
+            \tau  = \frac{\Delta \vec {\bm P}}{A t}
+          \end{equation}
+          $\tau_{yx}$: 流體在$x$方向上流動，所造成$y$方向上的動量傳送
+      \end{itemize}
+    \item Steady-state $\Rightarrow$ 函數$f$對時間$t$無關
+    \item uniform $\Rightarrow$函數$f$與空間$(x,y,z)$無關
+    \item Balance Equation
+      \begin{equation}
+        \text{input} - \text{output} + \text{generation} = \text{accumulation}
+      \end{equation}
+      其中Accumulation要表示為:\fbox{單位時間，系統內總量，的變化量}
+  \end{itemize}
+  \item 流體流動的原因:
+  \begin{itemize}
+    \item Poiseuille flow: 由pump推動流體流動$\implies$壓力差使流體流動
+    \item Couette flow: 由移動板(管)使流體流動$\implies$剪切力使流體流動
+  \end{itemize}
+  \item Non-slip condition:\\
+    流體在固體表面上的速度，等於固體表面的速度
+  \item 黏度(viscosity) $\mu$:
+  \begin{equation}
+    \mu \equiv \frac{\text{Shear stress}}{\text{Rate of strain}} = \frac{\tau_{y{\color{red}{x}}}}{-\frac{du_{{\color{red}{x}}}}{dy}}
+  \end{equation}
+  產生單位變形量(速度梯度)，單位面積所需的力量\\
+  SI的單位通常太大，所以通常用cP (centi Poise)來表示
+  \begin{equation}
+    1 \textrm{cP} = 0.01 \textrm{Poise} \left[\frac{\textrm{g}}{\textrm{cm}\cdot s}\right] 
+    = 0.001 \textrm{Pa}\cdot s \left[\frac{\textrm{kg}}{\textrm{m}\cdot s}\right]
+  \end{equation}
+  \fbox{S.I.的單位並沒有特別名稱，直接用Pa·s表示}\\
+  \fbox{1 Poise是CGS下的單位，不是S.I.單位}\\
+  \fbox{平常大多使用cP來表示黏度，因為其他單位太大}
+  \item Kinematic viscosity $\nu$:
+    \begin{equation}
+      \nu \equiv \frac{\mu}{\rho}
+    \end{equation}
+    除上密度後，得到運動黏度\\
+    因為流體密度不同也會影響黏滯的表現(越重越難推)，故定義運動黏度，作為流體的慣性\\
+    由稱為動量擴散係數(momentum diffusivity)\\
+    單位一樣主要使用CGS產生的單位Stokes (St)
+    \begin{equation}
+      1 \textrm{St} = 1 \textrm{cm}^2/\textrm{s} = 10^{-4} \textrm{m}^2/\textrm{s}
+    \end{equation}
+  \item Reynold number:\\
+    雷諾數，定義為慣性力與黏滯力的比值，無因次化，可以用來判斷流體的流動狀態
+    \begin{equation}
+      \boxed{\text{Re} \equiv \frac{\rho \left<u\right> L}{\mu} }= \frac{\rho u^2}{\mu\frac{u}{D}} = \frac{\text{Inertial Force(Stress)}}{\text{Viscous Force}}
+    \end{equation}
+    概念上就是目前流體狀態是慣性力在主導，還是黏滯力在主導\\
+    可是雷諾數只能用在管子，才會有$D$，所以定義水力直徑$D_H$來取代$D$\\
+    應用:$<$2100屬於層流，$>$4,000屬於紊流，中間為過渡流
+  \item Hydraulic diameter，水力直徑，$D_H$:
+    若管子不是圓管，則以等效圓管的直徑，又稱當量直徑、水力直徑，來計算\\
+    也寫作$D_e$，定義為Equivalent Diameter，相當直徑
+    \begin{equation}
+      D_H = D_e = \frac{4A}{P} = \frac{4 \text{流動方向的垂直面積}}{\text{浸潤周長}}
+    \end{equation}
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (4,2);
+        \node[anchor=north] at (2,0) {$a$};
+        \node[anchor=west] at (4,1) {$b$};
+        \fill[pattern ={Lines[angle=45,distance={4pt/sqrt(2)}]}, pattern color=blue] (0,0) rectangle (4,2);
+        \def\xshift{5}
+        \draw (\xshift,0) -- (\xshift+4,0);
+        \draw (\xshift,2) -- (\xshift+4,2);
+        \draw[dashed] (\xshift,0) -- (\xshift,2);
+        \draw[dashed] (\xshift+4,0) -- (\xshift+4,2);
+        \node[anchor=north] at (\xshift+2,0) {$x$};
+        \node[anchor=west] at (\xshift+4,1) {$b$};
+        \fill[pattern ={Lines[angle=45,distance={4pt/sqrt(2)}]}, pattern color=blue] (\xshift+0,0) rectangle (\xshift+4,2);
+        \xdef\xshift{10}
+        \draw (\xshift+1.5, 1.5) circle (0.75);
+        \draw (\xshift+1.5, 1.5) circle (1.5);
+        \fill[pattern ={Lines[angle=45,distance={4pt/sqrt(2)}]}, pattern color=blue] (\xshift+1.5,1.5) circle (1.5);
+        \fill[white, draw=black] (\xshift+1.5,1.5) circle (0.75);
+        \draw[<->] (\xshift,1.5) -- (\xshift+3,1.5) node[right] {$D_2$};
+        \draw[dashed] (\xshift+0.75,1.5) -- (\xshift+0.75,3.2);
+        \draw[dashed] (\xshift+2.25,1.5) -- (\xshift+2.25,3.2);
+        \draw[<->] (\xshift+0.75,3.2) -- (\xshift+2.25,3.2) node[midway, above] {$D_1$};
+      \end{tikzpicture}
+      \caption{水力直徑示意圖}
+      \label{fig:hydraulic_diameter}
+    \end{figure}
+    左圖為方管:
+    \begin{equation}
+      D_H = \frac{4A}{P} = \frac{4ab}{2(a+b)} = \frac{2ab}{a+b}
+    \end{equation}
+    中圖為平板間隙，假設一距離$x$($x$會被削掉):
+    \begin{equation}
+      D_H = \frac{4A}{P} = \frac{4bx}{2x} = 2b
+    \end{equation}
+    因為沒有邊，所以周常不考慮邊的長度\\
+    右圖為環管:
+    \begin{equation}
+      D_H = \frac{4A}{P} = \frac{4\pi\left(\frac{D_2^2-D_1^2}{4}\right)}{\pi(D_2+D_1)} = \frac{D_2^2-D_1^2}{D_2+D_1} = D_2 - D_1
+    \end{equation}
+    可看出，環管的水力直徑等於外徑減內徑
+  \item 水力半徑與水力直徑的關係:
+    \begin{equation}
+      R_H = \frac{D_H}{4} = \frac{A}{P}
+    \end{equation}
+    注意不是兩倍的關係哦\\
+    所以半徑$R$，直徑$D$的圓管的水力半徑為$R/2$
+    \begin{equation}
+      R_H = \frac{\pi R^2}{2\pi R} = \frac{R}{2}
+    \end{equation}
+    但是水力直徑仍然是$D$:
+  \item Laminar flow 或 Turbulent flow:\\
+    流態分為層流(Laminar flow)與紊流(Turbulent flow)，層流時，流體不會有垂直方向的混合，紊流時，流體會有垂直方向的混合\\
+    Turbulent flow是亂中有序的移動，會有不同尺度的渦流(eddis flow)，整體的平均速度仍然是平滑的\\
+    若為圓管，雷諾數小於2100為層流，大於4000為紊流，介於兩者之間為過渡流\\
+    若為平板，雷諾數小於25為層流，大於2100為紊流，介於兩者之間為過渡流
+\end{itemize}
+\subsection{流體的流動模型}
+\begin{itemize}
+  \item Ideal fluid, Inviscid fluid:\\
+    $\mu=0,~\nu=0$，無黏滯，各點速度相同，流態為\fbox{Plug flow}\\
+    不會在剪切方向上傳遞動量
+  \item Newtonian fluid:\\
+    符合牛頓流體定律
+    \begin{equation}
+      \boxed{\tau_{yx} = -\mu \frac{u_x}{dy}}
+    \end{equation}
+    垂直流體方向上的速度梯度與提供的剪應力成正比，比例常數為黏度\\
+    以Shear Stress為縱軸，Shear Rate為橫軸，繪製出來的圖形為一條過原點直線，斜率為黏度
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (5,0) node[anchor=north west] {Shear Rate $\left(-\frac{du_x}{dy}\right)$};
+        \draw[->] (0,0) -- (0,5) node[anchor=south east] {Shear Stress $\tau_{yx}$};
+        \draw (0,0) -- (4,4);
+        \node at (4,4) [anchor=south west] {斜率: $\mu$};
+      \end{tikzpicture}
+      \caption{Newtonian fluid}
+      \label{fig:newtonian_fluid}
+    \end{figure}
+  \item Power Law fluid，冪次流體
+    \begin{equation}
+      \boxed{\tau_{yx} = -m\left|\frac{d u_x}{dy}\right|^{n-1}\left(\frac{du_x}{dy}\right) = \eta \left(-\frac{du_x}{dy}\right)}
+    \end{equation}
+    $\eta$稱為apparent viscosity(表現黏度)，$m$為常數
+    \begin{equation}
+      \eta = m\left|\frac{du_x}{dy}\right|^{n-1}
+    \end{equation}
+    可以想成是量測所得的黏度\\
+    若$n=1$，則為牛頓流體\\
+    若$n>1$，則為剪切增稠流體、Dilatant fluid，具有脹流性(diltant)\\
+    固體含量多的流體大多屬於此類\\
+    高分子、含有血球的血液、玉米澱粉水溶液
+    若$n<1$，則為剪切稀釋流體、假塑性液體、Shear thinning fluid、Pseudoplastic fluid\\
+    像是番茄醬，你擠它的時候會噴出來，但在瓶子裡就感覺稠稠的\\
+    塗料、油漆、血漿
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (5,0) node[anchor=north west] {Shear Rate $\left(-\frac{du_x}{dy}\right)$};
+        \draw[->] (0,0) -- (0,5) node[anchor=south east] {Shear Stress $\tau_{yx}$};
+        \draw[domain=0:4,smooth,variable=\x] plot ({\x},{\x});
+        \draw[domain=0:4,smooth,variable=\x, blue] plot ({\x},{0.4*\x^(1.5)});
+        \draw[domain=0:4,smooth,variable=\x, red] plot ({\x},{2.3*\x^(0.5)});
+        \node[anchor=south west] at (4,4) {$n=1$};
+        \node[anchor=south west, blue] at (4,3.2) {$n>1$};
+        \node[anchor=south west, red] at (4,4.6) {$n<1$};
+      \end{tikzpicture}
+      \caption{Power law fluid}
+      \label{fig:power_law_fluid}
+    \end{figure}
+    注意$n>1$，反而會在下面，是斜率隨著剪切速率增加而增加，所以一開始是平緩的
+  \item Bingham fluid
+    \begin{equation}
+      \begin{cases}
+        \tau_{yx} = \tau_0 + \mu \frac{du_x}{dy} & \text{if } \left|\tau_{yx}\right| >\tau_0\\
+        \tau_{yx} = 0 & \text{if } \left|\tau_{yx}\right| \leq \tau_0
+      \end{cases}
+    \end{equation}
+    $\tau_0$稱為Yield stress，當剪應力小於$\tau_0$時，流體不會流動，直到剪應力大於$\tau_0$\\
+    例如牙膏，你倒過來半天它也不會流下來，但一旦你用力擠，它就會流下來
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (5,0) node[anchor=north west] {Shear Rate $\left(-\frac{du_x}{dy}\right)$};
+        \draw[->] (0,0) -- (0,5) node[anchor=south east] {Shear Stress $\tau_{yx}$};
+        \draw (0,1) -- (4,5);
+        \node at (4,5) [anchor=south west] {斜率: $\mu$};
+        \node at (0,1) [anchor=east] {$\tau_0$};
+      \end{tikzpicture}
+      \caption{Bingham fluid}
+      \label{fig:bingham_fluid}
+    \end{figure}
+    從最大傾斜角來計算$\tau_0$
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) -- (6,0);
+        \draw (1,0) -- (5,3);
+        \draw (1.5,0) arc(0:37:0.5) node[midway,right] {$\beta$};
+        \fill[pattern = {Lines[angle=70,distance={3/sqrt(2)}]}] (1,0) -- (5,3) -- (5,2.7) -- (1.4,0) -- cycle;
+        \fill[pattern = crosshatch dots, pattern color = blue] (1,0) -- (5,3) -- ++(127:1) -- ++(217:5) -- cycle;
+        \draw[blue]  (5,3) -- ++(127:1) -- ++(217:5) -- ++(307:1);
+        \draw[->] (3,1.9) -- ++(217:0.6);
+        \draw[->] (3,1.9) -- ++(270:1) node[below] {$F$};
+        \draw[->] (3,1.9) -- ++(307:0.8);
+        \draw[<->] (5.2,3.15) -- ++(127:1) node[midway,above right] {$W$};
+        \draw[<->] (4.25,4) -- ++(217:5) node[midway,above left] {$L$};
+      \end{tikzpicture}
+      \caption{Bingham fluid 傾斜角實驗}
+      \label{fig:bingham_fluid_max_slope}
+    \end{figure}
+    \begin{equation}
+      Fg\sin\beta \geq \tau_0\cdot(LW) \implies \sin\beta \geq \frac{\tau_0 LW}{Fg}
+    \end{equation}
+    也可以直接解出$\beta$
+    \begin{equation}
+      \beta  \geq \sin^{-1}\left(\frac{\tau_0 LW}{Fg}\right)
+    \end{equation}
+  \item Eyring fluid:
+    \begin{equation}
+      \tau_{yx} = A\sinh^{-1}\left(\frac{1}{B}\frac{du_x}{dy}\right)
+    \end{equation}
+    $A,B$為常數，跟分子間的作用力有關，在高速度梯度下，剪應力的增加量不再顯著\\
+    而在低速度梯度下，則幾乎符合牛頓流體，是非牛頓流體與牛頓流體的結合\\
+    速度差越大就來不及生成鍵，阻力也會下降\\
+    通常用在生物或聚合物領域，如血液或膠
+  \item Ellis fluid:
+    \begin{equation}
+      -\frac{du_x}{dy} = \left(\phi_0 + \phi_1 \left|\tau_{yx}\right|^{\alpha -1}\right)\cdot \tau_{yx}
+    \end{equation}
+    若$\phi_0=0$，則為Power law fluid\\
+    若$\phi_1=0$，則為Newtonian fluid\\
+    用在描述在低速度梯度下是牛頓流體，高的話則表現出剪切稀釋流體的特性\\
+    通常用在描述膏、乳液這種，本來不太會流，但你放在手裡搓，卻很好搓開
+  \item Reiner-Philippoff fluid:
+    \begin{equation}
+      -\frac{du_x}{dy} = \left(\frac{1}{
+        \mu_\infty + \frac{\mu_0-\mu_\infty}{1+\left(\frac{\tau_{yx}}{\tau_0}\right)^2}
+      }\right)\cdot \tau_{yx}
+    \end{equation}
+    可以注意到$\mu_\infty + \frac{\mu_0-\mu_\infty}{1+\left(\frac{\tau_{yx}}{\tau_0}\right)^2}$，就是黏度\\
+    此模型是用來描述當流體在低速度梯度與高速度梯度，\\
+    有兩種不同但都符合牛頓流體的表現時的平滑轉換\\
+    當流體在低速度梯度時，$\mu\approx\mu_0$，當流體在高速度梯度時，$\mu\approx\mu_\infty$
+\end{itemize}
+\end{CJK*}
+\end{document}

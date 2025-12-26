@@ -1,0 +1,949 @@
+\RequirePackage{etex}
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,left=1cm,right=1cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{CJKutf8}
+\usepackage[colorlinks, linkcolor=blue]{hyperref}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cancel}
+\usepackage{fancyhdr}
+\usepackage{soul}
+\usepackage{chemarr}
+\usepackage{circuitikz}
+\usepackage{ifthen}
+\usepackage{esint}
+\usepackage{textcomp}
+\usepackage{catchfilebetweentags}
+\usepackage{subfiles}
+\usepackage{tikz}
+\usetikzlibrary{patterns,patterns.meta,arrows.meta,intersections,calc,decorations.pathmorphing}
+\usepackage{tikz-3dplot}
+\usepackage{float}
+\usepackage{chngcntr}
+\usepackage{makecell}
+\usepackage{tocloft}
+\usepackage{bm}
+\counterwithin{figure}{section}
+\graphicspath{images}
+\pgfplotsset{compat=1.18} 
+\setlength{\headheight}{15pt}
+\numberwithin{equation}{subsection}
+\renewcommand\cftsecafterpnum{\par\addvspace{1pt}}
+\newcommand{\mcirc}[1]{\text{\textcircled{\footnotesize #1}}}
+\newcommand \dbar {{d\mkern-6mu\mathchar'26\mkern-3mu}}
+\newcommand*{\rttensor}[1]{\bar{\bar{#1}}}
+\makeatletter
+\DeclareFontFamily{U}{tipa}{}
+\DeclareFontShape{U}{tipa}{m}{n}{<->tipa10}{}
+\newcommand{\arc@char}{{\usefont{U}{tipa}{m}{n}\symbol{62}}}%
+\newcommand{\arc}[1]{\mathpalette\arc@arc{#1}}
+\newcommand{\arc@arc}[2]{%
+  \sbox0{$\m@th#1#2$}%
+  \vbox{
+    \hbox{\resizebox{\wd0}{\height}{\arc@char}}
+    \nointerlineskip
+    \box0
+  }%
+}
+\def\cantox@vector#1#2#3#4#5#6#7#8{%
+  \dimen@.5\p@
+  \setbox\z@\vbox{\boxmaxdepth.5\p@
+   \hbox{\kern-1.2\p@\kern#1\dimen@$#7{#8}\m@th$}}%
+  \ifx\canto@fil\hidewidth  \wd\z@\z@ \else \kern-#6\unitlength \fi
+  \ooalign{%
+    \canto@fil$\m@th \CancelColor
+    \vcenter{\hbox{\dimen@#6\unitlength \kern\dimen@
+      \multiply\dimen@#4\divide\dimen@#3 \vrule\@depth\dimen@\@width\z@
+      \vector(#3,-#4){#5}%
+    }}_{\raise-#2\dimen@\copy\z@\kern-\scriptspace}$%
+    \canto@fil \cr
+    \hfil \box\@tempboxa \kern\wd\z@ \hfil \cr}}
+\def\bcancelto#1#2{\let\canto@vector\cantox@vector\cancelto{#1}{#2}}
+\makeatother
+\title{單元操作筆記}
+\author{B10504001 化工五 唐麒鈞}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{B10504001$\textrm{  }$化工五$\textrm{  }$唐麒鈞}
+\rhead{單元操作筆記}
+\cfoot{\thepage}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+\section{各種數學工具}
+\subfile{sections/ch0_1_math_tools}
+\subfile{sections/ch0_2_coordinates}
+\section{流體力學導論}
+\subfile{sections/ch1_fluid_intro}
+\section{動量輸送}
+\subfile{sections/ch2_0_momentum_transport}
+\subfile{sections/ch2_1_laminar_flow}
+\subfile{sections/ch2_2_laminar_differential}
+\subfile{sections/ch2_3_multi_variable_steady}
+\subfile{sections/ch2_4_unsteady_state}
+\subfile{sections/ch2_5_boundary_layer_dev}
+\section{熱量輸送}
+\subfile{sections/ch3_1_heat_transport_intro}
+\subfile{sections/ch3_2_heat_transfer_solve}
+\subfile{sections/ch3_3_heat_transfer_bessel}
+\subfile{sections/ch3_4_heat_transfer_unsteady}
+\subfile{sections/ch3_5_heat_transfer_graetz}
+\section{質量傳輸}
+\subsection{分子擴散}
+\begin{itemize}
+  \item Fick's law
+  \begin{equation}
+    J_{Az} = -D_{AB}\frac{\partial C_A}{\partial z}
+  \end{equation}
+  $J_{Az}$是在靜止流體中，物質A在z方向的分子擴散通量\\
+  $D_{AB}$是物質A在B的擴散係數\\
+  $C_A$是物質A的濃度\\
+  在等溫等壓條件下，整體的莫爾濃度($C$)是定值，可以寫成
+  \begin{equation}
+    J_{Az} = -C\cdot D_{AB}\frac{\partial y_A}{\partial z}
+  \end{equation}
+  $J_{Az}$是莫爾通量，可改為$j_{Az}$，質量通量\\
+  同樣地，在等溫等壓條件下，整體的密度($\rho$)是定值，可以寫成
+  \begin{equation}
+    j_{Az} = -D_{AB}\frac{\partial \rho_A}{\partial z} = -\rho\cdot D_{AB}\frac{\partial y_A}{\partial z}
+  \end{equation}
+  \item 在一個流動中，定義:
+  $u_A$是物質$A$的絕對速度，而$u_M$(m for medium)是流體的速度(分子的平均速度)，$u_{A,d}$是$A$相對於流體的相對速度
+  \begin{equation}
+    u_A = u_M + u_{A,d}
+  \end{equation}
+  因此可以將擴散，拆成跟著流體流，和超越或延遲流體流的兩個部分:
+  \begin{equation}
+    C_Au_A = C_Au_{a,d} + C_Au_M
+  \end{equation}
+  \item 定義$N_A$是總質傳通量，是於靜止流體中的分子擴散通量加上因流體流動的分子擴散通量
+  \begin{equation}
+    N_A = C_Au_A,\quad J_{Az} = C_Au_{A,d}
+  \end{equation}
+  則整體平均速度
+  \begin{equation}
+    u_M = \frac{\sum_i N_i}{\sum_i C_i}
+  \end{equation}
+  \item Fick's First Law:\\
+  假設兩個物質(物質A溶於物質B)
+  \begin{align}
+    N_A &= J_{A,z} + y_A\left(N_A+N_B\right)\\
+    &= -D_{AB}\frac{dC_A}{dz}+y_A\left(N_A+N_B\right) \\
+    &= -D_{AB}\frac{dy_A}{dz}+y_A\left(N_A+N_B\right) \\
+    &= -D_{AB}\nabla C_A + C_A\vec {\bm u}\label{eq050111}
+  \end{align}
+  或寫成質量通量形式:
+  \begin{equation}
+    n_A = j_{A,z}+w_A\left(n_A+n_B\right)
+  \end{equation}
+\end{itemize}
+\subsection{靠分子擴散的質傳濃度分布}
+同流體力學，熱傳，從General的微分方程，配合不同的假設和邊界條件，則可求出
+\begin{itemize}
+  \item Equation of Continuity:
+  \begin{equation}
+    -\oiint \rho \vec {\bm u} \cdot \vec {\bm n} dA + \iiint r\cdot dV = \frac{\partial}{\partial t}\iiint \rho dV
+  \end{equation}
+  質量形式:
+  \begin{equation}
+    \frac{\partial \rho}{\partial t} + \nabla\cdot(\rho \vec {\bm u}) = r
+  \end{equation}
+  莫爾形式:
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} + \nabla\cdot(C_A N_A) = R_A
+  \end{equation}
+  P.S. $R$是質量生成速率(mol)，$r$是質量生成速率(mass):
+  \begin{equation}
+    R = \frac{\partial C}{\partial t}+\nabla \cdot(C\vec {\bm u}) = \frac{\partial C}{\partial t}+\nabla \cdot N 
+  \end{equation}
+  \item 將Fick's First Law，的(\ref{eq050111})代入，得到:
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} + \vec {\bm u} \cdot \nabla C_A + C_A\nabla \cdot \vec {\bm u} = D_{AB}\nabla^2 C_A +R_A
+  \end{equation}
+  \item 對於incomprssible flow，$\nabla\cdot \vec {\bm u} = 0$，則
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} + \vec {\bm u} \cdot \nabla C_A = D_{AB}\nabla^2 C_A +R_A
+  \end{equation}
+  或寫成:
+  \begin{equation}
+    \frac{DC_A}{Dt} = D_{AB}\nabla^2 C_A +R_A
+  \end{equation}
+  \item 對於incomprssible flow，且沒有質量生成$R_A=0$，則
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} + \vec {\bm u} \cdot \nabla C_A = D_{AB}\nabla^2 C_A
+  \end{equation}
+  或寫成:
+  \begin{equation}
+    \frac{DC_A}{Dt} = D_{AB}\nabla^2 C_A
+  \end{equation}
+  \item 對於無流體流動$\vec {\bm u}=0$，且沒有反應
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} = D_{AB}\nabla^2 C_A
+  \end{equation}
+  此為Fick's Second Law
+  \item 若為穩態，且無流體流動$\vec {\bm u}=0$，且沒有反應:
+  \begin{equation}
+    \nabla^2 C_A = 0
+  \end{equation}
+  此為Laplace Equation
+\end{itemize}
+\subsection{對流質量傳輸}
+\begin{equation}
+  N_A = k_c\cdot \Delta C_A = k_c\left(C_{A_1}-C_{A_2}\right)=k_c\cdot C\cdot\left(y_{A_1}-y_{A_2}\right)
+\end{equation}
+$k_c$是質量傳輸係數
+\begin{itemize}
+  \item  對流質量傳輸產生的條件:
+  \begin{enumerate}
+    \item 某成分有濃度差
+    \item 有流動的連續介質
+  \end{enumerate}
+  \item 可將通式改寫為:
+  \begin{equation}
+    N_A = k_c\Delta C_A = k_p\Delta p_A = k_y\Delta y_A
+  \end{equation}
+  $k_p$是壓力單位下的傳輸係數，$k_y$是莫爾單位下的傳輸係數\\
+  P.S. $k_y = k_p\cdot P = k_c C$
+  \item 同熱對流的$h$，質量傳輸係數$k_{c,p,y}$也很難獲得，因為會受容器的形狀、流速、流動方式、流體的物性(密度、黏度、熱容、熱導係數)、質傳方式而影響\\
+  通常使用質量傳輸經驗式，計算，再代入獲得$k_{c,p,y}$
+\end{itemize}
+\subsection{對流質量傳輸的無因次群}
+其中有些在熱對流中已經提過
+\begin{itemize}
+  \item Schmidt Number:
+  \begin{equation}
+    \text{Sc} = \frac{\nu}{D_{AB}} = \frac{\mu}{\rho D_{AB}} = \frac{\text{Momentum Diffusivity}}{\text{Mass Diffusivity}}
+  \end{equation}
+  這裡也同熱對流有:
+  \begin{equation}
+    \text{Sc} = \left(\frac{\delta}{\delta_m}\right)^3 = \left(\frac{\text{Mass Boundary Layer}}{\text{Momentum Boundary Layer}}\right)^3
+  \end{equation}
+  的關係，但注意$\delta_m$是質量邊界層厚度，而不是熱對流的熱邊界層厚度
+  \item Lewis Number:
+  \begin{equation}
+    \text{Le} = \frac{\alpha}{D_{AB}} = \frac{k}{\rho C_p D_{AB}} = \frac{\text{Thermal Diffusivity}}{\text{Mass Diffusivity}}
+  \end{equation}
+  \item Prandtl Number:
+  \begin{equation}
+    \text{Pr} = \frac{\nu}{\alpha} = \frac{C_p\mu}{k} = \frac{\text{Momentum Diffusivity}}{\text{Thermal Diffusivity}}
+  \end{equation}
+  \item Sherwood Number:\\
+  對比熱對流，就是那邊的Nusselt Number，徑向的動量傳輸和質量傳輸比
+  \begin{equation}
+    \text{Sh} = \frac{k_cL}{D_{AB}} = \frac{\text{Mass Convection Rate}}{\text{Molecular Diffusion Rate}}
+  \end{equation}
+  若系統為圓柱或球:
+  \begin{equation}
+    \text{Sh} = \frac{k_cD}{D_{AB}}
+  \end{equation}
+  \item Peclet Number:\\
+  在軸向上的質量傳輸比
+  \begin{equation}
+    \text{Pe}_M =\text{Re}\cdot\text{Sc} = \frac{\rho u D}{\mu} = \frac{\text{Mass Convection Rate}}{\text{Molecular Diffusion Rate}}
+  \end{equation}
+  質量跟著液體流動方向傳遞\\
+  若$\text{Pe}_M$很大，代表軸向上的質量傳導可以被忽略
+  \item Stanton Number:
+  \begin{equation}
+    \text{St}_M = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}} = \frac{k_c}{\nu}
+  \end{equation}
+\end{itemize}
+\subsection{質量傳輸的經驗式，及以$\text{St}_M$表示的經驗式}
+同熱對流，$f(\text{Re},\text{Sc},\frac{L}{D})$函數，題目會給
+\begin{itemize}
+  \item 流體流過平板:
+  \begin{equation}
+    \text{Sh} = 0.664\text{Re}^{\frac{1}{2}}\text{Sc}^{\frac{1}{3}}
+  \end{equation}
+  \item 層流流過長直圓管，其壁面濃度均一(泡茶包)
+  \begin{equation}
+    \text{Sh} = 3.66 + f(\text{Re},\text{Sc},\frac{L}{D})
+  \end{equation}
+  \item 層流流過長直圓管，給予均勻質量通量(過濾器)
+  \begin{equation}
+    \text{Sh} = \frac{48}{11} + f(\text{Re},\text{Sc},\frac{L}{D})
+  \end{equation}
+  \item Plug Flow，流過長直圓管，給予均勻質量通量
+  \begin{equation}
+    \text{Sh} = 8 + f(\text{Re},\text{Sc},\frac{L}{D})
+  \end{equation}
+  \item 流過球面的流(泡澡球):
+  \begin{equation}
+    \text{Sh} = 2 + f(\text{Re},\text{Sc})
+  \end{equation}
+  \item Reynolds Analogy:(適用於$\text{Sc}=1$)
+  \begin{equation}
+    \frac{k_c}{u_\infty} = \text{St}_M = \frac{C_f}{2} = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}}
+  \end{equation}
+  \item Colburn Analogy:(適用於$0.6<\text{Sc}<2500$) (P.S. 熱對流那邊是$0.5<\text{Pr}<50$)
+  \begin{equation}
+    j_D = \text{St}_M\cdot \text{Sc}^{\frac{2}{3}} = \frac{C_f}{2}
+  \end{equation}
+  $j_D$是Colburn $j$ factor for mass transfer\\
+  所以:
+  \begin{equation}
+    j_H =  j_D = \frac{C_f}{2},\quad 0.6<\text{Sc}<2500,\quad 0.5<\text{Pr}<50
+  \end{equation}
+  \item Prandtl Analogy:(適用於忽略Drag)
+  \begin{equation}
+    \text{St}_M = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}}\left(\text{Sc}-1\right)} = \frac{k_c}{u_\infty}
+  \end{equation}
+  \item Von Karman Analogy:(適用於忽略Drag)
+  \begin{equation}
+    \text{St}_M = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}\left\{
+      \text{Sc}-1+\ln\left[1+\frac{5}{6}\left(\text{Sc}-1\right)\right]
+    \right\}}} = \frac{k_c}{u_\infty}
+  \end{equation}
+\end{itemize}
+\section{兩個介質的質量傳輸，Two-Films Theory}
+假設有一液相與一氣相，兩項有一混合的接處面\\
+液相有$A$濃度分布$x_{A,l}$，到交界面時濃度$x_{A,i}$，氣相有$A$濃度分布$y_{A,g}$，到交界面時濃度$y_{A,i}$\\
+假設$A$在氣相與液相濃度皆很稀薄，可符合Henry's Law:
+\begin{equation}
+  y_{A,i} = Hx_{A,i} \nonumber
+\end{equation}
+定義$x_A^*$是與$y_{A,g}$平衡後的莫爾分率、$y_A^*$是與$x_{A,l}$平衡後的莫爾分率，也可以說是遠離交界面的氣液濃度
+\subsection{相關關係式}
+\begin{itemize}
+  \item Henry's Law:
+  \begin{align}
+    y_{A,i} &= Hx_{A,i} \\
+    y_A^* &= Hx_{A,l}\\
+    y_{A,g} &= Hx_A^*
+  \end{align}
+  \item Local gas-phase:
+  \begin{equation}
+    N_A = k'_y\left(y_{A,g}-y_{A,i}\right)
+  \end{equation}
+  $k'_y$是氣相中Equimolar的質量傳輸係數
+  \item Local liquid-phase:
+  \begin{equation}
+    N_A = k'_x\left(x_{A,i}-x_{A,l}\right)
+  \end{equation}
+  $k'_x$是液相中Equimolar的質量傳輸係數
+  \item Overall gas-phase:
+  \begin{equation}
+    N_A = K'_y\left(y_{A,g}-y_A^*\right) \label{eq060106}
+  \end{equation}
+  $K'_y$是整體的氣相Equimolar的質量傳輸係數
+  \item Overall liquid-phase:
+  \begin{equation}
+    N_A = K'_x\left(x_A^*-x_{A,l}\right)\label{eq060107}
+  \end{equation}
+  $K'_x$是整體的液相Equimolar的質量傳輸係數
+\end{itemize}
+\subsection{在交界區}
+\begin{itemize}
+  \item 若為Equilmolar Counterdiffusion，(A可擴散到B，B可擴散到A)則:
+  \begin{enumerate}
+    \item 在兩相中:
+    \begin{align}
+      N_A &= k'_y\left(y_{A,g}-y_{A,i}\right)\label{eq060201}\\
+      N_A &= k'_x\left(x_{A,i}-x_{A,l}\right)\label{eq060202}
+    \end{align}
+    \item 合併兩式:
+    \begin{equation}
+      k'_y\left(y_{A,g}-y_{A,i}\right) = k'_x\left(x_{A,i}-x_{A,l}\right)
+    \end{equation}
+    \item 將實驗數據或算式，可得到不同時候平衡時的$y_{A,g},~x_{A,l}$
+    \item 做出$y_A-x_A$的圖，將上步驟的數據畫於圖上，此為平衡線
+    \item 已知$y_{A,g},~x_{A,l}$，可在此圖上點出此為置，令為點$P$
+    \item 上式移項後得到:
+    \begin{equation}
+      -\frac{k'_x}{k'_y} = \frac{y_{A,g}-y_{A,i}}{x_{A,i}-x_{A,l}}
+    \end{equation}
+    \item 從點$P$出發，做過點$P$斜率為$-\frac{k'_x}{k'_y}$的直線，與平衡線交於點$M(x_i,y_i)$，$M(x_i,y_i)$即為交界面的濃度
+    \item 而得知交界面的兩相濃度後，即可計算非勻相反應情形
+  \end{enumerate}
+  \item 若$B$是Stagnant，也就是$B$不會擴散到$A$，則:
+  \begin{enumerate}
+    \item 根據Fick's Law:
+    \begin{equation}
+      N_A = -D_{AB} C\cdot \frac{dy_A}{dz}+y_A\left(N_A+\cancel{N_B}\right)
+    \end{equation}
+    \item 也就是:
+    \begin{equation}
+      N_A = -\frac{D_{AB}C}{L}\ln\left(\frac{1-y_{A,g}}{1-y_{A,l}}\right)
+    \end{equation}
+    \item 代入$N_A$式子的氣相那一條(\ref{eq060201})，經過化簡後可得到:
+    \begin{equation}
+      N_A =  k'_y\cdot \frac{\ln\left(\frac{1-y_{A,i}}{1-y_{A,g}}\right)}{\left(1-y_{A,i}\right)-\left(1-y_{A,g}\right)}
+      \left(y_{A,g}-y_{A,l}\right) 
+    \end{equation}
+    \item 將常數換掉後可寫成這樣:
+    \begin{equation}
+      N_A = k_y\left(y_{A,g}-y_{A,l}\right)
+    \end{equation}
+    其中定義$k_y$是氣相，但氣相不傳給液相的質量傳輸係數
+    \begin{equation}
+      k_y = \frac{k_y'}{\left(1-y_A\right)_{i,M}}
+    \end{equation}
+    並定義$\left(1-y_A\right)_{i,M}$是
+    \begin{equation}
+      \left(1-y_A\right)_{i,M} = \frac{\left(1-y_{A,i}\right)-\left(1-y_{A,g}\right)}{\ln\left(\frac{1-y_{A,i}}{1-y_{A,g}}\right)}\label{eq060210}
+    \end{equation}
+    \item 同樣地，代入$N_A$式子的液相那一條(\ref{eq060202})，經過化簡後可得到:
+    \begin{equation}
+      N_A = k'_x\cdot \frac{\ln\left(\frac{1-x_{A,i}}{1-x_{A,l}}\right)}{\left(1-x_{A,i}\right)-\left(1-x_{A,l}\right)}
+      \left(x_{A,i}-x_{A,l}\right)
+    \end{equation}
+    \item 將常數換掉後可寫成這樣:
+    \begin{equation}
+      N_A = k_x\left(x_{A,i}-x_{A,l}\right)
+    \end{equation}
+    其中定義$k_x$是液相，但氣相不傳給液相質量傳輸係數
+    \begin{equation}
+      k_x = \frac{k_x'}{\left(1-x_A\right)_{i,M}}
+    \end{equation}
+    並定義$\left(1-x_A\right)_{i,M}$是
+    \begin{equation}
+      \left(1-x_A\right)_{i,M} = \frac{\left(1-x_{A,i}\right)-\left(1-x_{A,l}\right)}{\ln\left(\frac{1-x_{A,i}}{1-x_{A,l}}\right)}\label{eq060214}
+    \end{equation}
+    \item 兩式移項後得到:
+    \begin{equation}
+      -\frac{k_x}{k_y} = \frac{y_{A,g}-y_{A,i}}{x_{A,i}-x_{A,l}} =
+      \frac{\frac{-k'_x}{\left(1-x_A\right)_{i,M}}}{\frac{k'_y}{\left(1-y_A\right)_{i,M}}}\label{eq060215}
+    \end{equation}
+    \item 將實驗數據或算式，可得到不同時候平衡時的$y_{A,g},~x_{A,l}$
+    \item 做出$y_A-x_A$的圖，將上步驟的數據畫於圖上，此為平衡線
+    \item 已知$y_{A,g},~x_{A,l}$，可在此圖上點出此為置，令為點$P$
+    \item 首先，令$k_x = k_x'$，$k_y = k_y'$
+    \item 做過點$P$斜率為$-\frac{k_x}{k_y}$的直線，與平衡線交於點$M(x_i,y_i)$，$M(x_i,y_i)$
+    \item 將得到的$x_i,y_i$代入(\ref{eq060214})和(\ref{eq060210})，即可得到$\left(1-x_A\right)_{i,M}$和$\left(1-y_A\right)_{i,M}$
+    \item 將$k'_x,k'_y$代入(\ref{eq060215})，可得到另一$k_x,k_y$
+    \item 重複步驟12，直到$k_x,k_y$不再改變
+    \item 得到正確的交點$M(x_i,y_i)$
+  \end{enumerate}
+\end{itemize}
+\subsection{在Overall region}
+\begin{itemize}
+  \item 若為Equilmolar Counterdiffusion，(A可擴散到B，B可擴散到A)則:
+  \begin{enumerate}
+    \item 由(\ref{eq060201})和(\ref{eq060202})，代入(\ref{eq060106})和(\ref{eq060107})可得到:
+    \begin{align}
+      N_A &= k'_y\left(y_{A,g}-y_{A,i}\right) = \frac{y_{A,g}-y_{A,i}}{\frac{1}{k'_y}}\label{eq060301}\\
+      N_A &= k'_x\left(x_{A,i}-x_{A,l}\right) = k'_x\frac{x_{A,i}-x_{A,l}}{y_{A,i}-y_A^*}\left(y_{A,i}-y_A^*\right)
+    \end{align}
+    定義$m'$是:
+    \begin{equation}
+      m' = \frac{y_{A,i}-y_A^*}{x_{A,i}-x_{A,l}}
+    \end{equation}
+    第二式可改寫為
+    \begin{equation}
+      N_A = k_x'\frac{1}{m'}\left(y_{A,i}-y_A^*\right) = \frac{y_{A,i}-y_A^*}{\frac{m'}{k_x'}}\label{eq060304}
+    \end{equation}
+    \item 合併(\ref{eq060301})和(\ref{eq060304})可得到:
+    \begin{equation}
+      N_A = \frac{\left(y_{A,g}-y_{A,i}\right)+\left(y_{A,i}-y_A^*\right)}{\frac{1}{k'_y}+\frac{m'}{k_x'}} = 
+      \frac{y_{A,g}-y_A^*}{\frac{1}{k'_y}+\frac{m'}{k_x'}}
+    \end{equation}
+    \item 再跟(\ref{eq060106})比較，可得到:
+    \begin{equation}
+      \frac{1}{K'_y} = \frac{1}{k'_y}+\frac{m'}{k_x'}
+    \end{equation}
+    此為從兩相質量傳輸係數，得到整體氣相平衡的質量傳輸係數的方法
+    \item 反著第一步，再做一次:
+    \begin{align}
+      N_A &= k'_y\left(y_{A,g}-y_{A,i}\right) = k'_y\frac{y_{A,g}-y_{A,i}}{x_A^*-x_{A,i}}\left(x_A^*-x_{A,l}\right)\\
+      N_A &= k'_x\left(x_{A,i}-x_{A,l}\right) = \frac{x_{A,i}-x_{A,l}}{\frac{1}{k'_x}}\label{eq060308}
+    \end{align}
+    定義$m''$是:
+    \begin{equation}
+      m'' = \frac{y_{A,g}-y_{A,i}}{x_A^*-x_{A,i}}
+    \end{equation}
+    第一式可改寫為
+    \begin{equation}
+      N_A = k_y'm''\left(x_A^*-x_{A,i}\right) = \frac{x_A^*-x_{A,i}}{\frac{1}{m''k'_y}}\label{eq060310}
+    \end{equation}
+    \item 合併(\ref{eq060308})和(\ref{eq060310})可得到:
+    \begin{equation}
+      N_A = \frac{\left(x_A^*-x_{A,i}\right)+\left(x_{A,i}-x_{A,l}\right)}{\frac{1}{k'_x}+\frac{1}{m''k'_y}} = 
+      \frac{x_A^*-x_{A,l}}{\frac{1}{k'_x}+\frac{1}{m''k'_y}}
+    \end{equation}
+    \item 再跟(\ref{eq060107})比較，可得到:
+    \begin{equation}
+      \frac{1}{K'_x} = \frac{1}{k'_x}+\frac{1}{m''k'_y}
+    \end{equation}
+    此為從兩相質量傳輸係數，得到整體液相平衡的質量傳輸係數的方法
+  \end{enumerate}
+  \item 若$B$是Stagnant，也就是$B$不會擴散到$A$，則會有完全與上述相同的式子，但$k'_x,k'_y$會被$k_x,k_y$取代\\
+  P.S. $k_x,k_y$ 的定義分別是:
+  \begin{align}
+    k_x &= \frac{k_x'}{\left(1-x_A\right)_{i,M}} \nonumber\\
+    k_y &= \frac{k_y'}{\left(1-y_A\right)_{i,M}} \nonumber\\
+    \left(1-x_A\right)_{i,M} &= \frac{\left(1-x_{A,i}\right)-\left(1-x_{A,l}\right)}{\ln\left(\frac{1-x_{A,i}}{1-x_{A,l}}\right)} \nonumber\\
+    \left(1-y_A\right)_{i,M} &= \frac{\left(1-y_{A,i}\right)-\left(1-y_{A,g}\right)}{\ln\left(\frac{1-y_{A,i}}{1-y_{A,g}}\right)} \nonumber
+  \end{align}
+  最後會得到
+  \begin{equation}
+    \frac{1}{K_y} = \frac{1}{k_y}+\frac{m'}{k_x},\quad \frac{1}{K_x} = \frac{1}{k_x}+\frac{1}{m''k_y}
+  \end{equation}
+\end{itemize}
+\section{單元操作}
+\subsection{熱交換器}
+\begin{itemize}
+  \item 原理: 利用熱傳導與熱對流的方式，藉由一金屬介面使兩個部混合的流體，將熱量由高溫傳到低溫，達到加熱或冷卻的目的\\
+  定義$T_{H,i},T_{H,o},T_{C,i},T_{C,o}$分別是熱交換器中高溫流體進入、出口溫度，低溫流體進入、出口溫度
+  \item 依照結構可分為:
+  \begin{enumerate}
+    \item Double pipe heat exchanger(又稱 Single-pass heat exchanger)
+    \begin{equation}
+      q = \dot m_H C_{p,H}\left(T_{H,i}-T_{H,o}\right) = \dot m_C C_{p,C}\left(T_{C,o}-T_{C,i}\right)
+    \end{equation}
+    \item Shell-and-tube heat exchanger\\
+    會使用(X-Y Shell and Tube Heat Exchanger)的方式來表示，其中$X$代表Shell的數量，$Y$代表Tube的數量
+    \begin{equation}
+      q = \dot m_H C_{p,H}\left(T_{H,i}-T_{H,o}\right) = \dot m_C C_{p,C}\left(T_{C,o}-T_{C,i}\right)
+    \end{equation}
+    一樣的式子，但這裡熱傳的常數是被乘上一個修正因子Correction Factor(F)後的\\
+    而$F$則會根據不同的Shell-and-tube heat exchanger有不同的(F-Y)關係圖\\
+    關係圖上也會因為不同的$\frac{T_{H,i}-T_{H,o}}{T_{C,i}-T_{C,o}}$數值而有不同的線
+  \end{enumerate}
+  \item 依照流體流動方式可分為:
+  \begin{enumerate}
+    \item Counterflow heat exchanger(反向流熱交換器)
+    \item Co-current flow heat exchanger(同向流熱交換器)
+  \end{enumerate}
+  而流向只影響$T_{H,o},T_{C,o},T_{H,i},T_{C,i}$的加減關係，適用相同式子
+  \item 解題方式有兩種:
+  \begin{enumerate}
+    \item Log Mean Temperature Difference(LMTD) Method\\
+    ($T_{H,i},T_{H,o},T_{C,i},T_{C,o}$)的四個參數中，要知道其中3個才能使用
+    \begin{equation}
+      \text{LMTD} = \frac{\Delta T_1-\Delta T_2}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)}
+    \end{equation}
+    注意:$1,2$指的是交換器的位置，無關高低溫\\
+    舉例來說\\
+    Double pipe heat exchanger，且為Counterflow heat exchanger，則:
+    \begin{equation}
+      \Delta T_1 = T_{H,i}-T_{C,o},\quad \Delta T_2 = T_{H,o}-T_{C,i}
+    \end{equation}
+    Double pipe heat exchanger，且為Co-current flow heat exchanger，則:
+    \begin{equation}
+      \Delta T_1 = T_{H,i}-T_{C,i},\quad \Delta T_2 = T_{H,o}-T_{C,o}
+    \end{equation}
+    而只要對Double pipe heat exchanger，都適用:
+    \begin{equation}
+      q = U\cdot A\cdot \text{LMTD}
+    \end{equation}
+    而對Shell-and-tube heat exchanger:
+    \begin{equation}
+      q = F_G\cdot UA \text{LMTD}
+    \end{equation}
+    有一種特殊情況是，當$\Delta T_1 = \Delta T_2$時，這時$\text{LMTD}$會變成$\frac{0}{0}$的未定義狀態\\
+    這時要使用L'Hopital's Rule
+    \begin{equation}
+      \text{LMTD} = \frac{\Delta T_1-\Delta T_2}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)} = 
+      \Delta T_2 \cdot \frac{\frac{\Delta T_1}{\Delta T_2}-1}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)}
+    \end{equation}
+    令$\frac{\Delta T_1}{\Delta T_2} = x$，則根據L'Hopital's Rule:
+    \begin{equation}
+      \lim_{x\rightarrow 1}\left(\Delta T_2\cdot\frac{x-1}{\ln x} \right) =  \Delta T_2 x = \Delta \frac{T_1}{T_2} = \Delta T_1
+    \end{equation}
+    故此時$\Delta T_1 = \Delta T_2$
+    \item Number of Transfer Units(NTU) Method\\
+    只需知道$(T_{H,i},T_{C,i})$，也就是兩流體進入交換器的溫度，配合實驗找到效率(Effectiveness, $\varepsilon$)，即可求得\\
+    $\varepsilon$的定義:
+    \begin{equation}
+      \varepsilon = \frac{\text{熱交換器的真實熱傳速率}}{\text{具有無限大熱傳面積的熱傳速率}}
+    \end{equation}
+    $\varepsilon$會是$f(\text{NTU},\frac{C_\text{min}}{C_\text{max}})$的函數\\
+    定義NTU:
+    \begin{equation}
+      \text{NTU}=\frac{UA}{C_\text{min}}
+    \end{equation}
+    故在$A=\infty$時，會有最大的
+    \begin{equation}
+      q(A=\infty) = C_{\text{min}}\left(T_{H,i}-T_{C,i}\right) 
+    \end{equation}
+    其中$C_\text{min}$是兩個介質中的Minimum heat capacity\\
+    也就是:
+    \begin{equation}
+      \begin{cases}
+         C_H > C_C \Rightarrow C_H=C_\text{max},~C_C=C_\text{min} \\
+         C_C > C_H \Rightarrow C_C=C_\text{max},~C_H=C_\text{min}
+      \end{cases}
+    \end{equation}
+    得到:
+    \begin{equation}
+      q_{\text{act}}= \varepsilon\cdot C_{\text{min}}\left(T_{H,i}-T_{C,i}\right)
+    \end{equation}
+  \end{enumerate}
+\end{itemize}
+\subsection{蒸發器 Evaporator}
+藉由加熱使溶劑因沸騰而汽化，以去除溶劑達到溶液純化的目的
+\begin{itemize}
+  \item 蒸發器的種類
+  \begin{enumerate}
+    \item 橫管式蒸發器:
+    \begin{itemize}
+      \item 水蒸氣於管內流動、溶液於管外流動
+      \item 自然對流的加熱方式，加熱效果較差，高黏度流體效果更差
+      \item 不適用易產生泡沫或結垢的流體
+      \item 構造簡單、價格低廉、適合小規模生產
+    \end{itemize}
+    \item 垂直短管式蒸發器
+    \begin{itemize}
+      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
+      \item 自然對流的加熱方式，可加裝擋板以消除泡沫，並增加對流效果
+      \item 適用於易產生泡沫的流體，但結垢仍然不行
+      \item 構造簡單，價格不貴
+    \end{itemize}
+    \item 垂直長管式蒸發器
+    \begin{itemize}
+      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
+      \item 自然對流的加熱方式，但因為很長，熱傳效果更好
+      \item 溶液只要經管一次，即可完成蒸發的目的，大幅縮短加熱時間
+      \item 適用於易產生泡沫的流體、對溫度敏感的流體、同樣不適合用在易結垢的
+      \item 不適合用在會有鹽類析出、黏度高的流體
+    \end{itemize}
+    \item 強制循環式蒸發器
+    \begin{itemize}
+      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
+      \item 加裝循環泵浦作為融業的強制循環、強制對流、熱傳效果更好、大幅縮短加熱時間
+      \item 適用於易產生泡沫的流體、對溫度敏感的流體、黏度高的流體
+      \item 由於氣液飛濺的情形嚴重、泵浦的動力消耗、成本較高
+    \end{itemize}
+    \item 夾套式蒸發器(攪膜蒸發器)
+  \end{enumerate}
+  而根據操作也可以歸類成:
+  \begin{enumerate}
+    \item 單效蒸發器(Single-effect evaporator)
+    \item 多效蒸發器(multiple-effect evaporator)
+    \begin{enumerate}
+      \item 順向多效蒸發器
+      \item 逆向多效蒸發器
+    \end{enumerate}
+  \end{enumerate}
+  兩者的比較
+  \begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline   & 單效 & 多效 \\\hline
+    操作成本 &  相同 & 相同 \\\hline
+    蒸發總量 & 少 & 多\\\hline
+    經濟效益 & 小 & 大\\\hline
+    設備成本 & 少 & 多\\\hline
+    操作性  & 易 & 難\\\hline
+    物料損失 & 少 & 多\\\hline
+    最終濃度 & 小 & 大\\\hline
+    溫度 & $T_1$ & $T_1>T_2>\cdots>T_n$\\\hline
+    壓力 & $P_1$ & $P_1>P_2>\cdots>P_n$ \\\hline
+  \end{tabular}
+  \end{center}
+  \item 蒸發器的名詞介紹
+  \begin{itemize}
+  \item 蒸發量(Capacity),$V$:\\
+    單位時間所去除溶劑的質量
+    \item 蒸氣使用量(Steam Consumption),$S$:
+    單位時間，蒸發器使用(消耗)的蒸氣質量
+    \item 經濟效益(Economy),$\eta$:
+    每使用單位質量蒸氣，所能去除溶劑的質量
+    \begin{equation}
+      \eta = \frac{V}{S}
+    \end{equation}
+  \end{itemize}
+  \item 單效蒸發器的計算範例\\
+  假設一單效蒸發器，進料$F$，狀態$T_F,X_F,h_F$，經過蒸氣$S$加熱後\\
+  變為蒸氣$V$，狀態$T_1,X_V,H_V$，留下濃縮液$L$，狀態$T_1,X_L,h_L$\\
+  蒸氣$S$通入前狀態$T_S,H_S$，通入後凝結變成液體，溫度不變，狀態$T_S,h_S$
+  \begin{itemize}
+    \item 整體質量平衡:
+    \begin{equation}
+      F= L+V
+    \end{equation}
+    \item 溶質質量平衡:
+    \begin{equation}
+      FX_F=LX_L
+    \end{equation}
+    \item 熱平衡:
+    \begin{equation}
+      F\cdot h_F + S\cdot \lambda = L\cdot h_K + V\cdot H_V
+    \end{equation}
+    其中$\lambda$為蒸氣的潛熱
+    \begin{equation}
+      \lambda = H_S -h_S
+    \end{equation}
+    \item 蒸發器的熱傳方程
+    \begin{equation}
+      Q = S\cdot(H_S -h_S) = S\cdot \lambda = UA(T_S-T_1)
+    \end{equation}
+  \end{itemize}
+\end{itemize}
+\subsection{蒸餾 Distillation}
+藉由加熱使混合物之各成分因蒸氣壓的不同而分離
+\begin{itemize}
+  \item 分類:
+  \begin{itemize}
+    \item 簡單蒸餾 Simple Distillation :\\
+    液體受熱所產生的蒸汽直接排出，不再冷凝，回流，或與其他蒸氣進行液汽接觸
+    \begin{enumerate}
+      \item 閃蒸、驟沸蒸餾 Flash distillation\\
+      進料經加熱後，進入閃蒸槽，將槽內壓力降低，則液體部分企劃蒸發而達氣液平衡
+      \item 微分蒸餾 Differential distillation\\
+      液體(L)經加熱會產生蒸氣(V)，經冷凝而成為塔頂產物，不再回流至器內。\\
+      殘留液的量(L)及組成($x_A$)，與塔頂產物的量(V)及組成($y_A$)皆會隨時間改變(unsteadt state)\\
+      長時間來看，L,V為未平衡關係，不可視為平衡操作\\
+      但短時間來看，L,V仍為平衡關係，故$y_A,x_A$還是可以看平衡線
+    \end{enumerate}
+    \item 精餾 Rectification:\\
+    具有冷凝、回流裝置
+    \begin{enumerate}
+      \item 批式蒸餾 Batch Distillation
+      \item 連續蒸餾 Continuous Distillation\\
+      可以拆分為三個物流、三個操作線、兩個影響因素
+      \begin{itemize}
+        \item 物流:
+        \begin{itemize}
+          \item 進料($F$)，Feed
+          \item 塔頂產物($D$)，Distillate
+          \item 塔底產物($W$)，Bottoms
+        \end{itemize}
+        \item 操作線 Operating Line:
+        \begin{itemize}
+          \item q-line，Feed Section Operating Line
+          \item 增濃段，Enriching Section Operating Line
+          \item 氣提段(回收段)，Stripping(Recovery) Section Operating Line
+        \end{itemize}
+        \item 影響因素:
+        \begin{itemize}
+          \item 溫度\\
+          若塔溫提高，則分離效果較差，$x_D$下降，$x_W$上升\\
+          若回流比提高或再沸器功率降低，塔溫會下降，分離效果較好
+          \item 壓力\\
+          若壓力上升，則分離效果較差，$x_D$下降，$x_W$上升
+        \end{itemize}
+      \end{itemize}
+    \end{enumerate}
+    \item 共沸蒸餾 Azeotrope Distillation
+    \item 萃取蒸餾 Extraction Distillation
+    \item 水蒸氣蒸餾 Steam Distillation
+  \end{itemize}
+  \item 重要名詞
+  \begin{itemize}
+    \item 相對揮發度 Relative volatility，$\alpha_{AB}$\\
+    定義:
+    \begin{equation}
+      \alpha_{AB}=\frac{\frac{y_A}{x_A}}{\frac{y_B}{x_B}} = \frac{y_A\left(1-x_A\right)}{x_A\left(1-y_A\right)}
+    \end{equation}
+    \item 平衡線 Equilibrium line\\
+    將上式移項後，若作圖$y_A,x_A$，則會得到平衡線
+    \begin{equation}
+       y_A = \frac{\alpha_{AB}x_A}{1+\left(\alpha_{AB}-1\right)x_A}
+    \end{equation}
+    平衡線可判斷分離$A$,$B$的難易程度\\
+    若$\alpha_{AB}>1$，$A$易揮發\\
+    若$\alpha_{AB}<1$，$B$易揮發\\
+    若$\alpha_{AB}=1$，$A$,$B$達共沸點(Azeotrope point)\\
+    而$\alpha_{AB}$越偏離1，則$A$,$B$越易分離
+  \end{itemize}
+  \item Flash Distillation 的計算範例:\\
+  假設進料$F$，含輕成分$x_F$，進入閃蒸槽後，產生蒸氣$V$，含$y_A$，液體$L$，含$x_A$
+  \begin{itemize}
+    \item 整體質量平衡:
+    \begin{equation}
+      F = L+V
+    \end{equation}
+    \item 輕成分的質量平衡:
+    \begin{equation}
+      F\cdot x_F = L\cdot x_A +V\cdot y_A
+    \end{equation}
+    解得操作式，必過($x_F,x_F$)點
+    \begin{equation}
+      y_A = \frac{f-1}{f}x_A + \frac{x_f}{f}
+    \end{equation}
+    並定義$f$，代表進料中被汽化的比例:
+    \begin{equation}
+      f = \frac{V}{F}
+    \end{equation}
+    \item 自點($x_F,x_F$)，做斜率$\left(\frac{f-1}{f}\right)$的直線，會交平衡線於$P$點\\
+    $P$點及為出口端氣體與液體的組成\\
+    另外也可以做通過點($x_F,x_F$)和點($0,\frac{x_F}{f}$)的直線，同樣是$P$點
+  \end{itemize}
+  \item Differential Distillation 微分蒸餾的計算範例\\
+  (同樣適用於批次蒸餾(Batch Distillation))
+  假設有一具有共$L$ mole，內含$x_A$，的液體，在定功率的加熱下，蒸餾出$V$ mole 的東西，內含$y_A$\\
+  $t=0$時，只有$L$以及在$L$裡的$x_A$，令為$L_1$，$x_{A_1}$\\
+  $t=t$時，液體剩下$L-dL$，$X_A-dX_A$，令為$L_2$，$x_{A_1}$
+  \begin{itemize}
+    \item Overall Mass Balance:
+    \begin{equation}
+      L_1 = L_2 + V,\quad V = dL
+    \end{equation}
+    蒸出量$V$等於液體減少量$dL$
+    \item material Balance of $A$:
+    \begin{equation}
+      L\cdot x_A = \left(L-dL\right)\cdot\left(x_A-dx_A\right)+V\cdot y_A
+    \end{equation}
+    \item 化簡會得到，Rayleigh Equation
+    \begin{equation}
+      \int_{L_1}^{L_2}\frac{dL}{L} = \ln\frac{L_2}{L_1} = \int_{X_{A_1}}^{X_{A_2}}\frac{dX_A}{y_A-x_A}
+    \end{equation}
+    \item 定義Average Composition of total material distillated, $y_{av}$
+    \begin{equation}
+      y_{av} = \frac{L_1x_{A_1}-L_2x_{A_2}}{L_1-L_2}
+    \end{equation}
+    使得:
+    \begin{equation}
+      L_1 x_{A_1} = L_2 x_{A_2} = \left(L_2-L_1\right)\cdot y_{av}
+    \end{equation}
+    \item 解法1:\\
+    由Rayleigh Equation，對平衡時的$y_A,x_A$實驗結果做($\frac{1}{y_A-x_A}-x_A$)的圖\\
+    利用Simpson's rule或其他積分方法得到:
+    \begin{equation}
+      \int_{X_{A_1}}^{X_{A_2}}\frac{dX_A}{y_A-x_A} = \ln \frac{L_2}{L_1}
+    \end{equation}
+    \item 解法2:\\
+    利用$\alpha_{AB}$，平衡線會是:
+    \begin{equation}
+      y_A = \frac{\alpha_{AB}x_A}{1+\left(\alpha_{AB}-1\right)x_A}\nonumber
+    \end{equation}
+    代入 Rayleigh Equation，得到:
+    \begin{equation}
+      \ln \frac{L_2}{L_1} = \frac{1}{\alpha_{AB}-1}\left[
+        \ln\frac{x_{A_2}}{x_{A_1}} - \alpha_{AB}\cdot\ln\left(
+          \frac{1-x_{A_2}}{1-x_{A_1}}
+        \right)
+      \right]
+    \end{equation}
+  \end{itemize}
+  \item Continuous Distillation 連續蒸餾的計算範例\\
+  假設一連續蒸餾裝置，進料$F$，含$x_F$，進入塔後，產生塔頂產物$V_1$，含$y_1$，塔底產物$W$，含$x_W$\\
+  上方Enriching Section有n個板，下方Stripping Section有m個板\\
+  也就是具有共計n個理論板在高於進料端，由最頂端的板開始計數\\
+  也就是具有共計m個理論板在低於進料端，由靠近進料端的板開始計數\\
+  上方Enriching Section的冷凝後物流會有一部分回流，為$L$，含$x_D$，另一部分為$D$，同樣含$x_D$，有著回流比$R$\\
+  下方Stripping Section的經過再沸器將$W$，含$x_W$送出，並回收$y_W$
+  \begin{itemize}
+    \item 整體質量平衡:
+    \begin{equation}
+      F = D+W
+    \end{equation}
+    \item 輕成分的質量平衡:
+    \begin{equation}
+      F\cdot x_F = D\cdot y_D + W\cdot x_W
+    \end{equation}
+    \item 上方的Enriching Section的整體的質量平衡:
+    \begin{equation}
+      V_{n+1} = L_n + D
+    \end{equation}
+    P.S. 從進料端上面的板子是$n$，而在$1$板出去的物流為$V_1$故為$V_{n+1}$\\
+    $L_n$則為從$n$板掉回來的物流，因為在$1$板掉回來的是$L_1$\\
+    回流比的定義，$R$:
+    \begin{equation}
+      R = \frac{L_n}{D}
+    \end{equation}
+    \item 代入後得到Enriching Section的操作線:
+    \begin{equation}
+      y_{n+1} = \frac{R}{R+1}x_n + \frac{1}{R+1}x_D
+    \end{equation}
+    \item 當$n=0$時，$x_n=x_D$，代入可得到$y_1=x_D$，此為起點，開始作圖
+    \begin{enumerate}
+      \item 做($y-x$)圖，並繪製平衡線
+      \item 在圖上再繪製一$45^\circ$的直線，在此直線上點出$(x_D,x_D)$也就是起點
+      \item 過起點做一斜率為$\frac{R}{R+1}$的直線$M$
+      \item 從起點開始，做一水平直線，交平衡線於$1$點，此點即為塔頂產物的組成($x_1,y_1$)
+      \item 從$1$點開始，向下做一垂直線，交$M$後向左做一水平線，交平衡線於$2$點，此點即為第二層組成($x_2,y_2$)
+      \item 重複上述步驟，直到最後一層$n$，即為入料端向上第一板的組成($x_n,y_n$)
+    \end{enumerate}
+    \item 下方的Stripping Section的整體的質量平衡:
+    \begin{equation}
+      V_{m+1} = L_m -W
+    \end{equation}
+    \item 代入輕成分的質量平衡，得到Stripping Section的操作線:
+    \begin{equation}
+      y_{m+1}=\frac{L_m}{V_{m+1}}x_m - \frac{W}{V_{m+1}}x_W
+    \end{equation}
+    \item 當$m=m$時(第二個$m$是總Stripping段板數)，$x_m=x_W$，代入可得到$y_{m+1}=x_W$，此為起點，開始作圖
+    \begin{enumerate}
+      \item 做($y-x$)圖，並繪製平衡線
+      \item 在圖上再繪製一$45^\circ$的直線，在此直線上點出$(x_W,x_W)$也就是起點
+      \item 過起點做一斜率為$\frac{L_m}{V_{m+1}}$的直線$N$
+      \item 從起點開始，向上做一垂直線，交平衡線於$(M)$點，此點即為塔底產物的組成($x_M,y_M$)
+      \item 從$M$點開始，向右做一水平直線，交$N$後向上做一垂直線，交平衡線於$(M-1)$點，此點即為第二層組成($x_{M-1},y_{M-1}$)
+      \item 重複上述步驟，直到第一層上方，$0$，即為入料端向下第一板的組成($x_1,y_1$)
+    \end{enumerate}
+    \item 進料端的操作線:\\
+    定義$q$，蒸發1莫爾的進料組成需要花費的熱，比上進料組成的莫爾潛熱
+    \begin{equation}
+      q = \frac{H_V-H_F}{H_V-H_L}
+    \end{equation}
+    可以把這個比值想成是，想要掉下去的程度，也就是$F$進料後，會有$Fq$的液體掉下去，也就是$L_m$，$F(1-q)$的液體會被蒸發，也就是$V_n$
+    \item 整體進料端的質量平衡:
+    \begin{align}
+      L_m &= L_n + qF\\
+      V_n &= V_m + (1-q)F
+    \end{align}
+    \item 整體進料端的輕成分質量平衡，代回剛剛那兩個操作線:
+    \begin{align}
+      V_n y &= L_n x + Dx_D \\
+      V_m y &= L_m x + Wx_W
+    \end{align}
+    \item 合併以上四條會得到Q-line的方程式
+    \begin{equation}
+      y = \frac{1}{q-1}x -\frac{x_F}{q-1}
+    \end{equation}
+    \item 當$x=x_F$時，$y=x_F$，此為起點，開始作圖
+    \begin{enumerate}
+      \item 做($y-x$)圖，並繪製平衡線
+      \item 在圖上再繪製一$45^\circ$的直線，在此直線上點出$(x_F,x_F)$也就是起點
+      \item 過起點做一斜率為$\frac{q}{q-1}$的直線$Q$
+    \end{enumerate}
+    \item Q-line的用途，不知道板子數時，找到到底該在哪裡放進料，一共要多少個板子
+    \begin{enumerate}
+      \item 做($y-x$)圖，並由實驗數據或$y=\frac{\alpha_{AB}x}{1+(\alpha_{AB}-1)x}$繪製平衡線
+      \item 點出($x_D,x_D$)，叫做$D$點
+      \item 點出($x_W,x_W$)，叫做$W$點
+      \item 點出($x_F,x_F$)，叫做$F$點
+      \item 計算$q$值(往上與往下的理論分配量)，並由$F$點做一斜率為$\frac{q}{q-1}$的直線，叫做$M$線
+      \item 由$D$點做一斜率為$\frac{R}{R+1}$的直線，交$M$線於$O$點
+      \item 連接$O$點和$W$點
+      \item OWD三點形成一個三角形，包於平衡線內
+      \item 由$D$點向右出發，每碰到一次平行線，就是一個板子，碰到後向下碰到三角形OWD後，向左碰到平行線，就是另一個板子
+      \item 畫板子值到板子交點小於$x_W$
+      \item 進料板的位置就是$M$線與平衡線的交點在哪兩個板子間
+      \item 而向上需要多少板子，以及向下需要多少板子也會得出
+    \end{enumerate}
+    \item $q$的斜率特質:
+    \begin{itemize}
+      \item 若進料是過冷液體，$q>1$，$\frac{q}{q-1}$斜率$>1$，是朝右上方的斜直線
+      \item 若進料是飽和液體，$q=1$，$\frac{q}{q-1}=\infty$，是向上的垂直線
+      \item 若進料是氣液共存，$0<q<1$，$-\infty<\frac{q}{q-1}<0$，是向左上方的斜直線
+      \item 若進料是飽和蒸汽，$q=0$，$\frac{q}{q-1}=0$，是向左的水平線
+      \item 若進料是過熱蒸汽，$q<0$，$0<\frac{q}{q-1}<1$，是向左下方的斜直線
+    \end{itemize}
+  \end{itemize}
+  \item Stripping-column Distillation 的設計:\\
+  其實就是只有下半段的連續蒸餾，只有Stripping Section，沒有Enriching Section\\
+  整體質量平衡
+  \begin{equation}
+    F = W + V_D
+  \end{equation}
+  輕成分的質量平衡
+  \begin{equation}
+    F\cdot x_F = W\cdot x_W + V_D\cdot y_D
+  \end{equation}
+  操作線
+  \begin{equation}
+    y_{m+1}= \frac{L_m}{V_{m+1}}x_m - \frac{W}{V_{m+1}}x_W
+  \end{equation}
+  Q-line:
+  \begin{equation}
+    y = \frac{1}{q-1}x - \frac{x_F}{q-1}
+  \end{equation}
+  \item Distillation with direct stream injection:\\
+  連續蒸餾，但不使用Reboiler改為直接通入蒸氣$S$的純水($y_S=0$，蒸氣不含輕成分)\\
+  質量平衡，及輕成分質量平衡
+  \begin{equation}
+    F + S = D + W,\quad  F\cdot x_F = D\cdot x_D + W\cdot x_W
+  \end{equation}
+\end{itemize}
+\end{CJK*}
+\end{document}

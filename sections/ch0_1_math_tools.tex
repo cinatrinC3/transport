@@ -1,0 +1,1366 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{數學知識——向量、張量、純量}
+\begin{itemize}
+  \item 純量，\fbox{階數0}:\\
+  只有大小，沒有方向的量，例如:溫度、壓力、密度、黏度
+  \item 向量，\fbox{階數1}:\\
+  有大小與方向的量，例如:速度、加速度、力\\
+  當寫作$\vec {\bm u}_x$時，表示向量$\vec {\bm u}$在$x$方向的分量，代表$u_x \bm \delta_x$\\
+  而當寫作$u_x$時，就是純量，代表向量$\vec {\bm u}$在$x$方向的大小\\
+  向量$\vec {\bm u}$有兩種表式方式，可寫成分量形式:
+  \begin{equation}
+    \vec {\bm u} = u_x \bm \delta_x + u_y \bm \delta_y + u_z \bm \delta_z
+  \end{equation}
+  或者矩陣形式:
+  \begin{equation}
+    \vec {\bm u} = \begin{bmatrix}
+      u_x \\
+      u_y \\
+      u_z 
+    \end{bmatrix}
+  \end{equation}
+  \item 張量(化工只會碰到二階張量)，\fbox{階數2}:\\
+  有大小與方向的量，且有兩個方向，例如:應力張量、慣性張量\\
+  例如 Shear stress: $\overline{\overline{\bm \tau}}$ (\ref{eq:shear_stress_tensor})
+  \begin{equation}
+    \overline{\overline{\bm \tau}} = \begin{bmatrix}
+      \tau_{xx} & \tau_{xy} & \tau_{xz} \\
+      \tau_{yx} & \tau_{yy} & \tau_{yz} \\
+      \tau_{zx} & \tau_{zy} & \tau_{zz}
+    \end{bmatrix}
+  \end{equation}
+  由於出於對稱性的考量，故定義張量的大小為
+  \begin{equation}
+    \left|\overline{\overline {\bm \tau}}\right| = \sqrt{\frac{1}{2}\left(
+      \overline{\overline {\bm \tau}} : \overline{\overline {\bm \tau^\dagger}}  
+    \right)} = \sqrt{\frac{1}{2}\sum_{i}\sum_{j} \tau_{ij}\tau_{ij}}
+  \end{equation}uv
+  並定義張量的跡(Trace)為:
+  \begin{equation}
+    \text{Tr}(\overline{\overline {\bm \tau}}) = \sum_{i} \tau_{ii} = \tau_{xx} + \tau_{yy} + \tau_{zz}
+  \end{equation}
+  \item 量之間有四種乘法:
+  \begin{itemize}
+    \item 內積(Dot product)，\fbox{總階數下降2}:\\
+    向量降階為純量
+    \begin{equation}
+      \vec {\bm v} \cdot \vec {\bm w} = |\vec {\bm v}||\vec {\bm w}|\cos\theta
+    \end{equation}
+    張量內積向量降階為向量
+    \begin{equation}
+      \overline{\overline {\bm \tau}} \cdot \vec {\bm u} = 
+      \begin{bmatrix}
+        \tau_{xx}u_x + \tau_{xy}u_y + \tau_{xz}u_z\\
+        \tau_{yx}u_x + \tau_{yy}u_y + \tau_{yz}u_z \\
+        tau_{zx}u_x + \tau_{zy}u_y + \tau_{zz}u_z
+      \end{bmatrix}
+    \end{equation}
+    或寫成單位向量形式
+    \begin{align}
+      \overline{\overline {\bm \tau}} \cdot \vec {\bm u} =&\phantom{+} (\tau_{xx}u_x + \tau_{xy}u_y + \tau_{xz}u_z) \bm \delta_x \nonumber \\
+      &+ (\tau_{yx}u_x + \tau_{yy}u_y + \tau_{yz}u_z) \bm \delta_y \nonumber \\
+      &+ (tau_{zx}u_x + tau_{zy}u_y + tau_{zz}u_z) \bm \delta_z
+    \end{align}
+    同個向量內積自己後開根號會等於該向量的大小
+    \begin{equation}
+      \sqrt{\vec {\bm u} \cdot \vec {\bm u}} = |\vec {\bm u}| \implies \boxed{\vec {\bm u} \cdot \vec {\bm u} = |\vec {\bm u}|^2}
+    \end{equation}
+    \item 外積(Cross product)，\fbox{總階數下降1}:\\
+    向量外積向量仍為向量(1+1-1=1)
+    \begin{equation}
+      \vec {\bm u}_x \times \vec {\bm u}_y = |\vec {\bm u}_x||\vec {\bm u}_y|\sin\theta \cdot \bm \delta_z
+    \end{equation}
+    而座標軸則為右手定則下的方向\\
+    同個向量外積自己會等於0
+    \begin{equation}
+      \vec {\bm u}_x \times \vec {\bm u}_x = 0
+    \end{equation}
+    \item 直積，\fbox{總階數直接相加}\\
+    向量乘向量變張量(1+1=2)\\
+    例如:Inertial Stress: $\rho \vec {\bm u} \vec {\bm u}$ (\ref{eq:inertial_stress_tensor})
+    \begin{equation}
+      \rho \vec {\bm u} \vec {\bm u} = \begin{bmatrix}
+        \rho u_x u_x & \rho u_x u_y & \rho u_x u_z \\
+        \rho u_y u_x & \rho u_y u_y & \rho u_y u_z \\
+        \rho u_z u_x & \rho u_z u_y & \rho u_z u_z
+      \end{bmatrix}
+    \end{equation}
+    或寫成單位向量形式
+    \begin{align}
+      \rho \vec {\bm u} \vec {\bm u} =&\phantom{+} \rho u_x u_x \bm \delta_x \bm \delta_x + \rho u_x u_y \bm \delta_x \bm \delta_y + \rho u_x u_z \bm \delta_x \bm \delta_z \nonumber \\
+      &+ \rho u_y u_x \bm \delta_y \bm \delta_x + \rho u_y u_y \bm \delta_y \bm \delta_y + \rho u_y u_z \bm \delta_y \bm \delta_z \nonumber \\
+      &+ \rho u_z u_x \bm \delta_z \bm \delta_x + \rho u_z u_y \bm \delta_z \bm \delta_y + \rho u_z u_z \bm \delta_z \bm \delta_z \label{eq:inertial_stress_tensor_unit}
+    \end{align}
+    \item Double dot product，\fbox{總階數下降4}:\\
+    張量跟張量相乘降階至純量(2+2-4=0)
+    \begin{equation}
+      \overline{\overline {\bm \sigma}} : \overline{\overline {\bm \tau}} = \sum_{i}\sum_{j} \sigma_{ij}\tau_{ji} \label{eq:double_dot_product}
+    \end{equation}
+    簡單說就是把$3\times 3$的兩個矩陣後項轉置後每一項相乘後加總起來\\
+    之所以要轉置，是讓非方陣也能作內積(其實平常向量內積，也會把一個轉過來)
+  \end{itemize}
+  \item 量之間的加減法，\fbox{階數必須相等}就能做加減法
+  \item 量之間的交換律:
+  \begin{itemize}
+    \item 純量與純量直積，可交換，$rs = sr$
+    \item 純量與向量直積，可交換，$\phi \vec {\bm v} = \vec {\bm v} \phi$
+    \item 向量與向量內積，可交換，$\vec {\bm v} \cdot \vec {\bm w} = \vec {\bm w} \cdot \vec {\bm v}$
+    \item \fbox{向量與向量外積不可交換}，會差一個方向的負號
+      \begin{equation}
+        \boxed{\vec {\bm v} \times \vec {\bm w} = -(\vec {\bm w} \times \vec {\bm v})}
+      \end{equation}
+  \end{itemize}
+  \item 量之間的分配律
+  \begin{itemize}
+    \item 純量與純量有分配律，$r(s+t) = rs + rt$
+    \item 純量與向量有分配律，$\phi(\vec {\bm v} + \vec {\bm w}) = \phi \vec {\bm v} + \phi \vec {\bm w}$
+    \item 向量與向量內積有分配律，$\vec {\bm v} \cdot (\vec {\bm w} + \vec {\bm C}) = \vec {\bm v} \cdot \vec {\bm w} + \vec {\bm v} \cdot \vec {\bm C}$
+    \item 向量與向量外積有分配律，$(\vec {\bm v} + \vec {\bm w}) \times \vec {\bm C} = \vec {\bm v} \times \vec {\bm C} + \vec {\bm w} \times \vec {\bm C}$
+  \end{itemize}
+  \item 量之間的結合律
+  \begin{itemize}
+    \item 純量與純量有結合律，$r(st) = (rs)t$
+    \item 純量與向量有結合律，$\phi(\psi \vec {\bm v}) = (\phi \psi)\vec {\bm v}$
+    \item \fbox{向量與向量內積沒有結合律}
+      \begin{equation}
+        \boxed{\vec {\bm v} \cdot (\vec {\bm w} \cdot \vec {\bm C}) \neq (\vec {\bm v} \cdot \vec {\bm w}) \cdot \vec {\bm C}}
+      \end{equation}
+    \item \fbox{向量與向量外積沒有結合律}
+      \begin{equation}
+        \boxed{\vec {\bm v} \times (\vec {\bm w} \times \vec {\bm C}) \neq (\vec {\bm v} \times \vec {\bm w}) \times \vec {\bm C}}
+      \end{equation}
+  \end{itemize}
+  \item 向量之間的關係:
+  \begin{itemize}
+    \item 向量三重積: ($1 + (-2) + (1 + 1 - 1) = 0$)\\
+    會變純量，照循環順序$u\to v\to w$不可相反
+    \begin{equation}
+      \vec {\bm u} \cdot (\vec {\bm v} \times \vec {\bm w}) = \vec {\bm v} \cdot (\vec {\bm w} \times \vec {\bm u}) = \vec {\bm w} \cdot (\vec {\bm u} \times \vec {\bm v})
+    \end{equation}
+    \item 向量三重積: ($1+ (-1) + (1+ 1 -1) =1$)\\
+    會變向量
+    \begin{equation}
+      \vec {\bm u} \times (\vec {\bm v} \times \vec {\bm w}) = \vec {\bm v} (\vec {\bm u} \cdot \vec {\bm w}) - \vec {\bm w} (\vec {\bm u} \cdot \vec {\bm v})
+    \end{equation}
+    \item 向量四重積: ($(1+(-1)+1) + (-2) + (1+(-1)+1) = 0$)\\
+    會變純量
+    \begin{equation}
+      (\vec {\bm u} \times \vec {\bm v}) \cdot (\vec {\bm w} \times \vec {\bm s}) = (\vec {\bm u} \cdot \vec {\bm w})(\vec {\bm v} \cdot \vec {\bm s}) - (\vec {\bm u} \cdot \vec {\bm s})(\vec {\bm v} \cdot \vec {\bm w})
+    \end{equation}
+    \item 向量四重積: ($(1+(-1)+1) + (-1) + (1+(-1)+1) = 1$)\\
+    會變向量
+    \begin{equation}
+      (\vec {\bm u} \times \vec {\bm v}) \times (\vec {\bm w} \times \vec {\bm s}) = (\vec {\bm u} \cdot (\vec {\bm v} \times \vec {\bm s}))\vec {\bm w} - (\vec {\bm u} \cdot (\vec {\bm v} \times \vec {\bm w}))\vec {\bm s}
+    \end{equation}
+  \end{itemize}
+\end{itemize}
+\subsection{數學知識——向量、張量、純量的微分運算}
+\begin{itemize}
+  \item $\nabla$算子:
+    \begin{equation}
+      \nabla = \frac{\partial }{\partial x}\bm \delta_x + \frac{\partial }{\partial y}\bm \delta_y + \frac{\partial }{\partial z}\bm \delta_z
+    \end{equation}
+    $\nabla$算子在\fbox{升階}的時候，會變成$\boxed{3\times 1}$的矩陣
+    \begin{equation}
+      \begin{bmatrix}
+        \frac{\partial }{\partial x}\\
+        \frac{\partial }{\partial y}\\
+        \frac{\partial }{\partial z}
+      \end{bmatrix}
+    \end{equation}
+    而\fbox{降階}的時候，會變成$\boxed{1\times 3}$的矩陣
+    \begin{equation}
+      \begin{bmatrix}
+        \frac{\partial }{\partial x} & \frac{\partial }{\partial y} & \frac{\partial }{\partial z}
+      \end{bmatrix}
+    \end{equation}
+    但在沒有升降階的旋度下，沒有矩陣表示法，只有以行列式值，與外積對象合併的表示法\\
+    計算出行列式值後，以單位向量表示\\
+    不管什麼座標都永遠不會變，只是在不同座標下，\\
+    $\frac{\partial }{\partial x},\frac{\partial }{\partial y},\frac{\partial }{\partial z}$要換成對應的座標微分形式
+    \begin{enumerate}
+      \item Cartesian coordinate:
+      \begin{equation}
+        \nabla = \frac{\partial }{\partial x}\bm \delta_x + \frac{\partial }{\partial y}\bm \delta_y + \frac{\partial }{\partial z}\bm \delta_z
+      \end{equation}
+      \item Cylindrical coordinate:
+      \begin{equation}
+        \nabla = \frac{\partial }{\partial r}\bm \delta_r + \frac{1}{r}\frac{\partial }{\partial \theta}\bm \delta_{\theta} + \frac{\partial }{\partial z}\bm \delta_z
+      \end{equation}
+      \item Spherical coordinate:
+      \begin{equation}
+        \nabla = \frac{\partial }{\partial r}\bm \delta_r + \frac{1}{r}\frac{\partial }{\partial \theta}\bm \delta_{\theta} 
+        + \frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}\bm \delta_{\phi} 
+      \end{equation}
+    \end{enumerate}
+  \item 向量有四種微分運算
+    \begin{itemize}
+      \item Gradient(梯度):\fbox{朝最大變化量移動的方向}\\
+      \fbox{一次微分，升階}，純量微分為向量
+      \begin{equation}
+        \nabla \phi = \frac{\partial \phi}{\partial x}\bm \delta_x + \frac{\partial \phi}{\partial y}\bm \delta_y + \frac{\partial \phi}{\partial z}\bm \delta_z
+      \end{equation}
+      \item Divergence(散度):\fbox{單位體積內流出的淨流量}\\
+      \fbox{一次微分，降階}，向量微分為純量\\
+      純量無法做Divergence\\
+      \fbox{向量的Divergence}:
+      \begin{align}
+        \nabla \cdot \vec {\bm v} &= \left(
+          \frac{\partial }{\partial x}\bm \delta_x + \frac{\partial }{\partial y}\bm \delta_y + \frac{\partial }{\partial z}\bm \delta_z
+        \right)\cdot \left(
+          v_x \bm \delta_x + v_y \bm \delta_y + v_z \bm \delta_z
+        \right) \nonumber \\
+        &= \frac{\partial v_x}{\partial x} \cancel{\bm \delta_x \cdot \bm \delta_x} + 
+        \frac{\partial v_y}{\partial y} \cancel{\bm \delta_y \cdot \bm \delta_y} + 
+        \frac{\partial v_z}{\partial z} \cancel{\bm \delta_z \cdot \bm \delta_z} \nonumber \\  
+        &= \frac{\partial v_x}{\partial x} + \frac{\partial v_y}{\partial y} + \frac{\partial v_z}{\partial z}
+      \end{align}
+      \fbox{張量的Divergence}:
+      \begin{align}
+        \nabla \cdot \overline{\overline {\bm \tau}} &= 
+        \begin{bmatrix}
+          \frac{\partial }{\partial x} & \frac{\partial }{\partial y} & \frac{\partial }{\partial z}
+        \end{bmatrix} 
+        \cdot \begin{bmatrix}
+          \tau_{xx} & \tau_{xy} & \tau_{xz} \\
+          \tau_{yx} & \tau_{yy} & \tau_{yz} \\
+          \tau_{zx} & \tau_{zy} & \tau_{zz}
+        \end{bmatrix} \nonumber \\
+        &= \begin{bmatrix}
+          \frac{\partial \tau_{xx}}{\partial x} + \frac{\partial \tau_{yx}}{\partial y} + \frac{\partial \tau_{zx}}{\partial z} \\
+          \frac{\partial \tau_{xy}}{\partial x} + \frac{\partial \tau_{yy}}{\partial y} + \frac{\partial \tau_{zy}}{\partial z} \\
+          \frac{\partial \tau_{xz}}{\partial x} + \frac{\partial \tau_{yz}}{\partial y} + \frac{\partial \tau_{zz}}{\partial z}
+        \end{bmatrix}
+      \end{align}
+      或寫成單位向量形式:
+      \begin{align}
+        &\nabla \cdot \overline{\overline {\bm \tau}} \nonumber\\
+        &=\left(
+          \frac{\partial}{\partial x} \bm \delta_x + \frac{\partial}{\partial y} \bm \delta_y + \frac{\partial}{\partial z} \bm \delta_z
+        \right) \cdot \left(
+          \tau_{xx} \bm \delta_x \bm \delta_x + \tau_{xy} \bm \delta_x \bm \delta_y + \tau_{xz} \bm \delta_x \bm \delta_z \right. \nonumber \\
+        &\phantom{=\left(
+          \frac{\partial}{\partial x} \bm \delta_x + \frac{\partial}{\partial y} \bm \delta_y + \frac{\partial}{\partial z} \bm \delta_z
+        \right) \cdot } + \bm \delta_y \bm \delta_x \tau_{yx} + \tau_{yy} \bm \delta_y \bm \delta_y + \tau_{yz} \bm \delta_y \bm \delta_z \nonumber \\
+        &\phantom{=\left(
+          \frac{\partial}{\partial x} \bm \delta_x + \frac{\partial}{\partial y} \bm \delta_y + \frac{\partial}{\partial z} \bm \delta_z
+        \right) \cdot }\left. + \tau_{zx} \bm \delta_z \bm \delta_x + \tau_{zy} \bm \delta_z \bm \delta_y + \tau_{zz} \bm \delta_z \bm \delta_z\right) \nonumber \\
+        \tiny &=\left(
+          \frac{\partial \tau_{xx}}{\partial x} + \frac{\partial \tau_{yx}}{\partial y} + \frac{\partial \tau_{zx}}{\partial z}
+        \right) \bm \delta_x + \left(
+          \frac{\partial \tau_{xy}}{\partial x} + \frac{\partial \tau_{yy}}{\partial y} + \frac{\partial \tau_{zy}}{\partial z}
+        \right) \bm \delta_y + \left(
+          \frac{\partial \tau_{xz}}{\partial x} + \frac{\partial \tau_{yz}}{\partial y} + \frac{\partial \tau_{zz}}{\partial z}
+        \right) \bm \delta_z
+      \end{align}
+      \item Laplacian: ($\nabla^2 = \nabla \cdot (\nabla)$)\\
+      先做Gradient再做Divergence，純量操作完後仍為純量，向量操作完後仍為向量\\
+      二次微分，階數不變
+      \fbox{純量的Laplacian}:
+      \begin{align}
+        &\nabla^2\phi = \nabla \cdot (\nabla \phi) \nonumber \\
+        &= \left(
+          \frac{\partial }{\partial x}\bm \delta_x + \frac{\partial }{\partial y}\bm \delta_y + \frac{\partial }{\partial z}\bm \delta_z
+        \right) \cdot \left(
+          \frac{\partial \phi}{\partial x}\bm \delta_x + \frac{\partial \phi}{\partial y}\bm \delta_y + \frac{\partial \phi}{\partial z}\bm \delta_z
+        \right) \nonumber \\
+        &= \frac{\partial^2 \phi}{\partial x^2}\bm \delta_x \cdot \bm \delta_x 
+        + \frac{\partial^2 \phi}{\partial y^2}\bm \delta_y \cdot \bm \delta_y
+        + \frac{\partial^2 \phi}{\partial z^2}\bm \delta_z \cdot \bm \delta_z \nonumber \\
+        &= \frac{\partial^2 \phi}{\partial x^2} + \frac{\partial^2 \phi}{\partial y^2} + \frac{\partial^2 \phi}{\partial z^2}
+      \end{align}
+      \fbox{向量的Laplacian}:
+      \begin{align}
+        \nabla^2 \vec {\bm u} &= \nabla \cdot (\nabla \vec {\bm u}) \nonumber \\
+        &= \left(
+          \frac{\partial }{\partial x}\bm \delta_x + \frac{\partial }{\partial y}\bm \delta_y + \frac{\partial }{\partial z}\bm \delta_z
+        \right) \cdot \left(
+          \frac{\partial u_x}{\partial x}\bm \delta_x + \frac{\partial u_y}{\partial y}\bm \delta_y + \frac{\partial u_z}{\partial z}\bm \delta_z
+        \right) \nonumber \\
+        &= \left(
+          \frac{\partial^2 u_x}{\partial x^2} + \frac{\partial^2 u_x}{\partial y^2} + \frac{\partial^2 u_x}{\partial z^2}
+        \right) \bm \delta_x + \left(
+          \frac{\partial^2 u_y}{\partial x^2} + \frac{\partial^2 u_y}{\partial y^2} + \frac{\partial^2 u_y}{\partial z^2}
+        \right) \bm \delta_y \nonumber \\
+        &\phantom{=\frac{\partial^2 u_x}{\partial x^2} +} 
+        + \left(
+          \frac{\partial^2 u_z}{\partial x^2} + \frac{\partial^2 u_z}{\partial y^2} + \frac{\partial^2 u_z}{\partial z^2}
+        \right) \bm \delta_z
+      \end{align}
+      \item Curl(旋度):\fbox{單位面積上的旋轉強度}\\
+      \fbox{一次微分，階數不變}，向量微分為向量
+      \begin{equation}
+        \nabla \times \vec {\bm u} = 
+        \begin{vmatrix}
+          \bm \delta_x & \bm \delta_y & \bm \delta_z \\
+          \frac{\partial }{\partial x} & \frac{\partial }{\partial y} & \frac{\partial }{\partial z} \\
+          u_x & u_y & u_z
+        \end{vmatrix} \label{eq:curl_definition}
+      \end{equation}
+      行列式展開後:
+      \begin{equation}
+        \nabla \times \vec {\bm u} =\left(
+          \frac{\partial u_z}{\partial y} - \frac{\partial u_y}{\partial z}
+        \right) \bm \delta_x + \left(
+          \frac{\partial u_x}{\partial z} - \frac{\partial u_z}{\partial x}
+        \right) \bm \delta_y + \left(
+          \frac{\partial u_y}{\partial x} - \frac{\partial u_x}{\partial y}
+        \right) \bm \delta_z
+      \end{equation}
+    \end{itemize}
+  \item 分配律，注意階數相等
+    \begin{itemize}
+      \item Divergence，$\nabla \cdot (\rho \vec {\bm u})$\\
+        可看出$\nabla$會分別對每個括弧內變數作用，先觀察總階數\\
+        括弧內為純量(階數0)乘向量(階數1)，總階數為1\\
+        而Divergence會使階數降1，最後結果為純量(階數0)
+        \begin{equation}
+          \nabla \cdot (\rho \vec {\bm u}), \quad \text{階數: -1 + (0 + 1) = 0}
+        \end{equation}
+        故分配進去每項階數數必須都為0\\
+        提取$\rho$作用於$\vec {\bm u}$時，由於$\rho$(階數0)，故要使$\vec {\bm u}$(階數1)降為0，故作Divergence
+        \begin{equation}
+          \rho (\nabla \cdot \vec {\bm u}), \quad \text{階數: 0 + (-1 + 1) = 0}
+        \end{equation}
+        提取$\vec {\bm u}$作用於$\rho$時，由於$\vec {\bm u}$(階數1)，故需作\fbox{內積}來降階為0\\
+        並且內積的對象要是階數1(1+1-2=0)，故$\rho$(階數0)需作Gradient(升階1)來達成
+        \begin{equation}
+          \vec {\bm u} \cdot (\nabla \rho), \quad \text{階數: 1 -2 (+1 + 0) = 0}
+        \end{equation}
+        綜合以上兩項，得到分配律:
+        \begin{equation}
+          \nabla \cdot (\rho \vec {\bm u})  = \rho (\nabla \cdot \vec {\bm u}) + \vec {\bm u} \cdot (\nabla \rho)
+        \end{equation}
+      \item 推論牛頓黏度定律的向量表示法:$\tau_{yx} = -\mu \frac{\partial u_x}{\partial y}$\\
+        觀察左邊$\tau$為張量(階數2)\\
+        右邊$\mu$為純量(階數0)\\
+        微分，故有$\nabla$算子\\
+        $u$為向量(階數1)\\
+        故需使$\nabla$算子與$u$結合後，階數變為2\\
+        故為Gradient(升階1)與向量直積(階數1+1=2)的組合
+        \begin{equation}
+          \overline{\overline {\bm \tau}} = -\mu (\nabla \vec {\bm u})
+        \end{equation}
+        將等號兩邊同時做Divergence運算，得到
+        \begin{equation}
+          \nabla \cdot \overline{\overline {\bm \tau}} = -\nabla \cdot \left(\mu \nabla \vec {\bm u} \right)
+        \end{equation}
+        由於$\mu$為純量，故可提取出來
+        \begin{equation}
+          \nabla \cdot \overline{\overline {\bm \tau}} = -\mu \nabla \cdot( \nabla \vec {\bm u})
+        \end{equation}
+        而$\nabla \cdot \nabla$為Laplacian\\
+        證明，當為牛頓流體，且黏度固定，流體不可壓縮時
+        \begin{equation}
+          -\nabla \cdot \overline{\overline {\bm \tau}} = \mu \nabla^2 \vec {\bm u}
+        \end{equation}
+        P.S. 不可壓縮的假設在一開始牛頓流體時就用了，否則牛頓流體定律應為:
+        \begin{equation}
+          \overline{\overline {\bm \tau}} = -\mu \left[ \nabla \vec {\bm u} + (\nabla \vec {\bm u})^T\right]
+           + \left(
+            \frac{2}{3}\mu - \kappa 
+           \right)\left(
+            \nabla \cdot \vec {\bm u}
+           \right)\bm \delta           
+        \end{equation}
+        因為不可壓縮，故$\nabla \cdot \vec {\bm u} = 0$，故省略最後一項\\
+        且$\nabla \vec {\bm u}$為對稱矩陣，故省略轉置項
+    \end{itemize}
+\end{itemize}
+\subsection{單位向量的運算}
+由上個章節可以看出，不同的張量、向量、純量做不同的乘除、合併都會有不同的計算方式\\
+而若能讓數值的部分回歸數值，交給單位向量以及一些符號來處理向量、張量的運算\\
+會讓計算上更為簡潔，也可以輕鬆證明一些向量、張量的恆等式
+\begin{itemize}
+  \item 單位向量與單位向量的運算:
+    \begin{itemize}
+      \item 單位向量的內積:\\
+        單位向量表示方向，且互相垂直且大小為1，滿足以下關係:
+          \begin{align}
+            \bm \delta_x \cdot \bm \delta_y &= 0, \quad \bm \delta_x \cdot \bm \delta_x = 1 \nonumber \\
+            \bm \delta_x \times \bm \delta_y &= \bm \delta_z, \quad \bm \delta_x \times \bm \delta_x = 0
+          \end{align}
+        引入Kronecker delta符號$\delta_{ij}$來表示單位向量內積關係:
+        \begin{equation}
+          \boxed{\bm \delta_i \cdot \bm \delta_j = \delta_{ij} = \begin{cases}
+            1 & i=j \\
+            0 & i \neq j
+          \end{cases}}
+        \end{equation}
+      \item 單位向量的外積:\\
+        引入Levi-Civita符號$\varepsilon_{ijk}$來表示單位向量外積關係:
+        \begin{equation}
+          \boxed{\bm \delta_i \times \bm \delta_j = \varepsilon_{ijk} \bm \delta_k}
+        \end{equation}
+        其中$\varepsilon_{ijk}$定義為:
+        \begin{equation}
+          \varepsilon_{ijk} = \begin{cases}
+            +1 & (i,j,k)\text{為}(1,2,3),(2,3,1),(3,1,2)\text{的循環排列}\\
+            -1 & (i,j,k)\text{為}(3,2,1),(1,3,2),(2,1,3)\text{的反循環排列}\\
+            0 & \text{若有任兩個指標相同}
+          \end{cases}
+        \end{equation}
+        如果要寫的不直觀的話，也可以寫成:
+        \begin{equation}
+          \varepsilon_{ijk} = \frac{1}{2}(i-j)(j-k)(k-i)
+        \end{equation}
+        例如$\varepsilon_{123} = \frac{1}{2}(1-2)(2-3)(3-1) = +1$\\
+        例如$\varepsilon_{132} = \frac{1}{2}(1-3)(3-2)(2-1) = -1$\\
+        例如$\varepsilon_{112} = \frac{1}{2}(1-1)(1-2)(2-1) = 0$
+      \item 單位向量直積$\implies$二階張量，dyadic product:
+        \begin{equation}
+          \bm \delta_i \bm \delta_j \neq \bm \delta_j \bm \delta_i
+        \end{equation}
+        不代表任何意義上的乘法，只是表示方向的組合，只是一個二階張量的其中一項\\
+        整體如同(\ref{eq:inertial_stress_tensor_unit})所示
+        \begin{equation}
+          \overline{\overline{\bm \tau}} = \sum_{i=1}^3\sum_{j=1}^3 \bm \delta_i \bm \delta_j\tau_{ij} 
+        \end{equation}
+      \item 單位張量:\\
+        所謂\fbox{單位向量、張量}的想法是，\\
+        任何非零向量、純量、張量，與單位向量、張量做運算後\\
+        都不會改變原本向量、純量、張量的數值大小\\
+        因此單位張量其實就是$3\times 3$的單位矩陣
+        \begin{equation}
+          \sum_{i=1}^3 \bm\delta_i \bm \delta_i
+        \end{equation}
+        但這樣太容易和內積搞混，畢竟粗體不好在非電腦媒介呈現\\
+        故以Kronecker delta符號，配合兩個$\sum$號來表示
+        \begin{equation}
+          \boxed{\bm \delta = \sum_{i=1}^3\sum_{j=1}^3 \bm \delta_i \bm \delta_j \delta_{ij} }
+        \end{equation}
+        若張量是由兩個向量直積產生的，\fbox{則相乘的轉置等於相反的直積}
+        \begin{equation}
+          (\vec {\bm v} \vec {\bm w})^T = \vec {\bm w} \vec {\bm v}
+        \end{equation}
+      \item 單位張量與單位張量、向量的各種運算\\
+      有個很簡單的規則，在不改變撰寫順序下，把張量拆開\\
+      其中一邊去跟想跟張量運算內外積包在一起作運算。\\
+      舉例來說:$\bm\delta_i\bm\delta_j \cdot \vec {\bm v}$\\
+      把張量拆開成$\bm\delta_i$與$\bm\delta_j$兩部分\\
+      並且把$\vec {\bm v}$跟他最靠近的$\bm\delta_j$包在一起作(不影響順序)
+      \begin{equation}
+        \bm\delta_i\bm\delta_j \cdot \vec {\bm v} = \bm\delta_i (\bm\delta_j \cdot \vec {\bm v})
+      \end{equation}
+      \begin{enumerate}
+        \item 單位張量與單位張量作Double dot product:
+          \begin{equation}
+            \boxed{
+              \left(\bm\delta_i\bm\delta_j\right):\left(\bm\delta_m\bm\delta_n\right) =
+              \left(\bm\delta_j \cdot \bm\delta_k\right) \left(
+                \bm\delta_i \cdot \bm\delta_n
+              \right) = \delta_{jm}\delta_{in}
+            }
+          \end{equation}
+          Proof:\\
+          根據運算邏輯，Double dot product將可寫成:
+          \begin{equation}
+            \overline{\overline{\bm \sigma}} : \overline{\overline{\bm \tau}} = 
+            \sum_{i=1}^3\sum_{j=1}^3 \sum_{m=1}^3 \sum_{n=1}^3
+            \left(\bm \delta_i \bm \delta_j : \bm \delta_m \bm \delta_n\right)\sigma_{ij} \tau_{mn}
+          \end{equation}
+          根據Double dot product的定義，為兩張量各項內積後再加總(\ref{eq:double_dot_product})
+          \begin{equation}
+            \overline{\overline{\bm \sigma}} : \overline{\overline{\bm \tau}} =
+            \sum_{i=1}^3\sum_{j=1}^3 \sigma_{ij} \tau_{ij}
+          \end{equation}
+          比較後可得出:
+          \begin{equation}
+            \bm \delta_i \bm \delta_j : \bm \delta_m \bm \delta_n = \delta_{jm}\delta_{in}
+          \end{equation}
+          又由於($\bm \delta_j \cdot \bm \delta_k = \delta_{jm}$)以及($\bm \delta_i \cdot \bm \delta_n = \delta_{in}$)\\
+          故可得出:
+          \begin{equation}
+            \bm \delta_i \bm \delta_j : \bm \delta_m \bm \delta_n = 
+            \left(\bm \delta_j \cdot \bm \delta_k\right) \left(
+              \bm \delta_i \cdot \bm \delta_n
+            \right) = \delta_{jm}\delta_{in}
+          \end{equation}
+          另外，也可以很上述很簡單的規則得到:
+          \begin{align}
+             \bm \delta_i \bm \delta_j : \bm \delta_m \bm \delta_n &=
+              \bm \delta_i \left(
+                \bm \delta_j : \bm \delta_m \bm \delta_n
+              \right) \nonumber \\
+              &= \bm \delta_i \left(
+                \left(\bm \delta_j \cdot \bm \delta_m\right) \bm \delta_n
+              \right) \nonumber \\
+              &= \left(\bm \delta_j \cdot \bm \delta_m\right) \left(\bm \delta_i \cdot \bm \delta_n\right) \nonumber \\
+              &= \delta_{jm}\delta_{in}
+          \end{align}
+        \item 單位張量與單位向量作Dot product:
+          \begin{equation}
+            \boxed{
+              \left(\bm\delta_i\bm\delta_j\right) \cdot \bm \delta_k =
+              \bm \delta_i \left(\bm\delta_j \cdot \bm \delta_k\right) = \bm \delta_i\delta_{jk}}
+          \end{equation}
+          反過來也可以
+          \begin{equation}
+            \boxed{
+              \bm \delta_i \cdot \left(\bm\delta_j\bm\delta_k\right) =
+              \left(\bm \delta_i \cdot \bm\delta_j\right) \bm \delta_k = \delta_{ij}\bm \delta_k}
+          \end{equation}
+        \item 單位張量與單位張量的內積
+        \begin{equation}
+          \boxed{
+            \left(\bm\delta_i\bm\delta_j\right) \cdot \left(\bm\delta_m\bm\delta_n\right) =
+            \left(\bm\delta_j \cdot \bm\delta_m\right) \left(\bm\delta_i \bm\delta_n\right) 
+            =\sum_{i=1}^3 \delta_{jm}\bm \delta_i \bm \delta_n
+          }
+        \end{equation}
+        \item 單位張量與單位向量的外積:
+        \begin{equation}
+          \boxed{
+            \left(\bm\delta_i\bm\delta_j\right) \times \bm \delta_k =
+            \bm \delta_i \times \left(\bm\delta_j \times \bm \delta_k\right) = 
+            \sum_{i=1}^3\varepsilon_{jkl}\bm \delta_i \bm \delta_l
+          }
+        \end{equation}
+      \end{enumerate}
+      \item $\varepsilon_{ijk}$與$\delta_{ij}$的關係:\\
+        有兩大定律，這兩個定律可以很快速的將一堆$\sum$號的式子減少
+        \begin{enumerate}
+          \item 兩個$\varepsilon$相乘，底數後面兩個一樣的話，可以寫成$\delta$的形式
+            \begin{equation}
+              \sum_{j=1}^3\sum_{k=1}^3 \varepsilon_{ijk}\varepsilon_{hjk} = 2\delta_{ih} \label{eq:epsilon_delta_relation}
+            \end{equation}
+            Proof:
+            \begin{align}
+              \sum_{j=1}^3\sum_{k=1}^3 \varepsilon_{ijk}\varepsilon_{hjk} &= 
+              \cancel{\varepsilon_{i11}\varepsilon_{h11}} + \varepsilon_{i12}\varepsilon_{h12} + \varepsilon_{i13}\varepsilon_{h13} \nonumber \\
+              &\quad + \varepsilon_{i21}\varepsilon_{h21} + \cancel{\varepsilon_{i22}\varepsilon_{h22}} + \varepsilon_{i23}\varepsilon_{h23} \nonumber \\
+              &\quad + \varepsilon_{i31}\varepsilon_{h31} + \varepsilon_{i32}\varepsilon_{h32} + \cancel{\varepsilon_{i33}\varepsilon_{h33}} \nonumber \\
+              &= \varepsilon_{i12}\varepsilon_{h12} + \varepsilon_{i13}\varepsilon_{h13} + \varepsilon_{i21}\varepsilon_{h21} \nonumber \\
+              &\quad + \varepsilon_{i23}\varepsilon_{h23} + \varepsilon_{i31}\varepsilon_{h31} + \varepsilon_{i32}\varepsilon_{h32}
+            \end{align}
+            觀察可看出，當$i\neq h$時，由於每一個配對的後兩個指標都相同$\varepsilon_{i31}\varepsilon_{h31}$\\
+            故一定有一項會重複，每一項都會是0\\
+            更進一步地\\
+            第一和第三項要求$i=h=3$才會有值，且一個為$1^2$，另一個為$(-1)^2$，相加後為2\\
+            第二和第五項要求$i=h=2$才會有值，且一個為$1^2$，另一個為$(-1)^2$，相加後為2\\
+            第四和第六項要求$i=h=1$才會有值，且一個為$1^2$，另一個為$(-1)^2$，相加後為2\\
+            故總結可得:
+            \begin{equation}
+              \sum_{j=1}^3\sum_{k=1}^3 \varepsilon_{ijk}\varepsilon_{hjk} = 2\delta_{ih}
+            \end{equation}
+          \item 兩個$\varepsilon$相乘，底數最後一個一樣的話，可以寫成$\delta$的形式
+            \begin{equation} 
+              \boxed{\sum_{k=1}^3 \varepsilon_{ijk}\varepsilon_{mnk} = 
+              \begin{vmatrix}
+                \delta_{im} & \delta_{in} \\
+                \delta_{jm} & \delta_{jn}
+              \end{vmatrix} =\delta_{im}\delta_{jn} - \delta_{in}\delta_{jm}} \label{eq:epsilon_delta_relation_2}
+            \end{equation}
+            P.S. 行列式是\fbox{方便記憶}，由於是($i,j$)乘上($m,n$)的組合\\
+            故可想成($2\times 1$)乘($1\times 2$)來變成($2\times 2$)的矩陣，也就是
+            \begin{equation}
+              \begin{bmatrix}
+                i \\ j
+              \end{bmatrix}
+              \begin{bmatrix}
+                m & n
+              \end{bmatrix}
+              = \begin{bmatrix}
+                im & in \\
+                jm & jn
+              \end{bmatrix}
+            \end{equation}
+            Proof:
+            \begin{equation}
+              \sum_{k=1}^3 \varepsilon_{ijk}\varepsilon_{mnk} = 
+              \varepsilon_{ij1}\varepsilon_{mn1} + \varepsilon_{ij2}\varepsilon_{mn2} + \varepsilon_{ij3}\varepsilon_{mn3} 
+            \end{equation}
+            當$i,j$與$m,n$有一個不相同，則必定涵蓋了第三個數字\\
+            由於每一項都強制了$i,j,m,n$須從兩數字中選出，故每一項皆為0\\
+            而$\delta_{im}\delta_{jn}$要求$i=m$且$j=n$才會有值，$\delta_{in}\delta_{jm}$要求$i=n$且$j=m$才會有值\\
+            故兩者皆為0\\ 
+            當$i=m$且$j=n$時，但$i\neq j$，只有一項\\
+            第三個標不是$i$也不是$j$的會有值，且為$1^2=1$，其他兩項皆為0\\
+            而此時$ \delta_{im}\delta_{jn} - \delta_{in}\delta_{jm} = \delta_{mm}\delta_{nn} - \delta_{mn}\delta_{nm} = 1$\\
+            當$i=m$且$j=n$且$i=j$時，每一項因為前兩個標必相同，皆為0\\
+            而此時$ \delta_{im}\delta_{jn} - \delta_{in}\delta_{jm} = \delta_{mm}\delta_{mm} - \delta_{mm}\delta_{mm} = 1-1 = 0$\\
+            當$i=n$且$j=m$時，但$i\neq j$，只有一項，第三個標不是$i$也不是$j$的會有值\\
+            且因為前兩個標相反，故$\varepsilon_{nm1}\varepsilon_{mn1}=-1$\\
+            而此時$ \delta_{im}\delta_{jn} - \delta_{in}\delta_{jm} = \delta_{nm}\delta_{mn} - \delta_{nn}\delta_{mm} = -1$\\
+            故總結可得:
+            \begin{equation}
+              \sum_{k=1}^3 \varepsilon_{ijk}\varepsilon_{mnk} = \delta_{im}\delta_{jn} - \delta_{in}\delta_{jm}
+            \end{equation}
+        \end{enumerate}
+      \item $\varepsilon_{ijk}$可以表示行列式的值
+      \begin{equation}
+        \begin{vmatrix}
+          a_1 & a_2 & a_3 \\
+          b_1 & b_2 & b_3 \\
+          c_1 & c_2 & c_3
+        \end{vmatrix} = \sum_{i=1}^3\sum_{j=1}^3\sum_{k=1}^3 \varepsilon_{ijk} a_i b_j c_k
+      \end{equation}
+      就是把27種排列組合中，循環排列的加起來，反循環排列的減掉
+  \end{itemize}
+  \item 單位向量可將所有量都寫為分量形式
+    \begin{itemize}
+      \item 純量: $s$
+      \item 向量: $\vec {\bm v}$
+        \begin{equation}
+          \vec {\bm v} = v_x \bm \delta_x + v_y \bm \delta_y + v_z \bm \delta_z =  \sum_{i=1}^3 v_i \bm \delta_i
+        \end{equation}
+        當$\sum$遇到平方時，可以再生出一個$\sum$來表示
+        \begin{equation}
+          \boxed{\left(\sum_{i=1}^3 a_i\right)^2 = \sum_{i=1}^3 \sum_{j=1}^3 a_i a_j}
+        \end{equation}
+      \item 二階張量:\\ 
+        來自一個張量:$\overline{\overline  {\bm \tau}}$
+        \begin{equation}
+          \overline{\overline  {\bm \tau}} = \sum_{i=1}^3 \sum_{j=1}^3  \bm \delta_i \bm \delta_j \tau_{ij}
+        \end{equation}
+        來自兩個向量的直積:$\vec {\bm v} \vec {\bm w}$
+        \begin{equation}
+          \vec {\bm v} \vec {\bm w} = \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j v_i w_j
+        \end{equation} 
+    \end{itemize}
+  \item 由單位向量與符號來表示運算:
+    \begin{itemize}
+      \item 純量與向量相乘:
+        \begin{equation}
+          s\vec {\bm v} = \sum_{i=1}^3 \bm \delta_i (s v_i)
+        \end{equation}
+      \item 向量內積:
+        \begin{align}
+          \vec {\bm v} \cdot \vec {\bm w} &= \sum_{i=1}^3 \sum_{j=1}^3 (\bm \delta_i \cdot \bm \delta_j) v_i w_j \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \delta_{ij} v_i w_j \nonumber\\
+          &= \sum_{i=1}^3 v_i w_i
+        \end{align}
+      \item 向量外積:
+        \begin{align}
+          \vec {\bm v} \times \vec {\bm w} &= \sum_{i=1}^3 \sum_{j=1}^3 (\bm \delta_i \times \bm \delta_j) v_i w_j \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \varepsilon_{ijk} \bm \delta_k v_i w_j
+        \end{align}
+      \item 向量三重積:
+        \begin{align}
+          \vec {\bm u} \cdot \left[\vec {\bm v} \times \vec {\bm w}\right] &= \sum_{i=1}^3 u_i \bm \delta_i \cdot
+          \left[
+            \sum_{j=1}^3 \sum_{k=1}^3 \varepsilon_{jkl} \bm \delta_l v_k w_j
+          \right] \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \sum_{l=1}^3 \varepsilon_{jkl} (\bm \delta_i \cdot \bm \delta_l) u_i v_j w_k,\quad (l=1) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \varepsilon_{jki} u_i v_j w_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \varepsilon_{ijk} u_i v_j w_k \nonumber\\
+          &= \begin{vmatrix}
+            u_1 & u_2 & u_3 \\
+            v_1 & v_2 & v_3 \\
+            w_1 & w_2 & w_3
+          \end{vmatrix}
+        \end{align}
+      \item 向量直積$\implies$二階張量\\
+        P.S. $\vec{\bm v} \vec{\bm w} \neq \vec{\bm w} \vec{\bm v}$
+        \begin{equation}
+          \vec {\bm v} \vec {\bm w} = \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j v_i w_j
+        \end{equation}
+      \item 張量的轉置:\\
+        如果一張量$\overline{\overline {\bm \tau}}$的表示為
+        \begin{equation}
+          \overline{\overline {\bm \tau}} = \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j \tau_{ij}
+        \end{equation}
+        則其轉置$\overline{\overline {\bm \tau}}^\dagger$的表示為
+        \begin{equation}
+          \overline{\overline {\bm \tau}}^\dagger = \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j \tau_{ji}
+        \end{equation}
+      \item 張量與張量作Double dot product
+        \begin{align}
+          \overline{\overline {\bm \sigma}} : \overline{\overline {\bm \tau}} &=
+          \left(\sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j \sigma_{ij}\right) :
+          \left(\sum_{m=1}^3 \sum_{n=1}^3 \bm \delta_m \bm \delta_n \tau_{mn}\right) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{m=1}^3 \sum_{n=1} \left(
+            \bm \delta_i \bm \delta_j : \bm\delta_m\bm\delta_n
+          \right)\sigma_{ij}\tau_{mn} \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{m=1}^3 \sum_{n=1}^3 \delta_{jm}\delta_{in} \sigma_{ij}\tau_{mn} \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sigma_{ij}\tau_{ji}
+        \end{align}
+        P.S. 如果有一個是張量$\overline{\overline {\bm \tau}}$，另一個是兩個向量直積產生的張量$\vec {\bm v} \vec {\bm w}$，則
+        \begin{equation}
+          \overline{\overline {\bm \tau}} : \left(\vec {\bm v} \vec {\bm w}\right) = \sum_{i=1}^3 \sum_{j=1}^3 \tau_{ij} v_j w_i
+        \end{equation}
+      \item 張量內積向量:
+        \begin{align}
+          \overline{\overline {\bm \tau}} \cdot \vec {\bm v} &=
+          \left(
+            \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j \tau_{ij}
+          \right) \cdot
+          \left(
+            \sum_{k=1}^3 \bm \delta_k v_k
+          \right) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \left(
+            \bm \delta_i \bm \delta_j \cdot \bm \delta_k
+          \right) \tau_{ij} v_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \bm \delta_i (\bm \delta_j \cdot \bm \delta_k)  \tau_{ij} v_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \bm \delta_i \delta_{jk}  \tau_{ij} v_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3  \bm \delta_i  \tau_{ij} v_j 
+        \end{align}
+        也能看出$\overline{\overline {\bm \tau}} \cdot \vec {\bm v} \neq \vec {\bm v} \cdot \overline{\overline {\bm \tau}}$\\
+        也就是把$i,j$交換\\
+        而若進一步把$\bm\delta_i$往前移
+        \begin{align}
+          \overline{\overline {\bm \tau}} \cdot \vec {\bm v} &=
+          \sum_{i=1}^3 \bm \delta_i \left(
+            \sum_{j=1}^3  \tau_{ij} v_j 
+          \right)
+        \end{align}
+        則可以看出，若$\overline{\overline {\bm \tau}}$是對稱的，
+        則$\overline{\overline {\bm \tau}} \cdot \vec {\bm v} = \vec {\bm v} \cdot \overline{\overline {\bm \tau}}$
+      \item 張量外積向量:
+        \begin{align}
+          \overline{\overline {\bm \tau}} \times \vec {\bm v} &=
+          \left(
+            \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j \tau_{ij}
+          \right) \times
+          \left(
+            \sum_{k=1}^3 \bm \delta_k v_k
+          \right) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \left(
+            \bm \delta_i \bm \delta_j \times \bm \delta_k
+          \right) \tau_{ij} v_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \bm \delta_i (\bm \delta_j \times \bm \delta_k)  \tau_{ij} v_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \bm \delta_i \varepsilon_{jkl} \bm \delta_l  \tau_{ij} v_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3  \sum_{l=1}^3\bm \delta_i  \bm \delta_l  \varepsilon_{jkl}  \tau_{ij} v_k \label{eq:tensor_cross_vector}
+        \end{align}
+        一樣可以將$\bm \delta_i$和$\bm \delta_l$往前移
+        \begin{align}
+          \overline{\overline {\bm \tau}} \times \vec {\bm v} &=
+          \sum_{i=1}^3 \sum_{l=1}^3 \bm \delta_i  \bm \delta_l \left(
+            \sum_{j=1}^3 \sum_{k=1}^3 \varepsilon_{jkl}  \tau_{ij} v_k 
+          \right)
+        \end{align}
+    \end{itemize}
+  \item 由單位向量符號來證明各種運算性質:\\
+  證明時可以養成，先寫$\sum$再寫$\varepsilon_{ijk}$，再寫$\delta_{ij}$，再寫$\bm \delta_{i}$\\
+  最後再把剩下的非單位向量擺在後面\\
+  解題步驟如下:
+  \begin{enumerate}
+    \item 將所有量都展開為有單位向量的形式
+    \item 除了單位向量外的，全部擺到最後面，而所有$\sum$都可以乘在一起\\
+    $\delta$與$\varepsilon$，會防止最後項數不是$3^n$的情況發生
+    \item 所有的運算操作都只會對單位向量進行，按照上述的運算規則進行
+    \item 最後把產出的$\delta$與$\varepsilon$，將一些指標與$\sum$號消掉\\
+    P.S.$\varepsilon$可以旋轉，也可以透過(\ref{eq:epsilon_delta_relation})與(\ref{eq:epsilon_delta_relation_2})式\\
+    轉化為$\delta$的形式
+  \end{enumerate}
+  \begin{itemize}
+    \item 證明 Identity of Lagrange:
+      \begin{equation}
+        \left(
+          [\vec {\bm v} \times \vec {\bm w}] \cdot [\vec {\bm v} \times \vec {\bm w}]
+        \right) + \left( \vec {\bm v} \cdot \vec {\bm w} \right)^2 = v^2w^2
+      \end{equation}
+      Proof:\\
+      從左邊第一項開始:
+      \begin{align}
+        \left(
+          [\vec {\bm v} \times \vec {\bm w}] \cdot [\vec {\bm v} \times \vec {\bm w}]
+        \right) & = \left(
+          [\sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \varepsilon_{ijk} \bm \delta_k v_i w_j] \cdot
+          [\sum_{m=1}^3 \sum_{n=1}^3 \sum_{p=1}^3 \varepsilon_{mnp} \bm \delta_p v_m w_n]
+        \right) \nonumber\\
+        &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \sum_{m=1}^3 \sum_{n=1}^3 \sum_{p=1}^3
+        \varepsilon_{ijk} \varepsilon_{mnp} (\bm \delta_k \cdot \bm \delta_p) v_i w_j v_m w_n \nonumber\\
+        &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \sum_{m=1}^3 \sum_{n=1}^3 \sum_{p=1}^3
+        \varepsilon_{ijk} \varepsilon_{mnp} \delta_{kp} v_i w_j v_m w_n
+      \end{align}
+      由於出現，$\delta_{kp}$，故$p=k$，並除掉$\sum_{p=1}^3$，得到:
+      \begin{equation}
+        \left(
+          [\vec {\bm v} \times \vec {\bm w}] \cdot [\vec {\bm v} \times \vec {\bm w}]
+        \right) = \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \sum_{m=1}^3 \sum_{n=1}^3
+        \varepsilon_{ijk} \varepsilon_{mnk} v_i w_j v_m w_n 
+      \end{equation}
+      觀察到，$\varepsilon_{ijk} \varepsilon_{mnk}$，有一個共同項，因此使用(\ref{eq:epsilon_delta_relation_2})式\\
+      P.S. 注意指標順序有時可能與定義不同，順循環則不須變號，反循環則須變號
+      \begin{align}
+        \left(
+          [\vec {\bm v} \times \vec {\bm w}] \cdot [\vec {\bm v} \times \vec {\bm w}]
+        \right) &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{m=1}^3 \sum_{n=1}^3
+        \left(
+          \delta_{im}\delta_{jn} - \delta_{in}\delta_{jm}
+        \right) v_i w_j v_m w_n \nonumber\\
+        &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{m=1}^3 \sum_{n=1}^3 \delta_{im}\delta_{jn} v_i w_j v_m w_n
+        - \sum_{i=1}^3 \sum_{j=1}^3 \sum_{m=1}^3 \sum_{n=1}^3 \delta_{in}\delta_{jm} v_i w_j v_m w_n \nonumber\\
+        &= \sum_{i=1}^3 \sum_{j=1}^3 v_i w_j v_i w_j - \sum_{i=1}^3 \sum_{j=1}^3 v_i w_j v_j w_i \nonumber\\
+        &= \sum_{i=1}^3 \sum_{j=1}^3 v_i^2 w_j^2 - \sum_{i=1}^3 \sum_{j=1}^3 v_i v_j w_i w_j 
+      \end{align} 
+      接著看左邊第二項:
+      \begin{align}
+        \left( \vec {\bm v} \cdot \vec {\bm w} \right)^2 &= \left(
+          \sum_{i=1}^3 v_i w_i
+        \right)^2 \nonumber\\
+        &= \sum_{i=1}^3 \sum_{j=1}^3 v_i w_i v_j w_j
+      \end{align}
+      將兩項相加:
+      \begin{align}
+        \left(
+          [\vec {\bm v} \times \vec {\bm w}] \cdot [\vec {\bm v} \times \vec {\bm w}]
+        \right) + \left( \vec {\bm v} \cdot \vec {\bm w} \right)^2 &= 
+        \left(
+          \sum_{i=1}^3 \sum_{j=1}^3 v_i^2 w_j^2 - \sum_{i=1}^3 \sum_{j=1}^3 v_i v_j w_i w_j
+        \right) + \left(
+          \sum_{i=1}^3 \sum_{j=1} v_i w_i v_j w_j
+        \right) \nonumber\\
+        &= \sum_{i=1}^3 \sum_{j=1}^3 v_i^2 w_j^2 \nonumber\\
+        &= \left(\sum_{i=1}^3 v_i^2\right) \left(\sum_{j=1}^3 w_j^2\right) \nonumber\\
+        &= v^2 w^2
+      \end{align}
+    \item 證明向量三重積
+      \begin{equation}
+        \vec {\bm u} \times (\vec {\bm v} \times \vec {\bm w}) = (\vec {\bm u} \cdot \vec {\bm w})\vec {\bm v} - (\vec {\bm u} \cdot \vec {\bm v})\vec {\bm w}
+      \end{equation}
+      Proof:\\
+      從左邊開始:
+      \begin{align}
+        \vec {\bm u} \times (\vec {\bm v} \times \vec {\bm w}) &= \sum_{m=1}^3 \bm \delta_m u_m \times
+        \left[
+          \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \varepsilon_{ijk} \bm \delta_k v_i w_j
+        \right] \nonumber\\
+        &= \sum_{m=1}^3 \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3
+        \varepsilon_{ijk} (\bm \delta_m \times \bm \delta_k) u_m v_i w_j
+      \end{align}
+      當遇到單位向量外積時\\
+      記得生出一個$\varepsilon$符號，前兩個為外積的標，而後面一個為新的標\\
+      並多加一個$\sum$來涵蓋新的標
+      \begin{align}
+        \vec {\bm u} \times (\vec {\bm v} \times \vec {\bm w}) &= \sum_{m=1}^3 \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \sum_{n=1}
+        \varepsilon_{ijk} \varepsilon_{mkn} \bm \delta_n u_m v_i w_j \nonumber\\
+        &= \sum_{m=1}^3 \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 \sum_{n=1}
+        \varepsilon_{ijk} \varepsilon_{nmk} \bm \delta_n u_m v_i w_j
+      \end{align}
+      這邊換成$nmk$，或者可以是負的$mnk$，如果希望按照字母序\
+      用(\ref{eq:epsilon_delta_relation_2})式:
+      \begin{align}
+        \vec {\bm u} \times (\vec {\bm v} \times \vec {\bm w}) &= \sum_{m=1}^3 \sum_{i=1}^3 \sum_{j=1}^3 \sum_{n=1}^3
+        \left(
+          \delta_{in}\delta_{jm} - \delta_{im}\delta_{jn}
+        \right) \bm \delta_n u_m v_i w_j \nonumber\\
+        &= \sum_{m=1}^3 \sum_{i=1}^3 \sum_{j=1}^3 \sum_{n=1}^3
+        \delta_{in}\delta_{jm} \bm \delta_n u_m v_i w_j
+        - \sum_{m=1}^3 \sum_{i=1}^3 \sum_{j=1}^3 \sum_{n=1}^3
+        \delta_{im}\delta_{jn} \bm \delta_n u_m v_i w_j 
+      \end{align}
+      左邊，令$n=i$且$m=j$，右邊，令$m=i$且$n=j$:
+      \begin{equation}
+        \vec {\bm u} \times (\vec {\bm v} \times \vec {\bm w}) = {\color{red}{\sum_{i=1}^3}} \sum_{j=1}^3
+        {\color{red}{\bm \delta_i}} u_j {\color{red}{v_i}} w_j
+        - \sum_{i=1}^3 {\color{red}{\sum_{j=1}^3}}
+        {\color{red}{\bm \delta_j}} u_i v_i {\color{red}{w_j}} 
+      \end{equation}
+      當看到$\sum$的底標配合他的單位向量的底標時，可以回復成向量$\sum_i \bm \delta_i a_i = \vec {\bm a}$:
+      \begin{align}
+         \vec {\bm u} \times (\vec {\bm v} \times \vec {\bm w}) &= \vec {\bm v} \left(
+          \sum_{j=1}^3 u_j w_j
+         \right) - \vec {\bm w} \left(
+          \sum_{i=1}^3 u_i v_i
+          \right) \nonumber\\
+          &= (\vec {\bm u} \cdot \vec {\bm w}) \vec {\bm v} - (\vec {\bm u} \cdot \vec {\bm v}) \vec {\bm w}
+      \end{align}
+  \end{itemize}
+  \item 用單位向量來表示微分運算:
+    \begin{itemize}
+      \item $\nabla$算符:
+        \begin{equation}
+          \boxed{\nabla = \sum_{i=1}^3 \bm \delta_i \frac{\partial}{\partial x_i}}
+        \end{equation}
+        注意這裡的$x$是代表在卡式座標系下的$x,y,z$
+      \item Gradient (梯度):
+        \begin{equation}
+          \boxed{\nabla f = \sum_{i=1}^3 \bm \delta_i \frac{\partial f}{\partial x_i}}
+        \end{equation}
+        沒有交換律:
+        \begin{equation}
+          \boxed{\nabla f \neq f \nabla}
+        \end{equation}
+        沒有結合律:
+        \begin{equation}
+          \boxed{\nabla (fg) \neq (\nabla f) g}
+        \end{equation}
+      \item Divergence (散度):
+        \begin{equation}
+          \boxed{\nabla \cdot \vec {\bm u} = \sum_{i=1}^3\frac{\partial u_i}{\partial x_i}}
+        \end{equation}
+        Proof:
+        \begin{align}
+          &\nabla \cdot \vec {\bm u} \nonumber\\
+         =& \left(
+          \sum_{i=1}^3 \bm \delta_i \frac{\partial}{\partial x_i}
+          \right) \cdot \left(
+            \sum_{j=1}^3 \bm \delta_j u_j
+          \right)\\
+        =&\sum_{i=1}^3 \sum_{j=1}^3 \left(
+          \bm \delta_i \cdot \bm \delta_j
+        \right) \frac{\partial}{\partial x_i} u_j \nonumber\\
+        =&\sum_{i=1}^3 \sum_{j=1}^3 \delta_{ij} \frac{\partial u_j}{\partial x_i} \nonumber\\
+        =&\sum_{i=1}^3 \frac{\partial u_i}{\partial x_i}
+        \end{align}
+        不存在交換律、結合律
+        \begin{equation}
+          \boxed{\nabla \cdot \vec {\bm u} \neq \vec {\bm u} \cdot \nabla} \quad \boxed{\nabla \cdot (f \vec {\bm u}) \neq (\nabla f) \cdot \vec {\bm u}}
+        \end{equation}
+      \item Curl (旋度):
+        \begin{equation}
+          \boxed{\nabla \times \vec {\bm u} = \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3 
+          \varepsilon_{ijk} \bm \delta_k \frac{\partial u_j}{\partial x_i}}
+        \end{equation}
+        Proof:
+        \begin{align}
+          \left[\nabla \times \vec {\bm u} \right] &
+          = \left[
+            \left(
+              \sum_{i=1}^3 \bm \delta_i \frac{\partial}{\partial x_i}
+            \right) \times 
+            \left(
+              \sum_{j=1}^3 \bm \delta_j u_j
+            \right)
+          \right] \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \left(
+            \bm \delta_i \times \bm \delta_j
+          \right) \frac{\partial}{\partial x_i} u_j \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3
+          \varepsilon_{ijk} \bm \delta_k \frac{\partial u_j}{\partial x_i}
+        \end{align}
+        不存在交換律、結合律
+        \begin{equation}
+          \boxed{\nabla \times \vec {\bm u} \neq \vec {\bm u} \times \nabla} \quad 
+          \boxed{\nabla \times (f \vec {\bm u}) \neq (\nabla f) \times \vec {\bm u}}
+        \end{equation}
+        P.S. 若展開則跟前面(\ref{eq:curl_definition})式相同
+        \begin{equation}
+          \nabla \times \vec {\bm u} = \begin{vmatrix}
+            \bm \delta_x & \bm \delta_y & \bm \delta_z \\
+            \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\
+            u_x & u_y & u_z
+          \end{vmatrix}
+        \end{equation}
+      \item 對向量場取Gradient(升階為張量):
+        \begin{equation}
+          \boxed{\nabla \vec {\bm u} = \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j \frac{\partial u_j}{\partial x_i}}
+        \end{equation}
+        Proof:
+        \begin{align}
+          \nabla \vec {\bm u} &=
+          \left(
+            \sum_{i=1}^3 \bm \delta_i \frac{\partial}{\partial x_i}
+          \right) 
+          \left(
+            \sum_{j=1}^3 \bm \delta_j u_j
+          \right) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j
+          \frac{\partial u_j}{\partial x_i}
+        \end{align}
+        P.S. 可以將其轉置:
+        \begin{equation}
+          \left(\nabla \vec {\bm u}\right)^\dagger = \sum_{i=1}^3 \sum_{j=1}^3 \bm \delta_i \bm \delta_j \frac{\partial u_i}{\partial x_j}
+        \end{equation}
+        可以注意到轉置前後不同:
+        \begin{equation}
+          \boxed{\frac{\partial u_j}{\partial x_i} \neq \frac{\partial u_i}{\partial x_j}}
+        \end{equation}
+      \item 對張量場取Divergence(降階為向量):
+        \begin{equation}
+          \boxed{\nabla \cdot \overline{\overline{\bm \tau}} = 
+          \sum_{i=1}^3\sum_{k=1}^3 \bm \delta_k \frac{\partial \tau_{ik}}{\partial x_i}}
+        \end{equation}
+        少$j$的原因是在在計算中會降階\\
+        也可以將$k$提出:
+        \begin{equation}
+          \nabla \cdot \overline{\overline{\bm \tau}} = \sum_{k=1}^3 \bm \delta_k \left(
+            \sum_{i=1}^3 \frac{\partial \tau_{ik}}{\partial x_i}
+          \right)
+        \end{equation}
+        也就是說，等同於分別對$x,y,z$三個方向取Divergence後，再組合成向量場
+        \begin{equation}
+          \nabla \cdot \overline{\overline{\bm \tau}} = \begin{pmatrix}
+            \sum_{i=1}^3 \frac{\partial \tau_{i1}}{\partial x_i} \\
+            \sum_{i=1}^3 \frac{\partial \tau_{i2}}{\partial x_i} \\
+            \sum_{i=1}^3 \frac{\partial \tau_{i3}}{\partial x_i}
+          \end{pmatrix}
+        \end{equation}
+        如果張量是由兩個向量直積產生的，$\overline{\overline{\bm \tau}} = s\vec {\bm v} \vec {\bm w}$\\
+        可進一步改寫為:
+        \begin{equation}
+          \nabla \cdot (s \vec {\bm v} \vec {\bm w}) = \sum_{k=1}^3 \bm \delta_k \left(
+            \sum_{i=1}^3 \frac{\partial (s v_i w_k)}{\partial x_i}
+          \right)
+        \end{equation}
+        Proof:
+        \begin{align}
+          \nabla \cdot \overline{\overline{\bm \tau}} &=
+          \left(
+            \sum_{i=1}^3 \bm \delta_i \frac{\partial}{\partial x_i}
+          \right) \cdot
+          \left(
+            \sum_{j=1}^3 \sum_{k=1}^3 \bm \delta_j \bm \delta_k \tau_{jk}
+          \right) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3
+          \left[\left(
+            \bm \delta_i \cdot \bm \delta_j
+          \right) \bm \delta_k\right] \frac{\partial \tau_{jk}}{\partial x_i} \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3
+          \delta_{ij} \bm \delta_k
+          \frac{\partial \tau_{jk}}{\partial x_i} \nonumber\\
+          &= \sum_{i=1}^3 \sum_{k=1}^3 \bm \delta_k
+          \frac{\partial \tau_{ik}}{\partial x_i}
+        \end{align}
+      \item 對純量取Laplacian，$\nabla^2$: ($\nabla \cdot \nabla f$)
+        \begin{equation}
+          \boxed{\nabla^2 f = \sum_{i=1}^3 \frac{\partial^2 f}{\partial x_i^2}}
+        \end{equation}
+        Proof:
+        \begin{align}
+         \nabla^2 =  \nabla \cdot \nabla f &=
+          \left(
+            \sum_{i=1}^3 \bm \delta_i \frac{\partial}{\partial x_i}
+          \right) \cdot
+          \left(
+            \sum_{j=1}^3 \bm \delta_j \frac{\partial f}{\partial x_j}
+          \right) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3
+          \left(
+            \bm \delta_i \cdot \bm \delta_j
+          \right) \frac{\partial}{\partial x_i} \frac{\partial f}{\partial x_j} \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3
+          \delta_{ij} \frac{\partial^2 f}{\partial x_i \partial x_j} \nonumber\\
+          &= \sum_{i=1}^3 \frac{\partial^2 f}{\partial x_i^2}
+        \end{align}
+      \item 對向量場取Laplacian，$\nabla^2 \vec {\bm u}$:
+        \begin{equation}
+          \boxed{\nabla^2 \vec {\bm u}  = \nabla \cdot \nabla \vec {\bm u}
+          = \sum_{i=1}^3\sum_{k=1}^3 \bm \delta_k \frac{\partial^2 u_k}{\partial x_i^2}}
+        \end{equation}
+        也可將$k$提出:
+        \begin{equation}
+          \nabla^2 \vec {\bm u} = \sum_{k=1}^3 \bm \delta_k \left(
+            \sum_{i=1}^3 \frac{\partial^2 u_k}{\partial x_i^2}
+          \right) = \sum_{k=1}^3 \bm \delta_k \nabla^2 u_k
+        \end{equation}
+        也就是說，等同於分別對$x,y,z$三個方向取Laplacian後，再組合成向量場
+        \begin{equation}
+          \nabla^2 \vec {\bm u}  = \begin{pmatrix}
+            \nabla^2 u_x \\
+            \nabla^2 u_y \\
+            \nabla^2 u_z
+          \end{pmatrix}
+        \end{equation}
+        不過非卡式座標系下，就沒這麼簡單了\\
+        Proof:
+        \begin{align}
+          \nabla^2 \vec {\bm u} &=
+          \left(
+            \sum_{i=1}^3 \bm \delta_i \frac{\partial}{\partial x_i}
+          \right) \cdot
+          \left(
+            \sum_{j=1}^3 \bm \delta_j \frac{\partial}{\partial x_j}
+          \right)
+          \left(
+            \sum_{k=1}^3 \bm \delta_k u_k
+          \right) \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3
+          \left(
+            \bm \delta_i \cdot \bm \delta_j
+          \right) \bm \delta_k
+          \frac{\partial}{\partial x_i} \frac{\partial}{\partial x_j} u_k \nonumber\\
+          &= \sum_{i=1}^3 \sum_{j=1}^3 \sum_{k=1}^3
+          \delta_{ij} \bm \delta_k
+          \frac{\partial^2 u_k}{\partial x_i \partial x_j} \nonumber\\
+          &= \sum_{i=1}^3  \sum_{k=1}^3
+          \bm \delta_k
+          \frac{\partial^2 u_k}{\partial x_i^2} \nonumber\\
+          &= \sum_{k=1}^3  \bm \delta_k
+          \left(
+            \sum_{i=1}^3
+            \frac{\partial^2 u_k}{\partial x_i^2}
+          \right) \nonumber\\
+          &= \sum_{k=1}^3  \bm \delta_k
+          \nabla^2 u_k
+        \end{align}
+    \end{itemize}
+\end{itemize}
+\subsection{時間導數}
+\begin{itemize}
+  \item Substantial time derivative 質點微分 $\frac{D()}{dt}$(實質導數)\\
+    Lagrange提供：用移動座標觀察質點且移動座標速度等於質點速度\\
+    質點與座標之間相對位置不變\\
+    i.e. $f=f(t,\cancel{x},\cancel{y},\cancel{z})=f(t)$ only\\
+    得到對$t$微分，稱$\frac{D()}{dt}$
+    \begin{equation}
+      \frac{Df}{Dt} = \frac{\partial f}{\partial t} + \vec {\bm v} \cdot \nabla f \label{eq:substantial_time_derivative}
+    \end{equation}
+  \item Partial time derivative 偏微分$\frac{\partial}{\partial t}$\\
+    Euler提供：以固定座標來觀察質點\\
+    質點與座標之間相對位置不斷改變\\
+    i.e. $f=f(t,x,y,z)$\\
+    得到對$t$微分，稱$\frac{\partial}{\partial t}$
+  \item 如果知道函數對\fbox{單一變數}之關係$\Rightarrow$偏微分\\
+      $\frac{\partial y}{\partial x}>0$，$y$隨$x$增加而增加\\
+      $\frac{\partial y}{\partial x}<0$，$y$隨$x$增加而減少
+  \item total time derivative 全微分 $\frac{d}{dt}$\\
+    以移動座標來觀察質點，但移動座標速度不等於質點速度\\
+    質點與座標之間相對位置不斷改變\\
+    假設一函數$f=f(t,x,y,z)$，以$\vec {\bm w}$為參考點座標的移動速度，$\vec {\bm v}$為此函數的質點速度
+    \begin{equation}
+      \boxed{\frac{df}{dt} =\frac{\partial f}{\partial t}+ \vec{w}\cdot \nabla f} \label{eq:total_time_derivative}
+    \end{equation}
+  \item 如果要知道函數對\fbox{所有變數}之關係$\Rightarrow$全微分\\
+    欲知$f(t,x,y,z)$對所有變數影響，假設以$\vec {\bm w}$ 參考點座標，$\vec {\bm v}$質點座標\\
+    作全微分展開
+    \begin{equation}
+      df = \left(\frac{\partial f}{\partial t}\right)dt+
+      \left(\frac{\partial f}{\partial x}\right)dx+
+      \left(\frac{\partial f}{\partial y}\right)dy+
+      \left(\frac{\partial f}{\partial z}\right)dz
+    \end{equation}
+    提出$dt$:
+    \begin{equation}
+      df = dt\left(
+        \frac{\partial f}{\partial t}+\left(\frac{\partial f}{\partial x}\right)\left(\frac{\partial x}{\partial t}\right)
+        +\left(\frac{\partial f}{\partial y}\right)\left(\frac{\partial y}{\partial t}\right)
+        +\left(\frac{\partial f}{\partial z}\right)\left(\frac{\partial z}{\partial t}\right)
+      \right)
+    \end{equation}
+    可以注意到，$\frac{\partial x}{\partial t},~\frac{\partial y}{\partial t},~\frac{\partial z}{\partial t}$\\
+    就是參考點座標的速度分量，$w_x,w_y,w_z$\\
+    將$dt$移到左側：
+    \begin{equation}
+      \frac{df}{dt}= \frac{\partial f}{\partial t}+
+      \left(\frac{\partial f}{\partial x}\right)w_x+
+      \left(\frac{\partial f}{\partial y}\right)w_y+
+      \left(\frac{\partial f}{\partial z}\right)w_z
+    \end{equation}
+    其中因為$\nabla f$的定義為
+    \begin{equation}
+      \nabla f = \frac{\partial f}{\partial x} \bm\delta_x+\frac{\partial f}{\partial y}\bm\delta_y
+      +\frac{\partial f}{\partial z} \bm\delta_z
+    \end{equation}
+    且$\vec {\bm w}$寫為:
+    \begin{equation}
+      \vec{\bm w} = w_x \bm \delta_x + w_y \bm \delta_y + w_z \bm \delta_z
+    \end{equation}
+    後面三項即為$\vec {\bm w} \cdot \nabla f$，故可寫成
+    \begin{equation}
+      \boxed{\frac{df}{dt} =\frac{\partial f}{\partial t}+ \vec{w}\cdot \nabla f} 
+    \end{equation}
+    也就是式(\ref{eq:total_time_derivative})
+  \item $\frac{D()}{dt},~\frac{\partial}{\partial t},~\frac{d}{dt}$之間的關係式：
+    由式(\ref{eq:total_time_derivative})可知，\\
+    如果\fbox{座標移動速度等於質點速度}，$\vec {\bm w} = \vec {\bm v}$，就會變為質點微分的形式(\ref{eq:substantial_time_derivative})
+    \begin{equation}
+      \frac{df}{dt}=\frac{\partial f}{\partial t}+ \vec{v}\cdot \nabla f
+    \end{equation}
+    而當\fbox{座標不移動}時，$\vec {\bm w} = \vec 0$，則會變為偏微分的形式
+    \begin{equation}
+      \boxed{\frac{Df}{Dt} = \frac{\partial f}{\partial t}} 
+    \end{equation}
+  \item 推導:
+    \begin{equation}
+      \frac{\partial (\rho \vec {\bm u})}{\partial t} + \nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) = \rho \frac{D\vec {\bm u}}{Dt}  \label{eq:material_derivative_relation}
+    \end{equation}
+    Proof:
+    \begin{align}
+      \frac{\partial (\rho \vec {\bm u})}{\partial t} + \nabla \cdot (\boxed{\rho \vec {\bm u}} \boxed{\vec {\bm u}}) &= 
+      \rho\frac{\partial \vec {\bm u}}{\partial t} + \vec {\bm u} \frac{\partial \rho}{\partial t} 
+      + \rho \vec {\bm u} \cdot \nabla \vec {\bm u} + \vec {\bm u} \cdot \nabla (\rho \vec {\bm u}) \nonumber\\
+      &= \rho\left(
+        \frac{\partial \vec {\bm u}}{\partial t} + \vec {\bm u} \cdot \nabla \vec {\bm u}
+      \right) + \vec {\bm u} \left(
+        \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec {\bm u})
+      \right)
+    \end{align}  
+    由質量守恆方程式:
+    \begin{equation}
+      \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec {\bm u}) = 0
+    \end{equation}
+    故可得:
+    \begin{equation}
+      \frac{\partial (\rho \vec {\bm u})}{\partial t} + \nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) = \rho \left(
+        \frac{\partial \vec {\bm u}}{\partial t} + \vec {\bm u} \cdot \nabla \vec {\bm u}
+      \right)
+    \end{equation}
+    而右邊括弧內即為質點微分形式，故可寫成:
+    \begin{equation}
+      \frac{\partial (\rho \vec {\bm u})}{\partial t} + \nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) = \rho \frac{D\vec {\bm u}}{Dt} 
+    \end{equation}
+\end{itemize}
+\subsection{多重積分的定理}
+關於積分面積、法向量的正負號其實原先應透過定義法向量$\vec {\bm n}$來決定\\
+但只要透過假設是\fbox{流入-流出}，流入時與法向量方向相反，流出時與法向量方向相同\\
+即可決定正負號(兩邊算出的正負值一致)
+\begin{itemize}
+  \item Stokes theorem\\
+    面積分等於環線積分
+    \begin{equation}
+      \oint \vec {\bm v} \cdot d\vec {\bm s} = \iint \left(\nabla \times \vec {\bm v}\right) \cdot d\vec {\bm A}
+    \end{equation}
+    \item Gauss theorem
+    體積分等於環面積分，向量版本
+    \begin{equation}
+      \oiint \vec {\bm v} \cdot d\vec {\bm A} = \iiint \nabla \cdot \vec {\bm v} dV
+    \end{equation}
+    假設一個不規則形狀為控制體積，為了符合Mass balance
+    \begin{equation}
+      \text{流入} - \text{流出} = \frac{\partial }{\partial t} \iiint_{V} \rho dV
+    \end{equation}
+    而定義面積的法向量是垂直於控制體積的\\
+    因此流入控制體積的量為:
+    \begin{equation}
+      \oiint_{in} \vec {\bm u}_{in} \cdot d\vec {\bm A}_{in} 
+    \end{equation}
+    流入方向與法向量方向相反，故內積為負值\\
+    流出控制體積的量為:
+    \begin{equation}
+      \oiint_{out} \vec {\bm u}_{out} \cdot d\vec {\bm A}_{out} 
+    \end{equation}
+    流出方向與法向量方向相同，故內積為正值\\
+    由於流入與流出皆為負值，故流入-流出為負值\\
+    因此流入-流出可寫成:
+    \begin{equation}
+      \oiint_{in} \vec {\bm u}_{in} \cdot d\vec {\bm A}_{in} - \oiint_{out} \vec {\bm u}_{out} \cdot d\vec {\bm A}_{out} = -\oiint \vec {\bm u} \cdot d\vec {\bm A}
+    \end{equation}
+    綜合以上式子，可寫出Mass Balance方程式:
+    \begin{equation}
+      -\oiint \vec {\bm u} \cdot d\vec {\bm A} = \frac{\partial }{\partial t} \iiint_{V} \rho dV \label{eq:mass_balance_by_gauss}
+    \end{equation}
+    利用Gauss theorem，可將左邊面積分轉為體積分:
+    \begin{equation}
+      -\iiint \nabla \cdot \vec {\bm u} dV = \frac{\partial }{\partial t} \iiint_{V} \rho dV
+    \end{equation}
+    將右邊微分移到體積積分內:
+    \begin{equation}
+      \iiint_{V} \left(-\nabla \cdot \vec {\bm u} - \frac{\partial \rho}{\partial t}\right) dV = 0
+    \end{equation}
+    由於體積積分為0，故積分內的函數必為0:
+    \begin{equation}
+      -\nabla \cdot \vec {\bm u} - \frac{\partial \rho}{\partial t} = 0
+    \end{equation}
+    故可得出Equation of Continuity
+  \item Green theorem\\
+    體積分等於環面積分，純量版本
+    \begin{equation}
+      \oiint f d\vec {\bm A} = \iiint \nabla f dV
+    \end{equation}
+    由Momentum balance可得出Equation of Motion
+    \begin{equation}
+      \text{流入} - \text{流出} =\text{累積動能}
+    \end{equation}
+    動量為:
+    \begin{equation}
+      \vec {\bm P} = m \vec {\bm u} = \rho V \vec {\bm u}
+    \end{equation}
+    流入控制體積的量為:$\oiint_{in} \rho \vec {\bm u}_{in} \vec {\bm u}_{in} \cdot d\vec {\bm A}_{in}$\\
+    流入方向與法向量方向相反，故內積為負值\\
+    流出控制體積的量為:$\oiint_{out} \rho \vec {\bm u}_{out} \vec {\bm u}_{out} \cdot d\vec {\bm A}_{out}$\\
+    流出方向與法向量方向相同，故內積為正值\\
+    由於流入與流出皆為負值，故流入-流出為負值\\
+    因此流入-流出可寫成:
+    \begin{equation}
+      \oiint_{in} \rho \vec {\bm u}_{in} \vec {\bm u}_{in} \cdot d\vec {\bm A}_{in} - \oiint_{out} \rho \vec {\bm u}_{out} \vec {\bm u}_{out} \cdot d\vec {\bm A}_{out} 
+      = -\oiint \rho \vec {\bm u} \vec {\bm u} \cdot d\vec {\bm A}
+    \end{equation}
+    同高斯(\ref{eq:mass_balance_by_gauss})，利用Gauss theorem，可將左邊面積分轉為體積分:
+    \begin{equation}
+       -\oiint \rho \vec {\bm u} \vec {\bm u} \cdot d\vec {\bm A} = -\iiint \nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) dV
+    \end{equation}
+    對於壓力也相同的做法，只是壓力為純量\\
+    流入的壓力為，$\oiint_{in} P_{in} d\vec {\bm A}_{in}$\\
+    流入方向與法向量方向相反，故內積為負值
+    流出的壓力為，$\oiint_{out} P_{out} d\vec {\bm A}_{out}$\\
+    流出方向與法向量方向相同，故內積為正值
+    由於流入與流出皆為負值，故流入-流出為負值\\
+    因此流入-流出可寫成:
+    \begin{equation}
+      \oiint_{in} P_{in} d\vec {\bm A}_{in} - \oiint_{out} P_{out} d\vec {\bm A}_{out} = -\oiint P d\vec {\bm A}
+    \end{equation}
+    此時因為壓力是純量，故利用Green theorem，可將左邊面積分轉為體積分:
+    \begin{equation}
+      -\oiint P d\vec {\bm A} = -\iiint \nabla P dV
+    \end{equation}
+    加上重力作用:
+    \begin{equation}
+      \iiint \rho \vec {\bm g} dV
+    \end{equation}
+    加上黏滯力，進入系統的黏滯力為$\oiint_{in} \overline {\overline {\bm \tau}}_{in} \cdot d\vec {\bm A}_{in}$
+    流入方向與法向量方向相反，故內積為負值\\
+    流出的黏滯力為$\oiint_{out} \overline{\overline{\bm \tau}}_{out} \cdot d\vec {\bm A}_{out}$\\
+    流出方向與法向量方向相同，故內積為正值\\
+    由於流入與流出皆為負值，故流入-流出為負值\\
+    因此流入-流出可寫成:
+    \begin{equation}
+      \oiint_{in} \overline {\overline{\bm \tau}}_{in} \cdot d\vec {\bm A}_{in} - \oiint_{out} \overline{\overline{\bm \tau}}_{out} \cdot d\vec {\bm A}_{out} 
+      = -\oiint \overline{\overline{\bm \tau}} \cdot d\vec {\bm A}
+    \end{equation}
+    利用Gauss theorem，可將左邊面積分轉為體積分
+    \begin{equation}
+      -\oiint \overline{\overline{\bm \tau}} \cdot d\vec {\bm A} = -\iiint \nabla \cdot \overline{\overline{\bm \tau}} dV
+    \end{equation}
+    累積的動能為:
+    \begin{equation}
+      \frac{\partial }{\partial t} \iiint_{V} \rho \vec {\bm u} dV
+    \end{equation}
+    綜合以上式子，可寫出Momentum Balance方程式:
+    \begin{equation}
+      -\iiint \nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) dV - \iiint \nabla P dV + \iiint \rho \vec {\bm g} dV - \iiint \nabla \cdot \overline{\overline\tau} dV
+      = \frac{\partial }{\partial t} \iiint_{V} \rho \vec {\bm u} dV
+    \end{equation}
+    將右邊微分移到體積積分內:
+    \begin{equation}
+      \iiint_{V} \left(
+        -\nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) - \nabla P + \rho \vec {\bm g} - \nabla \cdot \overline{\overline{\bm \tau}}
+        - \frac{\partial }{\partial t}(\rho \vec {\bm u})
+      \right) dV = 0
+    \end{equation}
+    由於體積積分為0，故積分內的函數必為0:
+    \begin{equation}
+      -\nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) - \nabla P + \rho \vec {\bm g} - \nabla \cdot \overline{\overline{\bm \tau}}
+      = \frac{\partial }{\partial t}(\rho \vec {\bm u})
+    \end{equation}
+    此即為Equation of Motion
+\end{itemize}
+\subsection{雜項的微積分工具}
+\begin{itemize}
+  \item Leibniz's rule\\
+    當要對積分函數進行微分時，而且積分的上下界是變動的
+    \begin{equation}
+      f(x,y) = \int_{y_1(x)}^{y_2(x)} \phi(y,x) dy
+    \end{equation}
+    則對$x$微分時\\
+    會是\fbox{函數被微分+上限被微分乘函數-下限被微分乘函數}
+    \begin{equation}
+      \frac{\partial f(x,y)}{\partial x} = \int_{y_1(x)}^{y_2(x)} \frac{\partial \phi(y,x)}{\partial x} dy 
+      + \phi(y_2,x) \frac{dy_2(x)}{dx} 
+      - \phi(y_1,x) \frac{dy_1(x)}{dx} \label{eq:leibniz_rule}
+    \end{equation}
+  \item $\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}$ \label{sec:error_function_proof}\\
+    這東西是$\Gamma(\frac{3}{2})$，不過有其他證明方式\\
+    令
+    \begin{equation}
+      \int_0^\infty e^{-x^2} dx = I
+    \end{equation}
+    則$I^2$可寫成:
+    \begin{align}
+      I^2 &= \left(\int_0^\infty e^{-x^2} dx\right)\left(\int_0^\infty e^{-y^2} dy\right) \nonumber\\
+      &= \int_0^\infty \int_0^\infty e^{-(x^2+y^2)} dx dy
+    \end{align}
+    將其轉為\fbox{極座標}:
+    \begin{align}
+      I^2 &= \int_{\theta=0}^{\frac{\pi}{2}} \int_{r=0}^{\infty} e^{-r^2} r dr d\theta \nonumber\\
+      &= \frac{\pi}{2} \int_0^\infty e^{-r^2} r dr
+    \end{align}
+    令$u=-r^2$，$du=-2r dr$，則
+    \begin{align}
+      I^2 &= \frac{\pi}{2} \int_{u=-\infty}^{0} e^{u} \left(-\frac{1}{2}\right) du \nonumber\\
+      &= \frac{\pi}{4} \int_{-\infty}^{0} e^{u} du \nonumber\\
+      &= \frac{\pi}{4} \left[e^{u}\right]_{-\infty}^{0} \nonumber\\
+      &= \frac{\pi}{4} (1-0) \nonumber\\
+      &= \frac{\pi}{4}
+    \end{align}
+    故
+    \begin{equation}
+      \boxed{I = \int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}}
+    \end{equation}
+\end{itemize}
+\end{CJK*}
+\end{document}

@@ -1,0 +1,229 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{動量輸送的介紹}
+\begin{itemize}
+  \item 影響流速的四個力:
+  \begin{itemize}
+    \item Inertial Force (慣性力): 使流體繼續保持原本的流動狀態\\
+    實際上為Inertial Stress
+    \begin{equation}
+      \text{Inertial Force(慣性力)} = \rho \vec {\bm u} \vec {\bm u}
+    \end{equation}
+    $\vec {\bm u} \vec {\bm u}$為二階張量，有9個分量:
+    \begin{equation}
+      \rho \vec {\bm u} \vec {\bm u} = \begin{bmatrix}
+        \rho u_x u_x & \rho u_x u_y & \rho u_x u_z \\
+        \rho u_y u_x & \rho u_y u_y & \rho u_y u_z \\
+        \rho u_z u_x & \rho u_z u_y & \rho u_z u_z
+      \end{bmatrix} \label{eq:inertial_stress_tensor}
+    \end{equation}
+    或者寫為單位向量展開形式:
+    \begin{align}
+      \rho \vec {\bm u} \vec {\bm u} =& \phantom{+}\rho u_x u_x \bm \delta_x \bm \delta_x + \rho u_x u_y \bm \delta_x \bm \delta_y + \rho u_x u_z \bm \delta_x \bm \delta_z \nonumber \\
+      &+ \rho u_y u_x \bm \delta_y \bm \delta_x + \rho u_y u_y \bm \delta_y \bm \delta_y + \rho u_y u_z \bm \delta_y \bm \delta_z \nonumber \\
+      &+ \rho u_z u_x \bm \delta_z \bm \delta_x + \rho u_z u_y \bm \delta_z \bm \delta_y + \rho u_z u_z \bm \delta_z \bm \delta_z
+    \end{align}
+    慣性「力」的定義是使流體保持$u$之力，是動量/時間\\
+    但Inertial Force實際上是Inertial Stress，是力/面積
+    \begin{align}
+      \text{Inertial Stress} &= \frac{\text{真慣性力}}{A} = \frac{\frac{m\vec {\bm u}}{t}}{A} = \frac{\dot m\vec {\bm u}}{A} \nonumber \\
+      &= \frac{\rho Q \vec {\bm u}}{A} = \frac{\rho \vec {\bm u} A \vec {\bm u}}{A} = \rho \vec {\bm u} \vec {\bm u}
+    \end{align}
+    \item Pressure Force (壓力)，純量，$P$
+    \item Viscous Force (黏滯力)，$\overline {\overline \tau}$: 抵抗流體流動的力\\
+    實際上為Shear Stress，張量，有9個分量
+    \begin{equation}
+      \overline{\overline{\bm \tau}} = \begin{bmatrix}
+        \tau_{xx} & \tau_{xy} & \tau_{xz} \\
+        \tau_{yx} & \tau_{yy} & \tau_{yz} \\
+        \tau_{zx} & \tau_{zy} & \tau_{zz}
+      \end{bmatrix} \label{eq:shear_stress_tensor}
+    \end{equation}
+    也可以寫成單位向量的展開形式:
+    \begin{align}
+      \overline{\overline{\bm  \tau}} =& \phantom{+}\tau_{xx}\bm \delta_x\bm \delta_x + \tau_{xy}\bm \delta_x\bm \delta_y + \tau_{xz}\bm \delta_x\bm \delta_z \nonumber \\
+      &+ \tau_{yx}\bm \delta_y\bm \delta_x + \tau_{yy}\bm \delta_y\bm \delta_y + \tau_{yz}\bm \delta_y\bm \delta_z \nonumber \\
+      &+ \tau_{zx}\bm \delta_z\bm \delta_x + \tau_{zy}\bm \delta_z\bm \delta_y + \tau_{zz}\bm \delta_z\bm \delta_z
+    \end{align}
+    其中對角線上的分量為Normal Stress，其他為Shear Stress
+    \begin{equation}
+      \overline{\overline{\bm \tau}} = -\mu\left(
+        \nabla \vec {\bm u} + (\nabla \vec {\bm u})^T
+      \right) + \left(
+        \frac{2}{3}\mu - \kappa
+      \right)\left(\nabla \cdot \vec {\bm u}\right) \bm\delta
+    \end{equation}
+    而因為\fbox{數學上黏度會被乘進去壓力項}，所以加上$\kappa$，可以想成各向抗壓性(Dilatational Viscosity)\\
+    來消掉斜對角多算的部分，另外因為黏度這個純量是來自9個項，所以在定義上有其權重分配:\\
+    實際上可以由角動量守恆證明以下性質，但大學就不講這麼多了
+    \begin{equation}
+      \tau_{xy} = \tau_{yx} = -\mu \left[
+        \left(\frac{\partial u}{\partial y}\right) + \left(\frac{\partial v}{\partial x}\right)
+      \right]
+    \end{equation}
+    以及:
+    \begin{equation}
+      \tau_{xx} = -\mu \left[
+        2\left(\frac{\partial u}{\partial x}\right)
+      \right] + \left(\frac{2}{3}\mu - \kappa\right)\left(\nabla \cdot \vec {\bm u}\right)
+    \end{equation}
+    \item Gravity Force (重力)，純量，$\rho \vec {\bm g}$\\
+    實際上也不是力，而是力/體積
+    \begin{equation}
+      \text{Gravity Force} = \frac{\text{真重力}}{V} = \frac{m\vec {\bm g}}{V} = \frac{\rho V \vec {\bm g}}{V} = \rho \vec {\bm g}
+    \end{equation}
+  \end{itemize}
+  \item 動量輸送的Governing Equation
+  \begin{itemize}
+    \item Equation of continuity:
+      \begin{equation}
+        \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec {\bm u}) = 0
+      \end{equation}
+    \item Equation of motion:\\
+      最初的形式其實就是力平衡\\
+      牛頓第二定律可以解釋為物體所受淨利等於該物體度量隨時間的變化率
+      \begin{equation}
+        F = \frac{d(m\vec {\bm u})}{dt}
+      \end{equation}
+      而一個流體的力平衡則由四個力組成: 慣性力、壓力、黏滯力、重力
+      \begin{equation}
+        \underbrace{\frac{\partial}{\partial t}(\rho \vec {\bm u})}{\text{Momentum Accu.}} = 
+        - \underbrace{\nabla \cdot (\rho \vec {\bm u} \vec {\bm u})}_{\text{Inertial Force}} -
+        \underbrace{\nabla P}_{\text{Pressure Force}} +
+        \underbrace{\nabla \cdot \tau}_{\text{Viscous Force}} +
+        \underbrace{\rho \vec {\bm g}}_{\text{Gravity Force}}
+      \end{equation}
+      而將$\nabla \cdot (\rho \vec {\bm u} \vec {\bm u})$移到等號左邊，與$\frac{\partial}{\partial t}(\rho \vec {\bm u})$合併\\
+      這是將固定座標的微分，轉換為移動座標的微分
+      \begin{equation}
+        \frac{\partial}{\partial t}(\rho \vec {\bm u}) + \nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) = \frac{D(\rho \vec {\bm u})}{Dt}
+      \end{equation}
+      此步驟的推導可以看(\ref{eq:material_derivative_relation})，甚至還要用到Equation of continuity\\
+      因此此步驟其實假設了恆溫恆密度流體
+      \begin{equation}
+        \rho \frac{D\vec {\bm u}}{Dt} = -\nabla P + \nabla \cdot \tau + \rho \vec {\bm g}
+      \end{equation}
+      若為牛頓流體，且黏度、密度不變，則可化簡為Navier-Stokes Equation
+      \begin{equation}
+        \rho\left(
+          \frac{\partial \vec {\bm u}}{\partial t} + \vec {\bm u} \cdot \nabla \vec {\bm u}
+        \right) = \rho \frac{D\vec {\bm u}}{Dt} = -\nabla P + \mu \nabla^2 \vec {\bm u} + \rho \vec {\bm g}
+      \end{equation}
+      當流體流速很慢，加速度項可以忽略時，則會變成Stokes Flow Equation，或是Creeping Flow Equation
+      \begin{equation}
+        0 = -\nabla P + \mu \nabla^2 \vec {\bm u} + \rho \vec {\bm g}
+      \end{equation}
+      而當$\mu =0$時，會再進一步變成Euler Equation(或者說雷諾數無限大)
+      \begin{equation}
+        \rho\left(
+          \frac{\partial \vec {\bm u}}{\partial t} + \vec {\bm u} \cdot \nabla \vec {\bm u}
+        \right)= \rho \frac{D\vec {\bm u}}{Dt}  = -\nabla P + \rho \vec {\bm g}
+      \end{equation}
+    \item  Equation of Mechanical Energy\\
+      有了質量守恆、力平衡，再往下還有能量守恆:
+      \begin{align}
+        \underbrace{\frac{\partial}{\partial t}\left(\frac{1}{2}\rho u^2\right)}_{\text{總動能變化}}
+        =&-\underbrace{\left(\nabla \cdot \frac{1}{2}\rho u^2 \vec{\bm u}\right)}_{\text{傳送的動能變化}}
+        -\underbrace{\nabla \cdot p \vec{\bm u}}_{\text{周遭壓力做功}} \nonumber \\
+        &-\underbrace{p\left(-\nabla \cdot \vec{\bm u}\right)}_{\text{可逆的動能轉內能}}
+        -\underbrace{-\tau : \nabla \vec{\bm u}}_{\text{不可逆的動能轉內能}} \nonumber \\
+        &-\underbrace{\nabla\cdot [\overline{\overline{\tau}} \cdot \vec{\bm u}]}_{\text{黏力做功}} 
+        + \underbrace{\rho \vec{\bm u}\cdot \vec{\bm g} }_{\text{外力做功}} \label{eq:mechanical_energy_equation}
+      \end{align}
+      大概因為其他人都是能量的微分形式，唯有重力不是，所以定義單位質量的重力位能$\hat{\bm \Phi}$
+      \begin{equation}
+        g = - \nabla \hat{\bm \Phi}
+      \end{equation}
+      如此一來便可以將最後一項改寫成:
+      \begin{equation}
+        \rho  \vec{\bm u}\cdot \vec{\bm g} =
+          -\rho ( \vec{\bm u}\cdot \nabla \hat{\bm \Phi})
+          = -\left(
+          \nabla \cdot (\rho \vec{\bm u} \hat{\bm \Phi})
+          \right) + \hat{\bm \Phi} \left(\nabla \cdot \rho \vec{\bm u}\right)
+      \end{equation}
+      後面那項可以利用Equation of continuity換成$-\frac{\partial \rho}{\partial t}$\\
+      變成$\hat{\bm \Phi} \left(-\frac{\partial \rho}{\partial t}\right)$後就可以丟到左邊跟時間導數合併\\
+      最後得到Equation of change for mechanical energy(因為合併了動能+位能)
+      \begin{align}
+        \frac{\partial}{\partial t}\left(\frac{1}{2}\rho u^2 + \rho \hat{\bm \Phi}\right) = 
+        &-\left[
+          \nabla \cdot \left(
+            \frac{1}{2}\rho u^2 + \rho \hat{\bm \Phi}
+          \right) \vec{\bm u}
+        \right] - \nabla \cdot p \vec{\bm u} \nonumber \\
+        &- p\left(-\nabla \cdot \vec{\bm u}\right) - (-\tau : \nabla \vec{\bm u}) \nonumber \\
+        &- \nabla \cdot [\overline{\overline{\tau}} \cdot \vec{\bm u}] 
+        \label{eq:mechanical_energy_equation_modified}
+      \end{align}
+      而其中不可逆的動能轉內能項$-\tau : \nabla \vec{\bm u}$\\
+      實際上就是流體的耗散函數(Dissipation function)\\
+      如同後面例題會提到的假設，流體在管中造成的壓力損失\\
+      是來自為了抵抗形變所耗損的能量，所以才會是力乘以形變速率的形式\\
+      而那九項中，也可以再進一步提出壓力的影響與剪力的影響:
+      \begin{equation}
+        -\overline{\overline{\bm \tau}}: \nabla \vec{\bm u} =\frac{2}{3}\mu \sum_{i=1}^{3}\sum_{j=1}^{3}\left[
+          \left(
+          \frac{\partial u_i}{\partial x_i} + \frac{\partial u_j}{\partial x_j}
+        \right) - \frac{2}{3}\delta_{ij} \nabla \cdot \vec{\bm u}
+        \right]^2 + \kappa \left(
+          \nabla \cdot \vec{\bm u}
+        \right)^2 = \mu \bm \Phi_u + \kappa \bm \Phi_b \label{eq:viscous_dissipation}
+      \end{equation}
+      能量平衡式通常不會用微觀的形式來表示，而會用巨觀來表示\\
+      積分式中對於流入或流出控制體積的前三項，則利用Gauss定理轉換成整塊東西的表面積分
+      \begin{align}
+        \frac{d}{dt}\left(
+          K_{\text{tot}} + \bm \Phi_{\text{tot}}
+        \right) =&\left[ \frac{1}{2}\rho_1\left<
+          u_1^3\right>S_1 + \rho_1\hat{\bm \Phi}_1 \left<u_1\right>S_1 + P_1 \left<u_1\right>S_1\right]\nonumber\\
+          & - \left[\frac{1}{2}\rho_2\left<
+          u_2^3\right>S_2 + \rho_2\hat{\bm \Phi}_2 \left<u_2\right>S_2 + P_2 \left<u_2\right>S_2\right] \nonumber \\
+        & + W_m - E_c - E_v
+      \end{align}
+      其中$W_m$代表外力額外作功給流體的量(因為中括弧的第三項已經包含了狀態差所做的功)\\
+      而代入質量流率定義$w_1 = \rho_1\left<u_1\right>S_1$，$w_2 = \rho_2\left<u_2\right>S_2$後，並假設Steady State\\
+      最後得到機械能守恆方程式:
+      \begin{equation}
+        \boxed{\Delta \left(
+          \frac{1}{2}\left<u_1^2\right> + gh_1 + \frac{P_1}{\rho_1}
+        \right) w_1 - \sum\left(
+          \frac{1}{2}\left<u_2^2\right> + gh_2 + \frac{P_2}{\rho_2}
+        \right) w_2 = -W_m + E_c+ E_v}
+      \end{equation}
+      上述的$E_c$代表可逆的，因為壓縮造成的內能上升:
+      \begin{equation}
+        E_c = -\int_{\text{CV}} p\left(-\nabla \cdot \vec{\bm u}\right) dV
+      \end{equation}
+      若流體不可壓縮，則$E_c =0$\\
+      而$E_v$代表不可逆的，因為黏滯造成的內能上升，恆正:
+      \begin{equation}
+        E_v = -\int_{\text{CV}} \overline{\overline{\bm \tau}} : \nabla \vec{\bm u} dV
+      \end{equation}
+      若流體可壓縮，但是穩態，利用:
+      \begin{equation}
+        \nabla \cdot (\rho \vec{\bm u}) = \nabla \rho \cdot \vec{\bm u} + \rho (\nabla \cdot \vec{\bm u}) =0
+      \end{equation}
+      則可以將$E_c$改寫成:
+      \begin{equation}
+        E_c = \int_{\text{CV}} \frac{p}{\rho} (\nabla \rho \cdot \vec{\bm u}) dV
+      \end{equation}
+      若假設任一截面下的密度和壓力相同，則可以近似為:
+      \begin{equation}
+        E_c = -w\Delta \left(\frac{p}{\rho}\right) + w\int_1^2\frac{1}{\rho} dP
+      \end{equation}
+      往前併入機械能守恆方程式，則變成:
+      \begin{equation}
+        \boxed{\Delta \left(\frac{1}{2}\left<u^2\right>\right)  + g\Delta h + \int_1^2 \frac{1}{\rho} dP =
+        \frac{-W_m + E_v}{w}}
+      \end{equation}
+      另外若流速為紊流，速度並不均勻，若以平均速度來寫時應改為:
+      \begin{equation}
+        \frac{\left<u^3\right>}{\left<u\right>} = \alpha \left<u\right>^2
+      \end{equation}
+      其中$\alpha$為動能修正因子，通常大於1，這個數值大概是1.02到1.1之間
+  \end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}

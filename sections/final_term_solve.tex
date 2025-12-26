@@ -1,0 +1,855 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{輸送現象解題}
+\begin{itemize}
+  \item 題1 Mass transfer of baacteria
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) -- (6,0) node[right] {$C_S=0$};
+      \draw (0,4) -- (6,4) node[right] {$C_S=S_0$};
+      \shade[top color=blue!20, bottom color=blue!5] (0,0) rectangle (6,4);
+      \node[anchor=east] at (0,0) {$z=L$};
+      \node[anchor=east] at (0,4) {$z=0$};
+      \node at (3,2) {Bacteria + Chemical $S$};
+      \draw[->] (-0.5,3) -- (-0.5,2) node[below] {$z$};
+    \end{tikzpicture}
+    \caption{Mass Transfer of Bacteria in a Container}
+    \label{fig:mass_transfer_bacteria}
+  \end{figure}
+  \begin{itemize}
+    \item 兩塊薄膜，不允許細菌通過，但允許化學液體$S$擴散
+    \item 上方薄膜有濃度$S_0$，下方薄膜有濃度$0$
+    \item $S$遵守擴散方程式:
+      \begin{equation}
+        j_S = -D_S \frac{dC_S}{dz}
+      \end{equation}
+    \item 已經達到穩態
+    \item 細菌的濃度發現遵守以下經驗式:
+      \begin{equation}
+        j_B = -D_B \frac{dC_B}{dz} + \chi C_B \frac{dC_s}{dz}
+      \end{equation}
+    \item $D_B,D_S,\chi$都是常數
+  \end{itemize}
+  \begin{enumerate}
+    \item 求$C_s(z)$
+    \item 求$C_B(z)$，假設一開始細菌分布均勻時有濃度$C_{B0}$
+  \end{enumerate}
+  解題:
+  \begin{enumerate}
+    \item Equation of Continuity:\\
+    Steady State, no flux
+    \begin{equation}
+      -\frac{dj_s}{dz} = 0
+    \end{equation}
+    \item 寫出邊界條件:
+    \begin{align}
+      C_s(0) &= S_0\\
+      C_s(L) &= 0
+    \end{align}
+    \item 代入$j_S$:
+    \begin{equation}
+      \frac{d}{dz}\left(-D_S\frac{dC_s}{ds}\right) = 0 \implies \frac{d^2C_S}{dz^2} = 0
+    \end{equation}
+    \item 積分兩次:
+    \begin{equation}
+      C_S =C_1 z + C_2
+    \end{equation}
+    \item 代入邊界條件
+    \begin{align}
+      C_S(0) = C_2 &= S_0\\
+      C_S(L) = C_1 L + C_2 &= 0 \implies C_1 = -\frac{S_0}{L}
+    \end{align}
+    \item 解出$C_S(z)$:
+    \begin{equation}
+      \boxed{C_S(z) = S_0\left(1-\frac{z}{L}\right)}
+    \end{equation}
+    \item 對細菌來說，因為無法離開薄膜\\
+    達成Steady State後，細菌應該就靜止不動了\\
+    所以$j_B=0$
+    \begin{equation}
+      0 = -D_B \frac{dC_B}{dz} + \chi C_B \frac{dC_s}{dz}
+    \end{equation}
+    \item 將$C_S$代入:
+    \begin{equation}
+      \frac{dC_B}{dz} = \frac{\chi}{D_B} C_B \frac{d}{dz}\left[S_0\left(1-\frac{z}{L}\right)\right] = -\frac{\chi S_0}{D_B L} C_B
+    \end{equation}
+    \item 分離變數積分:
+    \begin{align}
+      \frac{1}{C_B}dC_B &= -\left(
+        \frac{\chi S_0}{D_B L}
+      \right)dz\nonumber\\
+      \int \frac{1}{C_B} dC_B &= -\frac{\chi S_0}{D_B L} \int_0^z dz\\
+      \ln C_B &= -\left(
+        \frac{\chi S_0}{D_B L}
+      \right)z + C_3\nonumber\\
+      C_B &=C_4 \exp\left[-
+        \frac{\chi S_0}{D_B L}z\right]
+    \end{align}
+    \item 剩下一個條件還沒用到，$C_{B0}$:\\
+    因為整個細菌離不開薄膜，所以:
+    \begin{equation}
+      \int_0^L C_B dz = C_{B0} L
+    \end{equation}
+    \item 代入$C_B$:
+    \begin{align}
+      \int_0^L C_4 \exp\left[-
+        \frac{\chi S_0}{D_B L}z\right] dz &= C_{B0} L\\
+      C_4 \left[
+        -\frac{D_B L}{\chi S_0} \exp\left(-
+        \frac{\chi S_0}{D_B L}z\right)
+      \right]_0^L &= C_{B0} L\\
+      C_4 \frac{D_B L}{\chi S_0} \left(
+        1 - \exp\left(-\frac{\chi S_0}{D_B}\right)
+      \right) &= C_{B0} L
+    \end{align}
+    \item 解出$C_4$:
+    \begin{equation}
+      C_4 = \frac{C_{B0} \chi S_0}{D_B \left(
+        1 - \exp\left(-\frac{\chi S_0}{D_B}\right)
+      \right)}
+    \end{equation}
+    \item 最後解出$C_B(z)$:
+    \begin{equation}
+      \boxed{C_B(z) = \frac{C_{B0} \chi S_0}{D_B \left(
+        1 - \exp\left(-\frac{\chi S_0}{D_B}\right)
+      \right)} \exp\left(-
+        \frac{\chi S_0}{D_B L}z\right)}
+    \end{equation}
+  \end{enumerate}
+  \item 題2 假設一個二元系統有等莫耳濃度的$C$
+  \begin{itemize}
+    \item 如果平均速度$V^\ast=0$，$n_A,n_B$的關係？
+    \item 如果平均速度$V^\ast=0$，但存在一個點$3C_A=C_B$，$V_A,V_B$的關係？
+    \item 如果平均速度$V^\ast\neq0$而且$n_B=0$，$C_A$會和$n_A,V_A,J_B^\ast$中那些獨立？
+    \begin{equation}
+      J_B^\ast = j_B/V^\ast
+    \end{equation}
+  \end{itemize}
+  解題:
+  \begin{enumerate}
+    \item 定義平均速度:
+    \begin{equation}
+      V^\ast = \frac{n_A V_A +n_B V_B}{n_A + n_B} = 0
+    \end{equation}
+    \item 由於濃度相等:
+    \begin{equation}
+      n_A = n_B
+    \end{equation}
+    \item 如果有$3C_A = C_B$:
+    \begin{equation}
+      3 n_A = n_B
+    \end{equation}
+    因為有總濃度
+    \begin{equation}
+      C = C_A + C_B \implies C_A + 3C_A =C \implies C_A = \frac{C}{4},\quad C_B = \frac{3C}{4}
+    \end{equation}
+    \item 代入平均速度:
+    \begin{align}
+      0 &= \frac{n_A V_A + n_B V_B}{n_A + n_B} \nonumber\\
+      0 &= \frac{\frac{C}{4} V_A + \frac{3C}{4} V_B}{\frac{C}{4} + \frac{3C}{4}} \nonumber\\
+      0 &= C\left(
+        \frac{V_A + 3V_B}{4}
+      \right) \nonumber\\
+      V_A + 3V_B &= 0 \nonumber\\
+      \boxed{V_A = -3 V_B}
+    \end{align}
+  \end{enumerate}
+  相關反應式:
+  \begin{itemize}
+    \item 濃度:
+    \begin{equation}
+      C_A =y_A C, \quad \sum_i y_i = 1, \quad C = \sum_i C_i
+    \end{equation}
+    \item Stationary coordinate下的速度:
+    \begin{equation}
+      N_i = C_i V_i
+    \end{equation}
+    \item 有反應時的總莫耳通量:
+    \begin{equation}
+      N_T = \sum_i N_i = \sum_i \nu_i r
+    \end{equation}
+    $\nu_i$是反應係數，$r$是反應速率
+    \item Diffusive Molar Flux:
+    \begin{equation}
+      J_i = N_i - y_i N_T, \quad N_i = J_i + y_i N_T = C_i V^\ast + J_i
+    \end{equation}
+    以及Average Velocity，還有質量守恆:
+    \begin{equation}
+      V^\ast = \frac{N_T}{C}, \quad \sum_i J_i = 0
+    \end{equation}
+    \item Fick's Law:
+    \begin{equation}
+      J_A = -C D_{AB} \frac{dy_A}{dz}
+    \end{equation}
+    合併後:
+    \begin{equation}
+      N_A = -C D_{AB} \frac{dy_A}{dz} + y_A N_T
+    \end{equation}
+    \item molar and mass flux:\\
+    mass flux:$n_i$\\
+    \begin{equation}
+      n_i = M_iN_i
+    \end{equation}
+    單位是$[kg/m^2 s]$\\
+    Total mass flux:
+    \begin{equation}
+      n_T = \sum_i n_i = \sum_i M_i N_i
+    \end{equation}
+    mixture density:
+    \begin{equation}
+      \rho = \sum_i C_i M_i
+    \end{equation}
+    Mass Fraction:
+    \begin{equation}
+      w_i = \frac{n_i}{n_T} = \frac{C_i M_i}{\rho} = \frac{\rho_i}{\rho}
+    \end{equation}
+    Mass average velocity:
+    \begin{equation}
+      V_m = \frac{n_T}{\rho} = \frac{\sum_i n_i}{\sum_i C_i M_i}
+    \end{equation}
+    Mass based Diffusivity flux:
+    \begin{equation}
+      j_i = n_i - w_i n_T, \quad n_i = j_i + w_i n_T 
+    \end{equation}
+    以及質量守恆
+    \begin{equation}
+      V_m = \frac{n_T}{\rho}, \quad \sum_i j_i = 0
+    \end{equation}
+  \end{itemize}
+  \item 題3，假設有一個反應如下:
+  \begin{equation}
+    C_2H_6 + 2H_2O \rightarrow 2CO +5H_2
+  \end{equation}
+  \begin{itemize}
+    \item 乙烷和水穿過一個厚度$L$的膜後碰到催化表面，變成一氧化碳和氫氣\\
+    然後再擴散回薄膜的另一邊
+    \item 假設$y_2$是乙烷在催化表面的莫耳分率，$y_1$是在空氣側的莫耳分率
+    \item 理想氣體
+    \item 乙烷在空氣側有均勻濃度$C$
+    \item 在膜中乙烷的擴散係數是$D_{AM}$
+    \item 求乙烷的通量$N_A$
+  \end{itemize}
+  解題:
+  \begin{enumerate}
+    \item 從反應方程中取得Net generation:
+    \begin{equation}
+      (2+5) - (1+2) = 4
+    \end{equation}
+    因此整體的莫爾通量:
+    \begin{equation}
+      N_T = -4 N_A
+    \end{equation}
+    P.S. 因為乙烷是被消耗掉的，所以前面有負號\\
+    因此對乙烷來說:
+    \begin{equation}
+      N_A = -\frac{N_T}{4}
+    \end{equation}
+    \item 使用Fick/Stefan-Maxwell equation:
+    \begin{equation}
+      N_A = -C D_{AM} \frac{dy_A}{dz} + y_A N_T
+    \end{equation}
+    \item 代入$N_T$:
+    \begin{align}
+      N_A &= -C D_{AM} \frac{dy_A}{dz} - 4 y_A N_A \nonumber\\
+      N_A(1+4y_A) &= -C D_{AM} \frac{dy_A}{dz}
+    \end{align}
+    \item 分離變數積分:
+    \begin{align}
+      N_A(1+4y_A) &= -C D_{AM} \frac{dy_A}{dz}\nonumber\\
+      N_A(1+4y_A) dz &= -C D_{AM} dy_A\nonumber\\
+      -\frac{N_A}{C D_{AM}} dz &= \frac{1}{1+4y_A} dy_A\nonumber\\
+      \int_0^L -\frac{N_A}{C D_{AM}} dz &= \int_{y_1}^{y_2} \frac{1}{1+4y_A} dy_A\nonumber\\
+      -\left(
+        \frac{N_A}{C D_{AM}}
+      \right) \int_0^L dz &= \int_{y_1}^{y_2} \frac{1}{1+4y_A} dy_A\nonumber\\
+      -\left(
+        \frac{N_A}{C D_{AM}}
+      \right) L &= \left[
+        \frac{1}{4} \ln(1+4y_A)
+      \right]_{y_1}^{y_2}\nonumber\\
+      -\left(
+        \frac{N_A}{C D_{AM}}
+      \right) L &= \frac{1}{4} \left(
+        \ln(1+4y_2) - \ln(1+4y_1)
+      \right)\nonumber\\
+      -\left(
+        \frac{N_A}{C D_{AM}}
+      \right) L &= \frac{1}{4} \ln\left(
+        \frac{1+4y_2}{1+4y_1}
+      \right) \nonumber\\
+      \left( \frac{N_A}{C D_{AM}}\right)L &= \frac{1}{4}\ln\left(
+        \frac{1+4y_1}{1+4y_2}
+      \right)
+    \end{align}
+    \item 最後解出$N_A$:
+    \begin{equation}
+      \boxed{N_A = \frac{C D_{AM}}{4L} \ln\left(
+        \frac{1+4y_1}{1+4y_2}
+      \right)}
+    \end{equation}
+  \end{enumerate}
+  \item 題4，假設一流體流入填充有顆粒的間距$2B$的兩板之間
+  \begin{itemize}
+    \item One Dimensional Only, $V = V_z(y)$
+    \item Governing Equation:
+    \begin{equation}
+      \frac{dP}{dz} = -\frac{\mu}{K}V_z + \mu\frac{d^2V_z}{dy^2}
+    \end{equation}
+    $K$是顆粒所導致的影響
+    \item $\frac{dP}{dz}$是常數(線性下降)
+    \item No Slip
+    \item 當$\frac{K}{B^2}\gg1$，$V_z(y)$為何？
+    \item 當$\frac{K}{B^2}\ll1$，$V_z(y)$會拆出邊界層，預估邊界層厚度$\delta$\\
+    以及在邊界層中的$V_z(y)$
+  \end{itemize}
+  解題:
+  \begin{enumerate}
+    \item 找到無因次群:
+    \begin{equation}
+      \frac{dP}{dz} = -\frac{\mu}{K}V_z + \mu\frac{d^2V_z}{dy^2}
+    \end{equation}
+    因為不知道$K$的單位，我們只看右邊那項就好\\
+    $\mu$的單位是$[M][L]^{-1}[T]^{-1}$，$V_z$的單位是$[L][T]^{-1}$，所以:
+    \begin{equation}
+      \mu V_z \sim [M][L]^0[T]^{-2}
+    \end{equation}
+    $\frac{d^2V_z}{dy^2}$的單位是$[L]^{-1}[T]^{-1}$，所以:
+    \begin{equation}
+      \mu \frac{d^2V_z}{dy^2} \sim [M][L]^{-2}[T]^{-2}
+    \end{equation}
+    因為兩項要相加，所以$K$的單位應該是$[L]^2$\\
+    可以想出兩個特徵值，$B$和$V_0$\\
+    故:
+    \begin{equation}
+      y^\ast = \frac{y}{B},\quad V_z^\ast = \frac{V_z}{V_0}
+    \end{equation}
+    \item 由於題目說$\frac{dP}{dz}$是常數
+    \begin{equation}
+      \frac{dP}{dz} = C = -\frac{\mu V_0}{K} V_z^\ast + \mu \frac{V_0}{B^2} \frac{d^2 V_z^\ast}{dy^{\ast 2}}
+    \end{equation}
+    同除以$\frac{\mu V_0}{B^2}$，來讓所有係數卡在一起
+    \begin{equation}
+      \frac{B^2}{\mu V_0} \frac{dP}{dz}  = \frac{CB^2}{\mu V_0} = -\frac{B^2}{K} V_z^\ast + \frac{d^2 V_z^\ast}{dy^{\ast 2}}
+    \end{equation}
+    因此我們可以利用題目所說的固定壓差，來定義$V_0$
+    \begin{equation}
+      \frac{CB^2}{\mu V_0} = -1 \implies V_0 = -\frac{CB^2}{\mu} = -\frac{B^2}{\mu} \frac{dP}{dz}
+    \end{equation}
+    代表無因次化:
+    \begin{align}
+      y^\ast &= \frac{y}{B} \nonumber\\
+       V_z^\ast &= \frac{V_z}{V_0} = \frac{V_z}{-\frac{CB^2}{\mu}} = \frac{V_z}{-\frac{B^2}{\mu} \frac{dP}{dz}} \nonumber\\
+      \frac{dP^\ast}{dz^\ast} &= \frac{CB^2}{\mu V_0} = -1
+    \end{align}
+    \item 代入Governing Equation:
+    \begin{equation}
+      -1 = -\frac{B^2}{K} V_z^\ast + \frac{d^2 V_z^\ast}{dy^{\ast 2}}
+    \end{equation}
+    \item 當$\frac{K}{B^2}\gg1$:
+    \begin{equation}
+      \frac{d^2 V_z^\ast}{dy^{\ast 2}} = -1
+    \end{equation}
+    \item 積分兩次:
+    \begin{equation}
+      V_z^\ast = -\frac{1}{2} y^{\ast 2} + C_1 y^\ast + C_2
+    \end{equation}
+    \item 代入No Slip邊界條件:
+    \begin{align}
+      V_z^\ast(1) &= -\frac{1}{2} + C_1 + C_2 = 0\\
+      V_z^\ast(-1) &= -\frac{1}{2} - C_1 + C_2 = 0 
+    \end{align}
+    \item 解出常數:
+    \begin{align}
+      C_1 &= 0\\
+      C_2 &= \frac{1}{2}
+    \end{align}
+    \item 最後解出$V_z^\ast(z^\ast)$:
+    \begin{equation}
+      V_z^\ast = \frac{1}{2} \left(1 - y^{\ast 2}\right)
+    \end{equation}
+    \item 換回有因次的變數:
+    \begin{align}
+      V_z &= V_z^\ast V_0 \nonumber\\
+         &= -V_z^\ast \left(\frac{CB^2}{\mu}\right) \nonumber\\
+          &= -\frac{1}{2} \left(1 - \frac{y^2}{B^2}\right) \left(\frac{CB^2}{\mu}\right) \nonumber\\
+          &= -\frac{CB^2}{2\mu}\left(1- \frac{y^2}{B^2}\right) \nonumber\\
+          &= \boxed{-\frac{CB^2}{2\mu} + \frac{Cy^2}{2\mu}}
+    \end{align}
+    \item 當$\frac{K}{B^2}\ll1$時
+    改以$\delta$為特徵長度
+    \begin{equation}
+      y^{\ast\ast} = \frac{y}{\delta}
+    \end{equation}
+    而有一無因次的$\delta^\ast$=$\frac{\delta}{B}$
+    \item 代入Governing Equation:
+    \begin{equation}
+      -1 = -\frac{B^2}{K} V_z^{\ast\ast} +  \frac{1}{\delta^{\ast 2}}\frac{d^2 V_z^{\ast\ast}}{dy^{\ast\ast 2}}
+    \end{equation}
+    \item 因為$\frac{K}{B^2}\ll1$，所以我們希望第二項和第一項同階
+    \begin{equation}
+      \frac{1}{\delta^{\ast 2}} \sim \frac{B^2}{K} \implies \delta^\ast \sim \sqrt{\frac{K}{B^2}} = \frac{\sqrt{K}}{B}
+    \end{equation}
+    故令$\delta^\ast = \frac{\sqrt{K}}{B}$，$\delta = \sqrt{K}$
+    \begin{equation}
+      -1 = - \frac{1}{\delta^{\ast 2}} V_z^{\ast\ast} + \frac{1}{\delta^{\ast 2}}\frac{d^2 V_z^{\ast\ast}}{dy^{\ast\ast 2}} 
+    \end{equation}
+    同乘$\delta^{\ast 2}$:
+    \begin{equation}
+      -\delta^{\ast 2} = - V_z^{\ast\ast} + \frac{d^2 V_z^{\ast\ast}}{dy^{\ast\ast 2}} 
+    \end{equation}
+    此為二階常係數非齊次ODE
+    假設$-\delta^{\ast 2}= \xi$，方便描述
+    \item 特徵值
+    \begin{equation}
+      \lambda^2 -1 = 0 \implies \lambda = \pm 1
+    \end{equation}
+    令解答為$V_z^{\ast\ast} = V_h + V_p$
+    \item 齊次解:
+    \begin{equation}
+      V_h^{\ast\ast} = C_1 \cosh y^{\ast\ast} + C_2 \sinh y^{\ast\ast}
+    \end{equation}
+    P.S. 用這個的好處是因為代入$\pm B$的時候$\sinh$因為是奇函數，會互相抵消
+    \item 特殊解:
+    \begin{equation}
+      V_p^{\ast\ast} = \xi
+    \end{equation}
+    \item 故總解為:
+    \begin{equation}
+      V_z^{\ast\ast} = C_1 \cosh y^{\ast\ast} + C_2 \sinh y^{\ast\ast} + \xi
+    \end{equation}
+    \item No Slip邊界條件:
+    \begin{align}
+      y=B \implies y^{\ast\ast} = \frac{B}{\sqrt{K}} &: \quad V_z^{\ast\ast}(1) = C_1 \cosh\left(\frac{B}{\sqrt{K}}\right)  + C_2 \sinh \left(\frac{B}{\sqrt{K}}\right)  + \xi = 0\\
+      y=-B \implies y^{\ast\ast} = \frac{-B}{\sqrt{K}} &: \quad V_z^{\ast\ast}(-1) = C_1 \cosh \left(\frac{B}{\sqrt{K}}\right)  - C_2 \sinh \left(\frac{B}{\sqrt{K}}\right)  + \xi = 0
+    \end{align}
+    \item 解出常數:
+    \begin{align}
+      C_2 &= 0\\
+      C_1 &= -\frac{\xi}{\cosh\left(\frac{B}{\sqrt{K}}\right)}
+    \end{align}
+    \item 最後解出$V_z^{\ast\ast}$:
+    \begin{equation}
+      V_z^{\ast\ast} = \xi \left[
+        1 - \frac{\cosh y^{\ast\ast}}{\cosh\left(\frac{B}{\sqrt{K}}\right)}
+      \right]
+    \end{equation}
+  \item 換回有因次的變數:($\xi= -\delta^{\ast 2} = -\frac{K}{B^2}$)
+    \begin{align}
+      V_z &= V_z^{\ast\ast} V_0 \nonumber\\
+          &= \xi \left[
+        1 - \frac{\cosh\left(\frac{y}{\sqrt{K}}\right)}{\cosh\left(\frac{B}{\sqrt{K}}\right)}
+      \right] \left(-\frac{CB^2}{\mu}\right) \nonumber\\
+          &= \frac{-CB^2 \xi}{\mu} \left[
+        1 - \frac{\cosh\left(\frac{y}{\sqrt{K}}\right)}{\cosh\left(\frac{B}{\sqrt{K}}\right)}
+      \right] \nonumber\\
+          &= \frac{-CB^2}{\mu} \left(-\delta^{\ast 2}\right) \left[
+        1 - \frac{\cosh\left(\frac{y}{\sqrt{K}}\right)}{\cosh\left(\frac{B}{\sqrt{K}}\right)}
+      \right] \nonumber\\
+          &= \boxed{\frac{C K}{\mu} \left[
+        1 - \frac{\cosh\left(\frac{y}{\sqrt{K}}\right)}{\cosh\left(\frac{B}{\sqrt{K}}\right)}
+      \right]}
+    \end{align}
+  \end{enumerate}
+  \item 題5，假設有一個距離$2B$的兩板系統
+  \begin{itemize}
+    \item 介質的熱傳導係數為$k$
+    \item 熱擴散係數為$\alpha$
+    \item 一開始兩邊溫度都$T_0$，整個全部都是$T_0$
+    \item 在$t=0$時，兩邊溫度都瞬間改成$T_w$
+    \item Governing Equation:
+    \begin{equation}
+      \frac{\partial T}{\partial t} = \alpha \frac{\partial^2 T}{\partial z^2}
+    \end{equation}
+    \item 寫出邊界條件以及初始條件
+    \item 無因次化
+    \item 解出溫度分布$T(z,t)$
+  \end{itemize}
+  解題:
+  \begin{enumerate}
+    \item 邊界條件:
+    \begin{align}
+      T(B,t) &= T_w\\
+      T(-B,t) &= T_w\\
+    \end{align}
+    \item 初始條件:
+    \begin{equation}
+      T(z,0) = T_0
+    \end{equation}
+    \item 無因次化:\\
+    兩個明顯的特徵值，$B$和$\frac{B^2}{\alpha}$
+    \begin{equation}
+      T^\ast = \frac{T - T_w}{T_0 - T_w},\quad z^\ast = \frac{z}{B}
+    \end{equation}
+    時間的無因次化:\\
+    列出$\alpha, T, z$的單位並嘗試表示:
+    \begin{align}
+      [\alpha] &= [L]^2[T]^{-1}\\
+      [T] &= [K]\\
+      [z] &= [L]
+    \end{align}
+    可以發現時間的單位可以由$\alpha$和$z$組合出來:
+    \begin{equation}
+      [t] = \frac{[z]^2}{[\alpha]} = [T]
+    \end{equation}
+    故時間的無因次化為:
+    \begin{equation}
+      t^\ast = \frac{t \alpha}{B^2}
+    \end{equation}
+    \item 代入Governing Equation:
+    \begin{align}
+      \frac{\partial T}{\partial t} &= \alpha \frac{\partial^2 T}{\partial z^2}\nonumber\\
+      \frac{\partial}{\partial t^\ast} \left[
+        T^\ast (T_0 - T_w) + T_w
+      \right] \frac{\partial t^\ast}{\partial t} &= \alpha \frac{\partial^2}{\partial z^{\ast 2}} \left[
+        T^\ast (T_0 - T_w) + T_w
+      \right] \frac{\partial z^\ast}{\partial z}^2\nonumber\\
+      (T_0 - T_w) \frac{\partial T^\ast}{\partial t^\ast} \frac{\alpha}{B^2} &= \alpha (T_0 - T_w) 
+      \frac{\partial^2 T^\ast}{\partial z^{\ast 2}} \frac{1}{B^2}\nonumber\\
+      \frac{\partial T^\ast}{\partial t^\ast} &= \frac{\partial^2 T^\ast}{\partial z^{\ast 2}}
+    \end{align}
+    \item 分離變數:
+    \begin{equation}
+      T^\ast(z^\ast,t^\ast) = X(z^\ast) G(t^\ast)
+    \end{equation}
+    \item 代入PDE:
+    \begin{align}
+      X \frac{dG}{dt^\ast} &= G \frac{d^2 X}{dz^{\ast 2}}\nonumber\\
+      \frac{1}{G} \frac{dG}{dt^\ast} &= \frac{1}{X} \frac{d^2 X}{dz^{\ast 2}} = -\lambda^2
+    \end{align}
+    \item 兩個ODE:
+    \begin{align}
+      \frac{dG}{dt^\ast} + \lambda^2 G &= 0\\
+      \frac{d^2 X}{dz^{\ast 2}} + \lambda^2 X &= 0
+    \end{align}
+    \item 解時間項:
+    \begin{equation}
+      G(t^\ast) = C e^{-\lambda^2 t^\ast}
+    \end{equation}
+    為了避免$t^\ast \to \infty$時解發散，只保留負指數部分
+    \item 解空間項並套用邊界條件:
+    \begin{equation}
+      X(z^\ast) = A \cos(\lambda z^\ast) + B \sin(\lambda z^\ast)
+    \end{equation}
+    由於$X(\pm 1)=0$，得到$A \cos \lambda = 0$且$B \sin \lambda = 0$，因此須滿足$\cos \lambda = 0$
+    \begin{equation}
+      \lambda_n = \frac{(2n+1)\pi}{2}, \quad n = 0,1,2,\ldots
+    \end{equation}
+    對應特徵函數為$X_n(z^\ast) = \cos(\lambda_n z^\ast)$
+    \item 疊加所有特徵解並利用正交性求係數:
+    \begin{equation}
+      T^\ast(z^\ast,t^\ast) = \sum_{n=0}^{\infty} A_n \cos(\lambda_n z^\ast) e^{-\lambda_n^2 t^\ast}
+    \end{equation}
+    初始條件$T^\ast=1$於$z^\ast\in[-1,1]$得
+    \begin{equation}
+      A_m = \frac{\int_{-1}^{1} \cos(\lambda_m z^\ast) dz^\ast}{\int_{-1}^{1} \cos^2(\lambda_m z^\ast) dz^\ast} = 
+      \frac{4(-1)^m}{(2m+1)\pi}
+    \end{equation}
+    \item 將無因次量換回原變數:
+    \begin{equation}
+      T(z,t) = T_w + (T_0 - T_w) \frac{4}{\pi} \sum_{n=0}^{\infty} 
+      \frac{(-1)^n}{2n+1} \cos\left[\frac{(2n+1)\pi}{2} \frac{z}{B}\right] 
+      \exp\left[-\left(\frac{(2n+1)\pi}{2}\right)^2 \frac{\alpha t}{B^2}\right]
+    \end{equation}
+    \item 在$t^\ast\to\infty$時，$\theta(z^\ast)$趨近於0
+  \end{enumerate}
+  如果改成$t=0$時，兩邊溫度開始被授予等量的熱通量$q_0$，其他條件不變
+  \begin{itemize}
+    \item 寫出起始條件和邊界條件
+    \item 證明:
+    \begin{equation}
+      T_{av} = T_0 + \frac{\alpha q_0}{kB} t
+    \end{equation}
+    其中$T_{av}$是平均溫度
+    \begin{equation}
+      T_{av}(t) = \frac{1}{B}\int_0^B T(z,t) dz
+    \end{equation}
+    \item 當$t\to\infty$時，可以將解近似成$\theta = C_0t^\ast +\psi(z^\ast)$\\
+    求出$C_0$和$\psi(z^\ast)$
+  \end{itemize}
+  解題:
+  \begin{enumerate}
+    \item 邊界條件:
+    \begin{align}
+      -k \frac{\partial T}{\partial z}\Big|_{z=B} &= q_0\\
+      -k \frac{\partial T}{\partial z}\Big|_{z=-B} &= -q_0
+    \end{align}
+    \item 初始條件:
+    \begin{equation}
+      T(z,0)=T_0
+    \end{equation}
+    \item 證明平均溫度:
+    \begin{align}
+      T_{av}(t) &= \frac{1}{B}\int_0^B T(z,t)\,dz \nonumber\\
+      \frac{dT_{av}}{dt}
+        &=\frac{1}{B}\int_0^B \frac{\partial T}{\partial t}\,dz
+        =\frac{\alpha}{B}\int_0^B \frac{\partial^2 T}{\partial z^2}\,dz \nonumber\\
+        &=\frac{\alpha}{B}\left[\frac{\partial T}{\partial z}\right]_0^B
+        =\frac{\alpha}{B}\left(\frac{\partial T}{\partial z}\Big|_{z=B}-0\right) \nonumber\\
+        &=\frac{\alpha}{B}\left(-\frac{q_0}{k}\right).
+    \end{align}
+    由於 $q_0$ 定義為「進入固體之熱通量大小(加熱)」，故
+    \begin{equation}
+      \boxed{\frac{dT_{av}}{dt}=\frac{\alpha q_0}{kB}}
+    \end{equation}
+    積分得
+    \begin{equation}
+      \boxed{T_{av}(t)=T_0+\frac{\alpha q_0}{kB}t.}
+    \end{equation}
+    \item 無因次化（定熱通量尺度）:
+    \begin{equation}
+      z^\ast=\frac{z}{B},\qquad t^\ast=\frac{\alpha t}{B^2},\qquad
+      \theta(z^\ast,t^\ast)=\frac{k}{q_0B}\bigl(T-T_0\bigr)
+    \end{equation}
+    則 PDE 為
+    \begin{equation}
+      \frac{\partial \theta}{\partial t^\ast}=\frac{\partial^2 \theta}{\partial z^{\ast2}},
+      \qquad \theta(z^\ast,0)=0
+    \end{equation}
+    邊界條件為
+    \begin{equation}
+      \theta_{z^\ast}(1,t^\ast)=-1,\qquad \theta_{z^\ast}(-1,t^\ast)=+1.
+    \end{equation}
+    \item 當 $t\to\infty$ 時，假設
+    \begin{equation}
+      \theta(z^\ast,t^\ast)=C_0 t^\ast+\psi(z^\ast)
+    \end{equation}
+    代入 PDE 得
+    \begin{equation}
+      C_0=\psi''(z^\ast).
+    \end{equation}
+    積分：
+    \begin{equation}
+      \psi'(z^\ast)=C_0 z^\ast+C_1.
+    \end{equation}
+    由邊界 $\psi'(1)=-1,\ \psi'(-1)=+1$ 得
+    \begin{equation}
+      \boxed{C_0=-1,\qquad C_1=0}
+    \end{equation}
+    再積分：
+    \begin{equation}
+      \boxed{\psi(z^\ast)=-\frac{1}{2}z^{\ast2}+C_2}
+    \end{equation}
+  \end{enumerate}
+  \item 題6，泡澡球溶解
+  \begin{itemize}
+    \item 一個球型的$A$，半徑$R_0$，密度$\rho$，分子重$M_A$，泡在流體裡
+    \item A自己在水中會漂走，有Diffusivity $D$
+    \item A還可以在水中發生一級分解反應，有反應速率
+    \begin{equation}
+      R_A = -kC_A
+    \end{equation}
+    $k$的單位是$\text{moles}/(m^2s)$
+    \item 在任何時候，還殘存的$A$球表面，濃度都是$C_{A0}$
+    \item Governing Equation:
+    \begin{equation}
+      \frac{\partial C_A}{\partial t} = D \left(
+        \frac{1}{r^2}\frac{\partial}{\partial r} \left(
+          r^2 \frac{\partial C_A}{\partial r}
+        \right)
+      \right) - k C_A
+    \end{equation}
+    \item 初始條件:
+    \begin{equation}
+      C_A(r,0) = 0
+    \end{equation}
+    \item 邊界條件:
+    \begin{align}
+      C_A(R(t), t) &= C_{A0}\\
+      C_A(\infty, t) &= 0
+    \end{align}
+    \item 求出能將Governing Equation換成
+    \begin{equation}
+      0 = D\left[
+        \frac{1}{r^2}\frac{\partial}{\partial r}\left(
+          r^2\frac{\partial C_A}{\partial r}
+        \right)
+      \right] - k C_A
+    \end{equation}
+    的條件
+    \item 當$\frac{kR^2}{D}\ll 1$，A被限制在一個厚度$\delta$的薄殼中\\
+    估計$\delta$，並證明$\delta \ll R$
+    \item 計算在$r=R$處的莫爾通量$N_A$
+    \item 利用通量求出$R(t)$
+  \end{itemize}
+  解題
+  \begin{enumerate}
+    \item 補上質量守恆平衡式
+    \begin{equation}
+      \frac{dR}{dt} = -\frac{M_A}{\rho} N_A
+    \end{equation}
+    \item 無因次分析:
+    \begin{itemize}
+      \item 特徵長度: $R_0$
+      \begin{equation}
+        r^\ast = \frac{r}{R_0}
+      \end{equation}
+      \item 特徵濃度: $C_{A0}$
+      \begin{equation}
+        C_A^\ast = \frac{C_A}{C_{A0}}
+      \end{equation}
+      \item 特徵時間: $t_c$\\
+      利用已知數值:$k,C_{A0},R_0,D$\\
+      其中速率定律常數因為右邊是一級反應
+      \begin{equation}
+        \frac{dC_A}{dt} \quad [mol][L]^{-3}[T]^{-1} = k C_A \quad [k][mol][L]^{-3}
+      \end{equation}
+      故$k$的單位是$[T]^{-1}$\\
+      嘗試組合出時間的單位:
+      \begin{align}
+        D: &\quad [L]^2[T]^{-1} \nonumber\\
+        R_0: &\quad [L] \nonumber\\
+        C_{A0}: &\quad [mol][L]^{-3} \nonumber\\
+        k: &\quad [T]^{-1} \nonumber\\
+        N_A: &\quad [mol][L]^{-2}[T]^{-1}\\
+        M_A: &\quad [M][mol]^{-1} \nonumber\\
+        \rho: &\quad [M][L]^{-3} \nonumber
+      \end{align}
+      發現有三個表示方式:\\
+      分別為:
+      \begin{equation}
+        t_0 [T] \sim  k^{-1} [T]
+      \end{equation}
+      以及
+      \begin{equation}
+        t_1 [T] \sim \frac{R_0^2}{D} [T]
+      \end{equation}
+      或
+      \begin{equation}
+        t_2 [T] \sim \frac{C_{A0} R_0^3}{D N_A} [T]
+      \end{equation}
+      三個特徵時間分別可以代表:
+      \begin{itemize}
+        \item $t_0$: 反應時間尺度
+        \item $t_1$: 擴散時間尺度
+        \item $t_2$: 溶解時間尺度
+      \end{itemize}
+      \item 因為題目要求能將Governing Equation換成穩態形式
+      \begin{equation}
+        0 = D\left[
+          \frac{1}{r^2}\frac{\partial}{\partial r}\left(
+            r^2\frac{\partial C_A}{\partial r}
+          \right)
+        \right] - k C_A
+      \end{equation}
+      故需要$t_0 \gg t_1$且$t_0 \gg t_2$，\\
+      即反應時間尺度遠大於擴散和溶解時間尺度
+      \item 當$\frac{kR^2}{D} \ll 1$時，估計$\delta$:
+      \begin{equation}
+        \frac{\partial C_A}{\partial t} = D \left(
+          \frac{1}{r^2}\frac{\partial}{\partial r} 
+          \left(
+            r^2 \frac{\partial C_A}{\partial r}
+          \right)
+        \right) - k C_A
+      \end{equation}
+      無因次化:
+      \begin{equation}
+        \frac{C_{A0}}{t_c} \frac{\partial C_A^\ast}{\partial t^\ast} = D \frac{C_{A0}}{R_0^2} \left(
+          \frac{1}{r^{\ast 2}}\frac{\partial}{\partial r^\ast} 
+          \left(
+            r^{\ast 2} \frac{\partial C_A^\ast}{\partial r^\ast}
+          \right)
+        \right) - k C_{A0} C_A^\ast
+      \end{equation}
+      同除以$\frac{C_{A0}}{t_c}$:
+      \begin{equation}
+        \frac{\partial C_A^\ast}{\partial t^\ast} = \frac{D t_c}{R_0^2} \left(
+          \frac{1}{r^{\ast 2}}\frac{\partial}{\partial r^\ast} 
+          \left(
+            r^{\ast 2} \frac{\partial C_A^\ast}{\partial r^\ast}
+          \right)
+        \right) - k t_c C_A^\ast
+      \end{equation}
+      因為題目說$\frac{kR^2}{D} \ll 1$，\\
+      故令$t_c = \frac{R_0^2}{D}$:
+      \begin{equation}
+        \frac{\partial C_A^\ast}{\partial t^\ast} = \left(
+          \frac{1}{r^{\ast 2}}\frac{\partial}{\partial r^\ast} 
+          \left(
+            r^{\ast 2} \frac{\partial C_A^\ast}{\partial r^\ast}
+          \right)
+        \right) - \frac{k R_0^2}{D} C_A^\ast
+      \end{equation}
+      \item 因為$\frac{kR^2}{D} \ll 1$，所以反應項可以忽略
+      \begin{equation}
+        \frac{\partial C_A^\ast}{\partial t^\ast} = \left(
+          \frac{1}{r^{\ast 2}}\frac{\partial}{\partial r^\ast} 
+          \left(
+            r^{\ast 2} \frac{\partial C_A^\ast}{\partial r^\ast}
+          \right)
+        \right)
+      \end{equation}
+      \item 假設$C_A$被限制在厚度$\delta$的薄殼中
+      \begin{equation}
+        \frac{\partial C_A}{\partial t} = D \left(
+          \frac{1}{r^2}\frac{\partial}{\partial r} 
+          \left(
+            r^2 \frac{\partial C_A}{\partial r}
+          \right)
+        \right)
+      \end{equation}
+      無因次化:
+      \begin{equation}
+        \frac{C_{A0}}{t_c} \frac{\partial C_A^\ast}{\partial t^\ast} = D \frac{C_{A0}}{\delta^2} \left(
+          \frac{1}{r^{\ast 2}}\frac{\partial}{\partial r^\ast} 
+          \left(
+            r^{\ast 2} \frac{\partial C_A^\ast}{\partial r^\ast}
+          \right)
+        \right)
+      \end{equation}
+      同除以$\frac{C_{A0}}{t_c}$:
+      \begin{equation}
+        \frac{\partial C_A^\ast}{\partial t^\ast} = \frac{D t_c}{\delta^2} \left(
+          \frac{1}{r^{\ast 2}}\frac{\partial}{\partial r^\ast} 
+          \left(
+            r^{\ast 2} \frac{\partial C_A^\ast}{\partial r^\ast}
+          \right)
+        \right)
+      \end{equation}
+      \item 為了讓兩邊同階:
+      \begin{equation}
+        \frac{D t_c}{\delta^2} \sim 1 \implies \delta \sim \sqrt{D t_c}
+      \end{equation}
+      \item 代入$t_c = \frac{R_0^2}{D}$:
+      \begin{equation}
+        \delta \sim \sqrt{D \frac{R_0^2}{D}} = R_0
+      \end{equation}
+      \item 但因為題目說$\frac{kR^2}{D} \ll 1$，\\
+      故$\delta \ll R$成立
+      \item 計算$r=R$處的莫爾通量$N_A$:
+      \begin{equation}
+        N_A = -D \frac{\partial C_A}{\partial r}\Big|_{r=R}
+      \end{equation}
+      假設在薄殼中，濃度線性分布:
+      \begin{equation}
+        \frac{\partial C_A}{\partial r} \sim \frac{C_{A0} - 0}{R - (R - \delta)} = \frac{C_{A0}}{\delta}
+      \end{equation}
+      \item 故莫爾通量為:
+      \begin{equation}
+        N_A = -D \frac{C_{A0}}{\delta}
+      \end{equation}
+      \item 利用通量求出$R(t)$:
+      \begin{equation}
+        \frac{dR}{dt} = -\frac{M_A}{\rho} N_A
+      \end{equation}
+      代入$N_A$:
+      \begin{equation}
+        \frac{dR}{dt} = -\frac{M_A}{\rho} \left(
+          -D \frac{C_{A0}}{\delta}
+        \right) = \frac{M_A D C_{A0}}{\rho \delta}
+      \end{equation}
+      \item 代入$\delta \sim \sqrt{D \frac{R_0^2}{D}} = R_0$:
+      \begin{equation}
+        \frac{dR}{dt} = \frac{M_A D C_{A0}}{\rho R_0}
+      \end{equation}
+      \item 積分:
+      \begin{equation}
+        R(t) = R_0 - \frac{M_A D C_{A0}}{\rho R_0} t
+      \end{equation}  
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{CJK*}
+\end{document}

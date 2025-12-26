@@ -1,0 +1,803 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{非卡氏坐標系}
+\begin{itemize}
+  \item 圓柱坐標系 (Cylindrical Coordinates)
+  \begin{itemize}
+    \item 坐標變換關係\\
+      $x,y,z \rightarrow r,\theta,z$
+      \begin{align}
+        x &= r \cos\theta\\
+        y &= r \sin\theta\\
+        z &= z
+      \end{align}
+      $r,\theta,z \rightarrow x,y,z$
+      \begin{align}
+        r &= \sqrt{x^2 + y^2} \label{eq:cylindrical_r_to_cat}\\
+        \theta &= \tan^{-1}\left(\frac{y}{x}\right) \label{eq:cylindrical_theta_to_cat}\\
+        z &= z 
+      \end{align}
+    在前面的章節，介紹了各種卡氏座標下的運算，而為了讓$\nabla$也能在圓柱座標下操作。
+    \begin{equation}
+      \nabla = \sum_{i=1}^3 \bm\delta_i \frac{\partial }{\partial x_i} =
+      \bm\delta_x \left(\frac{\partial }{\partial x}\right)_{yz} +
+      \bm\delta_y \left(\frac{\partial }{\partial y}\right)_{xz} +
+      \bm\delta_z \left(\frac{\partial }{\partial z}\right)_{xy}
+    \end{equation}
+    而為了能夠推廣到圓柱座標下，有兩件事要處理:
+    \begin{enumerate}
+      \item \fbox{偏微分變換}: $\left(\frac{\partial }{\partial x}\right)_{yz},
+        \left(\frac{\partial }{\partial y}\right)_{xz},
+        \left(\frac{\partial }{\partial z}\right)_{xy} \to
+        \left(\frac{\partial }{\partial r}\right)_{\theta z},
+        \left(\frac{\partial }{\partial \theta}\right)_{rz},
+        \left(\frac{\partial }{\partial z}\right)_{r\theta}$
+      \item \fbox{單位向量變換}: $\bm\delta_x,\bm\delta_y,\bm\delta_z \to \bm\delta_r,\bm\delta_\theta,\bm\delta_z$
+    \end{enumerate}
+    \item 偏微分變換:\\
+      步驟:
+      \begin{enumerate}
+        \item 利用Chain rule，將卡氏座標的偏微分
+        \item 計算各個偏微分，\fbox{會回到$x,y,z$的函數}:
+        \item 將函數也轉為圓柱座標的函數
+      \end{enumerate}
+      至於$\tan^{-1}(x)$這類反三角函數的微分證明如下:(假設只記得正的三角函數微分)
+      \begin{enumerate}
+        \item 令他的反函數的表示式:
+          \begin{equation}
+            y = \tan^{-1}(x) \Rightarrow x = \tan(y) 
+          \end{equation}
+        \item 兩邊都對$x$微分:
+          \begin{equation}
+            1 = \sec^2(y) \frac{dy}{dx}
+          \end{equation}
+        \item 嘗試把$y$的函數，如$\sec^2(y)$，轉換成$x$的函數:\\
+          想到$\tan^2(y) + 1 = \sec^2(y)$，而根據我們定義$x = \tan(y)$，可得:
+          \begin{equation}
+            \sec^2(y) = 1 + \tan^2(y) = 1 + x^2
+          \end{equation}
+        \item 將上式代回去，使得除了$\frac{dy}{dx}$以外，其他都是$x$的函數:
+          \begin{equation}
+            1 = (1 + x^2) \frac{dy}{dx}
+          \end{equation}
+        \item 整理，得到$\frac{dy}{dx}$:
+          \begin{equation}
+            \frac{dy}{dx} = \frac{1}{1 + x^2}
+          \end{equation}
+      \end{enumerate}
+      推導如下
+      \begin{enumerate}
+        \item 先利用Chain rule轉換偏微分:(從$\left(\frac{\partial}{\partial x}\right)_{yz}$開始)
+          \begin{equation}
+            \left(\frac{\partial}{\partial x}\right)_{yz} =
+            \left(\frac{\partial}{\partial r}\right)_{\theta z}\left(\frac{\partial r}{\partial x}\right)_{yz}
+            + \left(\frac{\partial}{\partial \theta}\right)_{rz}\left(\frac{\partial \theta}{\partial x}\right)_{yz}
+            + \left(\frac{\partial}{\partial z}\right)_{r\theta}\left(\frac{\partial z}{\partial x}\right)_{yz}
+          \end{equation}
+          而因為(\ref{eq:cylindrical_r_to_cat})式，可知道$\left(\frac{\partial r}{\partial x}\right)_{yz}$\\
+          ，(\ref{eq:cylindrical_theta_to_cat})式，可知道$\left(\frac{\partial \theta}{\partial x}\right)_{yz}$\\
+          ，以及$z=z$，可知道$\left(\frac{\partial z}{\partial x}\right)_{yz}=0$
+          \begin{equation}
+            \left(\frac{\partial}{\partial x}\right)_{yz} =
+            \left(\frac{\partial}{\partial r}\right)_{\theta z}\left[\frac{\partial }{\partial x}\sqrt{x^2 + y^2}\right]_{yz}
+            + \left(\frac{\partial}{\partial \theta}\right)_{rz}\left[\frac{\partial }{\partial x}\tan^{-1}\left(\frac{y}{x}\right)\right]_{yz}
+            + 0
+          \end{equation}
+        \item 計算各個偏微分，\fbox{會回到$x,y,z$的函數}:
+          \begin{align}
+            \left(\frac{\partial \theta}{\partial x}\right)_{yz} &=
+            \left(\frac{\partial}{\partial r}\right)_{\theta z}\left[
+              \frac{1}{2}\left(x^2+y^2\right)^{-\frac{1}{2}} \cdot 2x
+            \right]
+            + \left(\frac{\partial}{\partial \theta}\right)_{rz}\left[
+              \frac{1}{1+\left(\frac{y}{x}\right)^2} \cdot (-1)\frac{y}{x^2}
+            \right]
+            + 0 \nonumber\\
+            &= \left(\frac{x}{\sqrt{x^2+y^2}}\right)\left(\frac{\partial}{\partial r}\right)_{\theta z}
+            + \left(-\frac{y}{\left(1+ \frac{y^2}{x^2}\right)\cdot x^2}\right)\left(\frac{\partial}{\partial \theta}\right)_{rz} \nonumber\\
+            &= \left(\frac{x}{\sqrt{x^2+y^2}}\right)\left(\frac{\partial}{\partial r}\right)_{\theta z}
+            + \left(-\frac{y}{x^2+y^2}\right)\left(\frac{\partial}{\partial \theta}\right)_{rz}
+          \end{align}
+        \item 再利用$x = r\cos\theta$及$y = r\sin\theta$，將上式轉為圓柱座標的函數:
+          \begin{align}
+            \left(\frac{\partial}{\partial x}\right)_{yz} &=
+            \left(\frac{r\cos\theta}{\sqrt{(r\cos\theta)^2+(r\sin\theta)^2}}\right)\left(\frac{\partial}{\partial r}\right)_{\theta z}
+            + \left(-\frac{r\sin\theta}{(r\cos\theta)^2+(r\sin\theta)^2}\right)\left(\frac{\partial}{\partial \theta}\right)_{rz} \nonumber\\
+            &= \left(\frac{r\cos\theta}{r}\right)\left(\frac{\partial}{\partial r}\right)_{\theta z}
+            + \left(-\frac{r\sin\theta}{r^2}\right)\left(\frac{\partial}{\partial \theta}\right)_{rz} \nonumber\\
+            &= \cos\theta \left(\frac{\partial}{\partial r}\right)_{\theta z}
+            - \frac{\sin\theta}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz}
+          \end{align}
+          \item 同理，$\left(\frac{\partial}{\partial y}\right)_{xz}$:\\
+          先利用Chain rule轉換偏微分:
+          \begin{align}
+            \left(\frac{\partial}{\partial y}\right)_{xz} &=
+            \left(\frac{\partial}{\partial r}\right)_{\theta z}\left(\frac{\partial r}{\partial y}\right)_{xz}
+            + \left(\frac{\partial}{\partial \theta}\right)_{rz}\left(\frac{\partial \theta}{\partial y}\right)_{xz}
+            + \left(\frac{\partial}{\partial z}\right)_{r\theta}\left(\frac{\partial z}{\partial y}\right)_{xz} \nonumber\\
+            &\quad \left(\frac{\partial}{\partial r}\right)_{\theta z}\left[\frac{\partial }{\partial y}\sqrt{x^2 + y^2}\right]_{xz}
+            + \left(\frac{\partial}{\partial \theta}\right)_{rz}\left[\frac{\partial }{\partial y}\tan^{-1}\left(\frac{y}{x}\right)\right]_{xz}
+          \end{align}
+          接著計算各個偏微分，\fbox{會回到$x,y,z$的函數}:
+          \begin{equation}
+            \left(\frac{\partial}{\partial y}\right)_{xz}  =
+            \left(\frac{y}{\sqrt{x^2+y^2}}\right)\left(\frac{\partial}{\partial r}\right)_{\theta z}
+            + \left(\frac{x}{\left(1+ \frac{y^2}{x^2}\right)\cdot x^2}\right)\left(\frac{\partial}{\partial \theta}\right)_{rz}
+          \end{equation}
+          再利用$x = r\cos\theta$及$y = r\sin\theta$，將上式轉為圓柱座標的函數:
+          \begin{equation}
+            \left(\frac{\partial}{\partial y}\right)_{xz}  =
+            \sin\theta \left(\frac{\partial}{\partial r}\right)_{\theta z}
+            + \frac{\cos\theta}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz}
+          \end{equation}
+          \item 最後，$\left(\frac{\partial}{\partial z}\right)_{xy}$:
+          \begin{equation}
+            \left(\frac{\partial}{\partial z}\right)_{xy} = \left(\frac{\partial}{\partial z}\right)_{r\theta}
+          \end{equation}
+      \end{enumerate}
+      整理如下:
+      \begin{equation}
+        \boxed{
+        \begin{cases}
+          \left(\frac{\partial}{\partial x}\right)_{yz} = \cos\theta \left(\frac{\partial}{\partial r}\right)_{\theta z}
+          - \frac{\sin\theta}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz} \\
+          \left(\frac{\partial}{\partial y}\right)_{xz} = \sin\theta \left(\frac{\partial}{\partial r}\right)_{\theta z}
+          + \frac{\cos\theta}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz} \\
+          \left(\frac{\partial}{\partial z}\right)_{xy} = \left(\frac{\partial}{\partial z}\right)_{r\theta}
+        \end{cases}
+        } \label{eq:cylindrical_partial_transform}
+      \end{equation}
+      P.S. 另外注意到這和圓柱座標\fbox{轉回}卡氏座標的Jacobian matrix是互相轉置的關係。\\
+      觀察每一項會發現就是上面所在計算的偏微分\\
+      用直的把每項收集起來，就分別是$\frac{\partial }{\partial x},\frac{\partial }{\partial y},\frac{\partial }{\partial z}$
+      \begin{equation}
+        J^{-1} = \frac{\partial (r,\theta,z)}{\partial (x,y,z)} = \begin{bmatrix}
+          \frac{\partial r}{\partial x} & \frac{\partial r}{\partial y} & \frac{\partial r}{\partial z} \\
+          \frac{\partial \theta}{\partial x} & \frac{\partial \theta}{\partial y} & \frac{\partial \theta}{\partial z} \\
+          \frac{\partial z}{\partial x} & \frac{\partial z}{\partial y} & \frac{\partial z}{\partial z}
+        \end{bmatrix}
+      \end{equation}
+    \item \fbox{單位向量變換}:\\
+      由於目標是要變換單位向量的基底成另一個單位向量\\
+      並希望可以做所有卡氏座標下介紹的運算\\
+      這組基底必須要是\\
+      1.\fbox{互相正交的}，2.\fbox{長度為1}的向量，3.\fbox{右手系}的向量組合\\
+      這並不代表$r,\theta,z$，三個方向本身就是互相正交的\\
+      (雖然$r,z$是正交的，但$\theta$方向並不是和$r$正交的)\\
+      而是在任何一個點，可以定義出\fbox{屬於該點的}三個方向的單位向量，且這三個單位向量是互相正交的\\
+      以圖形來看，任一點座標($r,\theta,z$)的三個基底向量的方向，分別是:\\
+      1. 原點到該點的徑向方向(r方向)\\
+      2. 以原點為圓心，r為半徑的圓上，在該點切線方向($\theta$方向)\\
+      3. 與$r,\theta$方向皆垂直，並以右手系定義的方向(z方向)
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw[->] (0,0,0) -- (6.5,0,0) node[anchor=north east]{$x$};
+          \draw[->] (0,0,0) -- (0,6.5,0) node[anchor=north west]{$y$};
+          \draw[->] (0,0,0) -- (0,0,6.5) node[anchor=north east]{$z$};
+          \def\mySpotX{4}
+          \def\mySpotY{2}
+          \def\vecLength{1.5}
+          \def\mySpotZ{0}
+          \pgfmathsetmacro{\myRho}{sqrt(\mySpotX*\mySpotX + \mySpotY*\mySpotY)}
+          \pgfmathsetmacro{\myPhi}{atan2(\mySpotY, \mySpotX)}
+          \coordinate (P) at (\mySpotX, \mySpotY, \mySpotZ);
+          \coordinate (Origin) at (0,0,0);
+          \coordinate (Xproj) at (\mySpotX, 0, \mySpotZ);
+          \coordinate (Yproj) at (0, \mySpotY, \mySpotZ);
+          \draw[dashed] (Origin) -- (P);
+          \draw[dashed] (Origin) circle (\myRho);
+          \pgfmathsetmacro{\rEndX}{\mySpotX + \vecLength * cos(\myPhi)}
+          \pgfmathsetmacro{\rEndY}{\mySpotY + \vecLength * sin(\myPhi)}
+          \draw[->, red] (P) -- (\rEndX, \rEndY, 0) node[anchor=west]{$\bm\delta_r$};
+          \pgfmathsetmacro{\tEndX}{\mySpotX - \vecLength * sin(\myPhi)}
+          \pgfmathsetmacro{\tEndY}{\mySpotY + \vecLength * cos(\myPhi)}
+          \draw[->, red] (P) -- (\tEndX, \tEndY, 0) node[anchor=south east]{$\bm\delta_\theta$};
+          \draw[->, red] (P) -- (\mySpotX, \mySpotY, \mySpotZ + \vecLength) node[anchor=north east]{$\bm\delta_z$};
+          \draw[->, dashed, blue] (P) -- (\mySpotX + \vecLength, \mySpotY, \mySpotZ) node[anchor=west]{$\bm\delta_x$};
+          \draw[->, dashed, blue] (P) -- (\mySpotX, \mySpotY + \vecLength, \mySpotZ) node[anchor=south]{$\bm\delta_y$};
+        \end{tikzpicture}
+        \caption{圓柱座標系的單位向量示意圖}
+      \end{figure}
+      不從圖形來看，亦可從代數將$\nabla$的定義轉為圓柱座標下的單位向量組合:
+      \begin{equation}
+        \nabla =
+        \bm\delta_x \left(\frac{\partial }{\partial x}\right)_{yz} +
+        \bm\delta_y \left(\frac{\partial }{\partial y}\right)_{xz} +
+        \bm\delta_z \left(\frac{\partial }{\partial z}\right)_{xy}
+      \end{equation}
+      將(\ref{eq:cylindrical_partial_transform})式代入:
+      \begin{align}
+        \nabla &=
+        \bm\delta_x \left[\cos\theta \left(\frac{\partial}{\partial r}\right)_{\theta z}
+        - \frac{\sin\theta}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz}\right] +
+        \bm\delta_y \left[\sin\theta \left(\frac{\partial}{\partial r}\right)_{\theta z}
+        + \frac{\cos\theta}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz}\right] +
+        \bm\delta_z \left(\frac{\partial}{\partial z}\right)_{r\theta} \nonumber\\
+        &=
+        \left[\bm\delta_x \cos\theta + \bm\delta_y \sin\theta\right]\left(\frac{\partial}{\partial r}\right)_{\theta z} +
+        \left[-\bm\delta_x \frac{\sin\theta}{r} + \bm\delta_y \frac{\cos\theta}{r}\right]\left(\frac{\partial}{\partial \theta}\right)_{rz} +
+        \bm\delta_z \left(\frac{\partial}{\partial z}\right)_{r\theta}
+      \end{align}
+      而前面的三個方括號內的向量，分別就是$r,\theta,z$的\fbox{單位向量的方向}\\
+      因此需計算他們的長度，除去後，便是圓柱座標的單位向量:
+      \begin{align}
+        & \left| \bm\delta_x \cos\theta + \bm\delta_y \sin\theta \right| = \sqrt{\cos^2\theta + \sin^2\theta} = 1  \nonumber\\
+        (\div 1)\implies & \boxed{\bm\delta_r = \bm\delta_x \cos\theta + \bm\delta_y \sin\theta} \label{eq:cylindrical_delta_r}\\
+        & \left| -\bm\delta_x \frac{\sin\theta}{r} + \bm\delta_y \frac{\cos\theta}{r} \right| =
+        \sqrt{\left(\frac{\sin\theta}{r}\right)^2 + \left(\frac{\cos\theta}{r}\right)^2} = \frac{1}{r} \nonumber\\
+        (\div \frac{1}{r})\implies & \boxed{\bm\delta_\theta = -\bm\delta_x \sin\theta + \bm\delta_y \cos\theta} \label{eq:cylindrical_delta_theta}\\
+        & \left|\bm\delta_z \right| = 1 \nonumber\\
+        (\div 1)\implies & \boxed{\bm\delta_z = \bm\delta_z} \label{eq:cylindrical_delta_z}
+      \end{align}
+      最後整理出圓柱座標的$\nabla$:(把剛剛除的長度乘回去)
+      \begin{equation}
+        \boxed{
+        \nabla =
+        \bm\delta_r \left(\frac{\partial}{\partial r}\right)_{\theta z} +
+        \bm\delta_\theta \frac{1}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz} +
+        \bm\delta_z \left(\frac{\partial}{\partial z}\right)_{r\theta}
+        } \label{eq:cylindrical_nabla}
+      \end{equation}
+      右手性的部分，在定義$\bm\delta_x,\bm\delta_y,\bm\delta_z$時已經保證了\\
+      至於正交性，只要$\nabla$按照此方式被單位向量代換後，不再有交叉項\\
+      例如$\frac{\partial }{\partial r}$前面不會有$\bm\delta_\theta$或$\bm\delta_z$，即可保證正交性\\
+      (可以允許$r,\theta,z$出現，因為那是該位置的資訊，不是方向向量)
+    \item 將(\ref{eq:cylindrical_delta_r})、(\ref{eq:cylindrical_delta_theta})、(\ref{eq:cylindrical_delta_z})式聯立\\
+      可將圓柱座標的單位向量轉回卡氏座標的單位向量:
+      \begin{equation}
+        \boxed{
+        \begin{cases}
+          \bm\delta_r = \bm\delta_x \cos\theta + \bm\delta_y \sin\theta \\
+          \bm\delta_\theta = -\bm\delta_x \sin\theta + \bm\delta_y \cos\theta \\
+          \bm\delta_z = \bm\delta_z
+        \end{cases}
+        } \label{eq:cylindrical_delta_transform}
+      \end{equation}
+      結合(\ref{eq:cylindrical_partial_transform})式及(\ref{eq:cylindrical_delta_r})、(\ref{eq:cylindrical_delta_theta})、(\ref{eq:cylindrical_delta_z})式\\
+      可以寫出Spatial Derivatives，\fbox{圓柱座標之間}的相依關係\\
+      直覺夠好的話，可以直接以圖形來判斷，否則可以依照下面的步驟來操作:\\
+      步驟如下:
+      \begin{enumerate}
+        \item 由(\ref{eq:cylindrical_delta_transform})式，逐一對$r,\theta,z$偏微分
+        \item 利用Chain rule，將偏微分展開成$\bm\delta_x,\bm\delta_y,\bm\delta_z,r,\theta,z$的函數
+        \item 因為不同坐標系的單位向量是獨立的，將$\bm\delta_x,\bm\delta_y,\bm\delta_z$的微分設為0
+        \item 若這個方向的移動不會改變另一個坐標(例如$r$方向的移動不會改變$\theta$)\\
+        則將該偏微分設為0
+        \item 若最後結果不為0，則試圖以(\ref{eq:cylindrical_delta_transform})式將結果轉回圓柱座標的單位向量
+      \end{enumerate}
+      操作如下:
+      \begin{itemize}
+        \item 對$\bm\delta_r$以$r$偏微分:
+          \begin{equation}
+            \frac{\partial}{\partial r} \bm\delta_r = \frac{\partial}{\partial r} \left(\bm\delta_x \cos\theta + \bm\delta_y \sin\theta\right) 
+          \end{equation}
+          可以看出，因為對$\bm\delta_x,\bm\delta_y$偏微分會是0，且$r$方向的移動不會改變$\theta$，所以整個偏微分結果為0
+        \item 對$\bm\delta_r$以$\theta$偏微分:
+          \begin{equation}
+            \frac{\partial}{\partial \theta} \bm\delta_r = \frac{\partial}{\partial \theta} \left(\bm\delta_x \cos\theta + \bm\delta_y \sin\theta\right) 
+          \end{equation}
+          因為對$\bm\delta_x,\bm\delta_y$偏微分會是0\\
+          但是往$\theta$方向移動會改變$\bm\delta_\theta$，所以結果為:
+          \begin{equation}
+            \frac{\partial}{\partial \theta} \bm\delta_r = \left(
+              0\cdot \cos\theta + \bm\delta_x (-\sin\theta)
+            \right)+ \left(
+              0\cdot \sin\theta + \bm\delta_y \cos\theta
+            \right) = -\bm\delta_x \sin\theta + \bm\delta_y \cos\theta 
+          \end{equation}
+          發現這正好是$\bm\delta_\theta$，因此可得:
+          \begin{equation}
+            \boxed{
+            \frac{\partial}{\partial \theta} \bm\delta_r = \bm\delta_\theta
+            }
+          \end{equation}
+        \item 對$\bm\delta_r$以$z$偏微分:\\
+          因為在$z$方向的移動不會改變$\bm\delta_r$，所以結果為0
+        \item 對$\bm\delta_\theta$以$r$偏微分:\\
+          因為在$r$方向的移動不會改變$\bm\delta_\theta$，所以結果為0
+        \item 對$\bm\delta_\theta$以$\theta$偏微分:
+          \begin{equation}
+            \frac{\partial}{\partial \theta} \bm\delta_\theta = \frac{\partial}{\partial \theta} \left(-\bm\delta_x \sin\theta + \bm\delta_y \cos\theta\right) 
+          \end{equation}
+          因為對$\bm\delta_x,\bm\delta_y$偏微分會是0\\
+          但是往$\theta$方向移動會改變$\bm\delta_\theta$，所以結果為:
+          \begin{equation}
+            \frac{\partial}{\partial \theta} \bm\delta_\theta = \left(
+              0\cdot (-\sin\theta) + \bm\delta_x (-\cos\theta)
+            \right)+ \left(
+              0\cdot \cos\theta + \bm\delta_y (-\sin\theta)
+            \right) = -\bm\delta_x \cos\theta - \bm\delta_y \sin\theta 
+          \end{equation}
+          發現這正好是$-\bm\delta_r$，因此可得:
+          \begin{equation}
+            \boxed{
+            \frac{\partial}{\partial \theta} \bm\delta_\theta = -\bm\delta_r
+            }
+          \end{equation}
+          同理，最後列出全部的Spatial Derivatives:
+         \begin{equation}
+          \left(
+            \begin{array}{ccc} % ccc means 3 centered columns
+              \frac{\partial}{\partial r} \bm{\delta}_r  = 0 &
+              \frac{\partial}{\partial r} \bm{\delta}_\theta  = 0  &
+              \frac{\partial}{\partial r} \bm{\delta}_z  = 0 \\[1.5\jot] % Increased vertical space
+              \frac{\partial}{\partial \theta} \bm{\delta}_r  = \bm{\delta}_\theta &
+              \frac{\partial}{\partial \theta} \bm{\delta}_\theta  = -\bm{\delta}_r &
+              \frac{\partial}{\partial \theta} \bm{\delta}_z  = 0 \\[1.5\jot] % Increased vertical space
+              \frac{\partial}{\partial z} \bm{\delta}_r  = 0 &
+              \frac{\partial}{\partial z} \bm{\delta}_\theta  = 0 &
+              \frac{\partial}{\partial z} \bm{\delta}_z  = 0
+            \end{array}
+          \right)
+        \end{equation}
+      \end{itemize}
+    \item 圓柱座標下的運算\\
+      總的來說與卡氏座標下的運算是一樣的\\
+      唯有在遇到微分時，需用到剛剛所列的\fbox{Spatial Derivatives}\\
+      才能將單位向量從微分中解放出來
+      \begin{enumerate}
+        \item 內積: $\nabla \cdot \vec{\bm u}$\\
+          前項$\nabla$為(\ref{eq:cylindrical_nabla})式
+          \begin{equation}
+            \nabla = \bm\delta_r \left(\frac{\partial}{\partial r}\right)_{\theta z} +
+              \bm\delta_\theta \frac{1}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz} +
+              \bm\delta_z \left(\frac{\partial}{\partial z}\right)_{r\theta}
+          \end{equation}
+          後項$\vec{\bm u}$，因為沒有遇到微分，所以可以直接當成卡氏座標下的向量表示:
+          \begin{equation}
+            \vec{\bm u} = \sum_{i=1}^3 \bm\delta_i u_i = \bm\delta_r u_r + \bm\delta_\theta u_\theta + \bm\delta_z u_z
+          \end{equation}
+          進行內積:
+          \begin{align}
+            \nabla \cdot \vec{\bm u} &= \left(\bm\delta_r \cdot \frac{\partial}{\partial r}\left(\bm\delta_r u_r\right)\right)
+            + \left(\bm\delta_r \cdot \frac{\partial}{\partial r}\left(\bm\delta_\theta u_\theta\right)\right)
+            + \left(\bm\delta_r \cdot \frac{\partial}{\partial r}\left(\bm\delta_z u_z\right)\right) \nonumber\\
+            &+ \left(\bm\delta_\theta \cdot \frac{1}{r}\frac{\partial}{\partial \theta}\left(\bm\delta_r u_r\right)\right)
+            + \left(\bm\delta_\theta \cdot \frac{1}{r}\frac{\partial}{\partial \theta}\left(\bm\delta_\theta u_\theta\right)\right)
+            + \left(\bm\delta_\theta \cdot \frac{1}{r}\frac{\partial}{\partial \theta}\left(\bm\delta_z u_z\right)\right) \nonumber\\
+            &+ \left(\bm\delta_z \cdot \frac{\partial}{\partial z}\left(\bm\delta_r u_r\right)\right)
+            + \left(\bm\delta_z \cdot \frac{\partial}{\partial z}\left(\bm\delta_\theta u_\theta\right)\right)
+            + \left(\bm\delta_z \cdot \frac{\partial}{\partial z}\left(\bm\delta_z u_z\right)\right)
+          \end{align}
+          接著利用Spatial Derivatives和Chain rule展開:
+          \begin{align}
+            \nabla \cdot \vec{\bm u} =& \left\{
+              {\color{blue} \bm\delta_r} \cdot \left[
+                \left(\frac{\partial}{\partial r}\bm\delta_r\right) u_r + {\color{blue} \bm\delta_r \frac{\partial u_r}{\partial r}}
+              \right]
+            \right\}  + \left\{
+              \bm\delta_r \cdot \left[
+                \left(\frac{\partial}{\partial r}\bm\delta_\theta\right) u_\theta + \bm\delta_\theta \frac{\partial u_\theta}{\partial r}
+              \right]
+            \right\} \nonumber\\
+            & + \left\{
+              \bm\delta_r \cdot \left[
+                \left(\frac{\partial}{\partial r}\bm\delta_z\right) u_z + \bm\delta_z \frac{\partial u_z}{\partial r}
+              \right]
+            \right\}  + \left\{
+              \bm\delta_\theta \cdot \frac{1}{r} \left[
+                {\color{red}\left(\frac{\partial}{\partial \theta}\bm\delta_r\right) u_r} + \bm\delta_r \frac{\partial u_r}{\partial \theta}
+              \right]
+            \right\} \nonumber\\
+            & +  \left\{
+             \color{blue} \bm\delta_\theta \cdot \frac{1}{r} \color{black}\left[
+                {\color{red}\left(\frac{\partial}{\partial \theta}\bm\delta_\theta\right) u_\theta} + \color{blue}\bm\delta_\theta \frac{\partial u_\theta}{\partial \theta}
+              \right] \color{black}
+            \right\} + \left\{
+              \bm\delta_\theta \cdot \frac{1}{r} \left[
+                \left(\frac{\partial}{\partial \theta}\bm\delta_z\right) u_z + \bm\delta_z \frac{\partial u_z}{\partial \theta}
+              \right]
+            \right\} \nonumber\\
+            & + \left\{
+              \bm\delta_z \cdot \left[
+                \left(\frac{\partial}{\partial z}\bm\delta_r\right) u_r + \bm\delta_r \frac{\partial u_r}{\partial z}
+              \right]
+            \right\}  + \left\{
+              \bm\delta_z \cdot \left[
+                \left(\frac{\partial}{\partial z}\bm\delta_\theta\right) u_\theta + \bm\delta_\theta \frac{\partial u_\theta}{\partial z}
+              \right]
+            \right\} \nonumber\\
+            & + \left\{
+              {\color{blue}\bm\delta_z}\cdot \left[
+                \left(\frac{\partial}{\partial z}\bm\delta_z\right) u_z + {\color{blue}\bm\delta_z \frac{\partial u_z}{\partial z}}
+              \right]
+            \right\}
+          \end{align}
+        看起來好像很多，但因為正交基底間內積都是0\\
+        只要注意\\
+        1.\fbox{各Product的第一項，對單位向量微分是Spatial Derivatives中非0的}，以紅色標示\\
+        2.\fbox{各Product的第二項，和內積對象相同的}，以藍色標示\\
+        提取出來後，即可按照原本的單位向量運算方式合併
+        \begin{equation}
+          \resizebox{0.85\textwidth}{!}{%
+            $% 
+            \begin{aligned}
+              \nabla \cdot \vec{\bm{u}} &= \left[
+                \left(\bm{\delta}_r \cdot \bm{\delta}_r\right) \frac{\partial u_r}{\partial r}
+              \right] + \color{red} \left[
+                \left(\bm{\delta}_\theta \cdot \bm{\delta}_\theta\right) \frac{u_r}{r} 
+              \right] \color{black} + \color{red} \left[
+                \cancel{\left(\bm{\delta}_\theta \cdot -\bm{\delta}_r \right)} \frac{u_\theta}{r} 
+              \right] \color{black} + \left[
+                \left(\bm{\delta}_\theta \cdot \bm{\delta}_\theta\right) \frac{1}{r} \frac{\partial u_\theta}{\partial \theta}
+              \right] + \left[
+                \left(\bm{\delta}_z \cdot \bm{\delta}_z\right) \frac{\partial u_z}{\partial z}
+              \right] \nonumber\\
+              &= \boxed{\frac{\partial u_r}{\partial r} + \frac{u_r}{r} + \frac{1}{r} \frac{\partial u_\theta}{\partial \theta} + \frac{\partial u_z}{\partial z}}
+            \end{aligned}$
+          }
+        \end{equation}
+        \item 直積: $\nabla\vec{\bm u}$\\
+        前項$\nabla$為(\ref{eq:cylindrical_nabla})式
+          \begin{equation}
+            \nabla = \bm\delta_r \left(\frac{\partial}{\partial r}\right)_{\theta z} +
+              \bm\delta_\theta \frac{1}{r}\left(\frac{\partial}{\partial \theta}\right)_{rz} +
+              \bm\delta_z \left(\frac{\partial}{\partial z}\right)_{r\theta}
+          \end{equation}
+          後項$\vec{\bm u}$，因為沒有遇到微分，所以可以直接當成卡氏座標下的向量表示:
+          \begin{equation}
+            \vec{\bm u} = \sum_{i=1}^3 \bm\delta_i u_i = \bm\delta_r u_r + \bm\delta_\theta u_\theta + \bm\delta_z u_z
+          \end{equation}
+          進行直積:
+          \begin{align}
+            \nabla \vec{\bm u} &= \left(\bm\delta_r \frac{\partial}{\partial r}\right) \left(
+              \bm\delta_r u_r + \bm\delta_\theta u_\theta + \bm\delta_z u_z
+            \right) \nonumber\\
+            &+ \left(\bm\delta_\theta \frac{1}{r}\frac{\partial}{\partial \theta}\right) \left(
+              {\color{red}\bm\delta_r u_r} + {\color{red}\bm\delta_\theta u_\theta} + \bm\delta_z u_z
+            \right) \nonumber\\
+            &+ \left(\bm\delta_z \frac{\partial}{\partial z}\right) \left(
+              \bm\delta_r u_r + \bm\delta_\theta u_\theta + \bm\delta_z u_z
+            \right)
+          \end{align}
+          可以發現所有的Product Rule中，只有紅色標示的兩項皆非0\\
+          其他的都只剩下後微前不微的第二項，而對於第二項，其實就如同卡氏座標一樣\\
+          直接寫過去即可
+          \begin{align}
+            \nabla \vec{\bm u} &= \bm\delta_r\bm\delta_r \frac{\partial u_r}{\partial r} +
+            \bm\delta_r\bm\delta_\theta \frac{\partial u_\theta}{\partial r} +
+            \bm\delta_r\bm\delta_z \frac{\partial u_z}{\partial r} \nonumber\\
+            &+ \bm\delta_\theta\bm\delta_r \frac{u_r}{r} + \color{red}\bm\delta_\theta\bm\delta_\theta \frac{u_r}{r} \color{black} +
+            \bm\delta_\theta\bm\delta_\theta \frac{1}{r} \frac{\partial u_\theta}{\partial \theta} + 
+            \color{red}\left(-\bm\delta_\theta\bm\delta_r \frac{ u_\theta}{r}\right) \color{black} +
+            \bm\delta_\theta\bm\delta_z \frac{1}{r} \frac{\partial u_z}{\partial \theta} \nonumber\\
+            &+ \bm\delta_z\bm\delta_r \frac{\partial u_r}{\partial z} +
+            \bm\delta_z\bm\delta_\theta \frac{\partial u_\theta}{\partial z} +
+            \bm\delta_z\bm\delta_z \frac{\partial u_z}{\partial z}
+          \end{align}
+          整理後得到:
+          \begin{equation}
+            \nabla \vec{\bm u} =
+            \begin{bmatrix}
+              \bm\delta_r\bm\delta_r & \bm\delta_r\bm\delta_\theta & \bm\delta_r\bm\delta_z \\
+              \bm\delta_\theta\bm\delta_r & \bm\delta_\theta\bm\delta_\theta & \bm\delta_\theta\bm\delta_z \\
+              \bm\delta_z\bm\delta_r & \bm\delta_z\bm\delta_\theta & \bm\delta_z\bm\delta_z
+            \end{bmatrix}= \left(
+            \begin{array}{ccc}
+              \frac{\partial u_r}{\partial r} & \frac{\partial u_\theta}{\partial r} & \frac{\partial u_z}{\partial r} \\
+              \frac{1}{r}\frac{\partial u_r}{\partial\theta} - \frac{u_\theta}{r} & 
+              \frac{1}{r} \frac{\partial u_\theta}{\partial \theta}+\frac{u_r}{r} & 
+              \frac{1}{r} \frac{\partial u_z}{\partial \theta} \\
+              \frac{\partial u_r}{\partial z} & \frac{\partial u_\theta}{\partial z} & \frac{\partial u_z}{\partial z}
+            \end{array}\right) \label{eq:cylindrical_nabla_u}
+          \end{equation}
+        \item Equation of Motion，物質導數: $\frac{D\vec{\bm u}}{dt} = \frac{\partial \vec{\bm u}}{\partial t} + \vec{\bm u} \cdot \nabla \vec{\bm u}$\\
+          由於已經將微分處理完畢，因此只要將$\vec{\bm u}$以卡氏座標表示，相乘(\ref{eq:cylindrical_nabla_u})即可
+          \begin{equation}
+            \vec{\bm u} = \sum_{i=1}^3 \bm\delta_i u_i = \bm\delta_r u_r + \bm\delta_\theta u_\theta + \bm\delta_z u_z
+          \end{equation}
+          進行乘法，先看單位向量部分:
+          \begin{equation}
+            \vec{\bm u} \cdot \nabla \vec{\bm u} = \begin{bmatrix}
+              \bm\delta_r  & \bm\delta_\theta & \bm\delta_z
+            \end{bmatrix}
+            \begin{bmatrix}
+              \bm\delta_r\bm\delta_r & \bm\delta_r\bm\delta_\theta & \bm\delta_r\bm\delta_z \\
+              \bm\delta_\theta\bm\delta_r & \bm\delta_\theta\bm\delta_\theta & \bm\delta_\theta\bm\delta_z \\
+              \bm\delta_z\bm\delta_r & \bm\delta_z\bm\delta_\theta & \bm\delta_z\bm\delta_z
+            \end{bmatrix}
+          \end{equation}
+          $\bm \delta_r$:
+          \begin{equation}
+            \bm\delta_r \cdot \bm\delta_r\bm\delta_r  +  \bm\delta_\theta \cdot \bm\delta_\theta\bm\delta_r + \bm\delta_z \cdot \bm\delta_z\bm\delta_r =
+            \left(\bm\delta_r \cdot \bm\delta_r\right)\bm\delta_r + 0 + 0 = \bm\delta_r
+          \end{equation}
+          $\bm \delta_\theta$:
+          \begin{equation}
+            \bm\delta_r \cdot \bm\delta_r\bm\delta_\theta  +  \bm\delta_\theta \cdot \bm\delta_\theta\bm\delta_\theta + \bm\delta_z \cdot \bm\delta_z\bm\delta_\theta =
+            0 + \left(\bm\delta_\theta \cdot \bm\delta_\theta\right)\bm\delta_\theta + 0 = \bm\delta_\theta
+          \end{equation}
+          $\bm \delta_z$:
+          \begin{equation}
+            \bm\delta_r \cdot \bm\delta_r\bm\delta_z  +  \bm\delta_\theta \cdot \bm\delta_\theta\bm\delta_z + \bm\delta_z \cdot \bm\delta_z\bm\delta_z =
+            0 + 0 + \left(\bm\delta_z \cdot \bm\delta_z\right)\bm\delta_z = \bm\delta_z
+          \end{equation}
+          因此單位向量說明每一列算完就是該列方向的數值\\
+          接著看數值部分:
+          \begin{equation}
+            \begin{bmatrix}
+              u_r & u_\theta & u_z
+            \end{bmatrix}
+            \begin{bmatrix}
+              \frac{\partial u_r}{\partial r} & \frac{\partial u_\theta}{\partial r} & \frac{\partial u_z}{\partial r} \\
+              \frac{1}{r}\frac{\partial u_r}{\partial\theta} - \frac{u_\theta}{r} &
+              \frac{1}{r} \frac{\partial u_\theta}{\partial \theta}+\frac{u_r}{r} &
+              \frac{1}{r} \frac{\partial u_z}{\partial \theta} \\
+              \frac{\partial u_r}{\partial z} & \frac{\partial u_\theta}{\partial z} & \frac{\partial u_z}{\partial z}
+            \end{bmatrix}
+          \end{equation}
+          $\bm \delta_r$方向:
+          \begin{equation}
+            u_r \frac{\partial u_r}{\partial r} + u_\theta \left(\frac{1}{r}\frac{\partial u_r}{\partial\theta} - \frac{u_\theta}{r}\right) + u_z \frac{\partial u_r}{\partial z}
+          \end{equation}
+          $\bm \delta_\theta$方向:
+          \begin{equation}
+            u_r \frac{\partial u_\theta}{\partial r} + u_\theta \left(\frac{1}{r} \frac{\partial u_\theta}{\partial \theta}+\frac{u_r}{r}\right) + u_z \frac{\partial u_\theta}{\partial z}
+          \end{equation}
+          $\bm \delta_z$方向:
+          \begin{equation}
+            u_r \frac{\partial u_z}{\partial r} + \frac{u_\theta}{r} \frac{\partial u_z}{\partial \theta} + u_z \frac{\partial u_z}{\partial z}
+          \end{equation}
+          與此同理，$\frac{\partial \vec{\bm u}}{\partial t}$也可以直接寫出來:
+          \begin{equation}
+            \frac{\partial \vec{\bm u}}{\partial t} =
+            \bm\delta_r \frac{\partial u_r}{\partial t} +
+            \bm\delta_\theta \frac{\partial u_\theta}{\partial t} +
+            \bm\delta_z \frac{\partial u_z}{\partial t}
+          \end{equation}
+          最後將兩者相加，即為Equation of Motion中的$D\vec{\bm u}/dt$
+          \begin{align}
+            \frac{D \vec{\bm u}}{dt}  &= 
+            \bm\delta_r \left[
+              \frac{\partial u_r}{\partial t} +
+              u_r \frac{\partial u_r}{\partial r} + u_\theta \left(\frac{1}{r}\frac{\partial u_r}{\partial\theta} - \frac{u_\theta}{r}\right) + u_z \frac{\partial u_r}{\partial z}
+            \right] \nonumber\\
+            &+ \bm\delta_\theta \left[
+              \frac{\partial u_\theta}{\partial t} +
+              u_r \frac{\partial u_\theta}{\partial r} + u_\theta \left(\frac{1}{r} \frac{\partial u_\theta}{\partial \theta}+\frac{u_r}{r}\right) + u_z \frac{\partial u_\theta}{\partial z}
+            \right] \nonumber\\
+            &+ \bm\delta_z \left[
+              \frac{\partial u_z}{\partial t} +
+              u_r \frac{\partial u_z}{\partial r} + \frac{u_\theta}{r} \frac{\partial u_z}{\partial \theta} + u_z \frac{\partial u_z}{\partial z}
+            \right]
+          \end{align}
+        \item 假設為卡氏座標軸:
+          \begin{align}
+            \frac{D \vec{\bm u}}{dt}  &= \sum_{i=1}^3 \bm\delta_i \frac{\partial u_i}{\partial t} 
+            + \left( \vec{\bm u} \right) \cdot\left(\nabla \vec{\bm u}\right) \nonumber\\
+            &= \sum_{i=1}^3 \bm\delta_i \frac{\partial u_i}{\partial t} + 
+            \left(
+              \sum_{j=1}^3 \bm\delta_j u_j
+            \right) \cdot
+            \left(
+              \sum_{k=1}^3 \bm\delta_k \frac{\partial }{\partial x_k}
+            \right) \left(
+              \sum_{m=1}^3 \bm\delta_m u_m
+            \right) \nonumber\\
+            &= \sum_{i=1}^3 \bm\delta_i \frac{\partial u_i}{\partial t} +
+            \sum_{j=1}^3 \sum_{k=1}^3 \sum_{m=1}^3 \left(
+              \bm\delta_j \cdot \bm\delta_k\bm\delta_m
+            \right) u_j \frac{\partial u_m}{\partial x_k} \nonumber\\
+            &= \sum_{i=1}^3 \bm\delta_i \frac{\partial u_i}{\partial t} +
+            \sum_{j=1}^3 \sum_{k=1}^3 \sum_{m=1}^3 \left(
+              (\bm\delta_j \cdot \bm\delta_k)\bm\delta_m
+            \right) u_j \frac{\partial u_m}{\partial x_k} \nonumber\\
+            &= \sum_{i=1}^3 \bm\delta_i \frac{\partial u_i}{\partial t} +
+            \sum_{j=1}^3 \sum_{k=1}^3 \sum_{m=1}^3 \delta_{jk}\bm\delta_m u_j \frac{\partial u_m}{\partial x_k} \nonumber\\
+            &= \sum_{i=1}^3 \bm\delta_i \frac{\partial u_i}{\partial t} +
+            \sum_{j=1}^3 \sum_{m=1}^3 \bm\delta_m u_j \frac{\partial u_m}{\partial x_j}
+          \end{align}
+          讓$m=i$，並提出可得
+          \begin{equation}
+            \frac{D \vec{\bm u}}{dt}  = \sum_{i=1}^3 \bm\delta_i \left[
+              \frac{\partial u_i}{\partial t} +
+              \sum_{j=1}^3 u_j \left(\frac{\partial u_i}{\partial x_j}\right)
+            \right]
+          \end{equation}
+          展開後即為Equation of Motion中的$D\vec{\bm u}/dt$:
+          \begin{align}
+            \frac{D \vec{\bm u}}{dt}  &= 
+            \bm\delta_x \left[
+              \frac{\partial u_x}{\partial t} +
+              u_x \left(\frac{\partial u_x}{\partial x}\right) +
+              u_y \left(\frac{\partial u_x}{\partial y}\right) +
+              u_z \left(\frac{\partial u_x}{\partial z}\right)
+            \right] \nonumber\\
+            &+ \bm\delta_y \left[
+              \frac{\partial u_y}{\partial t} +
+              u_x \left(\frac{\partial u_y}{\partial x}\right) +
+              u_y \left(\frac{\partial u_y}{\partial y}\right) +
+              u_z \left(\frac{\partial u_y}{\partial z}\right)
+            \right] \nonumber\\
+            &+ \bm\delta_z \left[
+              \frac{\partial u_z}{\partial t} +
+              u_x \left(\frac{\partial u_z}{\partial x}\right) +
+              u_y \left(\frac{\partial u_z}{\partial y}\right) +
+              u_z \left(\frac{\partial u_z}{\partial z}\right)
+            \right]
+          \end{align}
+      \end{enumerate}
+  \end{itemize}
+\end{itemize}
+\subsection{無因次化}
+\begin{itemize}
+  \item  無因次化可以做很多事情:
+  \begin{itemize}
+    \item 減少變數個數
+    \item 找出系統中重要的無因次群特徵
+    \item 幫助實驗設計
+  \end{itemize}
+  \item 無因次化的方式:\\
+    如果是長度之類的，直接算出來\\
+    如果是推算出來的，則先找到那個式子\\
+    然後把另一邊每一項都想辦法拿已經無因次化的量去除的那個東西取代
+  \item 各種單位系統的無因次化:
+  \begin{itemize}
+    \item 長度的無因次化($l/l_0$):
+    \begin{equation}
+      x^\ast = \frac{x}{L}, \quad y^\ast = \frac{y}{W}, \quad r^\ast = \frac{r}{R}, \quad z^\ast = \frac{z}{H}
+    \end{equation}
+    P.S. $\theta$不需要無因次化，因為它本來就是無因次的\\
+    垂直方向如$y$看對稱性，有可能會是用半高$H/2$來無因次化\\
+    另外，如果是圓管之類的(包含方管等管狀物)\\
+    也可以直接用\fbox{水力直徑}同時對多個座標軸做無因次化
+    \begin{equation}
+      D_h = \frac{4 \times \text{流體截面積}}{\text{濕周長}},
+      \quad x^\ast = \frac{x}{D_h}, \quad y^\ast = \frac{y}{D_h}, \quad r^\ast = \frac{r}{D_h}
+    \end{equation}
+    \item 速度的無因次化($u/u_0$):
+    \begin{equation}
+      \vec {\bm u}^\ast = \frac{\vec {\bm u}}{u_0}
+    \end{equation}
+    $u_0$通常是入口或平均初始速度$\sqrt{\left<\vec {\bm u}\right>^2}$\\
+    無因次化並不是將向量消除，只是讓向量的大小變成無因次的
+    \item 時間的無因次化($t/t_0$):\\
+    通常利用剛剛定義的長度和速度來定義無因次時間
+    \begin{equation}
+      t^\ast = \frac{t}{t_0} , \quad t_0 = \frac{l_0}{u_0}
+    \end{equation}
+    至於$L$是要取哪個方向，通常是探討的分布的方向
+    \item 重力常數的無因次化$g/g_0$:
+    \begin{equation}
+      \vec {\bm g}^\ast = \frac{\vec {\bm g}}{g}
+    \end{equation}
+    \item 修正壓力的無因次化$\mathbb{P}/\mathbb{P}_0$:\\
+    修正壓力的無因次化\fbox{不會採用內部壓力}\\
+    畢竟修正壓力會來自別人的\fbox{剪力}或者\fbox{慣性力}，這產生了兩種定義
+    \begin{itemize}
+      \item 剪力產生的修正壓力無因次化:
+      \begin{equation}
+        \mathbb P^\ast = \frac{\mathbb P}{\mathbb P_0},\quad \mathbb P_0 \sim \tau_0 = \frac{\mu u_0}{l_0}
+      \end{equation}
+      \item 慣性力$\rho \vec{\bm v}\vec{\bm v}$產生的修正壓力無因次化:
+      \begin{equation}
+        \mathbb P^\ast = \frac{\mathbb P}{\mathbb P_0},\quad \mathbb P_0 \sim \rho u_0^2
+      \end{equation}
+    \end{itemize}
+    \item 壓力的無因次化$P/P_0$:\\
+      如果是考慮壓力而不是和重力合併計算的修正壓力，則通常會用慣性力來無因次化
+      \begin{equation}
+        P^\ast = \frac{P}{P_0}, \quad P_0 = \rho u_0^2
+      \end{equation}
+      P.S. 另外定義Euler Number:
+      \begin{equation}
+        \text{Eu} = \frac{P_0}{\rho u_0^2} = \frac{\text{Pressure Force}}{\text{Inertial Force}}
+      \end{equation}
+    \item 重力的無因次化$\bm \vec{g}/g_0$:\\
+    其實就只是重力在參考坐標系的投影量除上重力\\
+    例如若以斜坡方向為$x$軸，則重力在斜坡上的分量為$g\sin\theta$，則無因次化後為:
+    \begin{equation}
+      g_x^\ast = \frac{g\sin\theta}{g} = \sin\theta
+    \end{equation}
+    \item $\nabla$的無因次化:
+    \begin{equation}
+      \nabla^\ast = l_0 \cdot \nabla, \quad \nabla^{\ast 2} = l_0^2 \cdot \nabla^2
+    \end{equation}
+    會變成用乘的而不是除的，因為$\nabla^\ast$所代表的每個單位向量都被除了$l_0$\\
+    可以想成你是對$\frac{\nabla}{l_0}$無因次化，所以你在找的$\nabla_0$是$\frac{1}{l_0}$
+    \item 衍生，對$D/Dt$的無因次化\\
+    P.S. $D$跟帶有單位的$\nabla$不一樣，只是個微分符號而已哦!
+    \begin{equation}
+      \frac{D}{D t^\ast} = \frac{D}{D\left(\frac{t}{t_0}\right)} = t_0 \cdot \frac{D}{Dt} = \left(\frac{l_0}{u_0}\right) \cdot \frac{D}{Dt}
+    \end{equation}
+  \end{itemize}
+  \item 用無因次化的方式來推出各種神奇性質:
+  \begin{itemize}
+    \item Eqaution of Motion(Navier-Stokes Equation)無因次化:
+    \begin{equation}
+      \rho \frac{D\vec {\bm u}}{Dt} = -\nabla \mathbb P + \mu \nabla^2 \vec {\bm u}
+    \end{equation}
+    無因次化後:
+    \begin{align}
+      \rho \frac{D u_0 \vec{ \bm u}^\ast}{D  t_0 t^\ast} &= 
+      -\frac{1}{l_0}\nabla^\ast \left(\mathbb P_0 \mathbb P^\ast\right) 
+      + \mu \frac{1}{l_0^2} \nabla^{\ast 2} \left(u_0 \vec {\bm u}^\ast\right) \nonumber\\
+      \rho \frac{u_0}{t_0} \frac{D \vec {\bm u}^\ast}{D t^\ast} &= 
+      -\frac{\mathbb P_0}{l_0} \nabla^\ast \mathbb P^\ast 
+      + \mu \frac{u_0}{l_0^2} \nabla^{\ast 2} \vec {\bm u}^\ast
+    \end{align}
+    而這邊假設採用\fbox{剪力}產生的壓力無因次化方式:
+    \begin{equation}
+      \mathbb P_0 = \frac{\mu u_0}{l_0}
+    \end{equation}
+    而時間則是:
+    \begin{equation}
+      t_0 = \frac{l_0}{u_0}
+    \end{equation}
+    代入後:
+    \begin{align}
+      \rho \frac{u_0^2}{l_0} \frac{D \vec {\bm u}^\ast}{D t^\ast} &= 
+      -\frac{\mu u_0}{l_0^2} \nabla^\ast \mathbb P^\ast 
+      + \mu \frac{u_0}{l_0^2} \nabla^{\ast 2} \vec {\bm u}^\ast \nonumber\\
+      (\text{同除}\frac{\mu u_0}{l_0^2}) \Rightarrow
+      \frac{\rho u_0 l_0}{\mu} \frac{D \vec {\bm u}^\ast}{D t^\ast} &= 
+      - \nabla^\ast \mathbb P^\ast 
+      + \nabla^{\ast 2} \vec {\bm u}^\ast
+    \end{align}
+    可以發現出現了一個無因次群，雷諾數(Reynolds Number)!\\
+    不過注意特徵長度要用水力直徑$D_h$
+    \begin{equation}
+      \text{Re} = \frac{\rho u_0 D_h}{\mu} = \frac{\text{Inertial Force}}{\text{Viscous Force}}
+    \end{equation}
+    若改採用\fbox{慣性力}產生的壓力無因次化方式:
+    \begin{equation}
+      \mathbb P_0 = \rho u_0^2
+    \end{equation}
+    則無因次化後的Equation of Motion為:
+    \begin{align}
+      \rho \frac{u_0^2}{l_0} \frac{D \vec {\bm u}^\ast}{D t^\ast} &= 
+      -\frac{\rho u_0^2}{l_0} \nabla^\ast \mathbb P^\ast 
+      + \mu \frac{u_0}{l_0^2} \nabla^{\ast 2} \vec {\bm u}^\ast \nonumber\\
+      (\text{同除}\frac{\rho u_0^2}{l_0}) \Rightarrow
+      \frac{D \vec {\bm u}^\ast}{D t^\ast} &= 
+      - \nabla^\ast \mathbb P^\ast 
+      + \frac{\mu}{\rho u_0 l_0} \nabla^{\ast 2} \vec {\bm u}^\ast
+    \end{align}
+    這邊也出現了雷諾數(Reynolds Number)
+    \begin{equation}
+      \frac{\mu}{\rho u_0 l_0} \frac{D \vec {\bm u}^\ast}{D t^\ast} = 
+      - \nabla^\ast \mathbb P^\ast 
+      + \frac{1}{\text{Re}} \nabla^{\ast 2} \vec {\bm u}^\ast
+    \end{equation}
+    而這條式子可以告訴我們，雷諾數是配在黏滯力上的\\
+    當雷諾數越大，黏滯力造成的影響越小\\
+    而當雷諾數接近無限大時，就變成了Euler Equation:
+    \begin{equation}
+      \frac{D \vec {\bm u}^\ast}{D t^\ast} = 
+      - \nabla^\ast \mathbb P^\ast
+    \end{equation}
+    P.S. 如果改採用壓力(不是修正壓力)的無因次化方式，則Navier-Stokes Equation
+    \begin{align}
+      \rho \frac{D\vec {\bm u}}{Dt} &= -\nabla P + \mu \nabla^2 \vec {\bm u} + \rho \vec{\bm g} \nonumber\\
+      \rho \frac{D u_0 \vec{ \bm u}^\ast}{D  t_0 t^\ast} &=
+      -\nabla_0\nabla^\ast \left(P_0 P^\ast\right)
+      + \mu \nabla_0^2 \nabla^{\ast 2} \left(u_0 \vec {\bm u}^\ast\right)
+      + \rho g_0 \vec{\bm g}^\ast \nonumber\\
+      \rho \frac{u_0}{\frac{l_0}{u_0}} \frac{D \vec {\bm u}^\ast}{D t^\ast} &=
+      -\frac{\rho u_0^2}{l_0} \nabla^\ast P^\ast
+      + \mu \frac{u_0}{l_0^2} \nabla^{\ast 2} \vec {\bm u}^\ast
+      + \rho g_0 \vec{\bm g}^\ast \nonumber\\
+      (\text{同除}\frac{\rho u_0^2}{l_0}) \Rightarrow
+      \frac{D \vec {\bm u}^\ast}{D t^\ast} &=
+      - \nabla^\ast P^\ast
+      + \frac{1}{\text{Re}} \nabla^{\ast 2} \vec {\bm u}^\ast
+      + \frac{g_0 l_0}{u_0^2} \vec{\bm g}^\ast 
+    \end{align}
+    這裡出現的新的無因次群，我們叫做\fbox{Froude Number}:\\
+    一樣是用倒數的方式放在Navier-Stokes Equation中
+    \begin{equation}
+      \text{Fr} = \frac{\left<u\right>^2}{g D_h} = \frac{\text{Inertial Force}}{\text{Gravitational Force}}
+    \end{equation}
+    而Navier-Stokes Equation無因次化後的最終形式為:
+    \begin{equation}
+      \frac{D \vec {\bm u}^\ast}{D t^\ast} =
+      - \nabla^\ast P^\ast
+      + \frac{1}{\text{Re}} \nabla^{\ast 2} \vec {\bm u}^\ast
+      + \frac{1}{\text{Fr}} \vec{\bm g}^\ast 
+    \end{equation}
+  \end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}

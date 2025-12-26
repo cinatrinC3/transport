@@ -1,0 +1,1511 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{多變數的解題，獨立變數、流線、無因次化}
+解這些多變數的問題，方法有四種:
+\begin{enumerate}
+  \item 分離變數法:
+  \begin{equation}
+    u_x(y,t) = Y(y)T(t)
+  \end{equation}
+  \item 結合變數法:\\
+  $\eta$要無因次化，並根據問題找到適當的組合方式\\
+  $\eta$也可以利用虛擬定義一個邊界層厚度$\delta$來定義
+  \begin{equation}
+    u_x(y,t) \text{ or } u_x(x,y) = f(\eta), \quad \eta = \frac{y}{\sqrt{\nu t}} \text{ or } \eta = \frac{y}{x}
+  \end{equation}
+  可以某種程度上背起來，當是時間相關的問題時，通常會是:
+  \begin{equation}
+    \eta = \frac{y}{\sqrt{4\nu t}}
+  \end{equation}
+  \item Laplace Transform
+  \item 數值分析
+\end{enumerate}
+而以下兩個章節會以不同的例題來展示各種技巧
+\begin{itemize}
+  \item Cone \& Plate Viscometer\\
+  下圖是一個Cone \& Plate Viscometer的示意圖\\
+  藉由錐體旋轉帶動流體，當轉速達到一定速度\\
+  流體接觸到距離旋轉中心$R$的位置，也代表此時流體於下圖藍色範圍內填滿且達到穩態\\
+  此時即可藉由$\omega$與錐體角度$\theta_0$計算出流體的黏度
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (-5,-0.5) rectangle (5, 0);
+      \fill[pattern={Lines[angle=-45, distance=3, line width=0.5]}] (-5,-0.75) rectangle (5, -0.5);
+      \node[anchor=north east] at (5,-0.5) {Stationary Plate};
+      \draw (0,0) -- (20:5);
+      \fill[pattern={Lines[angle=-45, distance=3, line width=0.5]}, pattern color=blue] (0,0) -- (20:5) -- (20:5 |- 0,0) -- cycle;
+      \fill[pattern={Lines[angle=-45, distance=3, line width=0.5]}, pattern color=blue] (0,0) -- (160:5) -- (160:5 |- 0,0) -- cycle;
+      \draw (1,0) arc (0:20:1) node[midway, right] {$\theta_0$};
+      \draw[->] (0,1.25) arc (90:20:1.25) node[midway, above right] {$\theta_1$};
+      \draw[dashed] (0,0) -- (0,4);
+      \draw [->] (0.5,3.5)  arc(30:330:0.5 and 0.2);
+      \node[anchor=east] at (-0.5,3.5) {$\omega$};
+      \draw[<->] (0,0) -- (160:5) node[midway, above] {$R$};
+      \coordinate (O) at (7,2);
+      \coordinate (G) at (7,0);
+      \draw[->] (O) -- (G) node[below] {$g$};
+      \draw[dashed, ->] (7,2) -- ++(200:0.684) node[below left] {$g \cos\theta$};
+      \draw[dashed, ->] (7,2) -- ++(290:1.879385) node[below right] {$g\sin \theta$};
+      \draw[dashed] (160:5) -- (20:5);
+    \end{tikzpicture}
+    \caption{Cone \& Plate Viscometer示意圖}
+    \label{fig:ch2_3_cone_plate}
+  \end{figure}
+  \begin{enumerate}
+    \item 假設:
+    \begin{enumerate}
+      \item 流體為Newtonian Fluid
+      \item 流體為Incompressible Fluid
+      \item 流體達到Steady State
+      \item 流體密度、黏度一定
+      \item 溫度固定
+      \item 流體連續，無空洞，No-Slip
+    \end{enumerate}
+    \item 設定座標系為球座標系，在無累積下，$v_r=v_\theta =0$，只有$v_\phi$分量
+    \item 由於流體為Steady State，故$\frac{\partial}{\partial t} =0$
+    \item 根據對稱性$\frac{\partial v_\phi}{\partial \phi} =0$
+    \begin{equation}
+      \boxed{\vec{\bm v} = v_\phi (r,\theta) \bm \delta_\phi}
+    \end{equation}
+    \item  根據Equation of Motion(\ref{eq:spherical_navier_stokes})，削掉那堆東西後
+    \begin{itemize}
+      \item $r$方向:
+      \begin{equation}
+        -\rho \frac{v_\phi^2}{r} = -\frac{\partial p}{\partial r} - \rho g \cos\theta
+      \end{equation}
+      \item $\theta$方向:
+      \begin{equation}
+        -\frac{\rho v_\phi^2 \cot\theta}{r} = -\frac{1}{r}\frac{\partial p}{\partial \theta} + \rho g \sin\theta
+      \end{equation}
+      \item $\phi$方向:
+      \begin{equation}
+        0 = \mu \left[
+          \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 \frac{\partial v_\phi}{\partial r}\right)
+          + \frac{1}{r^2}\frac{\partial}{\partial \theta}
+          \left(\frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(v_\phi \sin\theta)\right)
+          \right] \label{eq:ch2_3_cone_plate_phi}
+      \end{equation}
+    \end{itemize}
+    \item $r$和$\theta$方向的方程式則要使用Creeping flow的假設，也就是Re很小，可以忽略慣性項
+    \begin{equation}
+      \text{Re}\ll 1
+    \end{equation}
+    無因次化$r$方向\\
+    相關的關係式有:(壓力用剪力來無因次化)
+    \begin{equation}
+      r^\ast = \frac{r}{R},\quad v_\phi^\ast = \frac{v_\phi}{\omega R},\quad p^\ast = 
+      \frac{p}{\frac{\mu \omega R}{R}} = \frac{p}{\mu \omega}
+    \end{equation}
+    解出:
+    \begin{align}
+      -\rho \frac{v_\phi^2}{r} &= -\frac{\partial p}{\partial r} - \rho g \cos\theta \nonumber\\
+      -\rho \frac{(\omega R v_\phi^\ast)^2}{R r^\ast} &= -\frac{\mu \omega}{R}\frac{\partial p^\ast}{\partial r^\ast} - \rho g \cos\theta \nonumber\\
+      (\text{同除}\frac{\mu \omega}{R})\Rightarrow\quad
+      -\frac{\rho \omega R^2}{\mu}\frac{( v_\phi^\ast)^2}{ r^\ast} &= -\frac{\partial p^\ast}{\partial r^\ast} - \frac{\rho g R}{\mu \omega} \cos\theta \nonumber\\
+      -\text{Re}\frac{( v_\phi^\ast)^2}{ r^\ast} &= -\frac{\partial p^\ast}{\partial r^\ast} - \frac{\rho g R}{\mu \omega} \cos\theta \nonumber\\
+      \Rightarrow\quad
+      \frac{\partial p^\ast}{\partial r^\ast} &= - \frac{\rho g R}{\mu \omega} \cos\theta + \text{Re}\frac{( v_\phi^\ast)^2}{ r^\ast}
+    \end{align}
+    而因為Re很小，所以可以忽略右邊
+    \begin{equation}
+      \frac{\partial p^\ast}{\partial r^\ast} = - \frac{\rho g R}{\mu \omega} \cos\theta
+    \end{equation}
+    再換回原本的變數:
+    \begin{equation}
+      \frac{\partial p}{\partial r} = - \rho g \cos\theta \implies \frac{\partial \mathbb{P}}{\partial r} = 0
+    \end{equation}
+    同理，$\theta$方向也可以得到:
+    \begin{equation}
+      \frac{1}{r}\frac{\partial p}{\partial \theta} =  \rho g \sin\theta
+    \end{equation}
+    而因為這個步驟很煩人，所以只要說是Creeping Flow\\
+    黏滯力主導，就可以等價的把左邊的:
+    \begin{equation}
+      -\frac{\rho v_\phi^2 \cot\theta}{r} \approx 0,\quad -\rho \frac{v_\phi^2}{r} \approx 0
+    \end{equation}
+    \item 寫出邊界條件:
+    \begin{align}
+      v_\phi(r,\frac{\pi}{2}) &= 0 \label{eq:ch2_3_cone_plate_bc1}\\
+      v_\phi(r,\theta_1) &= \omega r \sin\theta_1 \label{eq:ch2_3_cone_plate_bc2}\\
+      v_\phi(0,\theta) &= \text{finite} \implies  v_\phi(0,\theta) = 0 \label{eq:ch2_3_cone_plate_bc3}\\
+      \tau_{r\phi} (R,\theta) &= 0  \label{eq:ch2_3_cone_plate_bc4}
+    \end{align}
+    \item 利用分離變數，假設:
+    \begin{equation}
+      v_\phi (r,\theta) = h(r) f(\theta)
+    \end{equation}
+    而根據(\ref{eq:ch2_3_cone_plate_bc2})，當$\theta$被給定時，剩下的變數只剩$r$\\
+    故可以猜測$h(r) = r$，剩下的都是$f(\theta)$
+    \begin{equation}
+      v_\phi (r,\theta) = r f(\theta)
+    \end{equation}
+    \item 將上述式子代入(\ref{eq:ch2_3_cone_plate_phi}):
+    \begin{align}
+      0 &= \cancel{\mu} \left[
+        \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2f\right)+\frac{1}{r^{\cancel{2}}}\frac{\partial}{\partial \theta}
+        \left(\frac{1}{\sin\theta}\frac{\partial}{\partial \theta}\cancel{r}f\sin\theta\right)
+        \right] \nonumber\\
+      0 &= \frac{2}{r}f + \frac{1}{r}\frac{\partial}{\partial \theta}\left[
+        \frac{1}{\sin\theta}\left(
+          f\cos\theta + \sin\theta \frac{d f}{d \theta}
+        \right)
+      \right] \nonumber\\
+      0 &= \frac{2}{r}f + \frac{1}{r}\frac{\partial }{\partial \theta}\left(
+        f\frac{\cos\theta}{\sin\theta} + \frac{d f}{d \theta}\right) \nonumber\\
+      0 &= \frac{2}{r}f + \frac{1}{r}\left[
+        \frac{cos\theta}{\sin\theta}\frac{d f}{d \theta} + f\frac{-\sin^2\theta - \cos^2\theta}{\sin^2\theta}
+         + \frac{d^2 f}{d \theta^2}
+      \right] \nonumber\\
+      0 &= \frac{2}{r}f + \frac{1}{r}\left[
+        \frac{\cos\theta}{\sin\theta}\frac{d f}{d \theta} - f\frac{1}{\sin^2\theta}
+         + \frac{d^2 f}{d \theta^2}
+      \right]
+    \end{align}
+    假設$r\neq 0$，則兩邊同乘$r$後:
+    \begin{equation}
+      \boxed{\frac{d^2 f}{d \theta^2} + \frac{\cos\theta}{\sin\theta}\frac{d f}{d \theta}
+        + f\left(2 - \frac{1}{\sin^2\theta}\right) = 0} \label{eq:ch2_3_cone_plate_ode}
+    \end{equation}
+    \item 變數代換\\
+    令$x = \cos\theta$，則$dx = -\sin\theta d\theta$，則有以下關係:
+    \begin{equation}
+      \frac{df}{d\theta} = \frac{df}{dx}\frac{dx}{d\theta} = -\sin\theta \frac{df}{dx}
+    \end{equation}
+    同理:
+    \begin{equation}
+      \frac{d^2 f}{d \theta^2} = -\cos\theta \frac{df}{dx} + \sin^2\theta \frac{d^2 f}{d x^2}
+    \end{equation}
+    而且$\sin^2\theta = 1 - \cos^2\theta = 1 - x^2$\\
+    將上述兩個式子代入(\ref{eq:ch2_3_cone_plate_ode}):
+    \begin{equation}
+      \boxed{\left(1-x^2\right)\frac{d^2 f}{d x^2} - 2x \frac{df}{dx} + \left(2 - \frac{1}{1-x^2}\right)f = 0}
+    \end{equation}
+    此為Associated Legendre Equation Spherical Harmonic的形式\\
+    不過其實也不用這樣搞，因為可以從邊界條件猜到$f(\theta)=\omega\sin\theta$
+    代入ODE即可驗證
+    \begin{align}
+      \frac{d^2 f}{d \theta^2} + \frac{\cos\theta}{\sin\theta}\frac{d f}{d \theta}
+        + f\left(2 - \frac{1}{\sin^2\theta}\right) &= 
+      -\omega \sin\theta + \frac{\cos\theta}{\sin\theta} \omega \cos\theta
+        + \omega \sin\theta \left(2 - \frac{1}{\sin^2\theta}\right) \nonumber\\
+      &= -\omega \sin\theta + \omega \frac{\cos^2\theta}{\sin\theta}
+        + 2\omega \sin\theta - \omega \frac{1}{\sin\theta} \nonumber\\
+      &= \omega \left(
+        \sin\theta + \frac{\cos^2\theta - 1}{\sin\theta}
+      \right) \nonumber\\
+      &= \omega \left(
+        \sin\theta - \frac{\sin^2\theta}{\sin\theta}
+      \right) \nonumber\\
+      &= 0
+    \end{align}
+    然後就是簡單的
+    \begin{equation}
+      v_\phi (r,\theta) = r \omega \sin\theta
+    \end{equation}
+    只是在(\ref{eq:ch2_3_cone_plate_bc1})的邊界條件下，會出現應該要是0的情況，結果這裡等於$r\omega$\\
+    不過還是可以不用知道Legendre Equation，只要使用Reduction of Order的方法即可
+    \begin{equation}
+      f_2(\theta) = f_1(\theta) \int \frac{e^{-\int P(\theta) d\theta}}{(f_1(\theta))^2} d\theta
+    \end{equation}
+    其中$P(\theta) = \frac{\cos\theta}{\sin\theta}= \cot\theta$，而已知一個解為$f_1(\theta) = \sin\theta$\\
+    則:
+    \begin{align}
+      f_2(\theta) &= \sin\theta \int \frac{e^{-\int \cot\theta d\theta}}{\sin^2\theta} d\theta \nonumber\\
+      &= \sin\theta \int \frac{e^{-\ln|\sin\theta|}}{\sin^2\theta} d\theta \nonumber\\
+      &= \sin\theta \int \frac{1}{\sin^3\theta} d\theta \nonumber\\
+      &= \sin\theta \int \csc^3\theta d\theta \nonumber\\
+      &= \sin\theta \left(
+        -\frac{1}{2}\frac{\csc\theta\cot\theta}-\frac{1}{2}\ln\left|\csc\theta + \cot\theta\right|
+      \right) \nonumber\\
+      &= \sin\theta \left[
+        -\frac{1}{2}\frac{\cos\theta}{\sin^2\theta} - \frac{1}{2}\ln\left|\frac{1}{\sin\theta}+\frac{\cos\theta}{\sin\theta}\right|
+      \right] \nonumber\\
+      & = -\frac{1}{2}\frac{\cos\theta}{\sin\theta} - \frac{1}{2}\sin\theta \ln\left|\frac{1+\cos\theta}{\sin\theta}\right|
+    \end{align}
+    因此通解為:
+    \begin{equation}
+      f(\theta) = C_1 \sin\theta + C_2 \left[
+        -\frac{1}{2}\frac{\cos\theta}{\sin\theta} - \frac{1}{2}\sin\theta \ln\left|\frac{1+\cos\theta}{\sin\theta}\right|
+      \right]
+    \end{equation}
+    \item 利用邊界條件求解常數
+    \begin{itemize}
+      \item 由於$f(\frac{\pi}{2}) = 0$，故$C_1 = 0$
+      \item 由於$f(\theta_1) = \omega \sin\theta_1$，故:
+      \begin{align}
+       & \omega \sin\theta_1 = C_2 \left[
+          -\frac{1}{2}\frac{\cos\theta_1}{\sin\theta_1} - \frac{1}{2}\sin\theta_1 \ln\left|\frac{1+\cos\theta_1}{\sin\theta_1}\right|
+        \right] \nonumber\\
+        & C_2 = \omega \sin\theta_1 \cdot\frac{1}{
+          -\frac{1}{2}\frac{\cos\theta_1}{\sin\theta_1} - \frac{1}{2}\sin\theta_1 \ln\left|\frac{1+\cos\theta_1}{\sin\theta_1}\right|}
+      \end{align}
+      因此$f(\theta)$可寫為:
+      \begin{equation}
+        f(\theta) = \omega \sin\theta_1 \cdot\frac{1}{
+          -\frac{1}{2}\frac{\cos\theta_1}{\sin\theta_1} - \frac{1}{2}\sin\theta_1 \ln\left|\frac{1+\cos\theta_1}{\sin\theta_1}\right|} \cdot
+        \left[
+          -\frac{1}{2}\frac{\cos\theta}{\sin\theta} - \frac{1}{2}\sin\theta \ln\left|\frac{1+\cos\theta}{\sin\theta}\right|
+        \right]
+      \end{equation}
+      令$g(\theta)$為:
+      \begin{align}
+        g(\theta) &= \frac{\cos\theta}{\sin\theta} +\sin\theta \ln\left|\frac{1+\cos\theta}{\sin\theta}\right| \nonumber\\
+        &= \cot\theta + \sin\theta \ln\left|\tan\left(\frac{\theta}{2}\right)\right| \nonumber\\
+        &= \cot\theta + \frac{1}{2}\sin\theta \ln\left|\tan^2\left(
+          \frac{\theta}{2}
+        \right)\right| \nonumber\\
+        &= \cot\theta + \frac{1}{2}\sin\theta \ln\left|\frac{1-\cos\theta}{1+\cos\theta}\right|
+      \end{align}
+      則$f(\theta)$可改寫為:
+      \begin{align}
+        f(\theta) &= \omega \sin\theta_1 \cdot\frac{1}{
+          -\frac{1}{2}g(\theta_1)} \cdot
+        \left[
+          -\frac{1}{2}g(\theta)
+        \right] \nonumber\\
+        &= \omega \sin\theta_1 \frac{g(\theta)}{g(\theta_1)}
+      \end{align}
+    \end{itemize}
+    \item 解出速度分佈:
+    \begin{align}
+      v_\phi (r,\theta) &= r f(\theta) \nonumber\\
+      &= r \omega \sin\theta_1 \frac{g(\theta)}{g(\theta_1)}
+    \end{align}
+    \item 計算下盤的Torque，$T$
+    \begin{equation}
+      T = \int_0^{2\pi} \int_0^R \tau_{\theta\phi}\big|_{\theta=\frac{\pi}{2}} r \cdot r dr d\phi \label{eq:ch2_3_cone_plate_torque}
+    \end{equation}
+    而$\tau_{\theta\phi}$為:
+    \begin{equation}
+      \tau_{\theta\phi} = \mu \left[
+        \frac{\sin\theta}{r}\frac{\partial}{\partial \theta}\left(
+          \frac{v_\phi}{\sin\theta} + \cancel{\frac{1}{r\sin\theta}\frac{\partial v_\theta}{\partial \phi}}
+        \right)
+      \right] 
+    \end{equation}
+    代入速度分佈
+    \begin{align}
+      \tau_{\theta\phi} &= -\mu\frac{\sin\theta}{r}\left(\frac{v_\phi}{\sin\theta}\right) \nonumber\\
+      &= -\mu\frac{\sin\theta}{\cancel{r}}\frac{\partial}{\partial \theta}\left[
+        \cancel{r}\omega \frac{\sin(\theta_1)}{\sin\theta}\cdot \frac{g(\theta)}{g(\theta_1)}
+      \right] \nonumber\\
+      &= -\mu\sin\theta\frac{\partial}{\partial \theta}\left[
+        \omega \frac{\sin(\theta_1)}{\sin\theta}\cdot \frac{\cot\theta + \frac{1}{2}\sin\theta \ln\left|\frac{1-\cos\theta}{1+\cos\theta}\right|}
+        {g(\theta_1)}
+      \right] \nonumber\\
+      &= -\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\frac{\partial}{\partial \theta}\left[
+        \frac{\frac{\cos\theta}{\sin\theta} + \frac{1}{2}\sin\theta \ln\left|\frac{1-\cos\theta}{1+\cos\theta}\right|}{\sin\theta}
+      \right] \nonumber\\
+      &=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\frac{\partial}{\partial \theta}\left[
+        \frac{\cos\theta}{\sin^2\theta} + \frac{1}{2}\ln\left|\frac{1-\cos\theta}{1+\cos\theta}\right|
+      \right] \nonumber\\
+      &=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\left[
+        \frac{-\sin\theta \cdot \sin^2\theta - \cos\theta \cdot 2\sin\theta \cos\theta}{\sin^4\theta}
+        \vphantom{\frac{1}{2}\frac{1-\cos\theta}{1+\cos\theta}\cdot\left(
+          \frac{-\sin\theta(1-\cos\theta)-(\sin\theta)(1+\cos\theta)}{(1-\cos\theta)^2}
+        \right)}\right.\nonumber\\
+      &\phantom{=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot+ }\left.\vphantom{\frac{-\sin\theta \cdot \sin^2\theta - \cos\theta \cdot 2\sin\theta \cos\theta}{\sin^4\theta}}
+      + \frac{1}{2}\frac{1-\cos\theta}{1+\cos\theta}\cdot\left(
+          \frac{-\sin\theta(1-\cos\theta)-(\sin\theta)(1+\cos\theta)}{(1-\cos\theta)^2}
+        \right)\right] \nonumber\\
+      &=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\left[
+        \frac{-\sin^3\theta - 2\cos^2\theta \sin\theta}{\sin^4\theta}
+        + \frac{1}{2}\frac{1-\cos\theta}{1+\cos\theta}\cdot\left(
+          \frac{-2\sin\theta}{(1-\cos\theta)^2}
+        \right)\right] \nonumber\\
+      &=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\left[
+        \frac{-\sin^2\theta - 2\cos^2\theta}{\sin^3\theta}
+        - \frac{\sin\theta}{(1+\cos\theta)(1-\cos\theta)}\right] \nonumber\\
+      &=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\left[
+        \frac{-\sin^2\theta - 2\cos^2\theta}{\sin^3\theta}
+        - \frac{\sin\theta}{\sin^2\theta}\right] \nonumber\\
+      &=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\left(
+        \frac{-2\cos^2\theta - 2\sin^2\theta}{\sin^3\theta}
+      \right) \nonumber\\
+      &=-\frac{\mu\omega\sin(\theta_1)}{g(\theta_1)}\sin\theta\cdot\left(
+        \frac{-2}{\sin^3\theta}
+      \right) \nonumber\\
+      & = \frac{2\mu\omega\sin(\theta_1)}{g(\theta_1)}\frac{1}{\sin^2\theta} \label{eq:ch2_3_cone_plate_shear}
+    \end{align}
+    \item 將$\tau_{\theta\phi}$代入(\ref{eq:ch2_3_cone_plate_torque}):
+    \begin{align}
+      T &= \int_0^{2\pi} \int_0^R \frac{2\mu\omega\sin(\theta_1)}{g(\theta_1)}\frac{1}{\sin^2\left(\frac{\pi}{2}\right)} r \cdot r dr d\phi \nonumber\\
+      &= \int_0^{2\pi} \int_0^R \frac{2\mu\omega\sin(\theta_1)}{g(\theta_1)} r^2 dr d\phi \nonumber\\
+      &= \frac{2\mu\omega\sin(\theta_1)}{g(\theta_1)} \int_0^{2\pi} d\phi \int_0^R r^2 dr \nonumber\\
+      &= \frac{2\mu\omega\sin(\theta_1)}{g(\theta_1)} \cdot 2\pi \cdot \frac{R^3}{3} \nonumber\\
+      &= \frac{4\pi}{3} \cdot \frac{\mu\omega R^3 \sin(\theta_1)}{g(\theta_1)}
+    \end{align}
+    \item 因此黏度$\mu$為:
+    \begin{equation}
+      \boxed{\mu = \frac{3g(\theta_1)T}{4\pi \omega R^3 \sin(\theta_1)} }
+    \end{equation}
+    展開$g(\theta_1)$:
+    \begin{equation}
+      \mu = \frac{3T}{4\pi \omega R^3} \cdot
+      \left[\cot\theta_1 + \frac{1}{2}\sin\theta_1 \ln\left|\frac{1-\cos\theta_1}{1+\cos\theta_1}\right|\right]
+      \cdot \frac{1}{\sin\theta_1}
+    \end{equation}
+    也就是說，我只要量測在液體旋轉到貼合時，使用的$\omega$與$T$，就可以計算出黏度
+    \item Independent of Reology\\
+    可以注意到$T$以及$\tau_{\theta\phi}$之間存在的關係並不受流體的Reology影響\\
+    算出的$T$，(\ref{eq:ch2_3_cone_plate_torque})是
+    \begin{equation}
+      T = \frac{4\pi}{3} \cdot \frac{\mu\omega R^3 \sin(\theta_1)}{g(\theta_1)}
+    \end{equation}
+    $\tau_{\theta\phi}$是:
+    \begin{equation}
+      \tau_{\theta\phi} = \frac{2\mu\omega\sin(\theta_1)}{g(\theta_1)}\frac{1}{\sin^2\theta}
+    \end{equation}
+    將兩者互除:
+    \begin{align}
+      \frac{\tau_{\theta\phi}}{T} &= \frac{\frac{2\mu\omega\sin(\theta_1)}{g(\theta_1)\sin^2\theta}}
+      {\frac{4\pi}{3} \cdot \frac{\mu\omega R^3 \sin(\theta_1)}{g(\theta_1)}} \nonumber\\
+      &= \frac{2\mu\omega\sin(\theta_1)g(\theta_1)}
+      {g(\theta_1)\sin^2\theta\cdot \frac{4\pi}{3} \cdot \mu\omega R^3 \sin(\theta_1)} \nonumber\\
+      &= \frac{3}{2\pi R^3 \sin^2\theta} \nonumber\\
+      \Rightarrow\quad 
+      \tau_{\theta\phi} &= \frac{3T}{2\pi R^3 \sin^2\theta} \label{eq:ch2_3_cone_plate_independent}
+    \end{align}
+    也就是說，假設我從量測數據獲得了一個$T$，那不管\fbox{流體是Newtonian還是Non-Newtonian}\\
+    我都能知道任何位置所受到的$\tau_{\theta\phi}$
+    \item 上述想法衍生，如果想要知道一個Power Law Fluid的表現黏度$\eta = \left|\frac{dv}{dt}\right|^{n-1}$\\
+    可以設計一個$\theta_0\ll 1$的Cone \& Plate Viscometer\\
+    藉由量測出下方盤的Torque $T$，即可求出(\ref{eq:ch2_3_cone_plate_independent})的$\tau_{\theta\phi}$\\
+    P.S.這裡不近似$\theta$是算不出來的\\
+    因為要計算$\eta$你需要速度分布，要知道速度分布，你要知道流體模型
+    \begin{align}
+        \tau_{\theta\phi} &= \frac{3T}{2\pi R^3 \sin^2\theta} \nonumber\\
+        &= \frac{3T}{2\pi R^3  \sin^2(90^\circ -\theta_0)} \nonumber\\
+        &= \frac{3T}{2\pi R^3  \cos^2\theta_0} \nonumber\\
+        &\approx \boxed{\frac{3T}{2\pi R^3} }
+    \end{align}
+    這樣整個流場的$\tau_{\theta\phi}$就是常數了!\\
+    這代表不管什麼流體，我的速度變化隨$\phi$的梯度都是一樣的\\
+    而因為no slip，$\theta=0,v_\phi=0$，$\theta=\theta_0,v_\phi=\omega r$\\
+    接著根據Power Law Fluid的定義:
+    \begin{equation}
+      \tau_{\theta\phi} = \eta \left(\frac{\partial v_\phi}{r \partial \theta}\right) 
+    \end{equation}
+    因為$\tau_{\theta\phi}$是常數，而$\frac{\partial v_\phi}{r \partial \theta}$可以近似為$\frac{\omega r}{r\theta_0} = \frac{\omega}{\theta_0}$\\
+    故可以解出表觀黏度為:
+    \begin{align}
+      \eta &= \tau_{\theta\phi} \cdot \frac{\theta_0}{\omega} \nonumber\\
+      &= \boxed{\frac{3T\theta_0}{2\pi R^3\omega}}
+    \end{align}
+  \end{enumerate}
+  \item Stokes flow around a sphere
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) circle (1.5);
+      \fill [pattern=north west lines] (0,0) circle (1.5);
+      \draw [->] (-3,0) -- (3,0);
+      \draw [dashed] (0,0) -- (330:3);
+      \draw [->] (2.5,0) arc (0:-30:2.5) node[midway, right] {$\theta$};
+      \draw [dashed, blue] (-6,0) -- (-3,0);
+      \draw [dashed, blue] (6,0) -- (3,0);
+      \draw [blue, ->] (-6,0.4) .. controls (-1.5, 0.4) and (-1.5,1.7) .. (0, 1.7);
+      \draw [blue, ->] (0,1.7) .. controls (1.5, 1.7) and (1.5,0.4) .. (6, 0.4);
+      \draw [blue, ->] (-6,-0.4) .. controls (-1.5, -0.4) and (-1.5,-1.7) .. (0, -1.7);
+      \draw [blue, ->] (0,-1.7) .. controls (1.5, -1.7) and (1.5,-0.4) .. (6, -0.4);
+      \draw [blue, ->] (-6, 0.8) .. controls (-1.5, 0.8) and (-1.5,1.9) .. (0, 1.9);
+      \draw [blue, ->] (0,1.9) .. controls (1.5, 1.9) and (1.5,0.8) .. (6, 0.8);
+      \draw [blue, ->] (-6,-0.8) .. controls (-1.5, -0.8) and (-1.5,-1.9) .. (0, -1.9);
+      \draw [blue, ->] (0,-1.9) .. controls (1.5, -1.9) and (1.5,-0.8) .. (6, -0.8);
+      \draw [blue, ->] (-6, 1.2) .. controls (-1.5, 1.2) and (-1.5,2.1) .. (0, 2.1);
+      \draw [blue, ->] (0,2.1) .. controls (1.5, 2.1) and (1.5,1.2) .. (6, 1.2);
+      \draw [blue, ->] (-6,-1.2) .. controls (-1.5, -1.2) and (-1.5,-2.1) .. (0, -2.1);
+      \draw [blue, ->] (0,-2.1) .. controls (1.5, -2.1) and (1.5,-1.2) .. (6, -1.2);
+    \end{tikzpicture}
+    \caption{Stokes flow around a sphere示意圖}
+    \label{fig:ch2_3_stokes_flow_sphere}
+  \end{figure}
+  \begin{enumerate}
+    \item 假設流體為Newtonian，且為Creeping Flow，Steady State，不可壓縮
+    \item 使用Spherical Coordinate System\\
+    流場為$\mathbf{v} = (v_r, v_\theta, v_\phi) = (v_r, v_\theta, 0)$\\
+    因為流場與$\phi$無關，且無旋轉分量
+    \item 由於Steady State，故$\frac{\partial}{\partial t} = 0$\\
+    由於不可壓縮，故連續方程為:
+    \begin{equation}
+      \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 v_r\right) + \frac{1}{r\sin\theta}\frac{\partial}{\partial \theta}\left(v_\theta \sin\theta\right) = 0 \label{eq:ch2_3_stokes_sphere_continuity}
+    \end{equation}
+    而對於不可壓縮的流體，但又只有兩種速度分量時\\
+    則可以使用\fbox{Stream Function}來描述流場
+    \renewcommand{\arraystretch}{1.8}
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{c|c}
+        座標系 & Stream Function關係式\\
+        \hline
+        直角坐標，沒有$z$分量 & $\begin{matrix}
+          v_x &= \frac{\partial \psi}{\partial y}\\
+          v_y &= -\frac{\partial \psi}{\partial x}
+        \end{matrix}$\\
+        \hline
+        圓柱座標，沒有$z$分量 & $\begin{matrix}
+          v_r &= \frac{1}{r}\frac{\partial \psi}{\partial \theta}\\
+          v_\theta &= -\frac{\partial \psi}{\partial r}
+        \end{matrix}$\\
+        \hline
+        圓柱座標，沒有$\theta$分量 & $\begin{matrix}
+          v_r &= -\frac{1}{r}\frac{\partial \psi}{\partial z}\\
+          v_z &= \frac{1}{r}\frac{\partial \psi}{\partial r}
+        \end{matrix}$\\
+        \hline
+        球座標，沒有$\phi$分量 & $\begin{matrix}
+          v_r &= \frac{1}{r^2\sin\theta}\frac{\partial \psi}{\partial \theta} \\
+          v_\theta &= -\frac{1}{r\sin\theta}\frac{\partial \psi}{\partial r} 
+        \end{matrix}$
+      \end{tabular}
+      \caption{各坐標系下的Stream Function關係式}
+      \label{tab:ch2_3_stokes_sphere_stream_function}
+    \end{table}
+    由於此題沒有$\phi$分量，故使用球座標下的Stream Function關係式\\
+    故根據上表，令:
+    \begin{equation}
+      v_r = \frac{1}{r^2\sin\theta}\frac{\partial \psi}{\partial \theta},\quad
+      v_\theta = -\frac{1}{r\sin\theta}\frac{\partial \psi}{\partial r} \label{eq:ch2_3_stokes_sphere_stream_function}
+    \end{equation}
+    驗證:\\
+    將(\ref{eq:ch2_3_stokes_sphere_stream_function})代入連續方程(\ref{eq:ch2_3_stokes_sphere_continuity}):
+    \begin{align}
+      & \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 v_r\right) + \frac{1}{r\sin\theta}\frac{\partial}{\partial \theta}\left(v_\theta \sin\theta\right) \nonumber\\
+      =& \frac{1}{r^2}\frac{\partial}{\partial r}\left(
+        r^2 \cdot \frac{1}{r^2\sin\theta}\frac{\partial \psi}{\partial \theta}
+      \right) + \frac{1}{r\sin\theta}\frac{\partial}{\partial \theta}\left(
+        -\frac{1}{r\sin\theta}\frac{\partial \psi}{\partial r} \cdot \sin\theta
+      \right) \nonumber\\
+      =& \frac{1}{r^2\sin\theta}\frac{\partial}{\partial r}\left(
+        \frac{\partial \psi}{\partial \theta}
+      \right) - \frac{1}{r\sin\theta}\frac{\partial}{\partial \theta}\left(
+        \frac{1}{r}\frac{\partial \psi}{\partial r}
+      \right) \nonumber\\
+      =& \frac{1}{r^2\sin\theta}\frac{\partial^2 \psi}{\partial r \partial \theta}
+        - \frac{1}{r^2\sin\theta}\frac{\partial^2 \psi}{\partial \theta \partial r} \nonumber\\
+      =& 0
+    \end{align}
+    \item 有了$v_r$與$v_\theta$的表示式後，寫出Equation of Motion\\
+    由於為Creeping Flow，故忽略慣性項\\
+    因此Equation of Motion為:
+    \begin{itemize}
+      \item $r$方向:
+      \begin{equation}
+        0 = -\frac{\partial \mathbb{P}}{\partial r} + \mu \left[
+          \frac{1}{r^2}\frac{\partial^2}{\partial r^2}(r^2 v_r)+\frac{1}{r^2\sin\theta}\frac{\partial}{\partial \theta}\left(
+            \sin\theta \frac{\partial v_r}{\partial \theta}\right)
+        \right]
+      \end{equation}
+      \item $\theta$方向:
+      \begin{equation}
+        0 = -\frac{1}{r}\frac{\partial \mathbb{P}}{\partial \theta} + \mu \left[
+          \frac{1}{r^2}\frac{\partial}{\partial r}\left(
+            r^2 \frac{\partial v_\theta}{\partial r}
+          \right) + \frac{1}{r^2}\frac{\partial}{\partial \theta}\left(
+            \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(\sin\theta v_\theta)
+          \right) + \frac{2}{r^2}\frac{\partial v_r}{\partial \theta} 
+        \right]
+      \end{equation}
+    \end{itemize}
+    \item 為了消除$\mathbb{P}$，對$r$方向的方程式微分$\theta$，對$\theta$方向的方程式微分$r$，然後相減
+    \begin{itemize}
+      \item 對$r$方向的方程式微分$\theta$:
+      \begin{equation}
+        0 = -\frac{\partial^2 \mathbb{P}}{\partial r \partial \theta} + \mu \left[
+          \frac{1}{r^2}\frac{\partial}{\partial \theta}\frac{\partial^2}{\partial r^2}(r^2 v_r)+\frac{1}{r^2\sin\theta}\frac{\partial}{\partial \theta}\left(
+            \sin\theta \frac{\partial v_r}{\partial \theta}\right)
+        \right]
+      \end{equation}
+      \item 對$\theta$方向的方程式微分$r$:
+      \begin{equation}
+        0 = -\frac{1}{r}\frac{\partial^2 \mathbb{P}}{\partial r \partial \theta} + \mu \left[
+          \frac{1}{r^2}\frac{\partial}{\partial r}\frac{\partial}{\partial r}\left(
+            r^2 \frac{\partial v_\theta}{\partial r}
+          \right) + \frac{1}{r^2}\frac{\partial}{\partial r}\frac{\partial}{\partial \theta}\left(
+            \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(\sin\theta v_\theta)
+          \right) + \frac{2}{r^2}\frac{\partial}{\partial r}\frac{\partial v_r}{\partial \theta} 
+        \right]
+      \end{equation}
+      乘上$r$:
+      \begin{equation}
+        0 = -\frac{\partial^2 \mathbb{P}}{\partial r \partial \theta} + \mu \left[
+          \frac{1}{r}\frac{\partial}{\partial r}\frac{\partial}{\partial r}\left(
+            r^2 \frac{\partial v_\theta}{\partial r}
+          \right) + \frac{1}{r}\frac{\partial}{\partial r}\frac{\partial}{\partial \theta}\left(
+            \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(\sin\theta v_\theta)
+          \right) + \frac{2}{r}\frac{\partial}{\partial r}\frac{\partial v_r}{\partial \theta} 
+        \right]
+      \end{equation}
+      \item 相減:
+      \begin{align}
+        0 &= \mu \left[
+          \frac{1}{r^2}\frac{\partial}{\partial \theta}\frac{\partial^2}{\partial r^2}(r^2 v_r)+\frac{1}{r^2\sin\theta}\frac{\partial}{\partial \theta}\left(
+            \sin\theta \frac{\partial v_r}{\partial \theta}\right)
+        \right] \nonumber\\
+        &\phantom{=} - \mu \left[
+          \frac{1}{r}\frac{\partial}{\partial r}\frac{\partial}{\partial r}\left(
+            r^2 \frac{\partial v_\theta}{\partial r}
+          \right) + \frac{1}{r}\frac{\partial}{\partial r}\frac{\partial}{\partial \theta}\left(
+            \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(\sin\theta v_\theta)
+          \right) + \frac{2}{r}\frac{\partial}{\partial r}\frac{\partial v_r}{\partial \theta} 
+        \right] \nonumber\\
+        & = \frac{1}{r^2}\frac{\partial}{\partial \theta}\frac{\partial^2}{\partial r^2}(r^2 v_r)+\frac{1}{r^2\sin\theta}\frac{\partial}{\partial \theta}\left(
+            \sin\theta \frac{\partial v_r}{\partial \theta}\right) \nonumber\\
+        &\phantom{=} - \left[
+          \frac{1}{r}\frac{\partial}{\partial r}\frac{\partial}{\partial r}\left(
+            r^2 \frac{\partial v_\theta}{\partial r}
+          \right) + \frac{1}{r}\frac{\partial}{\partial r}\frac{\partial}{\partial \theta}\left(
+            \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(\sin\theta v_\theta)
+          \right) + \frac{2}{r}\frac{\partial}{\partial r}\frac{\partial v_r}{\partial \theta} 
+        \right] \label{eq:ch2_3_stokes_sphere_eliminate_pressure}
+      \end{align}
+    \end{itemize}
+    \item 這樣就是一條只有$v_r$與$v_\theta$的方程式了\\
+    但是把$\psi$代入會非常複雜\\
+    若從旋度的角度切入可將上式改寫為:
+    \begin{equation}
+      E^4 \psi = 0
+    \end{equation}
+    其中$E^2$為:
+    \begin{equation}
+      \boxed{E^2 = \frac{\partial^2}{\partial r^2} + \frac{\sin\theta}{r^2}\frac{\partial}{\partial \theta}\left(
+        \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}
+      \right)}
+    \end{equation}
+    \item 列出邊界條件
+    \begin{itemize}
+      \item 在球表面$r=R$，no slip條件:
+      \begin{equation}
+        v_r(R,\theta) = 0,\quad \frac{-1}{R^2\sin\theta}\frac{\partial \psi}{\partial r}\bigg|_{r=R} = 0 \label{eq:ch2_3_stokes_sphere_bc1}
+      \end{equation}
+      以及:
+      \begin{equation}
+        v_\theta(R,\theta) = 0,\quad \frac{1}{R\sin\theta}\frac{\partial \psi}{\partial \theta}\bigg|_{r=R} = 0 \label{eq:ch2_3_stokes_sphere_bc2}
+      \end{equation}
+      \item 在無限遠處，流體速度為$U$:
+      \begin{equation}
+        v_r(\infty,\theta) = U \cos\theta,\quad \frac{1}{r^2\sin\theta}\frac{\partial \psi}{\partial \theta}\bigg|_{r\to\infty} = U \cos\theta \label{eq:ch2_3_stokes_sphere_bc3}
+      \end{equation}
+      以及:
+      \begin{equation}
+        v_\theta(\infty,\theta) = -U \sin\theta,\quad \frac{-1}{r\sin\theta}\frac{\partial \psi}{\partial r}\bigg|_{r\to\infty} = -U \sin\theta \label{eq:ch2_3_stokes_sphere_bc4}
+      \end{equation}
+    \end{itemize}
+    \item 第三、四個邊界條件能合併成:
+    \begin{equation}
+      \psi(r\to\infty,\theta) = -\frac{1}{2} U r^2 \sin^2\theta \label{eq:ch2_3_stokes_sphere_bc34}
+    \end{equation}
+    P.S. 分別移項後積分即可得到
+    \begin{align}
+      U \cos\theta &= \frac{1}{r^2\sin\theta}\frac{\partial \psi}{\partial \theta} \nonumber\\
+      \Rightarrow\quad \frac{\partial \psi}{\partial \theta} &= U r^2 \sin\theta \cos\theta \nonumber\\
+      \Rightarrow\quad \psi &= U r^2 \int \sin\theta \cos\theta d\theta \nonumber\\
+      &= U r^2 \cdot \frac{\sin^2\theta}{2} + C(r)
+    \end{align}
+    同理可驗證第四個邊界條件
+    \item 由無限遠的流場以及對稱性，猜測解的形式為:
+    \begin{equation}
+      \boxed{\psi(r,\theta) = f(r)g(\theta) = f(r)\sin^2\theta}
+    \end{equation}
+    \item 將猜測的解代入$E^4 \psi = 0$中，得到關於$f(r)$的方程式:
+    \begin{equation}
+      E^4\psi = E^2(E^2 \psi) = 0
+    \end{equation}
+    計算$E^2 \psi$:
+    \begin{align}
+      E^2 \psi &= \frac{\partial^2}{\partial r^2}(f(r)\sin^2\theta) + \frac{\sin\theta}{r^2}\frac{\partial}{\partial \theta}\left(
+        \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(f(r)\sin^2\theta)
+      \right) \nonumber\\
+      &= \sin^2\theta \frac{d^2 f}{d r^2} + \frac{\sin\theta}{r^2}\frac{\partial}{\partial \theta}\left(
+        \frac{1}{\sin\theta} \cdot f(r) \cdot 2\sin\theta \cos\theta
+      \right) \nonumber\\
+      &= \sin^2\theta \frac{d^2 f}{d r^2} + \frac{\sin\theta}{r^2}\frac{\partial}{\partial \theta}\left(
+        2f(r) \cos\theta
+      \right) \nonumber\\
+      &= \sin^2\theta \frac{d^2 f}{d r^2} + \frac{\sin\theta}{r^2} \cdot (-2f(r) \sin\theta) \nonumber\\
+      &= \sin^2\theta \left(
+        \frac{d^2 f}{d r^2} - \frac{2f(r)}{r^2}
+      \right)
+    \end{align}
+    接著計算$E^2(E^2 \psi)$:
+    \begin{align}
+      E^2(E^2 \psi) &= E^2\left[
+        \sin^2\theta \left(
+          \frac{d^2 f}{d r^2} - \frac{2f(r)}{r^2}
+        \right)
+      \right] \nonumber\\
+      &= \left(
+        \frac{d^2}{d r^2} - \frac{2}{r^2}
+      \right)\cdot\left(
+        \frac{d^2 f}{d r^2} - \frac{2}{r^2}
+      \right)f(r) \cdot \sin^2\theta \nonumber\\
+      &= \sin^2\theta \cdot \left[
+        \frac{d^4 f}{d r^4} - \frac{d^2}{dr^2}{2r^{-2}f(r)} - \frac{2}{r^2}\frac{d^2 f}{d r^2} + \frac{4}{r^4}f(r)
+      \right] \nonumber\\
+      &= \sin^2\theta \cdot \left[
+        \frac{d^4 f}{d r^4} - \frac{d}{dr}\left(
+          -4r^{-3}f(r) + 2r^{-2}\frac{df}{dr}
+        \right) - \frac{2}{r^2}\frac{d^2 f}{d r^2} + \frac{4}{r^4}f(r)
+      \right] \nonumber\\
+      &= \sin^2\theta \cdot \left[
+        \frac{d^4 f}{d r^4} - \left(
+          12r^{-4}f(r) - 4r^{-3}\frac{df}{dr} -4r^{-3}\frac{df}{dr} + 2r^{-2}\frac{d^2 f}{d r^2}
+        \right) - \frac{2}{r^2}\frac{d^2 f}{d r^2} + \frac{4}{r^4}f(r)
+      \right] \nonumber\\
+      &= \sin^2\theta \cdot \left[
+        \frac{d^4 f}{d r^4} -\frac{4}{r^2}\frac{d^2 f}{d r^2} + \frac{8}{r^3}\frac{df}{dr} - \frac{8}{r^4}f(r)
+      \right]  = 0\label{eq:ch2_3_stokes_sphere_E4f}
+    \end{align}
+    由於$\sin^2\theta \neq 0$，故:
+    \begin{equation}
+      \boxed{\frac{d^4 f}{d r^4} -\frac{4}{r^2}\frac{d^2 f}{d r^2} + \frac{8}{r^3}\frac{df}{dr} - \frac{8}{r^4}f(r) = 0} \label{eq:ch2_3_stokes_sphere_f_ode}
+    \end{equation}
+    此式為 Euler equidimensional Equation
+    \item  假設解的形式為:
+    \begin{equation}
+      f(r) = C_1r^{-1} +C_2 r + C_3 r^2 + C_4 r^4
+    \end{equation}
+    P.S. 為什麼會是這四個$-1,1,2,4$次方呢?\\
+    因為分別假設$f(r)=r^{-1},r^1,r^2,r^4$代入(\ref{eq:ch2_3_stokes_sphere_f_ode})都會成立\\
+    舉例來說:
+    \begin{align}
+      f(r) &= r^{-1} \nonumber\\
+      \frac{df}{dr} &= -r^{-2} \nonumber\\
+      \frac{d^2 f}{d r^2} &= 2r^{-3} \nonumber\\
+      \frac{d^3 f}{d r^3} &= -6r^{-4} \nonumber\\
+      \frac{d^4 f}{d r^4} &= 24r^{-5} \nonumber\\
+      \Rightarrow\quad & \frac{d^4 f}{d r^4} -\frac{4}{r^2}\frac{d^2 f}{d r^2} + \frac{8}{r^3}\frac{df}{dr} - \frac{8}{r^4}f(r) \nonumber\\
+      =& 24r^{-5} - \frac{4}{r^2}\cdot 2r^{-3} + \frac{8}{r^3}\cdot (-r^{-2}) - \frac{8}{r^4}\cdot r^{-1} \nonumber\\
+      =& 24r^{-5} - 8r^{-5} - 8r^{-5} - 8r^{-5} = 0
+    \end{align}
+    \item 由於合併後的邊界條件(\ref{eq:ch2_3_stokes_sphere_bc34})在$r\to\infty$時為:
+    \begin{equation}
+      \psi(r\to\infty,\theta) = \frac{1}{2} U r^2 \sin^2\theta
+    \end{equation}
+    故由於$f(r)$中$C_4 r^4$項應該為0\\
+    且$C_3 r^2$項應該為$\frac{1}{2} U r^2$\\
+    故$C_4 = 0,C_3 = -\frac{U}{2}$
+    \item 代入第一、二個邊界條件(\ref{eq:ch2_3_stokes_sphere_bc1})(\ref{eq:ch2_3_stokes_sphere_bc2}):
+    \begin{enumerate}
+      \item 代入第一個邊界條件(\ref{eq:ch2_3_stokes_sphere_bc1}):
+      \begin{align}
+        0 &= v_r(R,\theta) = \frac{1}{R^2\sin\theta}\frac{\partial \psi}{\partial \theta} \nonumber\\
+        &= \frac{1}{R^2\sin\theta}\frac{\partial }{\partial \theta}\left(
+          (C_1 R^{-1} + C_2 R - \frac{U}{2} R^2)\sin^2\theta
+        \right) \nonumber\\
+        &= \frac{1}{R^2\sin\theta} \cdot (C_1 R^{-1} + C_2 R - \frac{U}{2} R^2) \cdot 2\sin\theta \cos\theta \nonumber\\
+        &= \frac{2\cos\theta}{R^2} \cdot (C_1 R^{-1} + C_2 R - \frac{U}{2} R^2) \nonumber\\
+        \Rightarrow\quad & C_1 R^{-1} + C_2 R - \frac{U}{2} R^2 = 0 \nonumber\\
+        \Rightarrow\quad & C_1 + C_2 R^2 - \frac{U}{2} R^3 = 0 \label{eq:ch2_3_stokes_sphere_bc1_sub}
+      \end{align}
+      \item 代入第二個邊界條件(\ref{eq:ch2_3_stokes_sphere_bc2}):
+      \begin{align}
+        0 &= v_\theta(R,\theta) = \frac{-1}{R\sin\theta}\frac{\partial \psi}{\partial r} \nonumber\\
+        &= \frac{-1}{R\sin\theta}\frac{\partial }{\partial r}\left(
+          (C_1 r^{-1} + C_2 r - \frac{U}{2} r^2)\sin^2\theta
+        \right) \bigg|_{r=R} \nonumber\\
+        &= \frac{-1}{R\sin\theta} \cdot \sin^2\theta \cdot \left(
+          -C_1 R^{-2} + C_2 - U R
+        \right) \nonumber\\
+        &= \frac{-\sin\theta}{R} \cdot \left(
+          -C_1 R^{-2} + C_2 - U R
+        \right) \nonumber\\
+        \Rightarrow\quad & -C_1 R^{-2} + C_2 - U R = 0 \nonumber\\
+        \Rightarrow\quad & -C_1 + C_2 R^2 - U R^3 = 0 \label{eq:ch2_3_stokes_sphere_bc2_sub}
+      \end{align}
+      \item 聯立(\ref{eq:ch2_3_stokes_sphere_bc1_sub})與(\ref{eq:ch2_3_stokes_sphere_bc2_sub}):
+      \begin{align}
+        C_1 + C_2 R^2 - \frac{U}{2} R^3 &= 0 \nonumber\\
+        -C_1 + C_2 R^2 - U R^3 &= 0 \nonumber
+      \end{align}
+      相加:
+      \begin{align}
+        2C_2 R^2 - \frac{3U}{2} R^3 &= 0 \nonumber\\
+        \Rightarrow\quad C_2 &= \frac{3U}{4} R \nonumber
+      \end{align}
+      帶回(\ref{eq:ch2_3_stokes_sphere_bc1_sub}):
+      \begin{align}
+        C_1 + \frac{3U}{4} R^3 - \frac{U}{2} R^3 &= 0 \nonumber\\
+        \Rightarrow\quad C_1 &= -\frac{U}{4} R^3 \nonumber
+      \end{align}
+    \end{enumerate}
+    \item 最終解為:
+    \begin{equation}
+      \boxed{\psi(r,\theta) = \left(-\frac{U}{4} R^3 \cdot r^{-1} + \frac{3U}{4} R \cdot r - \frac{U}{2} r^2\right) \sin^2\theta}
+    \end{equation}
+    \item 換回速度分量:
+    \begin{align}
+      v_r &= \frac{1}{r^2\sin\theta}\frac{\partial \psi}{\partial \theta} \nonumber\\
+      &= \frac{1}{r^2\sin\theta} \cdot \left(
+        -\frac{U}{4} R^3 \cdot r^{-1} + \frac{3U}{4} R \cdot r - \frac{U}{2} r^2
+      \right) \cdot 2\sin\theta \cos\theta \nonumber\\
+      &= \left(-\frac{U}{2} \cdot \frac{R^3}{r^3} + \frac{3U}{2} \cdot \frac{R}{r} - U\right) \cos\theta \nonumber\\
+      \Rightarrow\quad & \boxed{v_r = U \left(
+        1 - \frac{3R}{2r} + \frac{R^3}{2r^3}
+      \right) \cos\theta} \label{eq:ch2_3_stokes_sphere_vr}
+    \end{align}
+    以及:
+    \begin{align}
+      v_\theta &= \frac{-1}{r\sin\theta}\frac{\partial \psi}{\partial r} \nonumber\\
+      &= \frac{-1}{r\sin\theta} \cdot \sin^2\theta \cdot \left(
+        \frac{U}{4} R^3 \cdot r^{-2} + \frac{3U}{4} R - U r
+      \right) \nonumber\\
+      &= \left(-\frac{U}{4} \cdot \frac{R^3}{r^3} - \frac{3U}{4} \cdot \frac{R}{r} + U\right) \sin\theta \nonumber\\
+      \Rightarrow\quad & \boxed{v_\theta = U \left(
+        1 - \frac{3R}{4r} - \frac{R^3}{4r^3}
+      \right) \sin\theta} \label{eq:ch2_3_stokes_sphere_vtheta}
+    \end{align}
+  \item 解出被換掉的壓力場$\mathbb{P}$:
+  \begin{align}
+    \frac{\partial \mathbb{P}}{\partial r} &= \mu \left[
+      \frac{1}{r^2}\frac{\partial^2}{\partial r^2}(r^2 v_r)+\frac{1}{r^2\sin\theta}\frac{\partial}{\partial \theta}\left(
+        \sin\theta \frac{\partial v_r}{\partial \theta}\right)
+    \right] \nonumber\\
+    &= \mu \left[
+      \frac{1}{r^2}\frac{\partial^2}{\partial r^2}\left(
+        r^2 \cdot U \left(
+          1 - \frac{3R}{2r} + \frac{R^3}{2r^3}
+        \right) \cos\theta
+      \right) \right.\nonumber\\
+      &\phantom{=\mu\quad} \left.+ \frac{1}{r^2\sin\theta}\frac{\partial}{\partial \theta}\left(
+        \sin\theta \frac{\partial }{\partial \theta} \left(
+          U \left(
+            1 - \frac{3R}{2r} + \frac{R^3}{2r^3}
+          \right) \cos\theta
+        \right)\right)
+    \right]
+  \end{align}
+  以及:
+  \begin{align}
+    \frac{1}{r}\frac{\partial \mathbb{P}}{\partial \theta} &= \mu \left[
+      \frac{1}{r^2}\frac{\partial}{\partial r}\left(
+        r^2 \frac{\partial v_\theta}{\partial r}
+      \right) + \frac{1}{r^2}\frac{\partial}{\partial \theta}\left(
+        \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}(\sin\theta v_\theta)
+      \right) + \frac{2}{r^2}\frac{\partial v_r}{\partial \theta} 
+    \right] \nonumber\\
+    &= \mu \left[
+      \frac{1}{r^2}\frac{\partial}{\partial r}\left(
+        r^2 \frac{\partial }{\partial r} \left(
+          U \left(
+            1 - \frac{3R}{4r} - \frac{R^3}{4r^3}
+          \right) \sin\theta
+        \right)
+      \right) \right.\nonumber\\
+      &\phantom{=\mu\quad} \left.+ \frac{1}{r^2}\frac{\partial}{\partial \theta}\left(
+        \frac{1}{\sin\theta}\frac{\partial}{\partial \theta}\left(
+          \sin\theta \cdot U \left(
+            1 - \frac{3R}{4r} - \frac{R^3}{4r^3}
+          \right) \sin\theta
+        \right)
+      \right) \right.\nonumber\\
+      &\phantom{=\mu\quad} \left. + \frac{2}{r^2}\frac{\partial }{\partial \theta} \left(
+        U \left(
+          1 - \frac{3R}{2r} + \frac{R^3}{2r^3}
+        \right) \cos\theta
+      \right)
+    \right] \nonumber\\
+    &=\frac{3}{2}\left(
+      \frac{\mu U R}{r^2}
+    \right) \sin\theta
+  \end{align}
+  \item 分別積分並且合併:
+  \begin{align}
+    \mathbb{P} &= \int \frac{\partial \mathbb{P}}{\partial r} dr + h(\theta) \nonumber\\
+    &= \int \left(
+      -\frac{3}{2}\left(
+        \frac{\mu U R}{r^2}
+      \right) \cos\theta
+    \right) dr + h(\theta) \nonumber\\
+    &= \frac{3}{2}\left(
+      \frac{\mu U R}{r}
+    \right) \cos\theta + h(\theta) \label{eq:ch2_3_stokes_sphere_pressure_r}
+  \end{align}
+  以及:
+  \begin{align}
+    \mathbb{P} &= \int r \frac{1}{r}\frac{\partial \mathbb{P}}{\partial \theta} d\theta + k(r) \nonumber\\
+    &= \int \frac{3}{2}\left(
+      \frac{\mu U R}{r}
+    \right) \sin\theta d\theta + k(r) \nonumber\\
+    &= -\frac{3}{2}\left(
+      \frac{\mu U R}{r}
+    \right) \cos\theta + k(r) \label{eq:ch2_3_stokes_sphere_pressure_theta}
+  \end{align}
+  \item 將(\ref{eq:ch2_3_stokes_sphere_pressure_r})與(\ref{eq:ch2_3_stokes_sphere_pressure_theta})合併:
+  \begin{equation}
+    \mathbb{P} = \frac{3}{2}\left(
+      \frac{\mu U R}{r}
+    \right) \cos\theta + C
+  \end{equation}
+  由於在無限遠處壓力為$p_0$
+  \begin{equation}
+    p_0 = \frac{3}{2}\left(
+      \frac{\mu U R}{\infty}
+    \right) \cos\theta + C \Rightarrow C = p_0
+  \end{equation}
+  故壓力場為:
+  \begin{equation}
+    \boxed{\mathbb{P} = p_0 + \frac{3}{2}\left(
+      \frac{\mu U R}{r}
+    \right) \cos\theta}
+  \end{equation}
+  若換回$p$，且假設流體是垂直向下流動(整張圖向右轉90度)，則:
+  \begin{equation}
+    \boxed{p = p_0 - \frac{3}{2}\left(
+      \frac{\mu U R}{r}
+    \right) \cos\theta - \rho g z} \label{eq:ch2_3_stokes_sphere_pressure_final}
+  \end{equation}
+  \item 注意到(\ref{eq:ch2_3_stokes_sphere_pressure_theta})裡面有雷諾數的感覺\\
+  將壓差除上動能:
+  \begin{equation}
+    \frac{\mathbb{P}-\mathbb{P}_0}{\frac{1}{2}\rho U^2} =
+    \frac{-3\mu\cos\theta}{\rho U R} = \frac{-6\mu\cos\theta}{\rho U D} = \frac{-6\cos\theta}{\text{Re}}
+  \end{equation}
+  如果以壓差除上動能為縱軸，$\theta$為橫軸繪圖，並假設雷諾數為6\\
+  也就是讓壓差等於$-\cos\theta$，則會得到下圖:
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+        axis lines = middle,
+        xlabel = {$\theta$},
+        ylabel = {$\frac{\mathbb{P}-\mathbb{P}_0}{\frac{1}{2}\rho U^2}$},
+        xtick={0,45,90,135,180},
+        xticklabels={$\pi$,$\frac{3\pi}{4}$,$\frac{\pi}{2}$,$\frac{\pi}{4}$,$0$},
+        ytick={-1, -0.5, 0, 0.5, 1},
+        ymin=-1.5, ymax=1.5,
+        xmin=-10, xmax=190,
+        domain=0:180,
+        samples=100,
+        smooth,
+        ]
+        \addplot[blue, thick, ->] {cos(x)};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Stokes Sphere Pressure Distribution}
+    \label{fig:ch2_3_stokes_sphere_pressure_distribution}
+  \end{figure}
+  P.S. 注意到這個圖是倒過來的，因為流體一開始的位置$\theta=\pi$，流體最後的位置$\theta=0$\\
+  另外從圖中也能觀察到，壓力大小在流過物體之後是能完全恢復的\\
+  而這個條件是只有在Stokes flow、不可壓縮流體、無旋轉流體才會成立的
+  \item 計算Drag Force:
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) circle (2.5);
+      \draw[->] (-4,0) -- (4,0) node[right] {$z$};
+      \draw [dashed] (0,0) -- (330:2.5);
+      \draw [->] (2,0) arc (0:-30:2) node[midway, right] {$\theta$};
+      \draw [->, blue] (330:3.5) -- (330:2.5);
+      \node[anchor=north west, blue] at (330:3.5) {$P\big|_R$};
+      \draw [dashed] (2.66506,-0.38397) -- (330:2.5);
+      \draw [->, blue] (330:2.5) -- (1.66506, -2.11603);
+      \node[anchor=north east, blue] at (1.66506, -2.11603) {$\tau_{r\theta}\big|_R$};
+      \draw[->, red, dotted] (3.03109,-1.25) -- (330:2.5);
+      \node[anchor=west,red] at (3.03109,-1.25) {$P\cos\theta$};
+      \draw[->, red, dotted]  (330:2.5) -- (1.66506,-1.25);
+      \node[anchor=east,red] at (1.66506,-1.25) {$\tau_{r\theta}\sin\theta$};
+    \end{tikzpicture}
+    \caption{Stokes Sphere Drag Force}
+    \label{fig:ch2_3_stokes_sphere_drag_force}
+  \end{figure}
+  物體在$z$方向所受到的力會是由壓力以及Shear Stress所組成的
+  \begin{equation}
+    F_z = \iint_{S}\left\{
+      -P\big|_R \cos\theta + \left[-\left(-\tau_{r\theta}\big|_R\right)\sin\theta\right]  
+    \right\} dA
+  \end{equation}
+  P.S. 注意到$\tau_{r\theta}$的負號是因為是流體對物體的作用力
+  \begin{itemize}
+    \item 計算$\tau_{r\theta}\big|_R$:
+    \begin{align}
+      \tau_{r\theta} &= -\mu \left(
+        r\frac{\partial}{\partial r}\left(\frac{v_\theta}{r}\right) + \frac{1}{r}\frac{\partial v_r}{\partial \theta}
+      \right) \nonumber\\
+      &= -\mu \left\{
+        r\frac{\partial}{\partial r}\left(
+          \frac{1}{r} \cdot U \left(
+            1 - \frac{3R}{4r} - \frac{R^3}{4r^3}
+          \right) \sin\theta
+        \right) + \frac{1}{r}\frac{\partial }{\partial \theta} \left(
+          U \left(
+            1 - \frac{3R}{2r} + \frac{R^3}{2r^3}
+          \right) \cos\theta
+        \right)
+      \right\} \nonumber\\
+      &= -\mu \left\{-r U\left[-\frac{1}{r^2}+\frac{3}{2}\frac{R}{r^3}+\frac{R^3}{r^5}\right]\sin\theta
+      + U\left[
+        1-\frac{3R}{2r}+\frac{R^3}{2r^3}
+      \right](-\sin\theta)\right\} \nonumber \\
+      &= -\mu U \sin\theta \left\{
+        \left[\frac{1}{r}-\frac{3R}{2r^2}-\frac{R^3}{r^4}\right] - \left[
+          1-\frac{3R}{2r}+\frac{R^3}{2r^3}
+        \right]
+      \right\} \nonumber\\
+      &= -\mu U \sin\theta \left(
+        -1 + \frac{4R}{r} - \frac{3R^3}{2r^3}
+      \right) 
+    \end{align}
+    當$r=R$時:
+    \begin{align}
+      \tau_{r\theta}\big|_R &= -\mu U \sin\theta \left(
+        -1 + 4 - \frac{3}{2}
+      \right) \nonumber\\
+      &= -\frac{3}{2} \mu U \sin\theta \label{eq:ch2_3_stokes_sphere_tau_rteta_R}
+    \end{align}
+    \item 計算$p\big|_R$:(代入(\ref{eq:ch2_3_stokes_sphere_pressure_final}))
+    \begin{equation}
+      P\big|_R = p_0 - \frac{3}{2}\left(
+        \frac{\mu U}{R}
+      \right) \cos\theta - \rho g z\big|_R
+    \end{equation}
+    \item 積分:
+    \begin{align}
+      F_z &= \iint_{S}\left\{
+      -P\big|_R \cos\theta + \left[-\left(-\tau_{r\theta}\big|_R\right)\sin\theta\right]  
+    \right\} dA \nonumber\\
+    &= 2\pi R^2 \int_0^\pi \left(
+      -p_0 \cos\theta\sin\theta + \left(
+        \rho g R + \frac{3}{2}\frac{\mu U}{R}
+      \right) \cos^2\theta \sin\theta + \frac{3\mu U}{2R} \sin^3\theta
+    \right) d\theta 
+    \end{align}
+    計算各項積分:\\
+    第一項:
+    \begin{equation}
+      \int_0^\pi -p_0 \cos\theta \sin\theta d\theta = -p_0 \int_0^\pi \cos\theta \sin\theta d\theta = 0
+    \end{equation}
+    第二項:
+    \begin{align}
+      \int_0^\pi \left(
+        \rho g R + \frac{3}{2}\frac{\mu U}{R}
+      \right) \cos^2\theta \sin\theta d\theta &= \left(
+        \rho g R + \frac{3}{2}\frac{\mu U}{R}
+      \right) \int_0^\pi \cos^2\theta \sin\theta d\theta \nonumber\\
+      &= \left(
+        \rho g R + \frac{3}{2}\frac{\mu U}{R}
+      \right) \cdot \left[
+        -\frac{\cos^3\theta}{3}
+      \right]_0^\pi \nonumber\\
+      &= \left(
+        \rho g R + \frac{3}{2}\frac{\mu U}{R}
+      \right) \cdot \frac{2}{3} \nonumber\\
+      &= \frac{2}{3}\rho gR + \frac{\mu U}{R}
+    \end{align}
+    第三項:
+    \begin{align}
+      \int_0^\pi \frac{3\mu U}{2R} \sin^3\theta d\theta &= \frac{3\mu U}{2R} \int_0^\pi \sin^3\theta d\theta \nonumber\\
+      &= \frac{3\mu U}{2R} \cdot \left[
+        -\cos\theta + \frac{\cos^3\theta}{3}
+      \right]_0^\pi \nonumber\\
+      &= \frac{3\mu U}{2R} \cdot \frac{4}{3} \nonumber\\
+      &= \frac{2\mu U}{R}
+    \end{align}
+    \item 合併:
+    \begin{align}
+      F_z &= 2\pi R^2 \left\{
+        0 + \left(
+          \frac{2}{3}\rho g R + \frac{\mu U}{R}
+        \right) + \frac{2\mu U}{R}
+      \right\} \nonumber\\
+      &= 2\pi R^2 \left(
+        \frac{2}{3}\rho g R + \frac{3\mu U}{R}
+      \right) \nonumber\\
+      \Rightarrow\quad & \boxed{F_z = \frac{4}{3}\pi \rho g R^3 + 6\pi \mu U R} \label{eq:ch2_3_stokes_sphere_drag_force}
+    \end{align}
+    而第一項，就是球的體積乘上液體的密度(排開液體重)，也就是浮力\\
+    第二項則可以拆成$2\pi \mu R U$和$4\pi \mu RU$兩部分\\
+    前者是球體受到的$p$，後者是球體受到的$\tau_{r\theta}$剪力
+    \begin{equation}
+      \boxed{F_z = \underbrace{\frac{4}{3}\pi \rho g R^3}_{\text{Buoyancy}} 
+      + \underbrace{2\pi \mu R U}_{\text{Form Drag}} + \underbrace{4\pi \mu R U}_{\text{Friction}}}
+    \end{equation}
+    而Drag Force就是後兩項的總和:
+    \begin{equation}
+      \boxed{F_D = 6\pi \mu R U}
+    \end{equation}
+  \end{itemize}
+  \item Drag Coefficient:
+    \begin{align}
+      C_D &= \frac{F_D}{\frac{1}{2}\rho U^2 A} \nonumber\\
+      &= \frac{6\pi \mu R U}{\frac{1}{2}\rho U^2 \cdot \pi R^2} \nonumber\\
+      &= \frac{12\mu}{\rho U R} \nonumber\\
+      &= \boxed{\frac{24}{\text{Re}}}
+    \end{align}
+    注意，只適用於$\text{Re} < 0.1$的情況\\
+    此為\fbox{Stokes' Law}
+  \item 衍生，推廣\\
+  由於在無限遠處，不可能是仍由黏滯力所主導的Creeping Flow\\
+  Oseen Correction:
+  \begin{equation}
+    0 = -\nabla\mathbb{P} + \mu \nabla^2 \vec{\bm u} \to 
+    \rho (\vec{\bm U_\infty} \cdot \nabla) \vec{\bm u} = -\nabla\mathbb{P} + \mu \nabla^2 \vec{\bm u}
+  \end{equation}
+  Oseen使用經驗修正，找到隨著雷諾數上升，Drag Force的修正關係:
+  \begin{equation}
+    F_D = 6\pi \mu R U \left(
+      1 + \frac{3}{8}\text{Re}
+    \right)
+  \end{equation}
+  \end{enumerate}
+  \item Flow to a Rotating Disk\\
+  雙變數，非流線(三個方向都有速度)，使用無因次化解題
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (-4,0) -- (4,0) node[right] {$r$};
+      \draw[->] (0,0) -- (0,4) node[above] {$z$};
+      \draw (-3,0) -- (3,0);
+      \draw[dashed] (-3,0) arc (180:360:3 and 0.5);
+      \draw[dashed] (3,0) arc (0:180:3 and 0.5);
+      \node[anchor=north] at (0,-0.8) {Rotating Disk};
+      \draw (-1.5,-1.5) -- (1.5,1.5);
+      \draw [->] (3.5,0)  arc(0:330:3.5 and 0.8);
+      \node[anchor=north east] at (-3.5,0) {$\omega$};
+      \draw [->, blue] (0.4, 3) .. controls (0.4, 0.2) .. (3, 0.2);
+      \draw[->, blue] (0.8, 3) .. controls (0.8, 0.3) and (1, 0.4) .. (3, 0.4); 
+      \draw[->, blue] (1.2, 3) .. controls (1.2, 0.4) and (1.5, 0.6) .. (3, 0.6);
+      \draw[->, blue] (-0.4, 3) .. controls (-0.4, 0.2) .. (-3, 0.2);
+      \draw[->, blue] (-0.8, 3) .. controls (-0.8, 0.3) and (-1, 0.4) .. (-3, 0.4); 
+      \draw[->, blue] (-1.2, 3) .. controls (-1.2, 0.4) and (-1.5, 0.6) .. (-3, 0.6);
+      \node[anchor=east, blue] at(1.2,3) {$U$};
+    \end{tikzpicture}
+    \caption{Flow to a Rotating Disk}
+    \label{fig:ch2_3_flow_to_a_rotating_disk}
+  \end{figure}
+  \begin{enumerate}
+    \item 假設Steady State, Axisymmetric, Incompressible, Newtonian
+    \item 可以看出流體勢必在三個方向上都會有速度分量\\
+    只是三個速度分量的函數不含$\theta,t$而已
+    \begin{equation}
+      v_r = v_r(r,z), \quad v_\theta = v_\theta(r,z), \quad v_z = v_z(r,z)
+    \end{equation}
+    \item 列出邊界條件:
+    \begin{itemize}
+      \item 於$z=0$處，無滑移邊界條件:
+      \begin{equation}
+        v_r(r,0) = 0, \quad v_\theta(r,0) = \omega r, \quad v_z(r,0) = 0
+      \end{equation}
+      \item 於$z\to\infty$處，流體垂直往下流動:
+      \begin{equation}
+        v_r(r,\infty) = 0, \quad v_\theta(r,\infty) = 0, \quad v_z(r,\infty) = -U
+      \end{equation}
+    \end{itemize}
+    \item 從邊界條件猜測速度分布的形式:
+    \begin{align}
+      v_\theta &= r g(z) \\
+      v_r &= \hat f(r) f(z)\\
+      v_z &= \hat h(r) h(z)\\
+      \mathbb{P} &= \hat k(r) k(z)
+    \end{align}
+    \item 代入Equation of Continuity:
+    \begin{align}
+      & \frac{1}{r}\frac{\partial }{\partial r}(\cancel{\rho} r v_r) + \frac{\partial}{\partial z}(\cancel{\rho} v_z) = 0 \nonumber\\
+      \Rightarrow \quad & \frac{1}{r}\frac{\partial }{\partial r}(r\hat f f)
+      + \frac{\partial }{\partial z}(\hat h h) = 0 \nonumber\\
+      \Rightarrow \quad & \frac{1}{r}\hat f f +\frac{1}{r}\cdot r \frac{d\hat f}{dr} f + \hat h \frac{dh}{dz} = 0 \nonumber\\
+      \Rightarrow \quad & \left(\frac{1}{r}\hat f  \hat f' \right) f + \hat h h' = 0 \label{eq:ch2_3_flow_to_a_rotating_disk_continuity}
+    \end{align}
+    P.S. 頭上有帽子的是$r$的函數，沒有帽子的則是$z$的函數\\
+    使用Product Rule展開\\
+    然後這條式子沒有什麼意義，Equation of Motion才有意義
+    \item 代入Equation of Motion:\\
+    注意有帽子的只是$r$的函數，沒有帽子的則是$z$的函數
+    \begin{equation}
+      \frac{\partial}{\partial r} \hat{\boxed{\phantom{a}}} = \hat{\boxed{\phantom{a}}}' , \quad
+      \frac{\partial}{\partial z} \hat{\boxed{\phantom{a}}} = 0, \quad
+      \frac{\partial}{\partial r} \boxed{\phantom{a}} = 0 , \quad
+      \frac{\partial}{\partial z} \boxed{\phantom{a}} = \boxed{\phantom{a}}'
+    \end{equation}
+    所以
+    \begin{align}
+      \frac{\partial v_r}{\partial r} = \hat f' f, \quad & \frac{\partial v_r}{\partial z} = \hat f f' \\
+      \frac{\partial v_\theta}{\partial r} = g , \quad & \frac{\partial v_\theta}{\partial z} = r g'\\
+      \frac{\partial v_z}{\partial r} = \hat h' h , \quad & \frac{\partial v_z}{\partial z} = \hat h h' \\
+      \frac{\partial \mathbb{P}}{\partial r} = \hat k' k , \quad & \frac{\partial \mathbb{P}}{\partial z} = \hat k k' 
+    \end{align}
+    \begin{itemize}
+      \item $r$方向:
+      \begin{align}
+        & \rho \left(
+          v_r \frac{\partial v_r}{\partial r} + v_z \frac{\partial v_r}{\partial z} - \frac{v_\theta^2}{r}
+        \right) = -\frac{\partial \mathbb{P}}{\partial r} + \mu \left[
+          \frac{1}{r}\frac{\partial }{\partial r}\left(
+            r \frac{\partial v_r}{\partial r}
+          \right) + \frac{\partial^2 v_r}{\partial z^2} - \frac{v_r}{r^2}
+        \right] \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          \hat ff \cdot \hat f'f + \hat h h \cdot \hat ff' - \frac{r^2 g^2}{r}
+        \right) = -\hat k' k + \mu \left[
+          \frac{1}{r}\frac{\partial }{\partial r}\left(
+            r \cdot \hat f' f
+          \right) + \hat f f'' - \frac{\hat ff}{r^2}
+        \right] \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          \hat f\hat f' f^2 + \hat h \hat f h f' - r g^2
+        \right) = -\hat k' k + \mu \left[
+          \frac{1}{r}\left(
+            \hat f' f + r \cdot \hat f'' f
+          \right) + \hat f f'' - \frac{\hat ff}{r^2}
+        \right] \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          \hat f\hat f' f^2 + \hat h \hat f h f' - r g^2
+        \right) = -\hat k' k + \mu \left(
+          \frac{\hat f' f}{r} + \hat f'' f + \hat f f'' - \frac{\hat ff}{r^2}
+        \right) 
+      \end{align}
+      \item $\theta$方向:
+      \begin{align}
+        & \rho \left(
+          v_r \frac{\partial v_\theta}{\partial r} + v_z \frac{\partial v_\theta}{\partial z} + \frac{v_r v_\theta}{r}
+        \right) = \mu \left[
+          \frac{\partial}{\partial r}\left(
+            \frac{1}{r}\frac{\partial }{\partial r}(r v_\theta)
+          \right) + \frac{\partial^2 v_\theta}{\partial z^2}
+        \right] \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          \hat ff \cdot g + \hat h h \cdot r g' + \frac{\hat ff \cdot r g}{r}
+        \right) = \mu \left[
+          \frac{\partial}{\partial r}\left(
+            \frac{1}{r}\frac{\partial }{\partial r}(r \cdot rg)
+          \right) + r g''
+        \right] \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          \hat f g f + \hat h r h g' + \hat f g f
+        \right) = \mu \left[
+          \frac{\partial}{\partial r}\left(
+            \frac{1}{r}\cdot 2r g
+          \right) + r g''
+        \right] \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          2 \hat f g f + \hat h r h g'
+        \right) = \cancel{\mu\frac{\partial}{\partial r}(2 g)} +  \mu r g'' \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          2 \hat f g f + \hat h r h g'
+        \right) = \mu rg''
+      \end{align}
+      由此可知$\hat f(r) = r$，以及$\hat h(r) =\text{constant}$\\
+      所以於$v_z$方向運算時，$\frac{\partial v_z}{\partial r} = 0$，就沒有$\hat h$了
+      \item $z$方向:
+      \begin{align}
+        & \rho v_z \frac{\partial v_z}{\partial z} = -\frac{\partial \mathbb{P}}{\partial z} 
+        + \mu \frac{\partial^2 v_z}{\partial z^2}\nonumber\\
+        \Rightarrow \quad & \rho \hat h h \cdot \hat h h' = -\hat k k' + \mu \hat h h'' \nonumber\\
+        (\hat h =\text{const}=1) \Rightarrow \quad & \rho h h' = -\hat k k' + \mu h''
+      \end{align}
+      由於等號左邊跟$r$無關，所以$\hat k(r) = \text{constant}$\\
+      故重新寫下四個假設:
+      \begin{align}
+        v_r &= r f(z) \\
+        v_\theta &= r g(z)\\
+        v_z &= h(z)\\
+        \mathbb{P} &= k(z)
+      \end{align}
+      此為 Von Karman Transformation\\
+      從新撰寫上面方程式:
+      \begin{align}
+       r :\quad & \rho \left(
+          \hat f\hat f' f^2 + \hat h \hat f h f' - r g^2
+        \right) = -\hat k' k + \mu \left(
+          \frac{\hat f' f}{r} + \hat f'' f + \hat f f'' - \frac{\hat ff}{r^2}
+        \right)  \nonumber\\
+         &\rho \left(
+          r f^2 + r h f' - r g^2
+        \right) = \mu \left(
+          \cancel{\frac{f}{r}} + r f'' - \cancel{\frac{r f}{r^2}}
+        \right) \nonumber\\
+        & \rho r \left(
+          f^2 + h f' - g^2
+        \right) = \mu r f'' \nonumber\\
+        \Rightarrow \quad & \boxed{\rho \left(
+          f^2 + h f' - g^2
+        \right) = \mu  f''
+        } \label{eq:ch2_3_rotating_disk_r}\\
+       \theta :\quad & \rho \left(
+          2 \hat f g f + \hat h r h g'
+        \right) = \mu rg'' \nonumber\\
+        \Rightarrow \quad & \boxed{\rho \left(
+          2 r g f + h r g'
+        \right) = \mu r g''} \label{eq:ch2_3_rotating_disk_theta}\\
+       z:\quad & \rho h h' = -\hat k k' + \mu h'' \nonumber\\
+       \Rightarrow \quad & \boxed{\rho h h' = -k' + \mu h''} \label{eq:ch2_3_rotating_disk_z}\\
+       \text{Continuity}:\quad &  \left(\frac{1}{r}\hat f  \hat f' \right) f + \hat h h' = 0 \nonumber\\
+        \Rightarrow \quad & \boxed{2 f + h' = 0} \label{eq:ch2_3_rotating_disk_continuity}
+      \end{align}
+    \end{itemize}
+    \item 無因次化\\
+    尋找無因次變數$\zeta$，可以看到，上面三個方程式中的$f,g,h,k$都是$z$的函數\\
+    而且沒有$r$的函數了\\
+    故我們想將$z$也就是長度變成無因次化的形式\\
+    此題剩下的單位有: $[\rho] = M L^{-3}$, $[\mu] = M L^{-1} T^{-1}$, $[\omega] = T^{-1}$\\
+    嘗試組合出長度單位:
+    \begin{equation}
+      [\rho]^\alpha [\mu]^\beta [\omega]^\gamma = L^{ -3\alpha - \beta } T^{ -\beta - \gamma } M^{ \alpha + \beta }
+    \end{equation}
+    解聯立方程式:
+    \begin{equation}
+      \begin{cases}
+        -3\alpha - \beta = 1 \\
+        -\beta - \gamma = 0 \\
+        \alpha + \beta = 0
+      \end{cases}
+      \Rightarrow \quad \alpha = -\frac{1}{2}, \quad \beta = \frac{1}{2}, \quad \gamma = -\frac{1}{2}
+    \end{equation}
+    故無因次化的長度為:
+    \begin{equation}
+      L = \left(\frac{\mu}{\omega\rho}\right)^{1/2}
+    \end{equation}
+    故無因次化變數為:
+    \begin{equation}
+      \boxed{\zeta = z \left(\frac{\omega \rho}{\mu}\right)^{1/2} = \frac{z}{\sqrt{\nu/\omega}}} \label{eq:ch2_3_rotating_disk_zeta}
+    \end{equation}
+    \item 無因次化速度分量:\\
+    將(\ref{eq:ch2_3_rotating_disk_zeta})代入速度分佈中:
+    \begin{equation}
+      z = \zeta \left(\frac{\nu}{\omega}\right)^{1/2}
+    \end{equation}
+    \begin{itemize}
+      \item  由於速度單位是$[v] = L T^{-1}$\\
+      若將$f,g,h,k$無因次化，則需要額外乘上一個什麼，來讓單位相同
+      \item 對於$v_r$:
+      \begin{equation}
+        v_r = r f(z)
+      \end{equation}
+      右邊$r$的單位是$L$，故需找到一個$T^{-1}$的單位
+      \begin{equation}
+        [\rho]^\alpha [\mu]^\beta [\omega]^\gamma = T^{-1} \Rightarrow
+        \begin{cases}
+          -3\alpha - \beta = 0 \\
+          -\beta - \gamma = -1 \\
+          \alpha + \beta = 0
+        \end{cases}
+        \Rightarrow \quad \alpha = 0, \quad \beta = 0, \quad \gamma = 1
+      \end{equation}
+      故:
+      \begin{equation}
+        \boxed{v_r = r \omega F(\zeta)}
+      \end{equation}
+      \item 對於$v_\theta$:
+      \begin{equation}
+        v_\theta = r g(z)
+      \end{equation}
+      同理可得:
+      \begin{equation}
+        \boxed{v_\theta = r \omega G(\zeta)}
+      \end{equation}
+      \item 對於$v_z$:
+      \begin{equation}
+        v_z = h(z)
+      \end{equation}
+      右邊需要一個$L T^{-1}$的單位
+      \begin{equation}
+        [\rho]^\alpha [\mu]^\beta [\omega]^\gamma = L T^{-1} \Rightarrow
+        \begin{cases}
+          -3\alpha - \beta = 1 \\
+          -\beta - \gamma = -1 \\
+          \alpha + \beta = 0
+        \end{cases}
+        \Rightarrow \quad \alpha = -\frac{1}{2}, \quad \beta = \frac{1}{2}, \quad \gamma = -\frac{1}{2}
+      \end{equation}
+      故:
+      \begin{equation}
+        \boxed{v_z = \sqrt{\nu \omega} H(\zeta)}
+      \end{equation}
+      \item 對於$\mathbb{P}$:
+      \begin{equation}
+        \mathbb{P} = k(z)
+      \end{equation}
+      右邊需要一個$M L^{-1} T^{-2}$的單位
+      \begin{equation}
+        [\rho]^\alpha [\mu]^\beta [\omega]^\gamma
+          = M L^{-1} T^{-2} \Rightarrow
+        \begin{cases}
+          -3\alpha - \beta = -1 \\
+          -\beta - \gamma = -2 \\
+          \alpha + \beta = 1
+        \end{cases}
+        \Rightarrow \quad \alpha = 0, \quad \beta = 1, \quad \gamma = 1
+      \end{equation}
+      故:
+      \begin{equation}
+        \boxed{\mathbb{P} = \mu \omega K(\zeta)}
+      \end{equation}
+    \end{itemize}
+    \item 拿上面那四個無因次化速度分量\\
+    代入方程式(\ref{eq:ch2_3_rotating_disk_r})至(\ref{eq:ch2_3_rotating_disk_z})\\
+    以及Equation of Continuity (\ref{eq:ch2_3_flow_to_a_rotating_disk_continuity})\\
+    注意:$\zeta$只是$z$的函數，所以那些對$r$偏微的部分都會消掉
+    \begin{equation}
+      \zeta = z \left(\frac{\omega \rho}{\mu}\right)^{1/2} \quad \frac{d\zeta}{dz} = \left(\frac{\omega \rho}{\mu}\right)^{1/2}
+    \end{equation}
+    另外$f,g,h,k$的代換就是比對上面的無因次化速度前面冒出的係數
+    \begin{equation}
+      f \to \omega F, \quad g \to \omega G, \quad h \to \left(
+            \frac{\mu \omega}{\rho}
+          \right)^{\frac{1}{2}} H, \quad k \to \mu \omega K
+    \end{equation}
+    而$f',g',h',k'$則是對$\zeta$微分後，再乘上$\frac{d\zeta}{dz} = \left(\frac{\omega \rho}{\mu}\right)^{1/2}$
+    \begin{align}
+      &f' \to \omega F' \left(\frac{\omega \rho}{\mu}\right)^{1/2}, \quad
+      g' \to \omega G' \left(\frac{\omega \rho}{\mu}\right)^{1/2} \nonumber\\
+      &h' \to \sqrt{\nu \omega} H' \left(\frac{\omega \rho}{\mu}\right)^{1/2}, \quad
+      k' \to \mu \omega K' \left(\frac{\omega \rho}{\mu}\right)^{1/2}
+    \end{align}
+    而$f'',g'',h'',k''$則是對$\zeta$二次微分後，再乘上$\frac{d^2\zeta}{dz^2} = \left(\frac{\omega \rho}{\mu}\right)$
+    \begin{align}
+      &f'' \to \omega F'' \left(\frac{\omega \rho}{\mu}\right), \quad
+      g'' \to \omega G'' \left(\frac{\omega \rho}{\mu}\right) \nonumber\\
+      &h'' \to \sqrt{\nu \omega} H'' \left(\frac{\omega \rho}{\mu}\right) = 
+      \sqrt{\frac{ \omega^3\rho}{\mu}} H'' = \omega\sqrt{\frac{\omega}{\nu}} H''\nonumber\\
+      &k'' \to \mu \omega K'' \left(\frac{\omega \rho}{\mu}\right)
+    \end{align}
+    \begin{itemize}
+      \item Equation of Continuity:(\ref{eq:ch2_3_rotating_disk_continuity})
+      \begin{align}
+        & 2 f + h' = 0 \nonumber\\
+        \Rightarrow \quad & 2 \omega F + \left(
+            \frac{\mu \omega}{\rho}
+          \right)^{\frac{1}{2}} H' \left(\frac{\omega \rho}{\mu}\right)^{1/2} = 0 \nonumber\\
+        \Rightarrow \quad & 2 \omega F + \left(
+          \frac{\mu \omega}{\rho}\cdot \frac{\omega \rho}{\mu}
+        \right)^{1/2} H' = 0 \nonumber\\
+        \Rightarrow \quad & 2\omega F + \omega H' = 0 \nonumber\\
+        \Rightarrow \quad & \boxed{2 F + H' = 0} \label{eq:ch2_3_rotating_disk_continuity_dimensionless}
+      \end{align}
+      \item $r$方向(\ref{eq:ch2_3_rotating_disk_r}):
+      \begin{align}
+        & \rho \left(
+          f^2 + h f' - g^2
+        \right) = \mu  f'' \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          \omega^{\cancel{2}} F^2 + \left(
+            \frac{\mu \omega}{\rho}
+          \right)^{\frac{1}{2}} H \cdot \cancel{\omega} F' 
+          \left(\frac{\omega \rho}{\mu}\right)^{1/2} - \omega^{\cancel{2}} G^2
+        \right) = \cancel{\mu} \cdot \cancel{\omega} F'' \left(\frac{\omega \rho}{\cancel{\mu}}\right) \nonumber\\
+        & \cancel{\rho} \left(
+          \omega F^2 + H   F' \left(\frac{\cancel{\mu} \omega}{\cancel{\rho}}\frac{\omega \cancel{\rho}}{\cancel{\mu}}\right)^{1/2} - \omega G^2
+        \right) = \omega\cancel{\rho} F'' \nonumber\\
+        &\cancel{\omega} F^2 + \cancel{\omega} H F' -\cancel{\omega} G^2
+        = \cancel{\omega} F'' \nonumber\\
+        \Rightarrow \quad & \boxed{F^2 + H F' - G^2 - F'' = 0} \label{eq:ch2_3_rotating_disk_r_dimensionless}
+      \end{align}
+      \item $\theta$方向:
+      \begin{align}
+        & \rho \left(
+          2 r g f + h r g'
+        \right) = \mu r g'' \nonumber\\
+        \Rightarrow \quad & \rho \left(
+          2 r \cdot \omega G \cdot \omega F + \left(
+            \frac{\mu \omega}{\rho}
+          \right)^{\frac{1}{2}} H \cdot r \cdot \omega G' 
+          \left(\frac{\omega \rho}{\mu}\right)^{1/2}
+        \right) = \cancel{\mu} r \cdot \omega G'' \left(\frac{\omega \rho}{\cancel{\mu}}\right) \nonumber\\
+        (\div r\omega\rho)\Rightarrow \quad & 
+        2\omega GF +\left(
+          \frac{\cancel{\mu}\omega}{\cancel{\rho}}\cdot \frac{\omega \cancel{\rho}}{\cancel{\mu}}
+        \right)^{\frac{1}{2}} HG' = \omega G'' \nonumber\\
+        & 2\omega GF + \omega HG' = \omega G'' \nonumber\\
+        \Rightarrow \quad & \boxed{2 GF + H G' - G'' = 0} \label{eq:ch2_3_rotating_disk_theta_dimensionless} 
+      \end{align}
+      \item $z$方向:
+      \begin{align}
+        & \rho h h' = -k' + \mu h'' \nonumber\\
+        \Rightarrow \quad & \rho \left(
+            \frac{\mu \omega}{\rho}
+          \right)^{\frac{1}{2}} H \cdot \left(
+            \frac{\mu \omega}{\rho}
+          \right)^{\frac{1}{2}} H' \left(\frac{\omega \rho}{\mu}\right)^{\frac{1}{2}} =
+           -\mu \omega K' \left(\frac{\omega \rho}{\mu}\right)^{\frac{1}{2}} + \mu \cdot \left(\frac{\omega^3 \rho}{\mu}\right)^{\frac{1}{2}} H'' \nonumber\\
+        & \left(\frac{
+          \cancel{\rho^2} (\cancel{\mu} \omega) (\mu\omega) (\omega \rho)
+        }{\cancel{\rho^2} \cancel{\mu}}\right)^{\frac{1}{2}} HH' = -\left(
+          \frac{\mu^{\cancel{2}}\omega^2 \omega \rho}{\cancel{\mu}}
+        \right)^{\frac{1}{2}} K' + \left(
+          \frac{\mu^{\cancel{2}}\omega^3 \rho}{\cancel{\mu}}
+        \right)^{\frac{1}{2}} H'' \nonumber\\
+        & \omega\left(\mu \omega \rho\right)^{\frac{1}{2}} HH' = -\omega \left(\mu\omega \rho\right)^{\frac{1}{2}} K' + \omega\left(
+          \mu\omega \rho
+        \right)^{\frac{1}{2}} H'' \nonumber\\
+        \Rightarrow \quad & \boxed{H H' = - K' + H''} \label{eq:ch2_3_rotating_disk_z_dimensionless}
+      \end{align} 
+      由於$z$方向沒有交叉項，故可分離變數:
+      \begin{equation}
+        HH' = -K' + H'' \implies K' = H'' - HH'
+      \end{equation}
+      兩邊對$\zeta$積分:
+      \begin{equation}
+        \boxed{K - K(0) = H' - \frac{1}{2}H^2} \label{eq:ch2_3_rotating_disk_pressure_dimensionless}
+      \end{equation}
+      \item 最後得到四條式子:
+      \begin{equation}
+        \begin{cases}
+          2 F + H' = 0 \\
+          F^2 + H F' - G^2 - F'' = 0 \\
+          2 GF + H G' - G'' = 0 \\
+          K - K(0) = H' - \frac{1}{2}H^2
+        \end{cases} \label{eq:ch2_3_rotating_disk_final_equations}
+      \end{equation}
+    \end{itemize}
+    \item 邊界條件無因次化:\\
+      因為$\zeta = z \left(\frac{\omega \rho}{\mu}\right)^{1/2}$\\
+      所以當$z=0$時，$\zeta = 0$\\
+      當$z\to\infty$時，$\zeta \to \infty$
+      \begin{itemize}
+        \item 原先的在$z=0$處:
+        \begin{equation}
+          v_r(r,0) = 0, \quad v_\theta(r,0) = \omega r, \quad v_z(r,0) = 0
+        \end{equation}
+        代入無因次化速度分量:
+        \begin{align}
+          r \omega F(0) = 0 \implies & \boxed{F(0) = 0} \nonumber\\
+          r \omega G(0) = \omega r \implies & \boxed{G(0) = 1} \nonumber\\
+          \sqrt{\nu \omega} H(0) = 0 \implies & \boxed{H(0) = 0}
+        \end{align}
+        \item 原先的在$z\to\infty$處:
+        \begin{equation}
+          v_r(r,\infty) = 0, \quad v_\theta(r,\infty) = 0, \quad v_z(r,\infty) = -U
+        \end{equation}
+        代入無因次化速度分量:
+        \begin{align}
+          r \omega F(\infty) = 0 \implies & \boxed{F(\infty) = 0} \nonumber\\
+          r \omega G(\infty) = 0 \implies & \boxed{G(\infty) = 0} \nonumber\\
+          \sqrt{\nu \omega} H(\infty) = -U \implies & \boxed{H(\infty) = -\frac{U}{\sqrt{\nu \omega}}}
+        \end{align}
+      \end{itemize}
+    \item 觀察四個要解的式子(\ref{eq:ch2_3_rotating_disk_final_equations})\\
+    可以發現，一旦先解出$H$，那麼代入第四條式子可以解出$K$\\
+    代入第一條式子可以解出$F$\\
+    再代入第二或第三條式子可以解出$G$\\
+    但可惜這是做不到的(Von Karman swirling flow)\\
+    這裡只剩下解析解，透過列出$H$的冪級數展開式來近似解
+    \begin{equation}
+      H(\zeta)  = -a\zeta^2 +\frac{1}{3}\zeta^3 +\frac{b}{6}\zeta^4 \cdots
+    \end{equation}
+    或是遠場的時候
+    \begin{equation}
+      H(\zeta) = -\alpha + \frac{2A}{\alpha} e^{-\alpha \zeta} + \cdots
+    \end{equation}
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {$H,F,G$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {$\zeta$};
+        \draw[->,blue] (0,0) ..controls(0.5,1) and (3, 0.5) .. (3.5, 6) node[above] {$H$};
+        \draw[->,red] (0,0) ..controls(1.61,2.07) and (0.05, 1.57) .. (0.1,6);
+        \node[red] at (1,1.25) {$F$};
+        \draw[->, teal] (5,0) .. controls (0.34,1) and (0.43, 3.43) .. (0.3, 6);
+        \node[teal, anchor=south] at (5,0) {$G$};
+        \node[teal, anchor=north] at (5,0) {$1$};
+        \draw[dashed] (0,4.5) -- (6,4.5);
+        \node[anchor=west] at(5,4.5) {邊界層}; 
+      \end{tikzpicture}
+      \caption{Velocity Profile of Tangential(G) Radial(F) and Axial(H)}
+      \label{fig:ch2_3_rotating_disk_velocity_profile}
+    \end{figure}
+  \end{enumerate}
+\end{itemize}
+\end{CJK*}
+\end{document}

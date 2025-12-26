@@ -1,0 +1,615 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{熱量+動量輸送，黏性摩擦, Graetz Problem, Leveque Method}
+\begin{itemize}
+  \item 從固體變成流體後，會多了動量輸送的影響\\
+  也就是會出現Governing Equation中的，來自流體壓降所反應的不可逆的能量上升(\ref{eq:viscous_dissipation})
+  \begin{equation}
+    \overline{\overline{\bm \tau}} : \nabla \vec {\bm v} =\frac{2}{3}\mu \sum_{i=1}^{3}\sum_{j=1}^{3}\left[
+          \left(
+          \frac{\partial u_i}{\partial x_i} + \frac{\partial u_j}{\partial x_j}
+        \right) - \frac{2}{3}\delta_{ij} \nabla \cdot \vec{\bm u}
+        \right]^2 + \kappa \left(
+          \nabla \cdot \vec{\bm u}
+        \right)^2 = \mu \bm \Phi_u + \kappa \bm \Phi_b
+  \end{equation}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (0,0) -- (0,1) node[above] {$x$};
+      \draw[->] (0,0) -- (1,0) node[right] {$z$};
+      \draw (0,-3) -- (10,-3);
+      \draw (0,3) -- (10,3);
+      \draw [<->] (9.5,-3) -- (9.5,3) node[midway, right] {$2B$};
+      \draw[dashed, blue] (2,3) .. controls (4,0) .. (2,-3);
+      \draw[dashed, blue] (2,3) -- (2,-3);
+      \draw[dashed, red] (5,3) -- (5,-3);
+      \draw[dashed, red] (5.5,3) .. controls (7,0) .. (5.5,-3);
+      \node[anchor=south, red] at (5.5,3) {$T_0$};
+      \node[blue, anchor=south] at (2,3) {$u_z(x,z,t)$};
+      \path[name path=vo] (2,3) .. controls (4,0) .. (2,-3);
+      \path[name path=ha] (2,2.5) -- (8,2.5);
+      \path[name path=hb] (2,2) -- (8,2);
+      \path[name path=hc] (2,1.5) -- (8,1.5);
+      \path[name path=hd] (2,1) -- (8,1);
+      \path[name path=he] (2,0.5) -- (8,0.5);
+      \path[name path=hf] (2,0) -- (8,0);
+      \path[name path=hg] (2,-0.5) -- (8,-0.5);
+      \path[name path=hh] (2,-1) -- (8,-1);
+      \path[name path=hi] (2,-1.5) -- (8,-1.5);
+      \path[name path=hj] (2,-2) -- (8,-2);
+      \path[name path=hk] (2,-2.5) -- (8,-2.5);
+      \path[name intersections={of=vo and ha, by=ya}];
+      \draw[blue,dashed, ->] (2,2.5) -- (ya);
+      \path[name intersections={of=vo and hb, by=yb}];
+      \draw[blue,dashed, ->] (2,2) -- (yb);
+      \path[name intersections={of=vo and hc, by=yc}];
+      \draw[blue,dashed, ->] (2,1.5) -- (yc);
+      \path[name intersections={of=vo and hd, by=yd}];
+      \draw[blue,dashed, ->] (2,1) -- (yd);
+      \path[name intersections={of=vo and he, by=ye}];
+      \draw[blue,dashed, ->] (2,0.5) -- (ye);
+      \path[name intersections={of=vo and hf, by=yf}];
+      \draw[blue,dashed, ->] (2,0) -- (yf);
+      \path[name intersections={of=vo and hg, by=yg}];
+      \draw[blue,dashed, ->] (2,-0.5) -- (yg);
+      \path[name intersections={of=vo and hh, by=yh}];
+      \draw[blue,dashed, ->] (2,-1) -- (yh);
+      \path[name intersections={of=vo and hi, by=yi}];
+      \draw[blue,dashed, ->] (2,-1.5) -- (yi);
+      \path[name intersections={of=vo and hj, by=yj}];
+      \draw[blue,dashed, ->] (2,-2) -- (yj);
+      \path[name intersections={of=vo and hk, by=yk}];
+      \draw[blue,dashed, ->] (2,-2.5) -- (yk);
+      \path[name path=temp] (5.5,3) .. controls (7,0) .. (5.5,-3);
+      \path[name intersections={of=temp and ha, by=ta}];
+      \draw[red,dashed, ->] (5,2.5) -- (ta);
+      \path[name intersections={of=temp and hb, by=tb}];
+      \draw[red,dashed, ->] (5,2) -- (tb);
+      \path[name intersections={of=temp and hc, by=tc}];
+      \draw[red,dashed, ->] (5,1.5) -- (tc);
+      \path[name intersections={of=temp and hd, by=td}];
+      \draw[red,dashed, ->] (5,1) -- (td);
+      \path[name intersections={of=temp and he, by=te}];
+      \draw[red,dashed, ->] (5,0.5) -- (te);
+      \path[name intersections={of=temp and hf, by=tf}];
+      \draw[red,dashed, ->] (5,0) -- (tf);
+      \path[name intersections={of=temp and hg, by=tg}];
+      \draw[red,dashed, ->] (5,-0.5) -- (tg);
+      \path[name intersections={of=temp and hh, by=th}];
+      \draw[red,dashed, ->] (5,-1) -- (th);
+      \path[name intersections={of=temp and hi, by=ti}];
+      \draw[red,dashed, ->] (5,-1.5) -- (ti);
+      \path[name intersections={of=temp and hj, by=tj}];
+      \draw[red,dashed, ->] (5,-2) -- (tj);
+      \path[name intersections={of=temp and hk, by=tk}];
+      \draw[red,dashed, ->] (5,-2.5) -- (tk);
+      \node[anchor=west, red] at (7,0) {$T(x,z,t)$};
+      \draw[->] (4.8, 0) -- (4.8, 3) node[midway, left] {$q_c$};
+    \end{tikzpicture}
+    \caption{穩定流體中的熱傳示意圖}
+  \end{figure}
+  \item 假設最簡單的狀況\\
+  流體已經發展完全，為牛頓流體，且溫度分布也發展完全\\
+  邊界條件，已知壁面溫度維持在$T_0$，如同浸泡在冷卻液當中的金屬管內流體
+  \begin{equation}
+    u_z(x,z,t) \to u_z(x) = U_{\text{max}}\left[1-\left(\frac{x}{B}^2\right)\right],\quad T(x,z,t) \to T(x)
+  \end{equation}
+  \begin{enumerate}
+    \item 由已知的流場，\fbox{寫出熱平衡方程式中的Dissipation項}
+    \begin{equation}
+      -\overline{\overline{\bm \tau}} : \nabla \vec {\bm v} = \mu \left(
+        \frac{\partial u_z}{\partial x}
+      \right)^2 = \mu \left(-\frac{2U_{\text{max}}}{B^2}x\right)^2 = \frac{4\mu U_{\text{max}}^2}{B^4} x^2
+    \end{equation}
+    P.S. 因為已經發展完全，$\vec{\bm u}= u_z$，而$u_z(x)$ only\\
+    因此整個剪力的9項中，只會有\fbox{z方向流動造成x方向剪力}的$\tau_{xz}$
+    \item 寫出熱平衡的方程式:
+    \begin{align}
+      \rho \hat C_p \left(
+        \cancelto{S.S.}{\frac{\partial T}{\partial t}} + \vec{\bm v} \cdot \nabla T
+      \right) &= k \nabla^2 T + \cancel{\dot q} - \overline{\overline{\bm \tau}} : \nabla \vec {\bm v} \nonumber\\
+      \rho \hat C_p \left(
+        u_z \cancelto{\text{只有T(x)}}{\frac{\partial T}{\partial z}}
+      \right) &= k \left( \frac{\partial^2 T}{\partial x^2} 
+      + \cancelto{\text{只有T(x)}}{\frac{\partial^2 T}{\partial z^2}}\right) + \frac{4\mu U_{\text{max}}^2}{B^4} x^2 \nonumber\\
+      0 &= \boxed{k \frac{d^2 T}{d x^2} + \frac{4\mu U_{\text{max}}^2}{B^4} x^2 } \label{eq:simple_graetz_ODE}
+    \end{align}
+    \item 邊界條件:
+    \begin{align}
+      T(B) &= T_0 \label{eq:simple_graetz_bc1}\\
+      \frac{dT}{dx}\bigg|_{x=0} &= 0,\quad(\text{對稱連續}) \label{eq:simple_graetz_bc2}
+    \end{align}
+    \item 移項(\ref{eq:simple_graetz_ODE})，並積分:
+    \begin{align}
+      \frac{d^2 T}{d x^2} &= -\frac{4\mu U_{\text{max}}^2}{k B^4} x^2 \nonumber\\
+      \frac{d T}{d x} &= -\frac{4\mu U_{\text{max}}^2}{k B^4} \cdot \frac{x^3}{3} + C_1 
+    \end{align}
+    \item 代入(\ref{eq:simple_graetz_bc2})求$C_1$:
+    \begin{equation}
+      0 = -\frac{4\mu U_{\text{max}}^2}{k B^4} \cdot \frac{0^3}{3} + C_1 \Rightarrow C_1 = 0
+    \end{equation}
+    \item 再次積分:
+    \begin{align}
+      T(x) &= -\frac{4\mu U_{\text{max}}^2}{k B^4} \cdot \frac{x^4}{12} + C_2 \nonumber\\
+      &= -\frac{\mu U_{\text{max}}^2}{3 k B^4} x^4 + C_2
+    \end{align}
+    \item 代入(\ref{eq:simple_graetz_bc1})求$C_2$:
+    \begin{equation}
+      T_0 = -\frac{\mu U_{\text{max}}^2}{3 k B^4} B^4 + C_2 \Rightarrow C_2 = T_0 + \frac{\mu U_{\text{max}}^2}{3 k} 
+    \end{equation}
+    \item 最後解為:
+    \begin{equation}
+      \boxed{T(x) = T_0 + \frac{\mu U_{\text{max}}^2}{3 k} \left(
+        1 - \frac{x^4}{B^4}
+      \right)}
+    \end{equation}
+    \item 可看出溫度最大值發生在$x=0$
+    \begin{equation}
+      T_{\text{max}} = T(x=0) = T_0 + \frac{\mu U_{\text{max}}^2}{3 k}
+    \end{equation}
+    \item 而將$T_0$移到等號左邊，變成$\Delta T$，然後再同除$\Delta T$，就會出現無因次群
+    \begin{equation}
+      \Delta T = \frac{\mu U_{\text{max}}^2}{3 k} \implies \frac{\mu U_{\text{max}}^2}{k \Delta T} = 3
+    \end{equation}
+    Brinkman number:
+    \begin{equation}
+      \boxed{\text{Br} = \frac{\mu U_{\text{max}}^2}{k \Delta T} = \frac{\text{黏性耗散產生的熱量}}{\text{導熱能力}}}
+    \end{equation}
+  \end{enumerate}
+  \item Graetz Problem，同樣情境，一個泡在冷卻液中的金屬管\\
+  但我想要知道我需要設計多長的金屬管，才會使溫度從$T_0$下降到$T_1$\\
+  也就是說，$T$不只是$r$的函數，還是$z$的函數\\
+  而這時，我們先假設$Br\ll 1$，因為是個金屬管，導熱能力很好，$\overline{\overline{\bm \tau}}:\nabla \vec{\bm v}$可以忽略\\
+  P.S.上一題不能忽略，不然就變成固體散熱了($k\nabla^2T = 0$)\\
+  而上一題也能想成是熱交換平衡後，流體內的溫度分布
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (-4,8) -- (-3,8);
+      \draw (-3,7.5) rectangle (-2,8.5);
+      \draw (-2,8) -- (0,8) -- (0, 7.5);
+      \draw [decorate, decoration={coil,aspect=0.3,segment length=1.5mm,amplitude=3mm}] (0,7.5) -- (0,5.25);
+      \draw (0,5.25)--(0,5) -- (3,5) -- (3,8) -- (5,8); 
+      \draw (-0.5,7.5) -- (-0.5,4.5) -- (3.5,4.5) -- (3.5, 7.5);
+      \fill[pattern=crosshatch dots, pattern color=blue] (-0.5,4.5) rectangle (3.5,7);
+      \draw [blue, dashed] (-0.5,7) -- (3.5,7);
+      \node[anchor=south] at (-0.5,8) {$T_0$};
+      \node[anchor=south] at (4,8) {$\approx T_1$};
+      \node[blue, anchor=south] at (1.5, 7.5) {$T_1$};
+      \node at (-2.5, 8) {裝置};
+      \draw[->] (0,1) -- (0,4) node[above] {$r$};
+      \draw[dashed] (0,-1.5) -- (0,1);
+      \draw[->] (0,3.5) -- (1,3.5) node[right] {$z$};
+      \draw (-4,-1) -- (6,-1);
+      \draw (-4,3) -- (6,3);
+      \draw[dashed] (-4,1) -- (6,1);
+      \draw [<->] (-0.3, 1) -- (-0.3,3) node[midway, left] {$R$};
+      \fill[pattern=north east lines, draw=black] (-4,3) rectangle (0,3.2);
+      \fill[pattern=north east lines, draw=black] (-4,-1) rectangle (0,-1.2);
+      \fill[pattern=north west lines, pattern color=blue, draw=blue] (0,3) rectangle (6,3.2);
+      \fill[pattern=north west lines, pattern color=blue, draw=blue] (0,-1) rectangle (6,-1.2);
+      \node[anchor=south east] at (0,3.2) {$T_0$};
+      \node[anchor=south east] at (6,3.2) {$T_1$};
+      \draw[dashed, domain=-1:3, smooth, variable=\y] plot ({-0.25*(\y-1)^2 + 1}, \y);
+      \foreach \y in {-0.75, -0.25, 0.25,0.75,1.25, 1.75, 2.25, 2.75} {
+        \draw[->, dashed] (0, \y) -- ({-0.25*(\y-1)^2 + 1}, \y);
+      }
+      \node[anchor=south west] at (1,1) {$2\overline{u_z}\left[1-\left(\frac{r}{R}\right)^2\right]$};
+    \end{tikzpicture}
+    \caption{Graetz 問題示意圖}
+  \end{figure}
+  \begin{enumerate}
+    \item 假設流體進入熱交換前，溫度為均勻的$T_0$，流場已完全發展
+    \begin{align}
+      u_z(r) = 2\overline{u_z}\left[1-\left(\frac{r}{R}\right)^2\right] 
+    \end{align}
+    Steady State, $k$, $\rho$, $\hat C_p$皆為常數\\
+    $\text{Br}\ll 1$，忽略Dissipation項
+    \item 寫出熱平衡的方程式
+    \begin{equation}
+      \rho \hat C_p \left(
+        \vec{\bm v} \cdot \nabla T
+      \right) = k \nabla^2 T
+    \end{equation}
+    展開我們已知的項，$T(r,z)$ only
+    \begin{align}
+      \rho \hat C_p \left(
+        u_z \frac{\partial T}{\partial z}
+      \right) &= k \left( \frac{1}{r} \frac{\partial}{\partial r} \left( r \frac{\partial T}{\partial r} \right)
+      + \frac{\partial^2 T}{\partial z^2}\right) \nonumber\\
+      2 \rho \hat C_p \left(
+        \overline{u_z}\left[1-\left(\frac{r}{R}\right)^2\right] \frac{\partial T}{\partial z}
+      \right) &= k \left[
+        \frac{1}{r} \frac{\partial}{\partial r} \left( r \frac{\partial T}{\partial r} \right)+
+        \frac{\partial^2 T}{\partial z^2}
+        \right] \label{eq:graetz_heat_equation}
+    \end{align}
+    \item 邊界條件:
+    \begin{align}
+      T(R,z<0) &= T_0 \label{eq:graetz_bc1}\\
+      T(R,z\ge0) &= T_1 \label{eq:graetz_bc2}\\
+      \frac{\partial T}{\partial r}(0,z) &= 0 \quad (\text{對稱連續}) \label{eq:graetz_bc3}\\
+      T(r,0+) &= T(r,0-) \quad (\text{入口連續}) \label{eq:graetz_bc4} \\
+      \frac{\partial T}{\partial z}(r,0+) &= \frac{\partial T}{\partial z}(r,0-) \quad (\text{入口連續}) \label{eq:graetz_bc5}
+    \end{align}
+    P.S. 最後一個邊界條件，又稱為Danckwerts Boundary Condition
+    \item 無因次化(\ref{eq:graetz_heat_equation})，並定義無因次群\\
+    溫度很明顯會用$T_0,T_1$作為特徵溫度:
+    \begin{equation}
+      \theta = \frac{T - T_1}{T_0 - T_1}
+    \end{equation}
+    長度方面，$R$是橫向特徵長度
+    \begin{equation}
+      r^\ast = \frac{r}{R}
+    \end{equation}
+    至於$z$的方向，則觀察(\ref{eq:graetz_heat_equation})的常數項係數\\
+    左邊忽視$\left(1-\frac{r^2}{R^2}\right)$，丟到右邊後會有
+    \begin{equation}
+      \frac{k}{2 \rho \hat C_p \overline{u_z}}
+    \end{equation}
+    再分母再補上一個$R$，就會變成無因次的\fbox{Peclet Number}的倒數
+    \begin{equation}
+       \boxed{\text{Pe} = \frac{2\rho \hat C_P\left<u_z\right>R}{k} = \frac{\text{軸向熱對流}}{\text{熱傳導}}}
+    \end{equation}
+    而我們再補上一個$R$，就能讓單位變成長度，作為$z$的特徵長度
+    \begin{equation}
+      \boxed{z^\ast = \frac{z}{R} \cdot\frac{1}{\text{Pe}} = \frac{z k}{2 \rho \hat C_P \left<u_z\right> R^2}}
+    \end{equation}
+    P.S. Peclet Number, Reynolds Number, Prandtl Number的關係為
+    \begin{equation}
+      \text{Pe} = \text{Re} \cdot \text{Pr}
+    \end{equation}
+    \item 最後將(\ref{eq:graetz_heat_equation})無因次化:
+    \begin{align}
+      2\rho \hat C_P \overline{u_z} \left[
+        1 - (r^\ast)^2
+      \right] \frac{T_0 - T_1}{R\text{Pe}} \frac{\partial \theta}{\partial z^\ast} &= k \left[
+        \frac{1}{r^\ast R} \frac{\partial}{\partial r^\ast} \left(
+          r^\ast \frac{T_0 - T_1}{R} \frac{\partial \theta}{\partial r^\ast}
+        \right) + \frac{T_0 - T_1}{R^2\text{Pe}^2} \frac{\partial^2 \theta}{\partial z^{\ast 2}}
+      \right] \nonumber\\
+      \div (T_0 - T_1) \Rightarrow 2\rho \hat C_P \overline{u_z} \left[
+        1 - (r^\ast)^2
+      \right] \frac{1}{R\text{Pe}}\frac{\partial \theta}{\partial z^\ast} &= \frac{k}{R^2} \left[
+        \frac{1}{r^\ast} \frac{\partial}{\partial r^\ast} \left(
+          r^\ast \frac{\partial \theta}{\partial r^\ast}
+        \right) + \frac{1}{\text{Pe}^2} \frac{\partial^2 \theta}{\partial z^{\ast 2}}
+      \right] \nonumber\\
+      \Rightarrow  \left[
+        1 - (r^\ast)^2
+      \right] \frac{1}{\cancel{R}\text{Pe}}\frac{\partial \theta}{\partial z^\ast} &= \frac{k}{2\rho \hat C_P \overline{u_z} R}\frac{1}{\cancel{R}} \left[
+        \frac{1}{r^\ast} \frac{\partial}{\partial r^\ast} \left(
+          r^\ast \frac{\partial \theta}{\partial r^\ast}
+        \right) + \frac{1}{\text{Pe}^2} \frac{\partial^2 \theta}{\partial z^{\ast 2}}
+      \right] \nonumber\\
+      \Rightarrow  \left[
+        1 - (r^\ast)^2
+      \right]\frac{1}{\text{Pe}} \frac{\partial \theta}{\partial z^\ast} &= \frac{1}{\text{Pe}} \left[
+        \frac{1}{r^\ast} \frac{\partial}{\partial r^\ast} \left(
+          r^\ast \frac{\partial \theta}{\partial r^\ast}
+        \right) + \frac{1}{\text{Pe}^2} \frac{\partial^2 \theta}{\partial z^{\ast 2}}
+      \right]  \nonumber\\
+      \div \frac{1}{\text{Pe}}\Rightarrow  \left[
+        1 - (r^\ast)^2
+      \right] \frac{\partial \theta}{\partial z^\ast} &= \left[
+        \frac{1}{r^\ast} \frac{\partial}{\partial r^\ast} \left(
+          r^\ast \frac{\partial \theta}{\partial r^\ast}
+        \right) + \frac{1}{\text{Pe}^2} \frac{\partial^2 \theta}{\partial z^{\ast 2}}
+      \right]   \label{eq:graetz_nondim_heat_equation}
+    \end{align}
+    由於$\text{Pe}=\text{Re}\cdot \text{Pr}$，所以假設流速很快，所以$\text{Re}\gg 1$\\
+    而且液體的$\text{Pr}$通常在10左右，因此$\text{Pe}\gg 1$，可以忽略最後一項
+    \begin{equation}
+      \boxed{\left[
+        1 - (r^\ast)^2
+      \right] \frac{\partial \theta}{\partial z^\ast} = \left[
+        \frac{1}{r^\ast} \frac{\partial}{\partial r^\ast} \left(
+          r^\ast \frac{\partial \theta}{\partial r^\ast}
+        \right)
+      \right]}   \label{eq:graetz_simplified_nondim_heat_equation}
+    \end{equation}
+    \item 邊界條件無因次化(省略那些$z<0$的部分):
+    \begin{align}
+      \theta(r^\ast,0) &= 1 \label{eq:graetz_nondim_bc1}\\
+      \theta(1,z^\ast) &= 0 \label{eq:graetz_nondim_bc2}\\
+      \frac{\partial \theta}{\partial r^\ast}(0,z^\ast) &= 0 \quad (\text{對稱連續}) \label{eq:graetz_nondim_bc3}
+    \end{align}
+    可以觀察到(\ref{eq:graetz_nondim_bc2})和(\ref{eq:graetz_nondim_bc3})都是齊次邊界條件而且與$z^\ast$無關\\
+    而(\ref{eq:graetz_nondim_bc1})則是非齊次邊界條件且與$z^\ast$有關\\
+    所以這又是一個標準的S-L問題
+    \item 分離變數，假設解為:
+    \begin{equation}
+      \theta(r^\ast, z^\ast) = R(r^\ast) Z(z^\ast)
+    \end{equation}
+    代入(\ref{eq:graetz_simplified_nondim_heat_equation}):
+    \begin{align}
+      \left[
+        1 - (r^\ast)^2
+      \right] R \frac{dZ}{d z^\ast} &= Z \left[
+        \frac{1}{r^\ast} \frac{d}{d r^\ast} \left(
+          r^\ast \frac{d R}{d r^\ast}
+        \right)
+      \right] \nonumber\\
+      \Rightarrow \frac{1}{Z} \frac{dZ}{d z^\ast} &= \frac{1}{R} \cdot \frac{1}{\left[
+        1 - (r^\ast)^2
+      \right]} \left[
+        \frac{1}{r^\ast} \frac{d}{d r^\ast} \left(
+          r^\ast \frac{d R}{d r^\ast}
+        \right)
+      \right] = -\lambda^2
+    \end{align}
+    \item 兩邊分別得到兩個ODE:
+    \begin{align}
+      \frac{dZ}{d z^\ast} + \lambda^2 Z &= 0 \label{eq:graetz_z_ODE}\\
+      \frac{d}{d r^\ast} \left(
+          r^\ast \frac{d R}{d r^\ast}
+        \right) + \left[
+        1 - (r^\ast)^2
+      \right] r^\ast \lambda^2 R &= 0 \label{eq:graetz_r_ODE}
+    \end{align}
+    \item 解(\ref{eq:graetz_z_ODE}):
+    \begin{equation}
+      Z(z^\ast) = C e^{-\lambda^2 z^\ast}
+    \end{equation}
+    \item 解(\ref{eq:graetz_r_ODE})
+    \begin{equation}
+      \frac{d}{d r^\ast} \left(
+          r^\ast \frac{d R}{d r^\ast}
+        \right) + \left[
+        1 - (r^\ast)^2
+      \right] r^\ast \lambda^2 R = 0
+    \end{equation}
+    寫成S-L形式:
+    \begin{equation}
+      \frac{d}{dx}\left[
+        p(x)\frac{dy}{dx}
+      \right] + q(x)y + \lambda^\ast r(x) y = 0
+    \end{equation}
+    比較係數可得到
+    \begin{equation}
+      p(r^\ast) = r^\ast,\quad q(r^\ast) = 0, r(r^\ast) = \left[
+        1 - (r^\ast)^2
+      \right] r^\ast,\quad \lambda^\ast = \lambda^2
+    \end{equation}
+    因此通解可以寫成:
+    \begin{align}
+      \theta(r^\ast, z^\ast) = Ce^{-\lambda^2 z^\ast}\left[
+        AR(r^\ast; \lambda) + BS(r^\ast; \lambda)
+      \right]
+    \end{align}
+    其中這些解我們稱為Graetz EigenFunctions，若對其微分\\
+    S會發散，R會收斂
+    \item 代入第三個邊界條件(\ref{eq:graetz_nondim_bc3})，可得$B=0$\\
+    合併$A,C$為一常數$D$:
+    \begin{equation}
+      \theta(r^\ast, z^\ast) = D e^{-\lambda^2 z^\ast} R(r^\ast; \lambda)
+    \end{equation}
+    \item 代入第二個邊界條件(\ref{eq:graetz_nondim_bc2})，可得特徵基底:\\
+    因為$z^\ast$不影響邊界條件，因此要令$R(1;\lambda) = 0$
+    \begin{equation}
+      R(1; \lambda) = 0 \Rightarrow \lambda_n\implies \Phi_n = R(r^\ast; \lambda_n)
+    \end{equation}
+    這一步驟的解，就如之前畫$\cot$和$ax$的交點一樣，是無法求出數值表示的\\
+    而如果可以表示出數值，就跟Fourier Series一樣\\
+    $R(1;\lambda n)=0=cos\theta$的解為$\theta_n = (2n-1)\frac{\pi}{2}$\\
+    這一步驟就是在做這件事情而已\\
+    這時解為:
+    \begin{equation}
+      \theta_n(r^\ast, z^\ast) = \sum_{n=1}^{\infty} D_n e^{-\lambda_n^2 z^\ast} R(r^\ast; \lambda_n)
+    \end{equation}
+    \item 最後代入第一個邊界條件(\ref{eq:graetz_nondim_bc1})，利用正交性求出$D_n$:
+    \begin{align}
+      1 = \theta(r^\ast,0) &= \sum_{n=1}^{\infty} D_n R(r^\ast; \lambda_n) \nonumber\\
+      D_n&=\frac{
+        \int f(x)r(x)\phi_n(x)dx
+      }{\int r(x)\phi_n^2(x) dx} \nonumber\\
+      &= \frac{\int_0^1 1 \cdot \left[
+        1 - (r^\ast)^2
+      \right] r^\ast R(r^\ast; \lambda_n) dr^\ast}{\int_0^1 \left[
+        1 - (r^\ast)^2
+      \right] r^\ast R^2(r^\ast; \lambda_n) dr^\ast}
+    \end{align}
+    而由於$R(r^\ast; \lambda_n)$是被Normalized過的，因此分母為1\\
+    最後解為:
+    \begin{equation}
+      \boxed{\theta(r^\ast, z^\ast) = \sum_{n=1}^{\infty} \left[
+        \int_0^1 \left(
+          1 - (r^\ast)^2
+        \right) r^\ast R(r^\ast; \lambda_n) dr^\ast
+      \right] e^{-\lambda_n^2 z^\ast} R(r^\ast; \lambda_n)}
+    \end{equation}
+    \item 用Adiabatic Mixing Cup的溫度($T_{\text{AMC}}$)來找到$\lambda_n$\\
+    實驗上，其實就是找到任一個截面的平均溫度，利用讓流體流進一個絕熱的杯子\\
+    等流體在裡面熱平衡後，測量溫度，就是平均溫度\\
+    不過這裡的\fbox{截面平均溫度是加權除過流速}的，因為流速快的部分，進去杯子的量也多\\
+    而以數學上來寫，則為
+    \begin{align}
+      T_{\text{AMC}}(z) &= \frac{4\pi \overline u_z \int_0^R T(r,z) \left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right] r dr}{
+        \overline u_z \cdot \pi R^2
+      } \nonumber\\
+      &= \frac{4 \int_0^R T(r,z) \left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right] r dr}{R^2} \nonumber\\
+      \theta_{\text{AMC}} &= \frac{T_{\text{AMC}}-T_1}{T_0-T_1}\nonumber\\
+       &= 4\int_0^1 \theta(r^\ast, z^\ast) \left[
+        1 - (r^\ast)^2
+      \right] r^\ast dr^\ast \nonumber\\
+      &= 4 \sum_{n=1}^{\infty} D_n e^{-\lambda_n^2 z^\ast} \underbrace{\left[
+        \int_0^1 \left(
+          1 - (r^\ast)^2
+        \right) r^\ast R(r^\ast; \lambda_n) dr^\ast
+      \right]}_{=D_n} \nonumber\\
+      &= 4 \sum_{n=1}^{\infty} D_n^2 e^{-\lambda_n^2 z^\ast} \label{eq:graetz_amc_temperature}
+    \end{align}
+    進一步令$4D_n^2 = M_n$，則(\ref{eq:graetz_amc_temperature})變成
+    \begin{equation}
+      \boxed{\theta_{\text{AMC}} = \sum_{n=1}^{\infty} M_n e^{-\lambda_n^2 z^\ast}}
+    \end{equation}
+    也就是說，我們跟換不同的$\lambda_n$，就能測量出不同的$\theta_{\text{AMC}}$\\
+    進而反推出$M_n$，或者說$D_n$，最後就能得到完整的溫度分布\\
+    而數值解提供了我們一系列的$\lambda_n,M_n$
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{c|c|c}
+        $n$ & $\lambda_n$ & $M_n$ \\
+        \hline
+        1 & 2.704 & 0.819\\
+        2 & 6.679 & 0.098\\
+        3 & 10.673 & 0.033\\
+        4 & 14.671 & 0.015\\
+        5 & 18.669 & 0.009
+      \end{tabular}
+      \caption{Graetz Problem 特徵值與係數}
+    \end{table}
+    也就是說，假設我們希望$\theta_{\text{AMC}}=0.1$，也就是100度被0度淨泡冷卻到10度\\
+    那我們可以算出:
+    \begin{equation}
+      \theta_{\text{AMC}} = 0.1 = 0.819 e^{-2.704^2 z^\ast} + 0.098 e^{-6.679^2 z^\ast}\cdots
+    \end{equation}
+    假設只取第一項就好，那就能算出$z^\ast\approx 0.2876$\\
+    代回去$z^\ast$的定義，就能算出需要多長的管子
+    \begin{equation}
+      L = z^\ast \cdot \frac{2 \rho \hat C_P \overline{u_z} R^2}{k} = 
+      0.2876 \cdot \frac{2 \rho \hat C_P \overline{u_z} R^2}{k} = 0.2876 R \text{Pe}
+    \end{equation}
+    如果以管子直徑($D=2R$)來當作特徵長度，則
+    \begin{align}
+      \boxed{\frac{L}{D} = 0.144 \text{Pe}}
+    \end{align}
+    也就是說，假設今天Pe算出來是1000，那我們需要的管長就是$L/D = 144$倍管直徑\\
+    但這個解析解只能用在想要知道到達某個溫度所需長度的情況\\
+    如果想要知道整個的溫度分布$\theta(z^\ast)$，換句話說，可能在靠近入口處\\
+    $\theta_{\text{AMC}}=0.99$，之類的，\\
+    就會需要接近無窮多項的數值解才能逼近的算出該位置($z^\ast$)\\
+    因此這樣的近似是不夠好的\\
+    這原因也能從我們的邊界條件看出\\
+    因為我們既要求$\theta(1,z^\ast)=0$，又要求$\theta(r^\ast,0)=1$\\
+    這\fbox{兩個條件在交界處($r^\ast=1,z^\ast=0$)會產生不連續點}\\
+    因此需要無窮多項的解才能逼近這個不連續點\\
+    這也是為什麼要介紹下面章節的，Leveque的方法\\
+    但在這之前，還有一點要介紹
+    \item 以巨觀下的熱傳係數$h$、Nusselt Number來描述Graetz Problem\\
+    可以將整根管子當成一個系統\\
+    則能寫出巨觀的能量平衡式:
+    \begin{align}
+      \left<h\right> 2\pi RL (T_i - T_0) =&\rho \hat C_P 2\left<u_z\right> \int_0^R\left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right]\left(T(r,L)-T^\dagger \right)2\pi r dr \nonumber\\
+      &-\rho \hat C_P 2\left<u_z\right> \int_0^R\left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right](T_0 - T^\dagger)2\pi r dr
+    \end{align}
+    其中$T_i$為流體進入管子的溫度，$T^\dagger$為假想的參考溫度，積分後會消掉\\
+    第一項是在右端口計算流體繼續傳下去的熱量($T(r,L)$)\\
+    因為只是管子離開交換區間，並不是流體離開管子\\
+    第二項是流體進入管子時帶入的熱量($T(r,0)=T_0$)\\
+    將上式同除$\pi$，並同除$k$，湊出Nusselt Number:
+    \begin{equation}
+      \text{Nu} = \frac{\left<h\right>L}{k}
+    \end{equation}
+    因此:
+    \begin{align}
+      \left<h\right> 2\pi RL (T_i - T_0) &=\rho \hat C_P 2\left<u_z\right> \int_0^R\left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right]\left(T(r,L)-T^\dagger \right)2\pi r dr \nonumber\\
+      &\phantom{=} -\rho \hat C_P 2\left<u_z\right> \int_0^R\left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right](T_0 - T^\dagger)2\pi r dr \nonumber\\
+      \left<h\right> 2\pi RL (T_i - T_0) &=4\pi\rho \hat C_P \left<u_z\right> \int_0^R\left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right]\left(T(r,L)-T_0\right) r dr \nonumber\\
+      \frac{2R\left<h\right>}{k}L (T_i - T_0) &=\frac{4\rho \hat C_P\left<u_z\right>}{k} \int_0^R\left[
+        1 - \left(\frac{r}{R}\right)^2
+      \right]\left(T(r,L)-T_0\right) r dr \nonumber\\
+      \text{Nu} (T_i - T_0) &= \frac{4\rho \hat C_P\left<u_z\right>}{k}\frac{R^2}{L}\int_0^1\left[
+        1 - (r^\ast)^2
+      \right]\left(T(r^\ast,L)-T_0\right) r^\ast dr^\ast \nonumber\\
+      &= \frac{4\rho \hat C_P\left<u_z\right> R^2}{k L} (T_i - T_0) \int_0^1\left[
+        1 - (r^\ast)^2
+      \right]\left(1-\theta(r^\ast, z^\ast) \right) r^\ast dr^\ast \nonumber\\
+      \text{Nu} &= \frac{2 R\rho \hat C_P\left<u_z\right>}{k} \cdot \frac{2R}{L}\cdot
+      \int_0^1\left(
+        1 - (r^\ast)^2
+      \right)\left(1-\theta(r^\ast, z^\ast) \right) r^\ast dr^\ast
+    \end{align}
+    這裡又出現了一個合併的無因次群\\
+    就是Graetz Number:
+    \begin{equation}
+      \boxed{\text{Gz} = \text{Pe} \cdot \frac{2R}{L} = \frac{4 \rho \hat C_P \left<u_z\right> R^2}{k L}}
+    \end{equation}
+    而將$\theta(r^\ast, z^\ast)$，以平均的$\theta_{\text{AMC}}$來近似\\
+    將積分積出可得:
+    \begin{equation}
+      \text{Nu} = \text{Gz} \left[
+        \frac{1}{4} - \frac{1}{4} \sum_{n=1}^{\infty} M_n e^{-\lambda_n^2 z^\ast_L}
+      \right]
+    \end{equation}
+    而若將$z^\ast_L$的定義代入:
+    \begin{equation}
+      z^\ast_L = \frac{L k}{2 \rho \hat C_P \left<u_z\right> R^2} = \frac{2}{\text{Gz}}
+    \end{equation}
+    最後可得:
+    \begin{equation}
+      \boxed{\text{Nu} = \text{Gz} \left[
+        \frac{1}{4} - \frac{1}{4} \sum_{n=1}^{\infty} M_n e^{-\frac{2\lambda_n^2}{\text{Gz}}}
+      \right]}
+    \end{equation}
+    從這裡更明顯能看出，隨著L越來越小\\
+    Nusselt Number與$L$無關，但Graetz Number反比於$L$\\
+    故需要更多項的級數相加才能讓等式成立
+  \end{enumerate}
+  \item Leveque 方法，用在Graetz Problem的入口區域
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \fill[pattern=north east lines, draw=black] (-4,2) rectangle (0,2.2);
+      \fill[pattern=north east lines, draw=black] (-4,-2) rectangle (0,-2.2);
+      \fill[pattern=north west lines, pattern color=blue, draw=blue] (0,2) rectangle (4,2.2);
+      \fill[pattern=north west lines, pattern color=blue, draw=blue] (0,-2) rectangle (4,-2.2);
+      \draw (-4,2) -- (4,2);
+      \draw (-4,-2) -- (4,-2);
+      \draw [->] (0,-2) -- (0,-1) node[above] {$y$};
+      \draw [dashed] (0, -3) -- (0,-2);
+      \def\yShift{2}
+      \draw [dashed] (0,0-\yShift) .. controls (1.5,0.5-\yShift) and (2.6, 0.6-\yShift) .. (4,0.7-\yShift);
+      \fill [pattern=crosshatch dots] (0,0-\yShift) .. controls (1.5,0.5-\yShift) and (2.6, 0.6-\yShift) .. (4,0.7-\yShift) -- (4,0-\yShift) -- cycle;
+      \draw [dashed] (0,0+\yShift) .. controls (1.5,-0.5+\yShift) and (2.6, -0.6+\yShift) .. (4,-0.7+\yShift);
+      \fill [pattern=crosshatch dots] (0,0+\yShift) .. controls (1.5,-0.5+\yShift) and (2.6, -0.6+\yShift) .. (4,-0.7+\yShift) -- (4,0+\yShift) -- cycle;
+      \node [anchor=south west] at (4,-2) {$\delta_T(z)$};
+      \node at (2,0) {Thermal Boundary Layer};
+      \node[anchor=north] at (4, 1.3) {$T_0$};
+      \node[anchor=south] at (4, -1.3) {$T_0$};
+      \node[anchor=north west] at (0, -2.2) {$T_1$};
+      \node[anchor=north east] at (0, -2.2) {$T_0$};
+      \draw[<->] (-1,-2) -- (-1,2) node[midway, left] {$2R$};
+      \draw[->] (-4,2.7) -- (-3,2.7) node [right] {$z$};
+    \end{tikzpicture}
+    \caption{Leveque 方法示意圖}
+  \end{figure}
+  坐標軸改以$y=R-r$，而$y/R\ll 1$
+  \begin{enumerate}
+    \item 能量平衡式:
+    \begin{align}
+      &\rho \hat C_P \overline u_z(y)\left[
+        1 -\left(\frac{r}{R}\right)^2
+      \right]\frac{\partial T}{\partial z} = k\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial T}{\partial r}\right) \nonumber\\
+      \Rightarrow&\rho \hat C_P \overline u_z(y)\left[
+        1 -\left(\frac{R-y}{R}\right)^2
+      \right]\frac{\partial T}{\partial z} =
+       k\frac{1}{R-y}\frac{\partial}{\partial y}\left((R-y)\frac{\partial T}{\partial y}\right)\nonumber\\
+      (R-y\to R)\Rightarrow&\rho \hat C_P \overline u_z(y)\left[
+        1-\frac{R^2}{R^2} + \frac{2Ry}{R^2} - \cancel{\frac{y^2}{R^2}}
+      \right]\frac{\partial T}{\partial z} = k \frac{1}{R} \frac{\partial }{\partial y}\left(
+        R\frac{\partial T}{\partial y}
+      \right) \nonumber\\
+      \Rightarrow & \rho \hat  C_P \overline u_z(y)\frac{2y}{R}\frac{\partial T}{\partial z}
+      = k\frac{\partial^2 T}{\partial y^2}
+    \end{align}
+  \end{enumerate}
+\end{itemize}
+\end{CJK*}
+\end{document}

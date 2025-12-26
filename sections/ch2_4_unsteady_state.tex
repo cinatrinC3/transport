@@ -1,0 +1,856 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{非穩態的解題，相似關係、邊界層、週期性、分離變數}
+找到一個$\eta$，合併兩個變數成一個變數，將PDE轉成ODE來解
+\begin{itemize}
+  \item Impulsive motion of a Flat plane\\
+  Rayleigh's first problem\\
+  一個靜止的平版，上面有流體，平板開始以速度$u$移動起來，問$t$時刻的速度分布
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (-2,0) -- (-1,0) node[anchor=west] {$x$};
+      \draw[->] (-2,0) -- (-2,1) node[anchor=south] {$y$};
+      \draw (0,0) rectangle (5, -0.5);
+      \draw[->] (5,-0.25) -- (6,-0.25) node[anchor=west] {$U$};
+      \draw[dashed] (1,0) -- (1,4);
+      \draw[blue] (4,0) .. controls (1,0) .. (1,0.5);
+      \draw[blue] (4,0) .. controls (1.5, 0) and (1, 0.5) .. (1,1);
+      \draw[blue] (4,0) .. controls (2, 0) and (1, 1) .. (1,2);
+      \draw[blue] (4,0) .. controls (2.5, 0) and (1, 2) .. (1,3);
+      \draw[->, red] (1,0) -- +(2,2) node[anchor=south west] {$t$};
+      \node[anchor=west, blue] at (1,3) {$u_x(y,t)$};
+    \end{tikzpicture}
+    \caption{Impulsive motion of a Flat plane}
+  \end{figure}
+  \begin{enumerate}
+    \item 根據Equation of Continuity
+    \begin{equation}
+      \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec {\bm u}) = 0
+    \end{equation}
+    \item Incompressible Fluid, $\rho$ is constant:
+    \begin{equation}
+      \nabla \cdot \vec {\bm u} = 0
+    \end{equation}
+    \item 選擇使用卡式座標:
+    \begin{equation}
+      \frac{\partial u_x}{\partial x} + \frac{\partial u_y}{\partial y} + \frac{\partial u_z}{\partial z} = 0
+    \end{equation}
+    \item 假設只有$x$方向上有流動，$u_y=u_z=0$，則
+    \begin{equation}
+      \frac{\partial u_x}{\partial x} = 0 
+    \end{equation}
+    代表 $u_x$跟$x$無關，故
+    \begin{equation}
+      u_x = f(\cancel{x},y,\cancel{z},t) \Rightarrow u_x = u_x(y,t)
+    \end{equation}
+    \item 代入Navier-Stokes Equation的$x$方向:
+    \begin{equation}
+      \rho\left(
+          \frac{\partial u_x}{\partial t} + u_x\cancelto{\text{上式}}{\frac{\partial u_x}{\partial x}} 
+          + \cancel{u_y}\frac{\partial u_x}{\partial y} 
+          + \cancel{u_z}\frac{\partial u_x}{\partial z}
+        \right) = -\cancel{\frac{\partial p}{\partial x}} + \mu\left[
+          \cancelto{\text{上式}}{\frac{\partial^2 u_x}{\partial x^2}} + \frac{\partial^2 u_x}{\partial y^2} + \cancelto{\text{上式}}{\frac{\partial^2 u_x}{\partial z^2}}
+        \right] + \cancelto{\text{水平}}{\rho g_x}
+    \end{equation}
+    解得
+    \begin{equation}
+      \rho\frac{\partial u_x}{\partial t} = \mu\frac{\partial^2 u_x}{\partial y^2} \Rightarrow \boxed{\frac{\partial u_x}{\partial t} = \nu\frac{\partial^2 u_x}{\partial y^2}}
+      \label{eq:ch2_4_unsteady_state_governing_equation}
+    \end{equation}
+    \item 列出邊界條件($u_x=(y,t)$):
+    \begin{align}
+      & u_x(y,0) = 0 \label{eq:ch2_4_initial_condition_1_1}\\
+      & u_x(0,t) = U \label{eq:ch2_4_boundary_condition_1_2}\\
+      & u_x(\infty,t) = 0 \label{eq:ch2_4_boundary_condition_1_3}
+    \end{align}
+    \item 有數種解題方式:
+    \begin{itemize}
+      \item Similarity Approach:\label{sec:fluid_unsteady}\\
+      由於解PDE很麻煩，而我們想要將PDE轉成ODE來解\\
+      希望能找到一個函數關係，描述兩個變數之間的關係\\
+      而函數關係如果要寫得出來，單位會限制解的型態，所以稱為Similarity Approach\\
+      以此題來說，我們想要解(\ref{eq:ch2_4_unsteady_state_governing_equation})\\
+      希望能找到一個函數關係，將$y$和$t$合併成一個變數$\eta$\\
+      使得能將$u(y,t)$改寫為$\Phi(\eta)$，從而將PDE轉成ODE來解\\
+      P.S. 並不是Similarity 找到了就解的出來，因為Similarity一定存在\\
+      此題由於邊界條件:
+      \begin{equation}
+        u_x(y,0) = u_x(\infty, t) = 0
+      \end{equation}
+      可以合理猜測這兩個變數之間有一個函數關係
+      \begin{enumerate}
+        \item 找到一個合適的$\eta$:\\
+          先來看一下各變數的單位:
+          \begin{equation}
+            [\nu] = L^2T^{-1},\quad [y] = L,\quad [t] = T
+          \end{equation}
+          與上一章節的Flow to a Rotating Disk不同，並不是要用他們來表示其他單位\\
+          而是要生出一個\fbox{無因次的變數$\eta$}，將所有變數合併再一個式子裡:
+          \begin{equation}
+            \eta = \nu^\alpha y^\beta t^\gamma
+          \end{equation}
+          使得$\eta$是無因次的二元一次方程式:
+          \begin{equation}
+            [\eta] = (L^2T^{-1})^\alpha (L)^\beta (T)^\gamma = L^{2\alpha + \beta} T^{-\alpha + \gamma} = 1
+          \end{equation}
+          解得:
+          \begin{equation}
+            \begin{cases}
+              2\alpha + \beta = 0\\
+              -\alpha + \gamma = 0
+            \end{cases} \Rightarrow \alpha = -\frac{1}{2},~\beta = 1,~\gamma = -\frac{1}{2}
+          \end{equation}
+          也就是說:
+          \begin{equation}
+            \eta = \frac{y}{\sqrt{\nu t}}
+          \end{equation}
+          而之後因為為了讓積分式能生的出$e^{-x^2}$\\
+          冪次是偶數對三角代換，Gamma函數，誤差函數都很方便\\
+          所以會在分母多乘一個常數$2$，變成:
+          \begin{equation}
+            \eta = \frac{y}{2\sqrt{\nu t}} 
+          \end{equation}
+        \item 無因次化:\\
+          由於$\eta$是無因次的，所以我們也要將我們要解的目標$u_x(y,t)$無因次化成$\phi(\eta)$:\\
+          而此題因為具有特徵的抽板速度$U$，所以可以用$U$來無因次化:
+          \begin{equation}
+            \phi(\eta) = \frac{u_x(y,t)}{U}
+          \end{equation}
+          而邊界條件將被改寫為:
+          \begin{align}
+            & \phi(y,0) = 0 \label{eq:ch2_4_initial_condition_2_1}\\
+            & \phi(0,t) = 1 \label{eq:ch2_4_boundary_condition_2_2}\\
+            & \phi(\infty,t) = 0 \label{eq:ch2_4_boundary_condition_2_3}
+          \end{align}
+          而(\ref{eq:ch2_4_unsteady_state_governing_equation})將被改寫為:
+          \begin{equation}
+            \frac{\partial \phi}{\partial t} = \nu \frac{\partial^2 \phi}{\partial y^2} \label{eq:ch2_4_unsteady_state_governing_equation_dimensionless}
+          \end{equation}
+        \item 將PDE轉成ODE，將$\eta$的定義代入(\ref{eq:ch2_4_unsteady_state_governing_equation_dimensionless}):\\
+        記得要在將其他變數轉成$\eta$的函數\\
+        由於$\eta$是無因次化的結果，這些多出的項一定會互相抵銷掉\\
+        左式
+        \begin{align}
+          \frac{\partial \phi}{\partial t} &= \frac{\partial \phi}{\partial \eta}\frac{\partial \eta}{\partial t} \nonumber\\
+          &= \frac{\partial \phi}{\partial \eta}\left(
+           -\frac{y}{4\sqrt{\nu}}\cdot t^{-\frac{3}{2}}
+          \right) \nonumber\\
+          &= \frac{\partial \phi}{\partial \eta}\left(
+           -\frac{1}{2}\cdot\underbrace{\frac{y}{2\sqrt{\nu t}}}_{\eta}\cdot \frac{1}{t}
+          \right) \nonumber\\
+          &= \frac{\partial \phi}{\partial \eta}\left(
+           -\frac{\eta}{2t}
+          \right) \label{eq:ch2_4_unsteady_state_partial_phi_partial_t}
+        \end{align}
+        右式
+        \begin{align}
+          \nu \frac{\partial^2 \phi}{\partial y^2} &= \nu \frac{\partial}{\partial y}\left(
+            \frac{\partial \phi}{\partial \eta}\frac{\partial \eta}{\partial y}
+          \right) \nonumber\\
+          &= \nu \frac{\partial}{\partial y}\left(
+            \frac{\partial \phi}{\partial \eta}\cdot \frac{1}{2\sqrt{\nu t}}
+          \right) \nonumber\\
+          & = \nu \frac{\partial}{\partial \eta}\left(
+            \frac{\partial \phi}{\partial \eta}\cdot \frac{1}{2\sqrt{\nu t}}
+          \right)\frac{\partial \eta}{\partial y} \nonumber\\
+          &= \nu \left(
+            \frac{\partial^2 \phi}{\partial \eta^2}\cdot \frac{1}{2\sqrt{\nu t}}\cdot \frac{1}{2\sqrt{\nu t}}
+          \right) \nonumber\\
+          &= \nu \left(
+            \frac{\partial^2 \phi}{\partial \eta^2}\cdot \frac{1}{4\nu t}
+          \right) \nonumber\\
+          &= \frac{1}{4t}\cdot \frac{\partial^2 \phi}{\partial \eta^2} \label{eq:ch2_4_unsteady_state_nu_partial2_phi_partial_y2}
+        \end{align}
+        兩式相等:
+        \begin{align}
+          & \frac{\partial \phi}{\partial \eta}\left(
+           -\frac{\eta}{2t}
+          \right) = \frac{1}{4t}\cdot \frac{\partial^2 \phi}{\partial \eta^2} \nonumber\\
+        \Rightarrow \quad & -2\eta \frac{\partial \phi}{\partial \eta} =
+         \frac{\partial^2 \phi}{\partial \eta^2} \nonumber\\
+         & \boxed{
+          \frac{d^2 \phi}{d \eta^2} + 2\eta \frac{d \phi}{d \eta} = 0
+         }
+        \end{align}
+        成功變成ODE了!
+        \item 改寫(\ref{eq:ch2_4_initial_condition_2_1})至(\ref{eq:ch2_4_boundary_condition_2_3})的邊界條件:\\
+        P.S. $\eta = \frac{y}{2\sqrt{\nu t}}$
+        \begin{align}
+          \phi(y,0) = 0& \implies \eta(y,0) = \infty \Rightarrow \phi(\infty) = 0\\
+          \phi(0,t) = 1& \implies \eta(0,t) = 0 \Rightarrow \phi(0) = 1\\
+          \phi(\infty,t) = 0& \implies \eta(\infty,t) = \infty \Rightarrow \phi(\infty) = 0
+        \end{align}
+        P.S. 如果這裡一、三式不一致的話，代表Similarity Approach失敗\\
+        所以前面才說是因為兩個條件祥同，才能這樣做
+        \begin{equation}
+          u_x(y,0) = u_x(\infty, t) = 0
+        \end{equation}
+        \item 解ODE:\\
+        這種某個東西的二次微分等於另一個東西的一次微分\\
+        就會想要把一次微分削掉\\
+        令 $\frac{d\phi}{d\eta} = g(\eta)$，則
+        \begin{equation}
+          \frac{d^2 \phi}{d \eta^2} + 2\eta \frac{d \phi}{d \eta} = 0 \Rightarrow \frac{dg}{d\eta} + 2\eta g = 0
+        \end{equation}
+        分離變數積分:
+        \begin{align}
+          \frac{dg}{d\eta} + 2\eta g &= 0 \nonumber\\
+          \frac{dg}{d\eta} &= -2\eta g \nonumber\\
+          \frac{dg}{g} &= -2\eta d\eta \nonumber\\
+          \int \frac{1}{g} dg &= \int -2\eta d\eta \nonumber\\
+          \ln |g| &= -\eta^2 + C_1 \nonumber\\
+          g &= C_2 e^{-\eta^2} \label{eq:ch2_4_unsteady_state_g}
+        \end{align}
+        代回:
+        \begin{equation}
+          g = \frac{d\phi}{d\eta} = C_2 e^{-\eta^2}
+        \end{equation}
+        再積分:
+        \begin{align}
+          \frac{d\phi}{d\eta} &= C_2 e^{-\eta^2} \nonumber\\
+          \int_{\phi(0)}^{\phi(\eta)} d\phi &= C_2 \int_0^{\eta} e^{-\tilde\eta^2} d\tilde\eta
+        \end{align}
+        P.S. $\tilde\eta$只是$\eta$的dummy variable
+        \begin{equation}
+          \phi(\eta) - \phi(0) = C_2 \int_0^{\eta} e^{-\tilde\eta^2} d\tilde\eta
+        \end{equation}
+        代入邊界條件$\phi(0) = 1$\\
+        再代入邊界條件(也作為積分上界)，$\phi(\infty) = 0$:
+        \begin{equation}
+          0 - 1 = C_2 \int_0^{\infty} e^{-\tilde\eta^2} d\tilde\eta
+        \end{equation}
+        而後面那項是Gamma函數，就是$\frac{\sqrt{\pi}}{2}$ (見\ref{sec:error_function_proof})\\
+        這也是為什麼要在前面多乘一個$2$的原因
+        \begin{align}
+          -1 &= C_2 \cdot \frac{\sqrt{\pi}}{2} \nonumber\\
+          C_2 &= -\frac{2}{\sqrt{\pi}}
+        \end{align}
+        故最後解為:
+        \begin{equation}
+          \phi(\eta) = 1 - \frac{2}{\sqrt{\pi}} \int_0^{\eta} e^{-\tilde\eta^2} d\tilde\eta = 1-\text{erf}(\eta) = \text{erfc}(\eta)
+        \end{equation}
+        而後面那項就是Error Function，被1減掉後，又變成Complementary Error Function
+        \item 把所有無因次化的東西代回去，獲得$u_x(y,t)$的解:
+        \begin{equation}
+          \frac{u_x(y,t)}{U} = \text{erfc}\left(
+            \frac{y}{2\sqrt{\nu t}}
+          \right) \implies
+          \boxed{u_x(y,t) = U \cdot \text{erfc}\left(
+            \frac{y}{2\sqrt{\nu t}}
+          \right)}
+        \end{equation}
+        \item 衍生，計算剪應力$\tau_{yx}(y,t)$:\\
+        由於$\tau_{yx} = \mu \frac{\partial u_x}{\partial y}\big|_{y=0}$\\
+        而對於erfc，我們還原回其積分形式:
+        \begin{align}
+          \tau_{yx} &= \mu \frac{\partial }{\partial y} \left[
+            U \left(
+              1 - \frac{2}{\sqrt{\pi}} \int_0^{\eta} e^{-\tilde\eta^2} d\tilde\eta\big|_{y=0}
+            \right)
+          \right] \nonumber\\
+          &= \mu U \frac{2}{\sqrt{\pi}} \cdot\left[
+            \frac{\partial }{\partial y} \left(\int_0^{\eta} e^{-\tilde\eta^2} d\tilde\eta\right)
+          \right]_{y=0}
+        \end{align}
+        這時，就可以用Leibniz' rule(\ref{eq:leibniz_rule})\\
+        對於不同變數的積分函數微分，\\
+        會是對其微分+對上限微分乘函數-對下限微分乘函數\\
+        又由於$y=0 \Rightarrow \eta = 0$，故第一項會是0\\
+        如果不用Leibniz' rule的話，會覺得好像全部都是0
+        \begin{align}
+          \frac{\partial }{\partial y} \left(\int_0^{\eta} e^{-\tilde\eta^2} d\tilde\eta\right) &=
+          \int_0^{\eta} \frac{\partial }{\partial y}(e^{-\tilde\eta^2}) d\tilde\eta\big|_{y=0} +
+          e^{-\eta^2}\frac{\partial \eta}{\partial y} - 0 \nonumber\\
+          & = \int_0^{{\color{red}0}} \frac{\partial }{\partial y}(e^{-\tilde\eta^2}) d\tilde\eta\big|_{y=0} +
+          e^{-\eta^2}\frac{\partial \eta}{\partial y} - 0 \nonumber\\
+          &= e^{-\eta^2}\cdot \frac{1}{2\sqrt{\nu t}} 
+        \end{align}
+        代回:
+        \begin{align}
+          \tau_{yx} &= \mu U \frac{2}{\sqrt{\pi}} \cdot \left(
+            e^{-\eta^2}\cdot \frac{1}{2\sqrt{\nu t}} 
+          \right)_{y=0} \nonumber\\
+          &= \mu U \frac{2}{\sqrt{\pi}} \cdot \left(
+            e^{0}\cdot \frac{1}{2\sqrt{\nu t}} 
+          \right) \nonumber\\
+          &= \frac{\mu U}{\sqrt{\pi \nu t}}
+        \end{align}
+        故:
+        \begin{equation}
+          \boxed{\tau_{yx}(y,t) = \frac{\mu U}{\sqrt{\pi \nu t}}}
+        \end{equation}
+        \item 邊界層分析:\\
+        假設定義邊界層厚度$\delta$為速度為$0.01U$的地方
+        \begin{equation}
+          \delta = \frac{u_x(y,t)}{U} = 0.01
+        \end{equation}
+        解得:
+        \begin{align}
+          \delta &= \phi(\eta) \nonumber\\
+          &= \phi\left(
+            \frac{y}{2\sqrt{\nu t}}
+          \right) \nonumber\\
+          &= \text{erfc}\left(
+            \frac{y}{2\sqrt{\nu t}}
+          \right) \nonumber\\
+          \Rightarrow \quad & \frac{y}{2\sqrt{\nu t}} = \text{erfc}^{-1}(0.01) \nonumber\\
+          \Rightarrow \quad & y = 2\sqrt{\nu t} \cdot \text{erfc}^{-1}(0.01) \nonumber\\
+          \Rightarrow \quad & \boxed{\delta(t) = 2\sqrt{\nu t} \cdot \text{erfc}^{-1}(0.01)} \nonumber\\
+          & \approx 4.652 \sqrt{\nu t}
+        \end{align}
+      \end{enumerate}
+      \item Boundary Layer Approximation 求解:\\
+      由於Similarity Approach必須要求:
+      \begin{equation}
+        u_x(y,0) = u_x(\infty, t) = 0
+      \end{equation}
+      可是如果不符合這個條件，例如沒有無限遠處的條件\\
+      或不完全相同\\
+      就無法使用Similarity Approach\\
+      這時候就可以使用\fbox{Boundary Layer Approximation}!\\
+      定義一個假想的會隨時間變化的邊界層厚度$\delta(t)$，並定義一個特徵長度$\eta$\\
+      當$\eta=1$時，代表他再邊界層$\delta(t)$上\\
+      至於\fbox{邊界條件}，由於假定了超過$\delta(t)$後，流體不再受影響\\
+      故所有$\eta =1$下的$\phi$
+      \begin{equation}
+        \boxed{\phi(1) = \phi'(1) = \phi''(1) = \phi'''(1) = \cdots = \phi^{(n)}(1) = 0}
+      \end{equation}
+      要多少邊界條件，就有多少導數等於0\\
+      如此以來我們\fbox{強制創造了一個時間與距離的函數關係}，來將PDE轉成ODE\\
+      如此即使不符合Similarity Approach的條件，也能近似出來\\
+      P.S.這方法永遠有效，但只是作用範圍只有在邊界層內\\
+      如果今天不是物理上說明了超過邊界層後性質趨於不影響\\
+      不然就是個只有在特定範圍有用的解而已
+      \begin{enumerate}
+        \item 定義$\eta$，並將速度無因次化:
+        \begin{equation}
+          \eta = \frac{y}{\delta(t)},~\phi(\eta) = \frac{u_x}{U}
+        \end{equation}
+        其中$\delta(t)$代表邊界層的厚度\\
+        如此一來，就一樣將$u_x(y,t)$轉成$\phi(\eta)$
+        \begin{equation}
+          u_x(y,t) = U \phi(\eta), \quad y = \eta \delta(t)
+        \end{equation}
+        \item 將各偏微分轉成$\eta$的函數:\\
+        同上面Similarity Approach的做法，注意出現$y$的地方要轉成$\eta \delta(t)$\\
+        原式(\ref{eq:ch2_4_unsteady_state_governing_equation}):
+        \begin{equation}
+          \frac{\partial u_x}{\partial t} = \nu\frac{\partial^2 u_x}{\partial y^2}
+        \end{equation}
+        左式:
+        \begin{align}
+          \frac{\partial u_x}{\partial t} &= U\frac{\partial \phi}{\partial \eta}\frac{\partial \eta}{\partial t} \nonumber\\
+          &= U\frac{\partial \phi}{\partial \eta}\left(
+            -\frac{y}{\delta^2}\cdot \frac{d\delta}{dt}
+          \right) \nonumber\\
+          &= -\frac{\eta U}{\delta}\cdot \frac{d\delta}{dt}\cdot \phi' \label{eq:ch2_4_unsteady_state_partial_ux_partial_t}
+        \end{align}
+        右式:
+        \begin{align}
+          \nu\frac{\partial^2 u_x}{\partial y^2} &= \nu \frac{\partial}{\partial y}\left(
+            U\frac{\partial \phi}{\partial \eta}\frac{\partial \eta}{\partial y}
+          \right) \nonumber\\
+          &= \nu \frac{\partial}{\partial y}\left(
+            U\frac{\partial \phi}{\partial \eta}\cdot \frac{1}{\delta}
+          \right) \nonumber\\
+          &= \nu U \frac{\partial}{\partial \eta}\left(
+            \frac{1}{\delta}\cdot \frac{\partial \phi}{\partial \eta}
+          \right)\frac{\partial \eta}{\partial y} \nonumber\\
+          &= \nu U \left(
+            \frac{1}{\delta}\cdot \frac{\partial^2 \phi}{\partial \eta^2}
+          \right)\cdot \frac{1}{\delta} \nonumber\\
+          &= \nu \frac{U}{\delta^2}\cdot \phi'' \label{eq:ch2_4_unsteady_state_nu_partial2_ux_partial_y2}
+        \end{align}
+        將兩式相等:
+        \begin{align}
+          -\frac{\eta U}{\delta}\cdot \frac{d\delta}{dt}\cdot \phi' &= \nu \frac{U}{\delta^2}\cdot \phi'' \nonumber\\
+          -\eta \phi' {\color{red}\delta \frac{d\delta}{dt}} &= {\color{red}\nu} \phi'' \label{eq:ch2_4_unsteady_state_phi}
+        \end{align}
+        看起來雖然很奇怪，這是因為我們不知道$\delta(t)$是什麼\\
+        但是沒有關係，因為我們就讓$\delta(t)$自己隨時間長\\
+        反正$\eta=0$時，$\phi=1,\delta$多大都沒差\\
+        $\eta=1$時，$\phi=0$，雖然$\eta$這時代表的位置不知道在哪，但$\phi$就是0
+      \item 直接假設$\phi$是一個多項式\\
+        一般通常假設是三次式，但其實多少都無所謂\\
+        而甚至最終答案是什麼也都無所謂\\
+        這就是一開始說的，這個方式並沒有減少自由度\\
+        只是讓他有一個適用範圍而已\\
+        舉例來說，假設我定一個6次多項式，你會解出$\delta=\sqrt{84\nu t}$\\
+        而假設是三次多項式，你會解出$\delta=\sqrt{24\nu t}$\\
+        6次式就只是定義更遠的地方才是邊界層而已\\
+        而一種比較物理意義的作法是，我先規定
+        \begin{equation}
+          u_x(y=\delta,t) = 0.01 U
+        \end{equation}
+        P.S. 因為這題是拉下板，如果是水流進管子，就會是$u_x(y=\delta,t) = 0.99 U$\\
+        代表邊界層外的流速接近特徵速度$U$\\
+        這樣就能比較有物理意義\\
+        至於微分項，因為無法測量，所以就仍然都是近似成0
+        \begin{equation}
+          \phi(1) = 0.01,~\phi'(1) = 0,~\phi''(1) = 0
+        \end{equation}
+        故假設為一個三次多項式:
+        \begin{equation}
+          \phi(\eta) = a + b\eta + c\eta^2 + d\eta^3
+        \end{equation}
+        代入邊界條件:
+        \begin{equation}
+          \begin{cases}
+            \phi(0) = a = 1\\
+            \phi(1) = 1 + b + c + d = 0.01 \\
+            \phi'(1) = b + 2c + 3d = 0\\
+            \phi''(1) = 2c + 6d = 0
+          \end{cases}
+        \end{equation}
+        解得:
+        \begin{equation}
+          a= 1,\quad b=-2.97, \quad c=2.97, \quad d=-0.99
+        \end{equation}
+        故最後多項式為:
+        \begin{equation}
+          \phi(\eta) = 1 - 2.97\eta + 2.97\eta^2 - 0.99\eta^3
+        \end{equation}
+      \item 獨立$\eta$並積分，得到$\delta(t)$:\\
+        將上面多項式代入(\ref{eq:ch2_4_unsteady_state_phi}):
+        \begin{equation}
+          -\eta (-2.97 + 5.94\eta - 2.97\eta^2) \delta \frac{d\delta}{dt} = \nu (5.94 -5.94\eta)
+        \end{equation}
+       兩邊對$\eta$從0積分到1:(邊界層不是$\eta$函數可以提出去)
+        \begin{align}
+          &  \delta \frac{d\delta}{dt}  \int_0^1 -\eta (-2.97 + 5.94\eta - 2.97\eta^2) d\eta = \nu
+          \int_0^1  (5.94 -5.94\eta) d\eta \nonumber\\
+        \Rightarrow \quad & \delta \frac{d\delta}{dt} 0.2475 = \nu \cdot 2.97 \nonumber\\
+        & \delta \frac{d\delta}{dt} = \frac{2.97}{0.2475}\nu = 12\nu \nonumber\\
+        & \delta d\delta = 12\nu dt \nonumber\\
+        & \int_0^{\delta} \delta d\delta = \int_0^t 12\nu dt \nonumber\\
+        & \frac{\delta^2}{2} = 12\nu t \nonumber\\
+        & \boxed{\delta(t) = \sqrt{24\nu t}}
+        \end{align}
+      \item 將$\delta(t)$代回多項式，並把$\phi$還原回$U$，得到最後解:
+        \begin{align}
+          u_x(y,t) &= U \phi(\eta) \nonumber\\
+          &= U \phi\left(
+            \frac{y}{\delta(t)}
+          \right) \nonumber\\
+          &= U \left[
+            1 - 2.97\left(\frac{y}{\sqrt{24\nu t}}\right) + 2.97\left(\frac{y}{\sqrt{24\nu t}}\right)^2 - 0.99\left(\frac{y}{\sqrt{24\nu t}}\right)^3
+          \right] 
+        \end{align}
+      \end{enumerate}
+      這個答案會和Similarity Approach的答案有些差異\\
+      但只是作為舉例，實際上大多問題都不能拿Similarity Approach來解
+    \end{itemize}
+  \end{enumerate}
+  \item Periodic Oscillation of a Flat plate\\
+  In a semiiInfinite fluid (Rayleigh's second problem)
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (-7,0) -- (-6,0) node[anchor=west] {$x$};
+      \draw[->] (-7,0) -- (-7,1) node[anchor=south] {$y$};
+      \draw (-5,0) rectangle (5, -0.5);
+      \draw[<->] (-5.5,-0.25) -- (5.5,-0.25) node[anchor=west] {$U \cos(\omega t)$};
+      \draw[dashed] (0,0) -- (0,5);
+      \def\decay{0.6}
+      \def\period{3}
+      \def\ymax{5}
+      \draw[blue, samples=100, smooth, variable=\y, domain=0:\ymax] 
+        plot ({4 * exp(-\decay * \y) * cos(-\period * \y r)}, \y);
+      \draw[red, samples=100, smooth, variable=\y, domain=0:\ymax] 
+        plot ({-4 * exp(-\decay * \y) * cos(-\period * \y r)}, \y);
+      \draw[dashed, variable=\y, domain=0:\ymax] 
+        plot ({4 * exp(-\decay * \y)}, \y);
+      \draw[dashed, variable=\y, domain=0:\ymax] 
+          plot ({-4 * exp(-\decay * \y)}, \y);
+    \end{tikzpicture}
+    \caption{Periodic Oscillation of a Flat plate}
+  \end{figure}
+  這裡就沒辦法用Similarity Approach\\
+  因為不管哪裡都會有時間上獨立的週期性$\frac{1}{\omega}$存在\\
+  而因為是週期性，故任一個速度分布的解，都會滿足:
+  \begin{equation}
+    u_x(y,t) = u_x\left(
+      y, t + \frac{2\pi}{\omega}
+    \right)
+  \end{equation}
+  \begin{enumerate}
+    \item 列出Governing Equation及邊界條件:\\
+    同上:
+    \begin{equation}
+      \frac{\partial u_x}{\partial t} = \nu \frac{\partial^2 u_x}{\partial y^2}
+    \end{equation}
+    邊界條件:
+    \begin{align}
+      & u_x(0,t) = U \cos(\omega t) \label{eq:ch2_4_periodic_boundary_condition_1}\\
+      & u_x(\infty,t) = 0 \label{eq:ch2_4_periodic_boundary_condition_2}
+    \end{align}
+    \item 猜測解的型態:\\
+    由於邊界條件是週期性的，所以猜測解也是週期性的\\
+    故猜測解的型態為:
+    \begin{equation}
+      u_x(y,t) = \text{Re}\left\{\overline{u}(y) e^{i\omega t}
+      \right\}
+    \end{equation}
+    P.S. Re代表取實部，$\overline{u}(y)$代表這是個複數函數\\
+    由於一直加Re會很干擾，所以最後再取實部就好
+    \item 將猜測解代入Governing Equation:
+    \begin{align}
+      &i\omega e^{i\omega t} \overline{u}(y) = \nu e^{i\omega t} \frac{d^2 \overline{u}}{dy^2} \nonumber\\
+      &\boxed{\frac{\partial^2 \overline{u}}{\partial y^2} - i\frac{\omega}{\nu} \overline{u} = 0} 
+    \end{align}
+    注意到了嗎？時間變數$t$被消掉了！這就只剩下$y$的ODE了！
+    \item 解ODE:\\
+    因為是標準的係數是常數的二次微分方程式\\
+    特徵值為:
+    \begin{equation}
+      \lambda^2 - i\frac{\omega}{\nu} = 0 \Rightarrow \lambda = \pm (1+i)\sqrt{\frac{\omega}{2\nu}}
+    \end{equation}
+    故通解為:
+    \begin{equation}
+      \overline{u}(y) = A e^{(1+i)\sqrt{\frac{\omega}{2\nu}}y} + B e^{-(1+i)\sqrt{\frac{\omega}{2\nu}}y}
+    \end{equation}
+    代入邊界條件(\ref{eq:ch2_4_periodic_boundary_condition_2}):
+    \begin{equation}
+      \lim_{y\to\infty} \overline{u}(y) = \lim_{y\to\infty} \left[
+        A e^{(1+i)\sqrt{\frac{\omega}{2\nu}}y} + B e^{-(1+i)\sqrt{\frac{\omega}{2\nu}}y}
+      \right] = 0
+    \end{equation}
+    因為$A$項會發散，故$A=0$\\
+    故解為:
+    \begin{equation}
+      \overline{u}(y) = B e^{-(1+i)\sqrt{\frac{\omega}{2\nu}}y}
+    \end{equation}
+    代入邊界條件(\ref{eq:ch2_4_periodic_boundary_condition_1}):
+    \begin{align}
+      & \text{Re}\left\{
+        B e^{-(1+i)\sqrt{\frac{\omega}{2\nu}} \cdot 0} \cdot e^{i\omega t}
+      \right\} = U \cos(\omega t) \nonumber\\
+      & \text{Re}\left\{
+        B e^{i\omega t}
+      \right\} = U \cos(\omega t) \nonumber\\
+      & B = U
+    \end{align}
+    故最後解為:
+    \begin{equation}
+      u_x(y,t) = \text{Re}\left\{
+        U e^{-(1+i)\sqrt{\frac{\omega}{2\nu}}y} \cdot e^{i\omega t}
+      \right\}
+    \end{equation}
+    利用$e^{i\theta} = \cos\theta + i\sin\theta$展開:
+    \begin{align}
+      u_x(y,t) &= \text{Re}\left\{
+        U e^{-\sqrt{\frac{\omega}{2\nu}}y} \left[
+          \cos\left(\omega t - \sqrt{\frac{\omega}{2\nu}}y\right) + i \sin\left(\omega t - \sqrt{\frac{\omega}{2\nu}}y\right)
+        \right]
+      \right\} \nonumber\\
+      &= U e^{-\sqrt{\frac{\omega}{2\nu}}y} \cos\left(\omega t - \sqrt{\frac{\omega}{2\nu}}y\right)
+    \end{align}
+    \item 物理分析:
+    \begin{itemize}
+      \item 漸近線為:
+      \begin{equation}
+        u_x(y) = U e^{-\sqrt{\frac{\omega}{2\nu}}y}
+      \end{equation}
+      \item Phase Shift:
+      \begin{equation}
+        \text{Phase Shift} = \sqrt{\frac{\omega}{2\nu}} y
+      \end{equation}
+      \item 邊界層:\\
+      假設令$u_x(\delta, t) = 0.01 U$，則:
+      \begin{align}
+        & 0.01 U = U e^{-\sqrt{\frac{\omega}{2\nu}}\delta} \nonumber\\
+        & \delta = \sqrt{\frac{2\nu}{\omega}} \ln(100) \approx 4.605 \sqrt{\frac{2\nu}{\omega}} 
+        \approx 6.51 \sqrt{\frac{\nu}{\omega}}
+      \end{align}
+    \end{itemize}
+  \end{enumerate}
+  \item Startup of Plane Couette Flow\\
+  跟Impulsive Motion of a Flat Plate一樣，但就是多了一個上板\\
+  這個時候就\fbox{不需要Similarity Approach}\\
+  就跟邊界層近似需要$\delta(t)$一樣，這裡就送你$L$了\\
+  之前的狀況是\fbox{不同時間，不同的作用範圍}，所以才需要近似
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (-2,0) -- (-1,0) node[anchor=west] {$x$};
+      \draw[->] (-2,0) -- (-2,1) node[anchor=south] {$y$};
+      \draw (0,0) rectangle (5, -0.5);
+      \draw[->] (5,-0.25) -- (6,-0.25) node[anchor=west] {$U$};
+      \draw[dashed] (1,0) -- (1,3);
+      \draw[blue] (4,0) .. controls (1,0) .. (1,0.5);
+      \draw[blue] (4,0) .. controls (1.5, 0) and (1, 0.5) .. (1,1);
+      \draw[blue] (4,0) .. controls (2, 0) and (1, 1) .. (1,2);
+      \draw[blue] (4,0) .. controls (2.5, 0) and (1, 2) .. (1,3);
+      \draw[->, red] (1,0) -- +(2,2) node[anchor=south west] {$t$};
+      \node[anchor=north west, blue] at (1,3) {$u_x(y,t)$};
+      \draw (0,3) rectangle (5, 3.5);
+      \draw[<->] (0.5,0) -- (0.5,3) node[midway, anchor=east] {$L$};
+    \end{tikzpicture}
+    \caption{Startup of Plane Couette Flow}
+  \end{figure}
+  \begin{enumerate}
+    \item 列出Governing Equation及邊界條件:
+    \begin{equation}
+      \frac{\partial u_x}{\partial t} = \nu \frac{\partial^2 u_x}{\partial y^2} \label{eq:ch2_4_startup_governing_equation}
+    \end{equation}
+    邊界條件:
+    \begin{align}
+      & u_x(0,t) = 0 \label{eq:ch2_4_startup_boundary_condition_1}\\
+      & u_x(L,t) = 0 \label{eq:ch2_4_startup_boundary_condition_2}\\
+      & u_x(y,0) = U \label{eq:ch2_4_startup_initial_condition}
+    \end{align}
+    \item 使用Separation of Variables求解\\
+    這裡不用特別去無因次化\\
+    假設解的型態為:
+    \begin{equation}
+      u_x(y,t) = Y(y) T(t)
+    \end{equation}
+    代入(\ref{eq:ch2_4_startup_governing_equation}):
+    \begin{align}
+      & YT' = \nu T Y'' \nonumber\\
+      & \frac{T'}{\nu T} = \frac{Y''}{Y} = \text{常數} = \pm \lambda^2
+    \end{align}
+    \item 從時間項開始解起:
+      \begin{align}
+        \frac{T'}{\nu T} &= \pm \lambda^2 \nonumber\\
+        \frac{T'}{T} &= \pm \lambda^2 \nu  \nonumber\\
+        \int \frac{1}{T} dT &= \int \pm \lambda^2 \nu dt \nonumber\\
+        \ln |T| &= \pm \lambda^2 \nu t + C_1 \nonumber\\
+        T(t) &= C_2 e^{\pm \lambda^2 \nu t}
+      \end{align}
+      可以看出應該選擇$-\lambda^2$，因為這樣才不會隨時間發散\\
+      故:
+      \begin{equation}
+        T(t) = C_2 e^{-\lambda^2 \nu t}
+      \end{equation}
+    \item 再來解空間項:
+      \begin{align}
+        \frac{Y''}{Y} &= -\lambda^2 \nonumber\\
+        Y'' + \lambda^2 Y &= 0
+      \end{align}
+      因為$\lambda^2$是正的，故解為:
+      \begin{equation}
+        Y(y) = A \cos(\lambda y) + B \sin(\lambda y)
+      \end{equation}
+      故通解為:
+      \begin{equation}
+        u_x(y,t) = \left[
+          A \cos(\lambda y) + B \sin(\lambda y)
+        \right] C_2 e^{-\lambda^2 \nu t} \label{eq:ch2_4_startup_separation_of_variables_solution}
+      \end{equation}
+      這時注意到如果丟進邊界條件(\ref{eq:ch2_4_startup_boundary_condition_2})
+      \begin{equation}
+        u_x(L,t) = \left[
+          A \cos(\lambda L) + B \sin(\lambda L)
+        \right] C_2 e^{-\lambda^2 \nu t} = U
+      \end{equation}
+      會發現右邊是常數，而左邊卻是時間的函數，先試試看S-L Theorem
+    \item Sturm-Liouville Theorem求解:\\
+      這代表要使用\fbox{SL Theorem}來解決\\
+      也就是令
+      \begin{equation}
+        u_x(y,t) = u_n(y) + w_s(y,t) \label{eq:ch2_4_startup_sl_theorem}
+      \end{equation}
+      其中$w_s(y,t)$貢獻所有Homogeneous Boundary Conditions\\
+      有以下幾種形式:
+      \begin{align}
+        \text{常數係數微分方程=0}\quad & \alpha_1y(a) + \alpha_2y'(a) = 0 \nonumber\\
+        \text{邊界值=0}\quad & P(a) = 0 \nonumber\\
+        \text{週期性邊界值}\quad & P(a) = P(b) \text{and} P'(a) = P'(b)
+      \end{align}
+      剩下的Boundary condition，如果只有剩下單一變數的話，例如$u(0,t)$\\
+      就可以使用S-L Theorem來解決
+    \item 替換S-L假設到Governing Equation中:
+      \begin{equation}
+        \frac{\partial u_x}{\partial t} = \nu \frac{\partial^2 u_x}{\partial y^2}
+      \end{equation}
+      代入(\ref{eq:ch2_4_startup_sl_theorem}):($u_x(y,t)=u_n(y)+w_s(y,t)$)
+      \begin{equation}
+        \frac{\partial w_s}{\partial t} = \nu \frac{\partial^2 u_n}{\partial y^2} + \nu \frac{\partial^2 w_s}{\partial y^2}
+      \end{equation}
+      而因為$u_n(y)$不含時間，要使等式成立:
+      \begin{equation}
+        \frac{\partial^2 u_n}{\partial y^2} = 0
+      \end{equation}
+      解得:
+      \begin{equation}
+        u_n(y) = A + By
+      \end{equation}
+    \item 代入邊界條件求解$u_n(y)$:\\
+      代入邊界條件(\ref{eq:ch2_4_startup_initial_condition}):
+      \begin{equation}
+        u_x(0,t) = U \to u_n(0) = A = U
+      \end{equation}
+      以及(\ref{eq:ch2_4_startup_boundary_condition_2}):
+      \begin{equation}
+        u_x(L,t) = 0 \to 
+        u_n(L) = U + B L = 0 \implies B = -\frac{U}{L}
+      \end{equation}
+      解得:
+      \begin{equation}
+        \boxed{u_n(y) = U \left(1 - \frac{y}{L} \right)}
+      \end{equation}
+      \item 求解$w_s(y,t)$:\\
+      因為這裡的邊界條件是Homogeneous Boundary Conditions\\
+      回到(\ref{eq:ch2_4_startup_separation_of_variables_solution}):
+      \begin{equation}
+        w_s(y,t) = \left[
+          A \cos(\lambda y) + B \sin(\lambda y)
+        \right] C_2 e^{-\lambda^2 \nu t}
+      \end{equation}
+      代入邊界條件(\ref{eq:ch2_4_startup_boundary_condition_1}):
+      \begin{equation}
+        w_s(0,t) = \left[
+          A \cos(0) + B \sin(0)
+        \right] C_2 e^{-\lambda^2 \nu t} = 0
+      \end{equation}
+      故$A=0$
+      \begin{equation}
+        w_s(y,t) = B \sin(\lambda y) C_2 e^{-\lambda^2 \nu t}
+      \end{equation}
+      代入邊界條件(\ref{eq:ch2_4_startup_boundary_condition_2}):
+      \begin{equation}
+        w_s(L,t) = B \sin(\lambda L) C_2 e^{-\lambda^2 \nu t} = 0
+      \end{equation}
+      故$\sin(\lambda L) = 0$，解得:
+      \begin{equation}
+        \lambda_n = \frac{n\pi}{L}, \quad n \in \mathbb{N}
+      \end{equation}
+      於是拿到一系列的Eigen value，使得
+      \begin{equation}
+        \phi_n(y,n) = \sin\left(
+          \frac{n\pi}{L} y
+        \right)
+      \end{equation}
+    \item (可省略) 測試Eigen function的正交性:\\
+    會利用到:
+    \begin{equation}
+      \sin A \sin B = \frac{1}{2}\left[
+        \cos(A-B) - \cos (A+B)
+      \right]
+    \end{equation}
+    證明如下:
+    \begin{align}
+      &\int_a^b r(x)\phi_n(x)\phi_m(x) dx = 0, \quad n \neq m \nonumber\\
+     \Rightarrow \quad &\int_0^L \left(
+        \sin \frac{n\pi y}{L} 
+      \right)\left(
+        \sin \frac{m\pi y}{L}
+      \right)dy  \nonumber\\
+      =& \int_0^L \frac{1}{2}\left[
+        \cos \left(
+          \frac{(n-m)\pi y}{L}
+        \right) - \cos \left(
+          \frac{(n+m)\pi y}{L}
+        \right)
+      \right] \nonumber\\
+      =& \frac{1}{2} \left[
+        \frac{L}{(n-m)\pi} \sin\left(
+          \frac{(n-m)\pi y}{L}
+        \right) - \frac{L}{(n+m)\pi} \sin\left(
+          \frac{(n+m)\pi y}{L}
+        \right)
+      \right]_0^L \nonumber\\
+      =& 0
+    \end{align}
+    \item 將所有Eigen function線性組合，得到$w_s(y,t)$:
+      \begin{equation}
+        w_s(y,t) = \sum_{n=1}^{\infty} B_n \sin\left(
+          \frac{n\pi}{L} y
+        \right) e^{-\left(
+          \frac{n\pi}{L}
+        \right)^2 \nu t}
+      \end{equation}
+    \item 這時，再把剛剛的$u_n(y)$代進去，他能限制所有$B_n$該長什麼樣子\\
+    這也就是\fbox{傅立葉轉換}的基礎，利用一個函數去換成另外一組無窮基底的函數
+      \begin{align}
+        & u_x(y,0) = U = u_n(y) + w_s(y,0) \nonumber\\
+        \Rightarrow \quad & U = U\left(
+          1 - \frac{y}{L}
+        \right) + \sum_{n=1}^{\infty} B_n \sin\left(
+          \frac{n\pi}{L} y
+        \right) \nonumber\\
+        \Rightarrow \quad & \frac{Uy}{L} = \sum_{n=1}^{\infty} B_n \sin\left(
+          \frac{n\pi}{L} y
+        \right)
+      \end{align}
+      兩邊同乘以$\sin\left(
+        \frac{m\pi}{L} y
+      \right)$並從0積分到$L$:
+      \begin{align}
+        & \int_0^L \frac{Uy}{L} \sin\left(
+          \frac{m\pi}{L} y
+        \right) dy = \int_0^L \sum_{n=1}^{\infty} B_n \sin\left(
+          \frac{n\pi}{L} y
+        \right) \sin\left(
+          \frac{m\pi}{L} y
+        \right) dy \nonumber\\
+        & \int_0^L \frac{Uy}{L} \sin\left(
+          \frac{m\pi}{L} y
+        \right) dy = B_m \int_0^L  \sin^2\left(
+          \frac{m\pi}{L} y
+        \right) dy \nonumber\\
+        & \int_0^L \frac{Uy}{L} \sin\left(
+          \frac{m\pi}{L} y
+        \right) dy = B_m \cdot \frac{L}{2} \nonumber\\
+        & B_m = \frac{2U}{L^2} \int_0^L y \sin\left(
+          \frac{m\pi}{L} y
+        \right) dy 
+      \end{align}
+      積分後得到:
+      \begin{equation}
+        B_m = \frac{2U}{m\pi} (-1)^{m+1}
+      \end{equation}
+    \item 最後解為:
+      \begin{equation}
+        \boxed{u_x(y,t) = U \left(
+          1 - \frac{y}{L}
+        \right) + \sum_{n=1}^{\infty} \frac{2U}{n\pi} (-1)^{n+1} \sin\left(
+          \frac{n\pi}{L} y
+        \right) e^{-\left(
+          \frac{n\pi}{L}
+        \right)^2 \nu t}}
+      \end{equation}
+    \item 另外對比最一開始只有下板的答案:
+      \begin{equation}
+        u_x(y,t) = U \left[
+          1 - \text{erf}\left(
+            \frac{y}{\sqrt{4\nu t}}
+          \right)
+        \right]
+      \end{equation}
+      可以發現兩者在$t\to\infty$時，都會收斂到:
+      \begin{equation}
+        u_x(y) = U \left(
+          1 - \frac{y}{L}
+        \right)
+      \end{equation}
+      這也是Plane Couette Flow的穩態解\\
+      所以對於短的時間來說，可以想成還沒影響到上板\\
+      這時如果用傅立葉展開的話，會需要可能近百項才能逼近\\
+      這時應直接假設上板不存在，使用誤差函數解會比較好
+      \begin{equation}
+        \frac{\nu t}{L^2} \ll 1 \Rightarrow  u_x(y,t) \approx U \left[
+          1 - \text{erf}\left(
+            \frac{y}{\sqrt{4\nu t}}
+          \right)
+        \right]
+      \end{equation}
+      反之，如果對於長時間來說，上板的影響已經擴散到整個區域\\
+      這時使用傅立葉展開的解會比較好，甚至能只保留第一項就很足夠了
+      \begin{equation}
+        \frac{\nu t}{L^2} \gg 1 \Rightarrow  u_x(y,t) \approx U \left(
+          1 - \frac{y}{L}
+        \right) + \frac{2U}{\pi} \sin\left(
+          \frac{\pi}{L} y
+        \right) e^{-\left(
+          \frac{\pi}{L}
+        \right)^2 \nu t}
+      \end{equation}
+  \end{enumerate}
+\end{itemize}
+\end{CJK*}
+\end{document}

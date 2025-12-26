@@ -1,0 +1,575 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{熱量輸送，Shell-Balance解題}
+\begin{itemize}
+  \item Shell Balance 解題三步驟:
+  \begin{enumerate}
+    \item 先確認控制體積的維度，是1D、2D、還是3D
+    \item 考慮在Control Volume中發生幾種熱傳:
+    \begin{itemize}
+      \item 熱傳導:
+      \begin{equation}
+        q_k = -kA\frac{dT}{dr}
+      \end{equation}
+      P.S. 卡氏座標通常畫等效電路圖就解完了
+      \item 軸向熱對流:\\
+      有物質進出控制體積
+      \begin{equation}
+        q_c = \rho C_V T v A
+      \end{equation}
+      如果是固體，$C_P=C_V$
+      \item 產生熱:\\
+      電熱、反應熱
+      \begin{equation}
+        \dot q  [=] \frac{J}{S\cdot m^3}
+      \end{equation}
+      徑向熱對流:
+      \begin{equation}
+        q_c = h A\Delta T
+      \end{equation}
+    \end{itemize}
+    \item 代入 Energy Balance的方程式:
+    \begin{equation}
+      E_\text{in} - E_{\text{out}} + E_{\text{gen}} = E_{\text{accumulation}}
+    \end{equation}
+  \end{enumerate}
+  \item 舉圓柱座標為例:
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) circle (4.8);
+      \draw[dashed] (0,0) circle (5.5);
+      \draw[dashed, ->] (10:4.8) -- (10:5.5) node[midway, above] {$q_c$};
+      \node[anchor=west] at (5.5,0) {Air};
+      \fill[pattern={Lines[angle=45,distance={9/sqrt(2)}]}, pattern color=blue!70] (0,0) circle (4.8);
+      \node at (0,1) {\large $\dot q$};
+      \fill[pattern=crosshatch dots, pattern color=black] (2.7,0) arc (0:180:2.7) -- (-2.4,0) arc (180:0:2.4) -- cycle;
+      \fill[pattern=crosshatch dots, pattern color=black] (2.7,0) arc (0:-180:2.7) -- (-2.4,0) arc (-180:0:2.4) -- cycle;
+      \draw [dashed] (0,0) circle (2.7);
+      \draw [dashed] (0,0) circle (2.4);
+      \draw[<->] (0,0) -- (45:4.8);
+      \node[anchor=south east] at (45:2.1) {$R$};
+      \node[anchor=south west] at (45:4.8) {$T_o$};
+      \draw[<->] (0,0) -- (315:2.4) node[midway, above] {$r$};
+      \draw[->] (225:3.2) -- (225:2.7);
+      \draw[->] (225:1.9) -- (225:2.4);
+      \node[anchor=south west] at (225:1.9) {$dr$};
+      \draw[->] (1.9,0) -- (2.4,0);
+      \node[anchor=east] at (1.9,0) {$q_k|_r$};
+      \draw[->] (2.7,0) -- (3.2,0);
+      \node[anchor=west] at (3.2,0) {$q_k|_{r+dr}$};
+    \end{tikzpicture}
+    \caption{圓柱座標，1D，Shell Balance示意圖}
+  \end{figure}
+  均勻產生熱$\dot q$，長度$L$，外徑$R$\\
+  控制體積為$r$到$r+dr$之間的圓環
+  \begin{itemize}
+    \item 能量流入:
+    \begin{equation}
+      E_\text{in} = q_k|_r  = -k\left(2\pi r L\right)\frac{dT}{dr}\bigg|_r
+    \end{equation}
+    \item 能量流出:
+    \begin{equation}
+      E_\text{out} = q_k|_{r+dr}  = -k\left[2\pi (r+dr) L\right]\frac{dT}{dr}\bigg|_{r+dr}
+    \end{equation}
+    \item 能量產生:
+    \begin{equation}
+      E_\text{gen} = \dot q \left[\pi \left((r+dr)^2 - r^2\right)L\right] = \dot q (2\pi r L dr)
+    \end{equation}
+    \item 能量累積:
+    \begin{equation}
+      E_{\text{acc}} = \rho C_V (2\pi r L dr) \frac{\partial T}{\partial t}
+    \end{equation}
+    \item 代入Energy Balance，並假設$C_V$、$k$、$\rho$為常數:
+    \begin{align}
+      & -k\left(2\pi r L\right)\frac{dT}{dr}\bigg|_r 
+       -\left[-k\left[2\pi (r+dr) L\right]\frac{dT}{dr}\bigg|_{r+dr}\right]
+       + \dot q (2\pi r L dr) = \rho C_V (2\pi r L dr) \frac{\partial T}{\partial t} \nonumber\\
+    (\div dr)\quad& \frac{
+      k\left[2\pi (r+dr) L\right]\frac{dT}{dr}\bigg|_{r+dr} - k\left(2\pi r L\right)\frac{dT}{dr}\bigg|_r
+    }{dr} + \dot q (2\pi r L) = \rho C_V (2\pi r L) \frac{\partial T}{\partial t} \nonumber\\
+    (\lim_{dr\to 0})\quad& -k \frac{d}{dr}\left(2\pi r L \frac{dT}{dr}\right) + \dot q (2\pi r L) = \rho C_V (2\pi r L) \frac{\partial T}{\partial t} \nonumber\\
+    \Rightarrow\quad& \boxed{
+      \frac{k}{r} \frac{d}{dr}\left(r \frac{dT}{dr}\right) + \dot q = \rho C_V \frac{\partial T}{\partial t}
+    }  \label{eq:heat_transfer_cylindrical_shell_balance}
+    \end{align}
+    P.S. $\frac{k}{r} \frac{d}{dr}\left(r \frac{dT}{dr}\right)$ 就是圓柱座標的Laplace:
+    \begin{equation}
+      k\nabla^2 T = \frac{k}{r} \frac{d}{dr}\left(r \frac{dT}{dr}\right)
+    \end{equation}
+    \item 求出Steady State下各處熱通量$\frac{q_k}{A}$ (Flux):\\
+    由Fourier's Law:
+    \begin{equation}
+      q_k = -kA\frac{dT}{dr} = -k(2\pi r L)\frac{dT}{dr} \label{eq:heat_transfer_shell_balance_Fourier_law}
+    \end{equation}
+    由(\ref{eq:heat_transfer_cylindrical_shell_balance})式代換出$\frac{dT}{dr}$:
+    \begin{align}
+      & \frac{k}{r} \frac{d}{dr}\left(r \frac{dT}{dr}\right) + \dot q = \rho C_V \cancel{\frac{\partial T}{\partial t}} \nonumber\\
+      \Rightarrow\quad& \frac{d}{dr}\left(r \frac{dT}{dr}\right) = -\frac{\dot q r}{k} \nonumber\\
+      \Rightarrow\quad& r \frac{dT}{dr} = -\frac{\dot q r^2}{2k} + C_1 \label{eq:heat_transfer_shell_balance_dTdr_intermediate}
+    \end{align}
+    代入連續性邊界條件，在$r=0$時連續，且$T$有最大值\\
+    故:
+    \begin{equation}
+      r=0, \quad \frac{\partial T}{\partial r} = 0
+    \end{equation}
+    代入(\ref{eq:heat_transfer_shell_balance_dTdr_intermediate})，解得:
+    \begin{equation}
+      C_1 = 0
+    \end{equation}
+    故
+    \begin{equation}
+      \frac{dT}{dr} = -\frac{\dot q r}{2k}
+    \end{equation}
+    代回(\ref{eq:heat_transfer_shell_balance_Fourier_law})式，得:
+    \begin{equation}
+      \frac{q_k}{A} = -k\left(
+        -\frac{\dot q}{2k} r
+      \right) = \frac{\dot q r}{2}
+    \end{equation}
+  \end{itemize}
+  \item 舉例，加上鰭片來增加熱傳面積
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) -- (2,0);
+      \draw (0,4) -- (2,4);
+      \draw (2,2) ellipse (0.75 and 2);
+      \fill[white] (2,1.2) rectangle (8,2.8);
+      \draw (2,1.2) arc(-90:-270:0.26 and 0.8) -- (8, 2.8);
+      \draw (2,1.2) -- (8,1.2);
+      \draw (8,2) ellipse (0.26 and 0.8);
+      \draw (2,1.2) -- (2,-0.5);
+      \draw [->] (2,-0.25) -- (3,-0.25) node[right] {$x$};
+      \draw [<->] (2,1) -- (8,1) node[midway, below] {$L$};
+      \node[anchor=south] at (2,2.8) {$T_s$};
+      \node at(5, 3.5) {$T_\infty, h$};
+      \node at(8,2) {$A_c$};
+      \draw[blue, dashed] (4.2,1.2) arc(-90:-270:0.26 and 0.8);
+      \draw[blue, dashed] (4.6,2) ellipse (0.26 and 0.8);
+      \node[blue, anchor=south] at (4.4,2.8) {$dx$};
+      \fill[pattern=north west lines, pattern color=blue] (4.2,1.2) arc(-90:-270:0.26 and 0.8) -- (4.6,2.8) arc(90:-90:0.26 and 0.8) -- cycle;
+    \end{tikzpicture}
+    \caption{鰭片示意圖}
+  \end{figure}
+  鰭片會加裝於熱傳裝置的壁面上來增加熱傳效率\\
+  鰭片因為很薄，所以計算上會\fbox{忽略厚度方向上的熱傳}\\
+  只考慮軸向熱傳，$T=T(x)$\\
+  依序求出$T(x)\to q_\text{fin}\to \eta_\text{fin}$:
+  \begin{itemize}
+    \item 求$T(x)$:\\
+    使用Shell Balance:
+    \begin{itemize}
+      \item 能量流入:
+      \begin{equation}
+        E_\text{in} = q_\text{fin}|_x = -kA_c \frac{dT}{dx}\bigg|_x
+      \end{equation}
+      \item 能量流出:
+      \begin{equation}
+        E_\text{out} = q_\text{fin}|_{x+dx} = -kA_c \frac{dT}{dx}\bigg|_{x+dx}
+      \end{equation}
+      \item 能量產生:
+      \begin{equation}
+        E_\text{gen} = -q_c = -h(T-T_\infty) (Pdx)
+      \end{equation}
+      P.S. $P$為鰭片的周長
+      \item 能量累積:
+      \begin{equation}
+        E_{\text{acc}} = 0
+      \end{equation}
+    \end{itemize}
+    \item 代入Energy Balance:
+    \begin{align}
+      & -kA_c \frac{dT}{dx}\bigg|_x - \left[-kA_c \frac{dT}{dx}\bigg|_{x+dx}\right] - h(T-T_\infty) (Pdx) = 0 \nonumber\\
+    (\div dx)\quad& \frac{kA_c \frac{dT}{dx}\bigg|_{x+dx} - kA_c \frac{dT}{dx}\bigg|_x}{dx} - hP(T-T_\infty) = 0 \nonumber\\
+    (\lim_{dx\to 0})\quad& -kA_c \frac{d^2 T}{dx^2} - hP(T-T_\infty) = 0 \nonumber\\
+    \Rightarrow\quad& \frac{d^2 T}{dx^2} - \frac{hP}{kA_c}(T-T_\infty) = 0 \label{eq:heat_transfer_fin_differential_equation}
+    \end{align}
+    \item 解(\ref{eq:heat_transfer_fin_differential_equation})式，需兩個邊界條件:
+    \begin{itemize}
+      \item $x=0$時，$T=T_s$
+      \item $x=L$時，鰭片頂端絕熱:
+      \begin{equation}
+        \frac{dT}{dx}\bigg|_{x=L} = 0
+      \end{equation}
+    \end{itemize}
+    \item 為了讓非齊次ODE變齊次，令:
+    \begin{equation}
+      \theta = T - T_\infty\implies \frac{d\theta}{dx} = \frac{dT}{dx},\quad \frac{d^2 \theta}{dx^2} = \frac{d^2 T}{dx^2}
+    \end{equation}
+    代入(\ref{eq:heat_transfer_fin_differential_equation})式:
+    \begin{equation}
+      \frac{d^2 \theta}{dx^2} - \frac{hP}{kA_c}\theta = 0
+    \end{equation}
+    特徵方程式:
+    \begin{equation}
+      r^2 - \frac{hP}{kA_c} = 0 \Rightarrow r = \pm \sqrt{\frac{hP}{kA_c}} = \pm m
+    \end{equation}
+    \item 分四種狀況解題
+    \begin{enumerate}
+      \item 無限長鰭片
+      \item 有限長鰭片，頂端絕熱
+      \item 有限長鰭片，知道末端溫度
+      \item 有限長鰭片，末關溫度未知
+    \end{enumerate}
+    \begin{itemize}
+      \item 我們先假設這個鰭片是無限長的\\
+      邊界條件為:
+      \begin{align}
+        T(\infty) &= T_\infty, \implies \theta = 0 \nonumber\\
+        T(0) &= T_s \implies \theta = T_s - T_\infty
+      \end{align}
+      當遇到邊界條件是無限遠時，以展開，可快速捨去發散的解
+      \begin{equation}
+        \theta = C_1 e^{mx} + C_2 e^{-mx}
+      \end{equation}
+      P.S.若邊界條件不為無限遠，怎建議使用
+      \begin{equation}
+        \theta = C_1 \cosh(mx) + C_2 \sinh(mx)
+      \end{equation}
+      \item 代入邊界條件求$C_1, C_2$:
+      \begin{itemize}
+        \item $x\to \infty$時，$\theta=0$:
+        \begin{equation}
+          \theta|_{x\to\infty} = C_1 e^{m\infty} + C_2 e^{-m\infty} = 0 \Rightarrow C_1 = 0
+        \end{equation}
+        \item $x=0$時，$T=T_s$:
+        \begin{equation}
+          \theta|_{x=0} = T_s - T_\infty = C_2 \label{eq:heat_transfer_fin_infinite_boundary_condition}
+        \end{equation}
+      \end{itemize}
+      由(\ref{eq:heat_transfer_fin_infinite_boundary_condition})式解得
+      \begin{equation}
+        C_2 = T_s - T_\infty
+      \end{equation}
+      故:
+      \begin{equation}
+        \theta = (T_s - T_\infty) e^{-mx}
+      \end{equation}
+      故溫度分佈為:
+      \begin{equation}
+        T(x) = T_\infty + (T_s - T_\infty) e^{-\sqrt{\frac{hP}{kA_c}} x} \label{eq:heat_transfer_fin_infinite_temperature_distribution}
+      \end{equation}
+      \item 無限長下的熱傳速率:$q_\text{fin}$:
+      \begin{equation}
+        q_\text{fin} = -kA_c \frac{dT}{dx}\bigg|_{x=0} = \int_0^L hP(T-T_\infty) dx
+      \end{equation}
+      P.S. 把整個鰭片當成一個系統，左邊為進入鰭片的熱通量，右邊為鰭片對流散失的熱通量\\
+      而通常我們會使用左邊的來計算，一方面是因為微分比較好微分\\
+      另一方面是因為右邊其實省略了鰭片頂端的熱傳導\\
+      微分(\ref{eq:heat_transfer_fin_infinite_temperature_distribution})式:
+      \begin{align}
+        & \frac{dT}{dx} = (T_s - T_\infty) \frac{d}{dx}\left(
+          e^{-\sqrt{\frac{hP}{kA_c}} x}
+        \right) \nonumber\\
+        = & (T_s - T_\infty) \left(
+          -\sqrt{\frac{hP}{kA_c}} e^{-\sqrt{\frac{hP}{kA_c}} x}
+        \right) \nonumber\\
+        \Rightarrow\quad& \frac{dT}{dx}\bigg|_{x=0} = -(T_s - T_\infty) \sqrt{\frac{hP}{kA_c}}
+      \end{align}
+      故無限長鰭片熱通量為:
+      \begin{equation}
+        q_\text{fin} = kA_c (T_s - T_\infty) \sqrt{\frac{hP}{kA_c}} =\boxed{ (T_s - T_\infty) \sqrt{hPkA_c}} \label{eq:heat_transfer_fin_infinite_heat_flux}
+      \end{equation}
+      \item 效率$\eta_\text{fin}$:\\
+      鰭片效率定義為實際鰭片熱通量與理想鰭片熱通量之比:
+      \begin{equation}
+        \eta_\text{fin} = \frac{q_\text{fin}}{q_{\text{fin, ideal}}}
+      \end{equation}
+      理想鰭片\fbox{假設整個鰭片溫度均為$T_s$}，維持最大溫差的Fin，故:
+      \begin{equation}
+        q_{\text{fin, ideal}} = h A_\text{fin} (T_s - T_\infty)
+      \end{equation} 
+      代入(\ref{eq:heat_transfer_fin_infinite_heat_flux})式，得:
+      \begin{align}
+        \eta_\text{fin} &= \frac{(T_s - T_\infty) \sqrt{hPkA_c}}{h P L (T_s - T_\infty)} \nonumber\\
+        &= \frac{\sqrt{hPkA_c}}{h P L} \nonumber\\
+        &= \boxed{\frac{1}{L} \sqrt{\frac{kA_c}{hP}}} \label{eq:heat_transfer_fin_infinite_efficiency}
+      \end{align}
+    \end{itemize}
+    \item 現在考慮有限長鰭片，頂端絕熱
+    \begin{itemize}
+      \item 邊界條件為:
+      \begin{align}
+        x=0,&\quad T=T_s \implies \theta = T_s - T_\infty \nonumber\\
+        x=L,&\quad \frac{dT}{dx}\bigg|_{x=L} = 0 \implies \frac{d\theta}{dx}\bigg|_{x=L} = 0
+      \end{align}
+      因為是有限的邊界條件，故代入:
+      \begin{equation}
+        \theta = C_1 \cosh(mx) + C_2 \sinh(mx)
+      \end{equation}
+      \item 代入邊界條件求$C_1, C_2$
+      \begin{itemize}
+        \item $\theta(0)=T_s - T_\infty$:
+        \begin{equation}
+          \theta|_{x=0} = T_s - T_\infty = C_1 \label{eq:heat_transfer_fin_finite_boundary_condition_1}
+        \end{equation}
+        \item $\frac{d\theta}{dx}\bigg|_{x=L} = 0$:
+        \begin{align}
+          & \frac{d\theta}{dx} = C_1 m \sinh(mx) + C_2 m \cosh(mx) \nonumber\\
+          \Rightarrow\quad& \frac{d\theta}{dx}\bigg|_{x=L} = 0 = C_1 m \sinh(mL) + C_2 m \cosh(mL) \nonumber\\
+          \Rightarrow\quad& C_2 = -C_1 \tanh(mL) \label{eq:heat_transfer_fin_finite_boundary_condition_2}
+        \end{align}
+      \end{itemize}
+      \item 由(\ref{eq:heat_transfer_fin_finite_boundary_condition_1})、(\ref{eq:heat_transfer_fin_finite_boundary_condition_2})式解得:
+      \begin{align}
+        C_1 &= T_s - T_\infty \nonumber\\
+        C_2 &= -(T_s - T_\infty) \tanh(mL)
+      \end{align}
+      故:
+      \begin{equation}
+        \theta = (T_s - T_\infty) \left[
+          \cosh(mx) - \tanh(mL) \sinh(mx)
+        \right]
+      \end{equation}
+      \item 故溫度分佈為:
+      \begin{equation}
+        T(x) = \boxed{T_\infty + (T_s - T_\infty) \left[
+          \cosh\left(\sqrt{\frac{hP}{kA_c}}x\right) - 
+          \tanh\left(L\sqrt{\frac{hP}{kA_c}}\right) \sinh\left(\sqrt{\frac{hP}{kA_c}}x\right)
+        \right] }\label{eq:heat_transfer_fin_finite_temperature_distribution}
+      \end{equation}
+      \item 有限長鰭片熱通量:$q_\text{fin}$:
+      \begin{align}
+        q_\text{fin} &= -kA_c \frac{dT}{dx}\bigg|_{x=0} \nonumber\\
+        \frac{dT}{dx} &= (T_s - T_\infty) \frac{d}{dx}\left[
+          \cosh(mx) - \tanh(mL) \sinh(mx)
+        \right] \nonumber\\
+        &= (T_s - T_\infty) \left[
+          m \sinh(mx) - \tanh(mL) m \cosh(mx)
+        \right] \nonumber\\
+        \Rightarrow\quad& \frac{dT}{dx}\bigg|_{x=0} = (T_s - T_\infty) \left[
+          0 - \tanh(mL) m 
+        \right] = -m \tanh(mL) (T_s - T_\infty)
+      \end{align}
+      故有限長鰭片熱通量為:
+      \begin{equation}
+        q_\text{fin} = kA_c m \tanh(mL) (T_s - T_\infty) = \boxed{
+          \sqrt{hPkA_c} \tanh\left(L\sqrt{\frac{hP}{kA_c}}\right) (T_s - T_\infty)
+        } \label{eq:heat_transfer_fin_finite_heat_flux}
+      \end{equation}
+      \item 效率$\eta_\text{fin}$:\\
+      同理可得:
+      \begin{align}
+        \eta_\text{fin} &= \frac{q_\text{fin}}{q_{\text{fin, ideal}}} \nonumber\\
+        &= \frac{\sqrt{hPkA_c} \tanh\left(L\sqrt{\frac{hP}{kA_c}}\right) (T_s - T_\infty)}{h P L (T_s - T_\infty)} \nonumber\\
+        &= \frac{\sqrt{hPkA_c}}{h P L} \tanh\left(L\sqrt{\frac{hP}{kA_c}}\right) \nonumber\\
+        &= \boxed{\frac{1}{L} \sqrt{\frac{kA_c}{hP}} \tanh\left(L\sqrt{\frac{hP}{kA_c}}\right)} \label{eq:heat_transfer_fin_finite_efficiency}
+      \end{align}
+    \end{itemize}
+    \item 考慮末端溫度已知，有限長鰭片
+    \begin{itemize}
+      \item 邊界條件為:
+      \begin{align}
+        x=0,&\quad T=T_s \implies \theta = T_s - T_\infty \nonumber\\
+        x=L,&\quad T=T_L \implies \theta = T_L - T_\infty
+      \end{align}
+      因為是有限的邊界條件，故代入:
+      \begin{equation}
+        \theta = C_1 \cosh(mx) + C_2 \sinh(mx)
+      \end{equation}
+      \item 代入邊界條件求$C_1, C_2$
+      \begin{itemize}
+        \item $\theta(0)=T_s - T_\infty$:
+        \begin{equation}
+          \theta|_{x=0} = T_s - T_\infty = C_1 \label{eq:heat_transfer_fin_finite_knownT_boundary_condition_1}
+        \end{equation}
+        \item $\theta(L)=T_L - T_\infty$:
+        \begin{align}
+          & \theta|_{x=L} = T_L - T_\infty = C_1 \cosh(mL) + C_2 \sinh(mL) \nonumber\\
+          \Rightarrow\quad& C_2 = \frac{T_L - T_\infty - C_1 \cosh(mL)}{\sinh(mL)} \label{eq:heat_transfer_fin_finite_knownT_boundary_condition_2}
+        \end{align}
+      \end{itemize}
+    \item 由(\ref{eq:heat_transfer_fin_finite_knownT_boundary_condition_1})、(\ref{eq:heat_transfer_fin_finite_knownT_boundary_condition_2})式解得:
+    \begin{align}
+      C_1 &= T_s - T_\infty \nonumber\\
+      C_2 &= \frac{T_L - T_\infty - (T_s - T_\infty) \cosh(mL)}{\sinh(mL)}
+    \end{align}
+    故:
+    \begin{equation}
+      \theta = (T_s - T_\infty) \cosh(mx) + \frac{T_L - T_\infty - (T_s - T_\infty) \cosh(mL)}{\sinh(mL)} \sinh(mx)
+    \end{equation}
+    \item 故溫度分佈為:
+    \begin{align}
+      T(x) &= T_\infty + (T_s - T_\infty) \cosh\left(\sqrt{\frac{hP}{kA_c}}x\right) \nonumber\\
+      &\quad \quad + \frac{T_L - T_\infty - (T_s - T_\infty) 
+      \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right)}{\sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)} 
+      \sinh\left(\sqrt{\frac{hP}{kA_c}}x\right) \label{eq:heat_transfer_fin_finite_knownT_temperature_distribution}
+    \end{align}
+    \item 有限長鰭片熱通量:$q_\text{fin}$:
+      \begin{align}
+        q_\text{fin} &= -kA_c \frac{dT}{dx}\bigg|_{x=0} \nonumber\\
+        \frac{dT}{dx} &= (T_s - T_\infty) \frac{d}{dx}\left[
+          \cosh(mx)
+        \right] + \frac{T_L - T_\infty - (T_s - T_\infty) \cosh(mL)}{\sinh(mL)} \frac{d}{dx}\left[
+          \sinh(mx)
+        \right] \nonumber\\
+        &= (T_s - T_\infty) \left[
+          m \sinh(mx)
+        \right] + \frac{T_L - T_\infty - (T_s - T_\infty) \cosh(mL)}{\sinh(mL)} \left[
+          m \cosh(mx)
+        \right] \nonumber\\
+        \Rightarrow\quad& \frac{dT}{dx}\bigg|_{x=0} = (T_s - T_\infty) \left[
+          0
+        \right] + \frac{T_L - T_\infty - (T_s - T_\infty) \cosh(mL)}{\sinh(mL)} \left[
+          m
+        \right] \nonumber\\
+        &= m \frac{T_L - T_\infty - (T_s - T_\infty) \cosh(mL)}{\sinh(mL)}
+      \end{align}
+      故有限長鰭片熱通量為:
+      \begin{align}
+        q_\text{fin} &= -kA_c m \frac{T_L - T_\infty - (T_s - T_\infty) \cosh(mL)}{\sinh(mL)} \nonumber\\
+        &= -\sqrt{hPkA_c} \frac{T_L - T_\infty - (T_s - T_\infty) \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right)}{\sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)}  \nonumber\\
+        &= \boxed{\sqrt{hpkA_c}\frac{(T_s - T_\infty) \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) - (T_L - T_\infty)}
+        {\sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)} }
+      \end{align}
+    \item 效率$\eta_\text{fin}$:\\
+      同理可得:
+      \begin{align}
+        \eta_\text{fin} &= \frac{q_\text{fin}}{q_{\text{fin, ideal}}} \nonumber\\
+        &= \frac{\sqrt{hPkA_c}\frac{(T_s - T_\infty) \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) - (T_L - T_\infty)}
+        {\sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)} }{h P L (T_s - T_\infty)} \nonumber\\
+        &= \frac{\sqrt{hPkA_c}}{h P L} \frac{(T_s - T_\infty) \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) - (T_L - T_\infty)}
+        {(T_s - T_\infty) \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)} \nonumber\\
+        &= \frac{1}{L} \sqrt{\frac{kA_c}{hP}} \frac{ \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) - \frac{T_L - T_\infty}{T_s - T_\infty}}
+        {\sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)} \nonumber\\
+        &=\boxed{\frac{1}{L}\sqrt{\frac{kA_c}{hP}}\tanh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+         - \frac{1}{L}\sqrt{\frac{kA_c}{hP}} \frac{\frac{T_L - T_\infty}{T_s - T_\infty}}{\sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)} } \label{eq:heat_transfer_fin_finite_knownT_efficiency}
+      \end{align}
+    \end{itemize}
+    \item 末端溫度未知，有限長鰭片，頂端與環境對流(最正統的鰭片模型)
+    \begin{itemize}
+      \item 邊界條件為:
+      \begin{align}
+        x=0,&\quad T=T_s \implies \theta = T_s - T_\infty \nonumber\\
+        x=L,&\quad -kA_c \frac{dT}{dx}\bigg|_{x=L} = h A_c (T_L - T_\infty)
+      \end{align}
+      \item 因為是有限的邊界條件，故代入:
+      \begin{equation}
+        \theta = C_1 \cosh(mx) + C_2 \sinh(mx)
+      \end{equation}
+      \item 代入邊界條件求$C_1, C_2$
+      \begin{itemize}
+        \item $\theta(0)=T_s - T_\infty$:
+        \begin{equation}
+          \theta|_{x=0} = T_s - T_\infty = C_1 \label{eq:heat_transfer_fin_finite_conv_boundary_condition_1}
+        \end{equation}
+        \item $-kA_c \frac{dT}{dx}\bigg|_{x=L} = h A_c (T_L - T_\infty)$:
+        \begin{align}
+          & \frac{dT}{dx} = (T_s - T_\infty) \frac{d}{dx}\left[
+            \cosh(mx)
+          \right] + C_2 \frac{d}{dx}\left[
+            \sinh(mx)
+          \right] \nonumber\\
+          &= (T_s - T_\infty) \left[
+            m \sinh(mx)
+          \right] + C_2 \left[
+            m \cosh(mx)
+          \right] \nonumber\\
+          \Rightarrow\quad& \frac{dT}{dx}\bigg|_{x=L} = (T_s - T_\infty) \left[
+            m \sinh(mL)
+          \right] + C_2 \left[
+            m \cosh(mL)
+          \right] \nonumber\\
+          \Rightarrow\quad& -kA_c \left[
+            (T_s - T_\infty) m \sinh(mL) + C_2 m \cosh(mL)
+          \right] = \nonumber \\
+          &\quad\quad h A_c \left[
+            C_1 \cosh(mL) + C_2 \sinh(mL)
+          \right] \nonumber\\
+          \Rightarrow\quad& C_2 = (T_s - T_\infty) \frac{
+            k m \sinh(mL) + h \cosh(mL)
+          }{
+            -k m \cosh(mL) + h \sinh(mL)
+          } \label{eq:heat_transfer_fin_finite_conv_boundary_condition_2}
+        \end{align} 
+      \end{itemize}
+    \item 由(\ref{eq:heat_transfer_fin_finite_conv_boundary_condition_1})、(\ref{eq:heat_transfer_fin_finite_conv_boundary_condition_2})式解得:
+    \begin{align}
+      C_1 &= T_s - T_\infty \nonumber\\
+      C_2 &= (T_s - T_\infty) \frac{
+        k m \sinh(mL) + h \cosh(mL)
+      }{
+        -k m \cosh(mL) + h \sinh(mL)
+      }
+    \end{align}
+    故:
+    \begin{equation}
+      \theta = (T_s - T_\infty) \left[
+        \cosh(mx) + \frac{
+          k m \sinh(mL) + h \cosh(mL)
+        }{
+          -k m \cosh(mL) + h \sinh(mL)
+        } \sinh(mx)
+      \right]
+    \end{equation}
+    \item 故溫度分佈為:
+    \begin{align}
+      T(x) &= T_\infty + (T_s - T_\infty) \left[
+        \cosh\left(\sqrt{\frac{hP}{kA_c}}x\right) + \right. \nonumber\\
+        &\quad \quad \left. \frac{
+          k \sqrt{\frac{hP}{kA_c}} \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        }{
+          -k \sqrt{\frac{hP}{kA_c}} \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        } \sinh\left(\sqrt{\frac{hP}{kA_c}}x\right)
+      \right] \label{eq:heat_transfer_fin_finite_conv_temperature_distribution}
+    \end{align}
+    \item 有限長鰭片熱通量:$q_\text{fin}$:
+      \begin{align}
+        q_\text{fin} &= -kA_c \frac{dT}{dx}\bigg|_{x=0} \nonumber\\
+        \frac{dT}{dx} &= (T_s - T_\infty) \frac{d}{dx}\left[
+          \cosh(mx)
+        \right] + C_2 \frac{d}{dx}\left[
+          \sinh(mx)
+        \right] \nonumber\\
+        &= (T_s - T_\infty) \left[
+          m \sinh(mx)
+        \right] + C_2 \left[
+          m \cosh(mx)
+        \right] \nonumber\\
+        \Rightarrow\quad& \frac{dT}{dx}\bigg|_{x=0} = (T_s - T_\infty) \left[
+          0
+        \right] + C_2 \left[
+          m
+        \right] = m C_2
+      \end{align}
+      故有限長鰭片熱通量為:
+      \begin{align}
+        q_\text{fin} &= -kA_c m C_2 \nonumber\\
+        &= -\sqrt{hPkA_c} (T_s - T_\infty) \frac{
+          k m \sinh(mL) + h \cosh(mL)
+        }{
+          -k m \cosh(mL) + h \sinh(mL)
+        } \nonumber\\
+        &= \boxed{-\sqrt{hPkA_c} (T_s - T_\infty) \frac{
+          k \sqrt{\frac{hP}{kA_c}} \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        }{
+          -k \sqrt{\frac{hP}{kA_c}} \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        } } 
+      \end{align}
+    \item 效率$\eta_\text{fin}$:\\
+      同理可得:
+      \begin{align}
+        \eta_\text{fin} &= \frac{q_\text{fin}}{q_{\text{fin, ideal}}} \nonumber\\
+        &= \frac{-\sqrt{hPkA_c} (T_s - T_\infty) \frac{
+          k \sqrt{\frac{hP}{kA_c}} \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        }{
+          -k \sqrt{\frac{hP}{kA_c}} \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        } }{h P L (T_s - T_\infty)} \nonumber\\
+        &= \frac{-\sqrt{hPkA_c}}{h P L} \frac{
+          k \sqrt{\frac{hP}{kA_c}} \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        }{
+          -k \sqrt{\frac{hP}{kA_c}} \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        } \nonumber\\
+        &= \boxed{ \frac{-1}{L} \sqrt{\frac{kA_c}{hP}} \frac{
+          k \sqrt{\frac{hP}{kA_c}} \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        }{
+          -k \sqrt{\frac{hP}{kA_c}} \cosh\left(L\sqrt{\frac{hP}{kA_c}}\right) + h \sinh\left(L\sqrt{\frac{hP}{kA_c}}\right)
+        } } 
+      \end{align}
+  \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}
