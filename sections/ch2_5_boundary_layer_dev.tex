@@ -194,7 +194,11 @@
   \begin{equation}
     \frac{\rho U\delta^2}{\mu L} \approx 1 \implies \boxed{\delta(x) \sim \sqrt{\frac{\mu L}{\rho U}} \propto \sqrt{L}}
   \end{equation}
-  也就是說，上圖的紅色線，大概會是$\delta(x) = C\sqrt{x}$的形式
+  也就是說，上圖的紅色線，大概會是$\delta(x) = C\sqrt{x}$的形式\\
+  另外，我們若將其同除以$L$，會發現邊界層發展速率，與雷諾數的關係
+  \begin{equation}
+    \boxed{\frac{\delta(x)}{L} \sim \sqrt{\frac{\mu}{\rho U L}} = \text{Re}_L^{-\frac{1}{2}}} \label{eq:ch2_5_boundary_layer_dev_delta_Re}
+  \end{equation}
   \item 回到一開始的問題，因為實際上沒有$L$這個長度，因此只能用$x$來表示
   \begin{enumerate}
     \item Governing Equation:
@@ -223,7 +227,7 @@
         \frac{\mu x}{\rho U}
       \right)^{-\frac{1}{2}}
     \end{equation}
-    定義:
+    定義: \label{sec:ch2_5_boundary_layer_dev_definition_F}
     \begin{equation}
       \frac{u_x}{U} = F'(\eta)
     \end{equation}
@@ -449,14 +453,64 @@
       由於邊界層很薄，$\frac{\partial u_x}{\partial y} \gg \frac{\partial u_y}{\partial x}$
       或者寫成特徵長度模式:
       \begin{equation}
-        -\mu\left(\frac{U}{\delta}+\cancel{\frac{V}{L}}\right),L\gg \delta \ll L
+        -\mu\left(\frac{U}{\delta}+\cancel{\frac{V}{L}}\right),L\gg \delta 
       \end{equation}
       因此可以忽略掉$\frac{\partial u_y}{\partial x}$\\
       所以:
+      \begin{align}
+        \tau_{yx} &= -\mu \frac{\partial u_x}{\partial y} \nonumber\\
+        &= -\mu \frac{\partial}{\partial y} \left(
+          U F'(\eta)
+        \right) \nonumber\\
+        &= -\mu U F''(\eta) \frac{\partial \eta}{\partial y} \nonumber\\
+        &= -\mu U F''(\eta) \left(
+          \frac{\mu x}{\rho U}
+        \right)^{-\frac{1}{2}} \nonumber\\
+        &= -\mu U F''(\eta) \frac{1}{\delta(x)} \nonumber\\
+        &= -\mu U F''(0) \sqrt{\frac{\rho U}{\mu x}} \label{eq:ch2_5_boundary_layer_dev_shear_stress}
+      \end{align}
+      另外，由於$\eta$是正比於$y$的，所以可以假想$F(\eta)$也是正比於$y$的\\
+      或者說在邊界層內，速度是線性增加的\\
+      我們假定速率分布是$u_x= \beta(x)y$\\
+      那麼:
+      \begin{align}
+        \beta(x) &= \left[
+          \frac{\partial u_x}{\partial y}
+        \right]_{y=0} \nonumber\\
+        & = \left[
+          \frac{\partial u_x}{\partial \eta} \frac{\partial \eta}{\partial y}
+        \right]_{\eta = 0} \nonumber\\
+        &= U F''(0) \left(
+          \frac{\partial \eta}{\partial y}
+        \right)_{\eta=0} \nonumber\\
+        &= U F''(0) \sqrt{\frac{\rho U}{\mu x}}
+      \end{align}
+      而解析解的數值發現$F''(0) = 0.332$\\
       \begin{equation}
-        \tau_{yx} = -\mu U\sqrt{\frac{\rho U}{\mu x}} F''(0)
+        \beta(x) = 0.332 U \sqrt{\frac{\rho U}{\mu x}} \implies \boxed{u_x = 0.332 U \sqrt{\frac{\rho U}{\mu x}} y} \label{eq:ch2_5_boundary_layer_dev_velocity_profile}
       \end{equation}
-      代入Drag Force:
+      而將速度分布代入Equation of Continuity，可以換出$u_y$:
+      \begin{align}
+        \frac{\partial u_x}{\partial x} + \frac{\partial u_y}{\partial y} &= 0 \nonumber\\
+        \implies \frac{\partial u_y}{\partial y} &= -\frac{\partial u_x}{\partial x} \nonumber\\
+        &= -\frac{\partial}{\partial x} \left(
+          0.332 \sqrt{\frac{\rho U^3}{\mu x}} y
+        \right) \nonumber\\
+       &= -0.332 \sqrt{\frac{\rho U^3}{\mu}} y \left(
+        -\frac{1}{2} x^{-\frac{3}{2}}
+        \right) \nonumber\\
+       &= 0.166 \sqrt{\frac{\rho U^3}{\mu x^3}} y
+      \end{align}
+      積分得到:
+      \begin{equation}
+        u_y = 0.166 \sqrt{\frac{\rho U^3}{\mu x^3}} \frac{y^2}{2} + H(x) = 0.083 \sqrt{\frac{\rho U^3}{\mu x^3}} y^2 + H(x)
+      \end{equation}
+      由於$u_y(x,0) = 0$，所以$H(x) = 0$\\
+      \begin{equation}
+        \boxed{u_y = 0.083 \sqrt{\frac{\rho U^3}{\mu x^3}} y^2} \label{eq:ch2_5_boundary_layer_dev_velocity_profile_u_y}
+      \end{equation}
+      \item Drag Force:\\
+      將(\ref{eq:ch2_5_boundary_layer_dev_shear_stress})代入Drag Force:
       \begin{align}
         F_x &= -2w \int_0^L -\mu U \sqrt{\frac{\rho U}{\mu x}} F''(0) dx \nonumber\\
         &= 2w \mu U F''(0) \sqrt{\frac{\rho U}{\mu}} \int_0^L x^{-\frac{1}{2}} dx \nonumber\\

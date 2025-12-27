@@ -509,7 +509,7 @@
     第二項是流體進入管子時帶入的熱量($T(r,0)=T_0$)\\
     將上式同除$\pi$，並同除$k$，湊出Nusselt Number:
     \begin{equation}
-      \text{Nu} = \frac{\left<h\right>L}{k}
+      \boxed{\text{Nu} = \frac{\left<h\right>L}{k}} \label{eq:graetz_nusselt_number}
     \end{equation}
     因此:
     \begin{align}
@@ -594,21 +594,765 @@
   \begin{enumerate}
     \item 能量平衡式:
     \begin{align}
-      &\rho \hat C_P \overline u_z(y)\left[
+      &2\rho \hat C_P \overline u_z(y)\left[
         1 -\left(\frac{r}{R}\right)^2
       \right]\frac{\partial T}{\partial z} = k\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial T}{\partial r}\right) \nonumber\\
-      \Rightarrow&\rho \hat C_P \overline u_z(y)\left[
+      \Rightarrow&2\rho \hat C_P \overline u_z(y)\left[
         1 -\left(\frac{R-y}{R}\right)^2
       \right]\frac{\partial T}{\partial z} =
        k\frac{1}{R-y}\frac{\partial}{\partial y}\left((R-y)\frac{\partial T}{\partial y}\right)\nonumber\\
-      (R-y\to R)\Rightarrow&\rho \hat C_P \overline u_z(y)\left[
+      (R-y\to R)\Rightarrow&2\rho \hat C_P \overline u_z(y)\left[
         1-\frac{R^2}{R^2} + \frac{2Ry}{R^2} - \cancel{\frac{y^2}{R^2}}
       \right]\frac{\partial T}{\partial z} = k \frac{1}{R} \frac{\partial }{\partial y}\left(
         R\frac{\partial T}{\partial y}
       \right) \nonumber\\
-      \Rightarrow & \rho \hat  C_P \overline u_z(y)\frac{2y}{R}\frac{\partial T}{\partial z}
-      = k\frac{\partial^2 T}{\partial y^2}
+      \Rightarrow & 4\rho \hat  C_P \overline u_z(y)\frac{y}{R}\frac{\partial T}{\partial z}
+      = k\frac{\partial^2 T}{\partial y^2} \label{eq:leveque_energy_equation}
     \end{align}
+    \item 邊界條件:
+    \begin{align}
+      T(y,0) &= T_0 \\
+      T(0,z) &= T_1 \\
+      T(y>\delta_T,z) &= T_0,\quad T(\infty, z)=T_0
+    \end{align}
+    由於沒有任兩個邊界條件是獨立且齊次的，所以不能用S-L方法\\
+    改採用Similarity Solution
+    \item 令$\eta = \frac{y}{\delta_T(z)}$\\
+    至於$\delta_T(z)$是什麼，則要做因次分析
+    也就是說能量平衡式(\ref{eq:leveque_energy_equation}):
+    \begin{align}
+      4\rho \hat  C_P \overline u_z\frac{\delta_T}{R}\frac{T}{z} = k\frac{T}{\delta_T^2}
+    \end{align}
+    而兩邊因次要相等，因此:
+    \begin{align}
+      &\frac{4\rho \hat C_P \overline u_z T}{R z k} = \frac{1}{\delta_T^3} \nonumber\\
+      \Rightarrow &\delta_T = \left(
+        \frac{k R z}{4\rho \hat C_P \overline u_z}
+      \right)^{1/3}
+    \end{align} 
+    而為了方便計算，定義特徵長度$\delta_T(z)$為:
+    \begin{equation}
+      \boxed{\delta_T(z) = \left(\frac{9 kRz}{4 \rho \hat C_P \overline u_z}\right)^{1/3}}
+    \end{equation}
+    \item 將$\eta=\frac{y}{\delta_T(z)}$代入(\ref{eq:leveque_energy_equation})\\
+    並順便也將溫度無因次化:
+    \begin{equation}
+      \theta = \frac{T - T_1}{T_0 - T_1},\quad \frac{\partial T}{\partial z} = (T_0 - T_1) \frac{\partial\theta}{\partial z}
+      ,\quad \frac{\partial^2 T}{\partial y^2} = (T_0 - T_1) \frac{\partial^2 \theta}{\partial y^2}
+    \end{equation}
+    故
+    \begin{align}
+     & 4\rho \hat  C_P \overline u_z \frac{y}{R}\frac{\partial T}{\partial z} = k \frac{\partial^2 T}{\partial y^2} \nonumber\\
+    \Rightarrow& 4\rho \hat  C_P \overline u_z \left(\frac{y}{R}\right)(T_0 - T_1) \frac{\partial \theta}{\partial z} 
+      = k (T_0 - T_1) \frac{\partial^2 \theta}{\partial y^2} \nonumber\\
+      \Rightarrow& 4\rho \hat  C_P \overline u_z \left(\frac{y}{R}\right) \frac{\partial \theta}{\partial z} 
+      = k \frac{\partial^2 \theta}{\partial y^2} \nonumber\\
+      \Rightarrow& \frac{\partial \theta}{\partial z} = \frac{k R}{4\rho \hat C_P \overline u_z y} \frac{\partial^2 \theta}{\partial y^2} \nonumber\\
+      \Rightarrow& \frac{\partial \theta}{\partial z} = \frac{k R}{4\rho \hat C_P \overline u_z \delta_T \eta} \frac{\partial^2 \theta}{\partial y^2} 
+    \end{align}
+    而上式的每個偏微分分別是
+    \begin{align}
+      \frac{\partial \theta}{\partial z} &= \frac{d\theta}{d\eta}{d\eta}{dz} \nonumber\\
+      &= \frac{d\theta}{d\eta} \cdot \left[
+        -\frac{1}{3}y\left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R}
+        \right)^{1/3} z^{-4/3}
+      \right] \nonumber\\
+      &= \frac{d\theta}{d\eta} \cdot \left[
+        -\frac{1}{3}\underbrace{y\left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+        \right)^{1/3}}_{\eta} z^{-1}
+      \right]\nonumber\\
+      &= \boxed{-\frac{1}{3} \eta z^{-1} \frac{d\theta}{d\eta}} \\
+      \frac{\partial \theta}{\partial y} &= 
+      \frac{d\theta}{d\eta} \frac{d\eta}{dy} \nonumber\\
+      &= \frac{d\theta}{d\eta} \cdot \left[
+        \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+      \right]^{1/3} \nonumber\\
+      \frac{\partial^2 \theta}{\partial y^2} &=
+      \frac{\partial}{\partial y}\left(
+        \frac{\partial \theta}{\partial y}
+      \right) \nonumber\\
+      &= \frac{\partial}{\partial y} \left[
+        \frac{d\theta}{d\eta} \cdot \left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+        \right)^{1/3}
+      \right] \nonumber\\
+      &= \boxed{\left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+        \right)^{2/3} \frac{d^2 \theta}{d\eta^2}}
+    \end{align}
+    代入能量平衡式:
+    \begin{align}
+      &4\rho \hat  C_P \overline u_z \left(\frac{y}{R}\right) \frac{\partial \theta}{\partial z} 
+      = k \frac{\partial^2 \theta}{\partial y^2} \nonumber\\
+      \Rightarrow& 4\rho \hat  C_P \overline u_z \left(\frac{\delta_T \eta}{R}\right) \left(
+        -\frac{1}{3} \frac{\eta}{z}\right) \frac{d\theta}{d\eta} = k \left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+        \right)^{2/3} \frac{d^2 \theta}{d\eta^2} \nonumber\\
+      \Rightarrow& -\frac{4}{3}\frac{\rho \hat  C_P \overline u_z}{R}\eta \frac{d\theta}{d\eta}
+      = k\left(
+        \frac{4\rho \hat C_P \overline u_z}{9 k R}
+      \right)^{2/3} \frac{z^{\frac{1}{3}}}{y} \frac{d^2 \theta}{d\eta^2} \nonumber\\
+      \Rightarrow& -\frac{4}{3}\frac{\rho \hat  C_P \overline u_z}{R}\eta \frac{d\theta}{d\eta}
+      = \cancel{k}\left(
+        \frac{4\rho \hat C_P \overline u_z}{9 \cancel{k} R}
+      \right)\left(
+        \frac{4\rho \hat C_P \overline u_z}{9 k R}
+      \right)^{-\frac{1}{3}} \frac{z^{\frac{1}{3}}}{y} \frac{d^2 \theta}{d\eta^2} \nonumber\\
+      \Rightarrow& -\frac{1}{3}\eta \frac{d\theta}{d\eta} = \frac{1}{9}
+      \underbrace{\left(
+        \frac{4\rho \hat C_P \overline u_z}{9 k R}
+      \right)^{-\frac{1}{3}} \frac{z^{\frac{1}{3}}}{y}}_{\frac{1}{\eta}} \frac{d^2 \theta}{d\eta^2} \nonumber\\
+      \Rightarrow& -3\eta \frac{d\theta}{d\eta} = 
+      \frac{1}{\eta} \frac{d^2 \theta}{d\eta^2} \nonumber\\
+      \Rightarrow& -3\eta^2 \frac{d\theta}{d\eta} = 
+       \frac{d^2 \theta}{d\eta^2} \label{eq:leveque_ODE}
+    \end{align}
+    所以最後的ODE變成:
+    \begin{equation}
+      \frac{d^2 \theta}{d\eta^2} + 3\eta^2 \frac{d\theta}{d\eta} = 0
+    \end{equation}
+    邊界條件變成:
+    \begin{align}
+      \theta(\infty) &= 1\\
+      \theta(0) &= 0
+    \end{align}
+    \item 解ODE(\ref{eq:leveque_ODE}):\\
+    方法同之前解流體的邊界層類似(\ref{sec:ch2_5_boundary_layer_dev_definition_F})\\
+    先令$F'=\frac{d\theta}{d\eta}$，則
+    \begin{align}
+      \frac{dF'}{d\eta} + 3\eta^2 F' &= 0 \nonumber\\
+      \Rightarrow \frac{dF'}{F'} &= -3\eta^2 d\eta \nonumber\\
+      \Rightarrow \ln F' &= -\eta^3 + C_1 \nonumber\\
+      \Rightarrow F' &= C_2 e^{-\eta^3} \nonumber\\
+      \Rightarrow \frac{d\theta}{d\eta} &= C_2 e^{-\eta^3} \nonumber\\
+      \Rightarrow \theta &= C_2 \int_0^\eta e^{-x^3} dx + C_3
+    \end{align}
+    代入邊界條件:
+    \begin{align}
+      \theta(0) &= 0 \Rightarrow C_3 = 0 \\
+      \theta(\infty) &= 1 \Rightarrow C_2 \int_0^\infty e^{-x^3} dx = 1 
+    \end{align}
+    令$x=\eta^3$，則$dx = 3\eta^2 d\eta$，$\eta = x^{1/3}$\\
+    因此:
+    \begin{equation}
+      1 = C_2 \int_0^\infty \frac{1}{3}e^{-x} x^{-\frac{2}{3}} dx
+    \end{equation}
+    而$\int_0^\infty e^{-x} x^{n-1} dx = \Gamma(n)$\\
+    因此:
+    \begin{equation}
+      1 = C_2 \cdot \frac{1}{3} \Gamma\left(
+        \frac{1}{3}
+      \right)
+    \end{equation}
+    又因為$\Gamma$函數具有下列性質:
+    \begin{align}
+      \Gamma(n+1) &= n\Gamma(n) \\
+      \Gamma(n+1) &= n! \quad (n\in \mathbb{N})
+    \end{align}
+    因此:
+    \begin{equation}
+       \frac{1}{3} \Gamma\left(
+        \frac{1}{3}\right) = \Gamma\left(
+          \frac{4}{3}
+        \right)
+    \end{equation}
+    故:
+    \begin{equation}
+      C_2 = \frac{1}{\Gamma\left(
+        \frac{4}{3}
+      \right)}
+    \end{equation}
+    最後解為:
+    \begin{equation}
+      \boxed{\theta(\eta) = \frac{1}{\Gamma\left(
+        \frac{4}{3}
+      \right)} \int_0^\eta e^{-x^3} dx} \label{eq:leveque_solution}
+    \end{equation}
+    \item 令$\theta=0.99$，也就是溫度差下降到1\%時，為Boundary Layer的厚度\\
+    代入(\ref{eq:leveque_solution})，可得$\theta(1.4) \approx 0.99$\\
+    也就是當$\eta = 1.4$時，溫度差下降到1\%\\
+    而此時的$y$，為$\delta_T$，因此:
+    \begin{align}
+      &\eta = y\left(
+        \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+      \right)^{\frac{1}{3}} \nonumber\\
+      \Rightarrow & 1.4 = \delta_T \left(
+        \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+      \right)^{\frac{1}{3}} \nonumber\\
+      \Rightarrow & \delta_T = 1.4 \left(
+        \frac{9 k R z}{4\rho \hat C_P \overline u_z}
+      \right)^{\frac{1}{3}} \nonumber\\
+       & \phantom{\delta_T} = 2.912 \text{Pe}^{-\frac{1}{3}}\left(
+        \frac{z}{2R}
+      \right)^{\frac{1}{3}} \quad \boxed{\propto z^{\frac{1}{3}}}
+    \end{align}
+    也就是說那條曲線大概是$z^{1/3}$的函數\\
+    P.S. 回顧流體的邊界層厚度是$z^{1/2}$\\
+    可見熱傳邊界層發展得比流體邊界層還要慢
+    \item 同樣的，可以用Leveque的方法來求出Nusselt Number\\
+    計算管面上的徑向熱通量守恆\\
+    因為Leveque方法假設熱傳邊界層很薄\\
+    因此可以近似認為整個管面都是在熱傳邊界層內\\
+    而溫差都為$T_0 - T_1$
+    \begin{equation}
+      h(T_1 - T_0) 2\pi R dz = -k \left.
+        2\pi R \frac{\partial T}{\partial r}
+      \right|_{r=R} dz = k \left.
+        2\pi R \frac{\partial T}{\partial y}
+      \right|_{y=0} dz
+    \end{equation}
+    無因次化，並湊出Nusselt Number:
+    \begin{align}
+      &h(T_1 - T_0) 2\pi R dz = k \left.
+        2\pi R \frac{\partial T}{\partial y}
+      \right|_{y=0} dz \nonumber\\
+      \Rightarrow & h(T_1 - T_0)  dz = k \left.
+         \frac{\partial T}{\partial y}
+      \right|_{y=0} dz \nonumber\\
+      \Rightarrow & h (T_0 - T_1) = -k (T_0 - T_1) \left.
+         \frac{\partial \theta}{\partial y}
+      \right|_{y=0} \nonumber\\
+      \Rightarrow & \frac{h}{k} = - \left.
+         \frac{\partial \theta}{\partial y}
+      \right|_{y=0} \nonumber\\
+      \times (2R) \Rightarrow & \text{Nu} = -2R \left.
+         \frac{\partial \theta}{\partial y}
+      \right|_{y=0}
+    \end{align}
+    代入 $\theta(\eta)$:
+    \begin{align}
+      \text{Nu} &= -2R \left.
+         \frac{\partial \theta}{\partial y}
+      \right|_{y=0} \nonumber\\
+      &= -2R \left.
+        \frac{d\theta}{d\eta} \frac{d\eta}{dy}
+      \right|_{y=0} \nonumber\\
+      &= -2R \left.
+        \frac{1}{\Gamma\left(
+          \frac{4}{3}
+        \right)} e^{-\eta^3} \cdot \left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+        \right)^{\frac{1}{3}}
+      \right|_{y=0} \nonumber\\
+      &= -2R \cdot \frac{1}{\Gamma\left(
+          \frac{4}{3}
+        \right)} e^{-(0)^3} \cdot \left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+        \right)^{\frac{1}{3}} \nonumber\\
+      &= \frac{2R}{\Gamma\left(
+          \frac{4}{3}
+        \right)} \left(
+          \frac{4\rho \hat C_P \overline u_z}{9 k R z}
+        \right)^{\frac{1}{3}} \nonumber\\
+      &= \frac{2}{\Gamma\left(
+          \frac{4}{3}
+        \right)} \left(
+          \frac{4\rho \hat C_P \overline u_z R^2}{9 k z}
+        \right)^{\frac{1}{3}} \nonumber\\
+      &= \frac{2}{\Gamma\left(
+          \frac{4}{3}
+        \right)} \left(
+          \frac{\text{Pe}}{9 (z/2R)}
+        \right)^{\frac{1}{3}}
+    \end{align}
+    最後得到:
+    \begin{equation}
+      \boxed{\text{Nu} = 1.077 \text{Pe}^{\frac{1}{3}} \left(
+        \frac{2R}{z}
+      \right)^{\frac{1}{3}}} = 1.077 \text{Gz}^{\frac{1}{3}}
+    \end{equation}
+    \item 將剛剛獲得的Nusselt Number積分出管長L的平均Nusselt Number
+    \begin{align}
+      \left<\text{Nu}\right>_L &= \frac{1}{L} \int_0^L \text{Nu} dz \nonumber\\
+      &= 1.077\left( \text{Pe} 2R\right)^{\frac{1}{3}}\frac{1}{L}  \int_0^L z^{-\frac{1}{3}} dz \nonumber\\
+      &= 1.077\left( \text{Pe} 2R\right)^{\frac{1}{3}}\frac{1}{L} \cdot\frac{3}{2} L^{\frac{2}{3}} \nonumber\\
+      &= 1.615 \left( \frac{2R}{L} \text{Pe} \right)^{\frac{1}{3}} L^{\frac{2}{3}} \nonumber\\
+      &= 1.615 \left(
+        \text{Pe}\cdot \frac{2R}{L}
+      \right)^{\frac{1}{3}} \nonumber\\
+      &= 1.615 \text{Gz}^{\frac{1}{3}}
+    \end{align}
+    \item 邊界層發展完全的深度$\delta_T/R = 1$，$L_{\text{entry}}$為:
+    \begin{align}
+      &1 = \frac{\delta_T}{R} \nonumber\\
+      \Rightarrow & 1 = 2.912 \text{Pe}^{-\frac{1}{3}} \left(
+        \frac{L_{\text{entry}}}{2R}
+      \right)^{\frac{1}{3}} \nonumber\\
+      \Rightarrow & \left(\frac{L_{\text{entry}}}{2R}\right)^{\frac{1}{3}} = \frac{1}{2.912} \text{Pe}^{\frac{1}{3}} \nonumber\\
+      \Rightarrow & \frac{L_{\text{entry}}}{2R} = \left(
+        \frac{1}{2.912}
+      \right)^3 \text{Pe} \nonumber\\
+      \Rightarrow & \boxed{L_{\text{entry}} = 0.0405 \text{Pe} \cdot 2R}
+    \end{align}
+    P.S. 也就是說假設Pe是1000的話，入口約略是40倍管直徑
+  \end{enumerate}
+  \item 假設流場與溫度場一起發展，回顧之前討論流體的邊界層發展(\ref{fig:ch2_5_boundary_layer_development})\\
+  以及上個假設中所觀察到，溫度場的邊界層發展速度較流體層慢($z^{1/3}$ vs. $z^{1/2}$)\\
+  因此可以畫出下圖:
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \fill[pattern=north east lines, draw=black] (-1,0) rectangle (2,-0.2);
+      \fill[pattern=north west lines, pattern color=red, draw=red] (2,0) rectangle (12,-0.2);
+      \draw[dashed] (2,0) -- (2,-1);
+      \draw[->] (2,-0.7) -- (1,-0.7) node[left] {$T_\infty$};
+      \draw[->] (2,-0.7) -- (3,-0.7) node[right] {$T_0$};
+      \draw[blue] (0.5,0) -- (0.5,4);
+      \draw[blue, dashed] (1.5,0) -- (1.5,4);
+      \draw[->, blue, dashed] (0.5,0.5) -- (1.5,0.5);
+      \draw[->, blue, dashed] (0.5,1) -- (1.5,1);
+      \draw[->, blue, dashed] (0.5,1.5) -- (1.5,1.5);
+      \draw[->, blue, dashed] (0.5,2) -- (1.5,2);
+      \draw[->, blue, dashed] (0.5,2.5) -- (1.5,2.5);
+      \draw[->, blue, dashed] (0.5,3) -- (1.5,3);
+      \draw[->, blue, dashed] (0.5,3.5) -- (1.5,3.5);
+      \draw[->, blue, dashed] (0.5,4) -- (1.5,4);
+      \node[anchor=south, blue] at (1,4) {U};
+      \draw[->] (13,0) -- (13,1) node[above] {$y$};
+      \draw[->] (13,0) -- (14,0) node[right] {$x$};
+      \draw[blue] (2,0) .. controls (5,3) and (10,3.72) .. (15.6,4.24);
+      \path[name path=B] (2,0) .. controls (5,3) and (10,3.72) .. (15.6,4.24);
+      \path[name path=C] (9,0) -- (9,4);
+      \path[name intersections={of=B and C, by=D}];
+      \draw[blue, dashed,<->] (9,0) -- (D) node[midway, right] {$\delta(x)$};
+      \path[name path=E] (9.5,0) -- (9.5,4);
+      \path[name intersections={of=B and E, by=F}];
+      \draw[->, blue, dotted] (F) -- +(0,0.5);
+      \node[anchor=south east, blue] at (F) {$U$};
+      \draw[red] (2,0) .. controls (5,2.1) and (10,2.6) .. (15.6,3);
+      \path[name path=Ba] (2,0) .. controls (5,2.1) and (10,2.6) .. (15.6,3);
+      \path[name path=Ca] (11,0) -- (11,4);
+      \path[name intersections={of=Ba and Ca, by=Da}];
+      \draw[red, dashed,<->] (11,0) -- (Da) node[midway, right] {$\delta_T(x)$};
+      \path[name path=Ea] (11.5,0) -- (11.5,4);
+      \path[name intersections={of=Ba and Ea, by=Fa}];
+      \draw[->, red, dotted] (Fa) -- +(0,0.5);
+      \node[anchor=south east, red] at (Fa) {$T_\infty$};
+      \draw[dashed, blue] (4,0) ..controls (4.8,0) and (5, 2.6) .. (5,4);
+      \path[name path=P1] (4,0) ..controls (4.8,0) and (5, 2.6) .. (5,4);
+      \draw[blue] (4,0) -- (4,4);
+      \path[name path=Pa] (4,0.5) -- (5,0.5);
+      \path[name intersections={of=P1 and Pa, by=I1}];
+      \draw[->, blue, dashed] (4,0.5) -- (I1);
+      \path[name path=Pb] (4,1) -- (5,1);
+      \path[name intersections={of=P1 and Pb, by=I2}];
+      \draw[->, blue, dashed] (4,1) -- (I2);
+      \path[name path=Pc] (4,1.5) -- (5,1.5);
+      \path[name intersections={of=P1 and Pc, by=I3}];
+      \draw[->, blue, dashed] (4,1.5) -- (I3);
+      \path[name path=Pd] (4,2) -- (5,2);
+      \path[name intersections={of=P1 and Pd, by=I4}];
+      \draw[->, blue, dashed] (4,2) -- (I4);
+      \path[name path=Pe] (4,2.5) -- (5,2.5);
+      \path[name intersections={of=P1 and Pe, by=I5}];
+      \draw[->, blue, dashed] (4,2.5) -- (I5);
+      \path[name path=Pf] (4,3) -- (5,3);
+      \path[name intersections={of=P1 and Pf, by=I6}];
+      \draw[->, blue, dashed] (4,3) -- (I6);
+      \path[name path=Pg] (4,3.5) -- (5,3.5);
+      \path[name intersections={of=P1 and Pg, by=I7}];
+      \draw[->, blue, dashed] (4,3.5) -- (I7);
+      \path[name path=Ph] (4,4) -- (5,4);
+      \path[name intersections={of=P1 and Ph, by=I8}];
+      \draw[->, blue, dashed] (4,4) -- (I8);
+      \draw[dashed, blue] (7,0) ..controls (7.6,0) and (8,3.4) .. (8,4);
+      \path[name path=P2] (7,0) ..controls (7.6,0) and (8,3.4) .. (8,4);
+      \path[name path=Qa] (7,0.5) -- (8,0.5);
+      \path[name intersections={of=P2 and Qa, by=J1}];
+      \draw[->, blue, dashed] (7,0.5) -- (J1);
+      \path[name path=Qb] (7,1) -- (8,1);
+      \path[name intersections={of=P2 and Qb, by=J2}];
+      \draw[->, blue, dashed] (7,1) -- (J2);
+      \path[name path=Qc] (7,1.5) -- (8,1.5);
+      \path[name intersections={of=P2 and Qc, by=J3}];
+      \draw[->, blue, dashed] (7,1.5) -- (J3);
+      \path[name path=Qd] (7,2) -- (8,2);
+      \path[name intersections={of=P2 and Qd, by=J4}];
+      \draw[->, blue, dashed] (7,2) -- (J4);
+      \path[name path=Qe] (7,2.5) -- (8,2.5);
+      \path[name intersections={of=P2 and Qe, by=J5}];
+      \draw[->, blue, dashed] (7,2.5) -- (J5);
+      \path[name path=Qf] (7,3) -- (8,3);
+      \path[name intersections={of=P2 and Qf, by=J6}];
+      \draw[->, blue, dashed] (7,3) -- (J6);
+      \path[name path=Qg] (7,3.5) -- (8,3.5);
+      \path[name intersections={of=P2 and Qg, by=J7}];
+      \draw[->, blue, dashed] (7,3.5) -- (J7);
+      \path[name path=Qh] (7,4) -- (8,4);
+      \path[name intersections={of=P2 and Qh, by=J8}];
+      \draw[->, blue, dashed] (7,4) -- (J8);
+      \draw[blue] (7,0) -- (7,4);
+    \end{tikzpicture}
+    \caption{Boundary Layer Development with both Velocity and Temperature Fields}
+  \end{figure}
+  \begin{enumerate}
+    \item 假設Newtonnian, incompressible, steady flow\\
+    有個虛擬的長度$L\gg \delta >\delta_T$\\
+    並假設在邊界層內\fbox{流速與$y$成正比}，雖然實際上是二次關係\\
+    但因為邊界層很薄，可以假想都受到相同的$\tau_{yx}$剪應力影響
+    \begin{equation}
+      \tau_{yx} = \mu \frac{\partial u_x}{\partial y} \implies u_x(y) = \frac{\tau_{yx}}{\mu} y \label{eq:graetz_linear_velocity_profile}
+    \end{equation}
+    又由於當發展到$\delta(x)$時，流速要等於$U$，所以那個$y$前面的係數會是$\frac{U}{\delta(x)}$
+    \begin{equation}
+      u_x(y) = \frac{U}{\delta(x)} y
+    \end{equation}
+    \item 無因次特徵量:\\
+    溫度的無因次化
+    \begin{equation}
+      T^\ast = \frac{T - T_0}{T_\infty - T_0}
+    \end{equation}
+    $y$方向的長度特徵選擇溫度的邊界厚度
+    \begin{equation}
+      y_T^\ast = \frac{y}{\delta_T(x)}
+    \end{equation}
+    而且會與用流體邊界厚度的有以下比例關係
+    \begin{equation}
+      y^\ast = \frac{y}{\delta(x)} = \frac{\delta_T(x)}{\delta(x)} y_T^\ast
+    \end{equation}
+    $x$方向速度的無因次化，則利用剛剛的(\ref{eq:graetz_linear_velocity_profile})假設\\
+    可以換成$y_T^\ast$來消除一個變數
+    \begin{equation}
+      u_x^\ast = \frac{u_x}{U} = \frac{y}{\delta(x)} = \frac{\delta_T(x)}{\delta(x)} y_T^\ast \label{eq:graetz_ux_dimensionless}
+    \end{equation}
+    $y$方向速度的無因次化\\
+    同之前流場的邊界層一樣，透過Goldilock Argument選擇
+    \begin{equation}
+      u_y^\ast = \frac{u_y}{V},\quad V = U \frac{\delta(x)}{L}
+    \end{equation}
+    再利用Equation of Continuity，可以換成$y_T^\ast$\\
+    連續方程式:
+    \begin{equation}
+      \frac{\partial u_x}{\partial x} = \frac{\partial u_y}{\partial y}
+    \end{equation}
+    無因次化:
+    \begin{align}
+      & \frac{U}{L} \frac{\partial u^\ast}{\partial x^\ast} = \frac{V}{\delta_T} \frac{\partial u_y^\ast}{\partial y_T^\ast} \nonumber\\
+      \Rightarrow & \frac{U}{L} \frac{\partial u^\ast}{\partial x^\ast}  = \frac{U \delta}{L \delta_T} \frac{\partial u_y^\ast}{\partial y_T^\ast} \nonumber\\
+      \Rightarrow & \frac{\partial u^\ast}{\partial x^\ast}  = \frac{\delta}{\delta_T} \frac{\partial u_y^\ast}{\partial y_T^\ast}
+    \end{align}
+    等號左邊利用(\ref{eq:graetz_ux_dimensionless})代入:
+    \begin{align}
+      & \frac{\partial }{\partial x^\ast} \left(
+        \frac{\delta_T}{\delta} y_T^\ast
+      \right) = \frac{\delta}{\delta_T} \frac{\partial u_y^\ast}{\partial y_T^\ast} \nonumber\\
+      \Rightarrow & y_T^\ast \frac{\partial }{\partial x^\ast} \left(
+        \frac{\delta_T}{\delta}
+      \right) = \frac{\delta}{\delta_T} \frac{\partial u_y^\ast}{\partial y_T^\ast} \nonumber\\
+      \Rightarrow & \frac{\partial u_y^\ast}{\partial y_T^\ast} = \frac{\delta_T^2}{\delta^2} y_T^\ast \frac{\partial }{\partial x^\ast} \left(
+        \frac{\delta_T}{\delta}
+      \right)
+    \end{align}
+    而我們假定兩個邊界層的\fbox{發展比例是固定的}\\
+    將上式積分:
+    \begin{equation}
+      u_y^\ast = \frac{\delta_T^2}{\delta^2}y_T^{\ast 2} \label{eq:graetz_uy_dimensionless}
+    \end{equation}
+    \item 最後將能量方程式無因次化:
+    \begin{align}
+      &\rho \hat C_P \left(
+        u_x \frac{\partial T}{\partial x} + u_y \frac{\partial T}{\partial y}
+      \right) = k\left(
+        \frac{\partial^2 T}{\partial x^2} + \frac{\partial^2 T}{\partial y^2}
+      \right)
+      \nonumber\\
+      \Rightarrow & \rho \hat C_P \left[
+        \left(
+          u_x^\ast U
+        \right) \left(
+          \frac{T_\infty - T_0}{L} \frac{\partial T^\ast}{\partial x^\ast}
+        \right) + \left(
+          u_y^\ast V
+        \right) \left(
+          \frac{T_\infty - T_0}{\delta_T} \frac{\partial T^\ast}{\partial y_T^\ast}
+        \right)
+      \right] = \nonumber\\
+      & k \left[
+        \frac{T_\infty - T_0}{L^2} \frac{\partial^2 T^\ast}{\partial x^{\ast 2}} +
+        \frac{T_\infty - T_0}{\delta_T^2} \frac{\partial^2 T^\ast}{\partial y_T^{\ast 2}}
+      \right]
+    \end{align}
+    因為$\delta_T \ll L$，所以可以忽略掉$\frac{\partial^2 T^\ast}{\partial x^{\ast 2}}$項\\
+    並將$u_x^\ast, u_y^\ast$用(\ref{eq:graetz_ux_dimensionless}), (\ref{eq:graetz_uy_dimensionless})代入:
+    \begin{equation}
+      \rho \hat C_P \left[
+        \left(
+          \frac{\delta_T}{\delta} y_T^\ast U
+        \right) \left(
+          \frac{T_\infty - T_0}{L} \frac{\partial T^\ast}{\partial x^\ast}
+        \right) + \left(
+          \frac{\delta_T^2}{\delta^2} y_T^{\ast 2} V
+        \right) \left(
+          \frac{T_\infty - T_0}{\delta_T} \frac{\partial T^\ast}{\partial y_T^\ast}
+        \right)
+      \right] =  k \left[
+        \frac{T_\infty - T_0}{\delta_T^2} \frac{\partial^2 T^\ast}{\partial y_T^{\ast 2}}
+      \right]
+    \end{equation}
+    再簡化，同除以$(T_\infty - T_0)$:
+    \begin{align}
+      &\rho \hat C_P \left[
+        \frac{\delta_T}{\delta} y_T^\ast U \cdot \frac{1}{L} \frac{\partial T^\ast}{\partial x^\ast} +
+        \frac{\delta_T^2}{\delta^2} y_T^{\ast 2} U \frac{\delta}{L} \cdot \frac{1}{\delta_T} \frac{\partial T^\ast}{\partial y_T^\ast}
+      \right] = \frac{k}{\delta_T^2} \left(\frac{\partial^2 T^\ast}{\partial y_T^{\ast 2}}\right) \nonumber\\
+      \Rightarrow & \rho \hat C_P U \left[
+        \frac{\delta_T}{\delta} y_T^\ast \frac{1}{L} \frac{\partial T^\ast}{\partial x^\ast} +
+        \frac{\delta_T}{\delta} y_T^{\ast 2} \frac{1}{L} \frac{\partial T^\ast}{\partial y_T^\ast}
+      \right] =  \frac{k}{\delta_T^2} \left(\frac{\partial^2 T^\ast}{\partial y_T^{\ast 2}}\right) \nonumber\\
+      \Rightarrow & \rho \hat C_P U \frac{\delta_T}{\delta} \frac{1}{L} \left[
+        y_T^\ast \frac{\partial T^\ast}{\partial x^\ast} +
+        y_T^{\ast 2} \frac{\partial T^\ast}{\partial y_T^\ast}
+      \right] =  \frac{k}{\delta_T^2} \left(\frac{\partial^2 T^\ast}{\partial y_T^{\ast 2}}\right) \nonumber\\
+      \Rightarrow & \frac{\rho \hat C_P U \delta_T^3}{k L\delta} \left[
+        y_T^\ast \frac{\partial T^\ast}{\partial x^\ast} +
+        y_T^{\ast 2} \frac{\partial T^\ast}{\partial y_T^\ast}
+      \right] = \frac{\partial^2 T^\ast}{\partial y_T^{\ast 2}} \label{eq:graetz_energy_equation_dimensionless}
+    \end{align}
+    \item 同樣，利用Goldilock Argument，判定左邊那陀係數應該接近1\\
+    因此可以得到兩邊界層的比例關係:
+    \begin{equation}
+      \frac{\rho \hat C_P U \delta_T^3}{k L\delta} = 1 
+    \end{equation}
+    以$\delta_T$來看:
+    \begin{equation}
+      \delta_T = \left(
+        \frac{kL \delta}{ \rho \hat C_P U}
+      \right)^{\frac{1}{3}} =  \left(
+        \frac{kL}{ \rho \hat C_P U\delta^2}
+      \right)^{\frac{1}{3}} \delta
+    \end{equation}
+    同除$\delta$，得到:
+    \begin{equation}
+      \boxed{\frac{\delta_T}{\delta} = \left(
+        \frac{kL}{\rho \hat C_P U\delta^2}
+        \right)^{\frac{1}{3}}} \label{eq:graetz_deltaT_over_delta}
+    \end{equation}
+    \item 更進一步，將上式結合流場邊界層得出的(\ref{eq:ch2_5_boundary_layer_dev_delta_Re}):
+    \begin{equation}
+      \frac{\delta}{L} \sim \text{Re}_L^{-\frac{1}{2}} = \left(
+        \frac{\mu}{\rho U L}
+      \right)^{\frac{1}{2}} \implies \delta^2 \sim \frac{\mu L}{\rho U}
+    \end{equation}
+    代入(\ref{eq:graetz_deltaT_over_delta}):
+    \begin{align}
+      & \frac{\delta_T}{\delta} = \left(
+        \frac{kL}{\rho \hat C_P U} \cdot \frac{\rho U}{\mu L}
+      \right)^{\frac{1}{3}} \nonumber\\
+      \Rightarrow & \frac{\delta_T}{\delta} = \left(
+        \frac{k}{\hat C_P \mu}
+      \right)^{\frac{1}{3}} \nonumber\\
+      \Rightarrow & \boxed{\frac{\delta_T}{\delta} = \text{Pr}^{-\frac{1}{3}}}
+    \end{align}
+    也就是說當Prandtl Number越大，熱傳邊界層相對於流體邊界層就越薄\\
+    衍生，如果將$\frac{\delta_T}{L}$表示出來:
+    \begin{align}
+      & \frac{\delta_T}{L} = \frac{\delta_T}{\delta} \cdot \frac{\delta}{L} \nonumber\\
+      \Rightarrow & \boxed{\frac{\delta_T}{L} = \text{Re}_L^{-\frac{1}{2}} \text{Pr}^{-\frac{1}{3}}}
+    \end{align}
+    然後把熱傳係數相關的Nusselt Number也表示出來(見\ref{eq:graetz_nusselt_number})
+    \begin{align}
+      & \text{Nu}_L = \frac{hL}{k}, \quad h = \frac{k}{\delta_T} \nonumber\\
+      \Rightarrow & \text{Nu}_L = \frac{k}{\delta_T}\cdot \frac{L}{k} = \frac{L}{\delta_T} \nonumber\\
+      \Rightarrow & \boxed{\text{Nu}_L = \text{Re}_L^{\frac{1}{2}} \text{Pr}^{\frac{1}{3}}}
+    \end{align}
+    \item 不過剛剛也只是假設兩個邊界層發展比例固定，而產生的因次關係推導\\
+    解題上還需回到只利用流體邊界層內流體是線性的這個假設\\
+    不能將全部都以$y_T^\ast$來表示
+    \begin{equation}
+      u_x \frac{\partial T}{\partial x} + u_y \frac{\partial T}{\partial y} = \alpha \frac{\partial^2 T}{\partial y^2}
+    \end{equation}
+    但這個式子其實裡面有$u(x,y)$，又有$T(x,y)$，是兩個PDE耦合在一起的系統\\
+    需要想辦法將$u$消掉，只剩下$T$的PDE\\
+    於是我們假設獨立性，而先解流體邊界層，得到$u(x,y)$後，再代入能量方程式中\\
+    至於流體邊界層的解法，已經在之前章節解過見(\ref{sec:ch2_5_boundary_layer_dev_definition_F})\\
+    並令$u_x = U F'(\eta_H)$\\
+    其中$\eta_H = y\cdot \sqrt{\frac{\rho U}{\mu x}}$，是Hydrodynamic Boundary Layer的無因次化變數\\
+    可以看(\ref{sec:ch2_5_boundary_layer_dev_definition_F})\\
+    當時用解析解解出(\ref{eq:ch2_5_boundary_layer_dev_velocity_profile})
+    \begin{equation}
+      u_x = 0.332 U \sqrt{\frac{\rho U}{\mu x}} y
+    \end{equation}
+    以及將$u_x$代入連續方程式得到的$u_y$(\ref{eq:ch2_5_boundary_layer_dev_velocity_profile_u_y})
+    \begin{equation}
+      u_y = 0.083 \sqrt{\frac{\rho U^3}{\mu x^3}} y^2
+    \end{equation}
+    代入能量方程式:
+    \begin{align}
+      & U F'(\eta_H) \frac{\partial T}{\partial x} + 0.083 \sqrt{\frac{\rho U^3}{\mu x^3}} y^2 \frac{\partial T}{\partial y} = \alpha \frac{\partial^2 T}{\partial y^2} \nonumber\\
+      \Rightarrow & U \left(
+        0.332 \sqrt{\frac{\rho U}{\mu x}} y
+      \right) \frac{\partial T}{\partial x} + 0.083 \sqrt{\frac{\rho U^3}{\mu x^3}} y^2 \frac{\partial T}{\partial y} = \alpha \frac{\partial^2 T}{\partial y^2} \nonumber\\
+      \Rightarrow & 0.332 U \sqrt{\frac{\rho U}{\mu x}} y \frac{\partial T}{\partial x} + 0.083 \sqrt{\frac{\rho U^3}{\mu x^3}} y^2 \frac{\partial T}{\partial y} = \alpha \frac{\partial^2 T}{\partial y^2}
+    \end{align}
+    至此，我們成功的消除速度項，而變成$T(x,y)$的偏微分方程式\\
+    而邊界條件為:
+    \begin{align}
+      &T(0,y) = T_\infty \nonumber\\
+      &T(x,\infty) = T_\infty, \quad T(x,\delta_T(x))=T_\infty \nonumber\\
+      &T(x,0) = T_0
+    \end{align}
+    其中前兩個邊界條件可以合併再一起\\
+    但可以發現剩下兩個邊界條件在$y=0$處是矛盾的，但沒關係\\
+    我們還是可以再用一次跟流場一樣的Similarity Solution來解這個PDE\\
+    定義無因次化變數:
+    \begin{equation}
+      \eta_T =\frac{y}{\delta_T(x)}, \quad \theta = \frac{T - T_0}{T_\infty - T_0}
+    \end{equation}
+    則省略那些($T_\infty - T_0$)，畢竟代進去也會消掉，或者就直接想成能量平衡式
+    \begin{equation}
+      u_x \frac{\partial \theta}{\partial x} + u_y \frac{\partial \theta}{\partial y} = \alpha \frac{\partial^2 \theta}{\partial y^2}
+    \end{equation}
+    而每個偏微分項:
+    \begin{align}
+      \frac{\partial \theta}{\partial x} & = \frac{\partial \theta}{\partial \eta_T}{\partial \eta_T}{\partial x}
+      = -\frac{y}{\delta_T^2(x)}\frac{d\delta_T}{dx}\frac{\partial \theta}{\partial \eta_T} \nonumber\\
+      \frac{\partial \theta}{\partial y} & = \frac{\partial \theta}{\partial \eta_T}{\partial \eta_T}{\partial y}
+      = \frac{1}{\delta_T(x)} \frac{\partial \theta}{\partial \eta_T} \nonumber\\
+      \frac{\partial^2 \theta}{\partial y^2} & = \frac{\partial }{\partial y} \left(
+        \frac{1}{\delta_T(x)} \frac{\partial \theta}{\partial \eta_T}
+      \right) = \frac{1}{\delta_T^2(x)} \frac{\partial^2 \theta}{\partial \eta_T^2}
+    \end{align}
+    把$u_x, u_y$以及上面三個偏微分代入能量方程式:
+    \begin{align}
+      &0.332 \left(
+        \frac{\rho U^3}{\mu x}
+      \right)^\frac{1}{2} y \cdot \left(
+        -\frac{y}{\delta_T^2(x)} \frac{d\delta_T}{dx} \frac{\partial \theta}{\partial \eta_T}
+      \right) + 0.083 \left(
+        \frac{\rho U^3}{\mu x^3}
+      \right)^\frac{1}{2} y^2 \cdot \left(
+        \frac{1}{\delta_T(x)} \frac{\partial \theta}{\partial \eta_T}
+      \right) \nonumber\\
+      &\quad = \alpha \cdot \left(
+        \frac{1}{\delta_T^2(x)} \frac{\partial^2 \theta}{\partial \eta_T^2}
+      \right)
+    \end{align}
+    再將$y = \eta_T \delta_T(x)$代入:
+    \begin{align}
+      & -0.332 \left(
+        \frac{\rho U^3}{\mu x}
+      \right)^\frac{1}{2} \eta_T^2 \cancel{\delta_T^2(x) }\cdot \cancel{\frac{1}{\delta_T^2(x)} }\frac{d\delta_T}{dx} \frac{\partial \theta}{\partial \eta_T}
+      + 0.083 \left(
+        \frac{\rho U^3}{\mu x^3}
+      \right)^\frac{1}{2} \eta_T^2 \delta_T(x) \cdot \frac{1}{\delta_T(x)} \frac{\partial \theta}{\partial \eta_T} \nonumber\\
+      & \quad = \alpha \cdot \left(
+        \frac{1}{\delta_T^2(x)} \frac{\partial^2 \theta}{\partial \eta_T^2}
+      \right)
+    \end{align}
+    目前這就已經是2階ODE了，但其實沒有沒被微分的$\theta$\\
+    所以同樣的方法，令$F'(\eta_T)=\frac{\partial \theta}{\partial \eta}$\\
+    但為了怕跟上面的$F$搞混，我們叫他$F_T$好了，把$\frac{\alpha}{\delta_T^2(x)}$移到左邊\\
+    然後把全部丟到右邊變成:
+    \begin{equation}
+      F_T' + \left[
+        0.332\sqrt{
+          \frac{\rho U^3}{\mu x}
+        }\frac{\eta_T^2\delta_T^2(x)}{\alpha} \frac{d\delta_T}{dx} F_T
+      \right]
+      - \left[
+        0.083 \sqrt{
+          \frac{\rho U^3}{\mu x^3}
+        } \frac{\eta_T^2 \delta_T^3(x)}{\alpha} F_T
+      \right] = 0 \label{eq:graetz_ODE_before_simplify}
+    \end{equation}
+    然後，還記得在上一個Leveque的假設中有(\ref{eq:leveque_ODE}):
+    \begin{equation}
+      \frac{d^2 \theta}{d\eta^2} + 3\eta^2 \frac{d\theta}{d\eta} = 0
+    \end{equation}
+    所以如果那兩坨中刮號內的係數相減能是常數3的話，那就再好不過了!\\
+    或者說，如果是圓管的話，那她大概就是3了\\
+    那接著我們來要要怎麼讓他變成成3?\\
+    觀察兩個係數，0.332是4倍的0.083\\
+    我們如果又右邊的係數共同項拿出來叫做$\xi$的話
+    \begin{equation}
+      \xi = 0.083 \sqrt{
+        \frac{\rho U^3}{\mu x}
+      } \frac{\eta_T^2}{\alpha}
+    \end{equation}
+    那麼左邊的係數就會是$4 \xi \delta_T^3 \frac{d\delta_T}{dx}$\\
+    因此我們要
+    \begin{equation}
+      4 \xi \delta_T^3 \frac{d\delta_T}{dx} - \xi\frac{\delta_T^2}{x} = 3
+    \end{equation}
+    % Proof that the left term will be constant 6 and the right term is 3
+    令$f(x)=\delta_T^3(x)$，則$f'(x)=3\delta_T^2 \frac{d\delta_T}{dx}$\\
+    或者說:
+    \begin{equation}
+      \frac{1}{3}f'(x) = \delta_T^2 \frac{d\delta_T}{dx}
+    \end{equation}
+    代入上式:
+    \begin{align}
+      & 4 \xi \delta_T^2\delta_T' = \frac{4}{3}\xi f'(x) \nonumber\\
+      \Rightarrow & \xi \frac{\delta_T^3}{x} = \xi\frac{f}{x}
+    \end{align}
+    又由於$\xi$當中$x$在分母，故$\propto x^{-0.5}$
+    \begin{equation}
+      \xi \frac{f}{x} \propto x^{-0.5} \frac{f}{x}= x^{-1.5} f \implies f \propto x^{1.5}
+    \end{equation}
+    因此令$f(x) = C x^{1.5}$，則$f'(x) = 1.5 C x^{0.5}$\\
+    代入上式:
+    \begin{equation}
+      4\xi \delta_T^2\delta_T' = \frac{4}{3}\xi (1.5 C x^{0.5}) = 2\xi C x^{0.5}
+    \end{equation}
+    以及:
+    \begin{equation}
+      \xi \frac{\delta_T^3}{x} = \xi \frac{C x^{1.5}}{x} = \xi C x^{0.5}
+    \end{equation}
+    可以看到他們的比例是2:1\\
+    而兩個相減又要是3，所左邊會是6，右邊是3\\
+    也就是說回到一開始的ODE:
+    \begin{equation}
+      \left[
+        0.332\sqrt{
+          \frac{\rho U^3}{\mu x}
+        }\frac{\delta_T^2(x)}{\alpha} \frac{d\delta_T}{dx}
+      \right] = 6, \quad
+      \left[
+        0.083 \sqrt{
+          \frac{\rho U^3}{\mu x^3}
+        } \frac{\delta_T^3(x)}{\alpha}
+      \right] = 3
+    \end{equation}
+   而右邊那項，是可以把$\delta_T(x)$解出來的
+   % Try to make 3.306 Pr^(-1/3) Re_x^(-1/2)x
+   \begin{align}
+    & 0.083 \sqrt{
+          \frac{\rho U^3}{\mu x^3}
+        } \frac{\delta_T^3(x)}{\alpha} 
+       = 3 \nonumber\\
+    \Rightarrow & \delta_T^3(x) = \frac{3}{0.083} \alpha\sqrt{
+          \frac{\mu x^3}{\rho U^3}
+        } \nonumber\\
+    \Rightarrow & \delta_T(x) = \sqrt[3]{
+      \frac{3}{0.083}
+    }\cdot \alpha^{\frac{1}{3}} \left(
+      \frac{\mu}{\rho U^3}
+    \right)^{\frac{1}{6}} x^{\frac{1}{2}} \nonumber\\
+    \Rightarrow & \delta_T(x) = 3.306 \cdot \alpha^{\frac{1}{3}} \left(
+      \frac{\mu}{\rho U^3}
+    \right)^{\frac{1}{6}} x^{\frac{1}{2}} \nonumber\\
+    \Rightarrow & \boxed{\delta_T(x) = 3.306 \cdot \text{Pr}^{-\frac{1}{3}} \text{Re}_x^{-\frac{1}{2}} x} \label{eq:graetz_deltaT_exact_solution}
+   \end{align}
+   \item 最後把相似於Leveque假設的ODE解出\\
+   假設等於3時，還原$F_T$，得到ODE:
+  \begin{equation}
+    \frac{d^2 \theta}{d\eta_T^2} + 3\eta_T^2 \frac{d\theta}{d\eta_T} = 0
+  \end{equation}
+  邊界條件:
+  \begin{align}
+    & \theta(0) = 1 \nonumber\\
+    & \theta(\infty) = 0
+  \end{align}
+  解出來的解為:
+  \begin{equation}
+    \theta(\infty) = 1 = A \int_0^\infty e^{-\eta_T^3} d\eta_T = A\Gamma\left(\frac{4}{3}\right)
+  \end{equation}
+  所以$A = \frac{1}{\Gamma(4/3)}$
+  \begin{equation}
+    \boxed{\theta(\eta_T) = \frac{1}{\Gamma(4/3)} \int_0^{\eta_T} e^{-\eta_T^3} d\eta_T}
+  \end{equation}
   \end{enumerate}
 \end{itemize}
 \end{CJK*}
