@@ -70,7 +70,7 @@ Same Analogy as Momentum Transport
         $k$有些時候不是常數，而會跟溫度與壓力有關，但是主要影響還是物質特性\\
         若要對影響排序，則是: 物質特性$>$溫度$>$壓力(只有氣體會受壓力影響)\\
         另外在物質當中，又以分子間距離遠近為主要影響\\
-        故\fbox{固體>液體>氣體}\\
+        故\fbox{固體$>$液體$>$氣體}\\
         液體中:$k\propto T$\\
         而扯到氣體，因為氣體的熱傳主要靠分子間的碰撞\\
         所以會跟溫度(動能上升)和壓力(分子距離靠近)有比較大的關係
@@ -94,7 +94,7 @@ Same Analogy as Momentum Transport
         \end{equation}
         而整陀流體的能量($\rho \hat E \vec{\bm u}$)又可以分成動能和內能
         \begin{equation}
-          (\frac{1}{2}\rho \left|\vec{\bm u}\right|^2 + \rho \hat U)\vec{\bm u} = \rho \hat E \vec{\bm u}
+        \left(\frac{1}{2}\rho \left|\vec{\bm u}\right|^2 + \rho \hat U\right)\vec{\bm u} = \rho \hat E \vec{\bm u}
         \end{equation}
         不過因為這些$\hat E$之類的在一團東西流動時很難取得\\
         所以有牛頓冷卻定律 (Newton's Law of Cooling)
@@ -107,6 +107,16 @@ Same Analogy as Momentum Transport
         但實務上$h$很難獲得\\
         因為會受容器的形狀、流速、流動方式、流體的物性(密度、黏度、熱容、熱導係數)、加熱方式而影響\\
         通常使用熱對流經驗式，計算，再代入獲得$h$
+      \item 熱輻射(Heat radiation)
+        \begin{equation}
+          q_r(1\to 2) = A_1 F_{1\to 2} \sigma \left(T_1^4 - T_2^4\right)
+        \end{equation}
+        (後面有詳細記介紹$\implies$\ref{fig:heat_radiation})
+      \item 將上面三種$q_k,q_c,q_r$加在一起，針對這三個$q$的能量守恆\\
+      會將\fbox{熱傳導放在$E_{\text{in}},~E_{\text{out}}$中}\\
+      而\fbox{熱對流和熱輻射放在$E_{\text{gen}}$中}，因為這兩個是\fbox{單向}的能量傳遞\\
+      只會從控制體積中流出或流入，但這也是方便而已，不用糾結為什麼對流是$E_{\text{gen}}$\\
+      另外，如果有電熱、化學反應等熱源產生，合理也會放在$E_{\text{gen}}$中
       \item Work associated with molecular motion，\fbox{分子運動作功Flux}\\
         定義一個控制體積對各方向的作用力是:
         \begin{equation}
@@ -124,7 +134,7 @@ Same Analogy as Momentum Transport
         \end{equation}
       \item 定義Combined energy flux，$\vec{\bm e}$:
         \begin{equation}
-          \vec{\bm e} = \rho \hat E \vec{\bm u} + \overline{\overline{\bm \pi}} \cdot \vec{\bm u} - \vec{\bm q}
+          \vec{\bm e} = \rho \hat E \vec{\bm u} + \overline{\overline{\bm \pi}} \cdot \vec{\bm u}  + \vec{\bm q}
           \label{eq:energy_flux_definition}
         \end{equation}
         注意我們使用$\vec{\bm q}$，因為並不是所有熱傳導都符合Fourier's Law
@@ -135,6 +145,10 @@ Same Analogy as Momentum Transport
           + \underbrace{\iiint_V \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)dV}_{\text{整陀東西被作功}=E_{\text{gen}}} 
           = \underbrace{\frac{d}{dt}\iiint_V \rho \hat E dV}_{E_\text{acc}}
         \end{equation}
+        P.S. 當使用Shell balance思考時，同介紹$q$時所說\\
+        熱對流和熱輻射是單向的能量傳遞，會放在$E_{\text{gen}}$中\\
+        而流入與流出也會再加上$\dot H$，也就是來自周遭流體給予的能量\\
+        因為根據題目不同很可能會把流場的傳遞、來自熱源的輸入等等簡併為焓\\
         根據高斯定理，將表面積分轉成體積積分:
         \begin{equation}
           \frac{\partial}{\partial t} (\rho \hat E) = - \nabla \cdot \vec{\bm e} + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)
@@ -193,32 +207,93 @@ Same Analogy as Momentum Transport
         兩式相減後得到:
         \begin{equation}
           \rho \frac{D\hat U}{Dt} = 
-          - \nabla \cdot \vec{\bm q} - P  \nabla \cdot \vec{\bm u} + \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
+          - \nabla \cdot \vec{\bm q} 
+          - P  \nabla \cdot \vec{\bm u} 
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
         \end{equation}
         利用$\hat H = \hat U + P\hat V\to \hat U + P\frac{1}{\rho}$，可以換成:
-        %TODO 省略
+        \begin{align}
+          \rho \frac{D\hat H}{Dt} -\rho \frac{D}{Dt}\left(\frac{P}{\rho}\right) &= 
+          -\nabla \cdot \vec{\bm q} -
+           \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \nonumber\\
+           \rho \frac{D\hat H}{Dt} -\frac{D P}{Dt} + \frac{P}{\rho}\frac{D \rho}{Dt} &=
+           -\nabla \cdot \vec{\bm q} - P \nabla \cdot \vec{\bm u}
+           - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
+        \end{align}
+        利用Equation of Continuity: 
         \begin{equation}
-          \rho \frac{D\hat H}{Dt} = -\nabla \cdot \vec{\bm q} + \frac{D P}{Dt} + \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
+          \frac{\partial \rho}{\partial t} + \nabla \cdot \rho \vec{\bm u} = 0 \implies \frac{D \rho}{Dt} =
+           -\rho \left(\nabla \cdot \vec{\bm u}\right)
         \end{equation}
+        代入後得到:
+        \begin{align}
+           \rho\frac{D\hat H}{Dt} - \frac{D P}{Dt} - \cancel{\frac{P}{\rho}\left(-\rho \nabla \cdot \vec{\bm u}\right)} &= 
+          -\nabla \cdot \vec{\bm q} 
+          -\cancel{ P \nabla \cdot \vec{\bm u}}
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \nonumber\\
+          \implies \quad \rho \frac{D\hat H}{Dt} &= -\nabla \cdot \vec{\bm q} + \frac{D P}{Dt} 
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \label{eq:energy_equation_intermediate}
+        \end{align}
+        為了要把式子變成溫度的形式，需利用熱力學關係式\\
         利用物化的$\hat H(T,P)$，換掉$\rho \frac{D\hat H}{Dt}$:
-        \begin{equation}
-          \rho \frac{D\hat H}{Dt} = \rho \hat C_p \frac{DT}{Dt} + \left[
+        \begin{align}
+          \hat H(T,P) \implies d\hat H &= \left(
+            \frac{\partial \hat H}{\partial T}
+          \right)_P dT + \left(
+            \frac{\partial \hat H}{\partial P}
+          \right)_T dP \nonumber\\
+          &= \hat C_p dT + \left[
+            \hat V - T\left(
+              \frac{\partial \hat V}{\partial T}
+            \right)_P
+          \right] dP \nonumber\\
+          &= \hat C_p dT + \left[
+            \frac{1}{\rho} - T\left(
+              \frac{\partial }{\partial T}\left(\frac{1}{\rho}\right)
+            \right)_P
+          \right] dP \nonumber\\
+          \therefore \quad \rho \frac{D\hat H}{Dt} &= \rho \hat C_p \frac{DT}{Dt} + \rho \left[
+            \frac{1}{\rho} - T\left(
+              \frac{\partial }{\partial T}\left(\frac{1}{\rho}\right)
+            \right)_P
+          \right] \frac{D P}{Dt} \nonumber\\
+          &= \rho \hat C_p \frac{DT}{Dt} + \left[
+            1 - \rho T\left(
+              \frac{\partial }{\partial T}\left(\frac{1}{\rho}\right)
+            \right)_P
+          \right] \frac{D P}{Dt} \nonumber\\
+          &= \rho \hat C_p \frac{DT}{Dt} + \left[
+            1 - \left(\frac{T}{\rho}\right)\left(
+              \frac{\partial \rho}{\partial T}
+            \right)_P
+          \right] \frac{D P}{Dt} \nonumber\\
+          &= \rho \hat C_p \frac{DT}{Dt} + \left[
             1 - \left(
               \frac{\partial \ln \rho}{\partial \ln T}
             \right)_P
           \right] \frac{D P}{Dt}
+        \end{align}
+        代入(\ref{eq:energy_equation_intermediate})式:
+        \begin{equation}
+          \rho\hat C_p \frac{DT}{Dt} + \left[
+            \cancel{1} - \left(
+              \frac{\partial \ln \rho}{\partial \ln T}
+            \right)_P
+          \right] \frac{D P}{Dt} = -\nabla \cdot \vec{\bm q} + \cancel{\frac{D P}{Dt} }
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)  
         \end{equation}
-        最後得到:
+        會得到最終移除力學能項的能量方程式:
         \begin{equation}
           \rho \hat C_p \frac{DT}{Dt} = -\nabla \cdot \vec{\bm q} 
-          + \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
           + \left(
             \frac{\partial \ln \rho}{\partial \ln T}
           \right)_P\frac{D_P}{D_t}
         \end{equation}
         其中$\overline{\overline{\bm \tau}}:\left(\nabla \vec {\bm u}\right)$在流量傳輸中有提過他的展開\\
-        見(\ref{eq:viscous_dissipation})式\\
-        簡化方式:
+        見(\ref{eq:viscous_dissipation})式
+      \item Equation of Energy的簡化形式\\
+        根據不同的假設條件，可以將上式進一步簡化，常見的假設條件有:
         \begin{enumerate}
           \item Fourier Law:
           \begin{equation}
@@ -614,6 +689,7 @@ Same Analogy as Momentum Transport
         \draw[red, dashed,domain=276:315, smooth] plot ({3.5+4.0311*cos(\x)}, {4+4.0311*sin(\x)});
       \end{tikzpicture}
       \caption{熱輻射示意圖}
+      \label{fig:heat_radiation}
     \end{figure}
     其中$F_{1\to 2}$是View Factor或稱為Shape Factor\\
     指的是1號面積所發出的光，到達2表面積的比例\\

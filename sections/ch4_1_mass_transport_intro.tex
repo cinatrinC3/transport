@@ -1,0 +1,667 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{質量傳輸概論}
+質量傳輸就是有各種物質，在空間與時間下的分布與變化\\
+假設空間中有一個控制體積，則在這個控制體積內，各個物質的
+\begin{enumerate}
+  \item Density, $\rho_i(\vec{\bm r}, t)$
+  \item Velocity, $\vec{\bm u}_i(\vec{\bm r}, t)$
+  \item Mass Flux, $\vec{\bm n}_i (\vec{\bm r}, t)$
+  \item Rate of Production, $r_i(\vec{\bm r}, t)$
+\end{enumerate}
+會發生變化，其中注意密度、生成速率是純量，對各方向皆相同\\
+而速度、質量通量則是向量，會隨方向改變\\
+質量通量，又可以再拆分為分子擴散造成，以及對流造成\\
+所謂對流，就是跟著整陀流體一起移動，以流體力學所造成的質量通量\\
+而分子擴散，則是在這個流場中，物質因為濃度差異，額外產生的質量通量\\
+因此質量通量，可以表示為
+\begin{equation}
+  \vec{\bm n}_i = \rho_i \vec{\bm u} + \vec{\bm j}_i \label{eq:mass_flux_decomposition}
+\end{equation}
+其中$\vec{\bm j}_i$即為分子擴散所造成的質量通量\\
+\fbox{Molecular diffusion by mass gradient}\\
+針對所有分密度相加，可以改為平均密度
+\begin{equation}
+  \sum_i \rho_i = \rho
+\end{equation}
+針對所有物質的擴散加總，會得到一個淨流入與淨流出的速度，定義為體積平均流速\\
+\fbox{Volume Average Velocity}
+\begin{equation}
+  \sum_i \rho_i \vec{\bm u} = \rho \vec{\bm u} \implies \boxed{\vec{\bm u} = \frac{\sum_i \rho_i \vec{\bm u}}{\rho}}
+\end{equation}
+換句話說，各物質的擴散$\vec{\bm j}_i$，則是根據這個平均流速為基準額外增加或減少的質量通量\\
+也因此根據此定義:
+\begin{align}
+  \vec{\bm j}_i &= \vec{\bm n}_i - \rho_i \vec{\bm u} \nonumber\\
+  &= \rho_i (\vec{\bm u}_i - \vec{\bm u})\nonumber\\
+  \sum_i \vec{\bm j}_i &= \sum_i \rho_i (\vec{\bm u}_i - \vec{\bm u})\nonumber\\
+  &= \sum_i \rho_i \vec{\bm u}_i - \vec{\bm u} \sum_i \rho_i \nonumber\\
+  &= \rho \vec{\bm u} - \rho \vec{\bm u} = 0
+\end{align}
+必然成立:
+\begin{equation}
+  \boxed{\sum_i \vec{\bm j}_i = 0}
+\end{equation}
+另外根據質量守恆，反應通量$r_i$，會滿足
+\begin{equation}
+  \boxed{\sum_i r_i=0}
+\end{equation}
+而將質量除上各物質的分子量$M_i$，即可獲得Molar Flux，會以大寫表示\\
+對比(\ref{eq:mass_flux_decomposition})，Molar Flux可表示為
+\begin{align}
+  &\frac{n_i}{M_i} = \frac{\rho_i \vec{\bm u}}{M_i} + \frac{\vec{\bm j}_i}{M_i} \nonumber\\
+  &\boxed{\vec{\bm N}_i = C_i \vec{\bm u} + \vec{\bm J}_i} \label{eq:molar_flux_decomposition}
+\end{align}
+由$\frac{\rho_i \vec{\bm u}}{M_i}$，定義出了$C_i$
+\begin{equation}
+  \frac{\rho_i}{M_i} = C_i \label{eq:species_molar_concentration}
+\end{equation}
+稱為\fbox{Species Molar Concentration}\\
+$J_i$則稱為\fbox{Molar Diffusion Flux}\\
+$N_i$則稱為\fbox{Species Molar Flux}\\
+同理，對$r_i$除上$M_i$，即可獲得Molar Rate of Production，表示為
+\begin{equation}
+  R_i = \frac{r_i}{M_i} \label{eq:molar_rate_of_production}
+\end{equation}
+當然，畢竟就是反應莫爾數，因此加總會跟總反應的係數合有關
+\begin{equation}
+  \sum_i R_i \neq 0 (\text{Depends on Stoichiometry})
+\end{equation}
+不過$N_i$在定義上會因為$\sum_i \vec{\bm j}_i= 0$，而定義為
+\begin{equation}
+  \vec{\bm N}_i = C_i \vec{\bm u}_i \label{eq:species_molar_flux_alternate}
+\end{equation}
+而各物質基於此定義產生的額外流速，才會是$J_i$\\
+可是如果用大寫的Molar Flux來看:
+\begin{align}
+  \vec{\bm N}_i &= C_i \vec{\bm u} + \vec{\bm J}_i \nonumber\\
+  &= C_i \vec{\bm u}_i \nonumber\\
+  \implies \vec{\bm J}_i &= C_i (\vec{\bm u}_i - \vec{\bm u})
+\end{align}
+由於
+\begin{equation}
+  \vec{\bm u} = \frac{\sum_i \rho_i \vec{\bm u}}{\sum_i \rho_i}
+\end{equation}
+因此:
+\begin{align}
+  \sum_i \vec{\bm J}_i &= \sum_i C_i (\vec{\bm u}_i - \vec{\bm u}) \nonumber\\
+  &= \sum_i C_i \vec{\bm u}_i - \vec{\bm u} \sum_i C_i \nonumber\\
+  &= \sum_i C_i \vec{\bm u}_i - \vec{\bm u} C \neq 0
+\end{align}
+也因為這件事\\
+我們希望可以不需要寫成:$\sum_i C_i \vec{\bm u}_i$，這樣就需要2倍物質種類的資訊量\\
+所以額外定義了\fbox{Molar Average Velocity}
+\begin{equation}
+  C \vec{\bm u}^\ast = \sum_i C_i \vec{\bm u}_i \implies \vec{\bm u}^\ast = \frac{\sum_i C_i \vec{\bm u}_i}{C} 
+  \label{eq:molar_average_velocity}
+\end{equation}
+而這時:
+\begin{equation}
+  \boxed{\vec{\bm N}_i = C_i \vec{\bm u}^\ast + \vec{\bm J}_i^\ast} \label{eq:molar_flux_decomposition_volume_average}
+\end{equation}
+這使得
+\begin{align}
+  \vec{\bm J}_i^\ast &= C_i \vec{\bm u}_i - C_i \vec{\bm u}^\ast \nonumber\\
+  &= C_i (\vec{\bm u}_i - \vec{\bm u}^\ast) \nonumber\\
+  \implies &\sum_i \vec{\bm J}_i^\ast = 0
+\end{align}
+將動量傳輸、能量傳輸、質量傳輸的通量做比較
+\begin{align}
+  \text{Momentum Flux: }& \overline{\overline {\bm \Phi}} = \underbrace{\quad\rho \vec{\bm u}\vec{\bm u}\quad}_{\text{慣性力}} 
+  + \underbrace{\quad\quad\overline{\overline{\bm \pi}}\quad\quad}_{\text{周遭流體作用力}} \nonumber\\
+  \text{Energy Flux: }& \overline{\bm e}  = \underbrace{\quad\rho\hat E \vec{\bm u} \quad}_{\text{對流}}
+  + \underbrace{\quad\vec{\bm_q}\quad}_{\text{熱傳導}} 
+  + \underbrace{\quad\quad\overline{\overline{\bm \pi}}\cdot \vec{\bm u}\quad\quad}_{\text{分子運動做功}} \nonumber\\
+  \text{Mass Flux: }& n_i = \underbrace{\quad\rho_i \vec{\bm u}\quad}_{\text{對流}}
+  + \underbrace{\quad\vec{\bm j}_i\quad}_{\text{分子擴散}} \label{eq:transport_flux_comparison}
+\end{align}
+\begin{itemize}
+  \item Governing Equation:
+  \begin{itemize}
+    \item 對一個物質的質量守恆:
+    \begin{equation}
+      m_{\text{in}} - m_{\text{out}} + m_{\text{gen}} = \Delta m_{\text{acc}} \label{eq:mass_conservation_general}
+    \end{equation}
+    故同之前熱傳與動量傳輸:
+    \begin{equation}
+      -\iint \vec{\bm n}_i \cdot \vec{\bm n}_sdS + \iiint r_i dV = \iiint \frac{\partial \rho_i}{\partial t} dV \label{eq:mass_conservation_integral}
+    \end{equation}
+    而其中$\vec{\bm n}_s$為控制體積表面的法向量\\
+    同樣根據高斯定理，將表面積分轉成體積積分:
+    \begin{align}
+      & - \iiint \nabla \cdot \vec{\bm n}_i dV + \iiint r_i dV = \iiint \frac{\partial \rho_i}{\partial t} dV \nonumber\\ 
+      \Rightarrow \quad & \iiint\left(
+        \frac{\partial \rho_i}{\partial t} + \nabla \cdot \vec{\bm n}_i - r_i
+      \right) dV = 0 \nonumber\\
+      \Rightarrow \quad & \boxed{\frac{\partial \rho_i}{\partial t} + \nabla \cdot \vec{\bm n}_i  -r_i = 0} \\
+      \text{or} \quad & \boxed{\frac{\partial \rho_i}{\partial t} + \nabla \cdot (\rho_i \vec{\bm u}) - r_i = 0} \label{eq:mass_conservation_differential}
+    \end{align}
+    \item 對所有物質的質量守恆:
+    \begin{align}
+      &\sum_i \frac{\partial \rho_i}{\partial t} + \sum_i\nabla \cdot (\rho_i \vec{\bm u}) - \cancelto{0}{\sum_i r_i} = 0 \nonumber\\
+      &\boxed{\frac{\partial \rho}{\partial t}+ \nabla \cdot \rho \vec{\bm u}=0} \label{eq:total_mass_conservation}
+    \end{align}
+    而就會發現他就變成流力的Equation of Continuity了
+    \item 寫成莫耳數的形式，有發生反應時會比較好計算
+    \begin{equation}
+      \frac{\partial C_i}{\partial t} + \nabla \cdot \vec{\bm N}_i - R_i = 0 \label{eq:molar_mass_conservation}
+    \end{equation}
+    $\vec{\bm N}_i=C_i\vec{\bm u}$\\
+    P.S. 上面討論過了$\sum_i R_i \neq 0$，會跟反應的化學計量有關
+    \item Fick's Law前身，如何得到$J_i, j_i$:\\
+    \fbox{Maxwell-Stefan Diffusion Equation}\\
+    假設了\fbox{物質$i$是受到所有非$i$的物質$j$的受力而移動}\\
+    而其他非$i$的物質$j$施給$i$的力，與$i$因為這個受力而施予其他$j$的力相等\\
+    (牛頓第三運動定律)\\
+    並認為作用力的大小，與單位時間內的碰撞頻率有關\\
+    而碰撞頻率，又跟兩物質的速度差成正比
+    \begin{equation}
+      \vec{\bm \varphi}_i^j= k_{ij} \left(\vec{\bm u_j - \vec{\bm u_i} }\right)
+    \end{equation}
+    $\varphi_i^j$為$j$對$i$的單位體積下的作用力，$k_{ij}$為Friction Coefficient\\
+    而$\vec{\bm u_j - \vec{\bm u_i} }$，則為兩物質的相對速度\\
+    且$k_{ij}=k_{ji}$\\
+    而Stefan-Maxwell又檢設$\boxed{k_{ij}\propto C_i C_j}$\\
+    而其比例常數取決於物質特性、溫度、以及整體濃度\\
+    將物質特性部分寫作$\mathbcal{D}_{ij}$ 有著\fbox{單位 $\frac{m^2}{s}$}
+    \begin{equation}
+      k_{ij} = \frac{C_iC_j RT}{C \mathbcal{D}_{ij}},\quad C=\sum_i C_i
+    \end{equation}
+    P.S. 同理$\mathbcal{D}_{ij}=\mathbcal{D}_{ji}$，稱之為\fbox{Maxwell-Stefan Diffusivity}
+    \item 對物質$i$，受到所有$j$的作用力總和
+    \begin{equation}
+      \vec{\bm \varphi}_i = \sum_{j \neq i} \vec{\bm \varphi}_i^j = \sum_{j \neq i} k_{ij} \left(\vec{\bm u_j - \vec{\bm u_i} }\right)
+    \end{equation}
+    $\vec{\bm \varphi}_i$，是Total Drag Force per Unit Volume on Species $i$\\
+    而這個由速度現象產生的作用力來源，應該來自濃度不同導致的\fbox{化學能}不同
+    \begin{equation}
+      \text{Driving Force/V} = \vec{\bm d}_i = -C_i \nabla \mu_i,\quad 
+      \mu_i = \left(
+        \frac{\partial G}{\partial n_i}
+      \right)_{T,P,n_j}
+    \end{equation}
+    P.S.  以單位來想的話，因為功是力乘上距離，故對能量取梯度\\
+    單位會是\fbox{Force / mol}，再乘上濃度的單位\fbox{mol / m$^3$}\\
+    即可得到\fbox{Force / m$^3$}\\
+    而因為Driving Force是物質感受周遭，而想要對外做功\\
+    Drag Force則是周遭物質對物質$i$施加的阻力\\
+    故兩者應該大小相等，方向相反\\
+    故寫出Maxwell-Stefan Diffusion Equation:
+    \begin{equation}
+      \boxed{C_i \nabla \mu_i = \sum_{j\neq i}k_{ij}\left(
+        \vec{\bm u_j - \vec{\bm u_i} }
+      \right)} \label{eq:maxwell_stefan_diffusion}
+    \end{equation}
+    如果計算整體加總，會發現根據Gibbs-Duhem Equation
+    \begin{equation}
+      \boxed{
+        SdT -VdP + \sum_i n_i d\mu_i = 0
+      }
+    \end{equation}
+    在\fbox{等溫、等壓}下，後面那項$\sum_i n_i d\mu_i = 0$\\
+    而這也剛好是Maxwell-Stefan Diffusion Equation加總後左側的結果\\
+    故
+    \begin{equation}
+      \sum_i C_i \nabla \mu_i = 0 \implies \sum_i \sum_{j\neq i}\frac{C_i C_j RT}{C \mathbcal{D}_{ij}} \left(
+        \vec{\bm u_j - \vec{\bm u_i} }
+      \right) = 0
+    \end{equation}
+    另外根據定義$\vec{\bm N}_i = C_i \vec{\bm u}_i$
+    \begin{equation}
+      \vec{\bm u}_i = \frac{\vec{\bm N}_i}{C_i}
+    \end{equation}
+    代入(\ref{eq:maxwell_stefan_diffusion})，可以消除$C_i, C_j$
+    \begin{align}
+      C_i \nabla \mu_i &= \sum_{j\neq i}k_{ij}\left(
+        \vec{\bm u_j - \vec{\bm u_i} }
+      \right)\nonumber\\
+      &=\sum_{j\neq i} \frac{C_i C_j RT}{C \mathbcal{D}_{ij}} \left( 
+        \vec{\bm u}_j - \vec{\bm u}_i
+      \right) \nonumber\\
+      &= \sum_{j\neq i} \frac{C_i C_jRT}{C \mathbcal{D}_{ij}} \left(
+        \frac{\vec{\bm N}_j}{C_j} - \frac{\vec{\bm N}_i}{C_i}
+      \right) \nonumber\\
+      &= \sum_{j\neq i} \frac{C_i C_jRT}{C \mathbcal{D}_{ij}} \left(
+        \frac{\vec{\bm N}_jC_i - \vec{\bm N}_iC_j}{C_iC_j}
+      \right)\nonumber\\
+      &= \sum_{j\neq i} \frac{ RT}{C\mathbcal{D}_{ij}}
+      \left(\vec{\bm N}_jC_i - \vec{\bm N}_iC_j\right)
+    \end{align}
+    把整體總濃度$C$移入括號內$\frac{C_i}{C} = X_i$\\
+    即為物質$i$的莫耳分率
+    \begin{equation}
+      \boxed{C_i \nabla \mu_i = \sum_{j\neq i} \frac{ RT}{\mathbcal{D}_{ij}}
+      \left(x_i \vec{\bm N}_j - x_j \vec{\bm N}_i\right)} \label{eq:maxwell_stefan_diffusion_final}
+    \end{equation}
+    \item 假設理想氣體
+    \begin{equation}
+      \mu_i = \mu_i^\circ + RT \ln (x_i P)
+    \end{equation}
+    P.S. 如果不是理想氣體，要將活度係數考慮進去，換掉$x_i$
+    \begin{equation}
+      \mu_i = \mu_i^\circ(T,P) + RT \ln (a_i) \label{eq:chemical_potential_non_ideal}
+    \end{equation}
+    而$\nabla \mu_i$為(定溫、定壓下)
+    \begin{align}
+      \nabla \mu_i &= \nabla \left(
+        \mu_i^\circ + RT \ln( x_i P)
+      \right) \nonumber\\
+      &= RT \nabla \ln (x_i P) \nonumber\\
+      &= RT \left(\frac{1}{x_i P}\cdot P \nabla x_i\right) \nonumber\\
+      &= \frac{RT}{x_i} \nabla x_i \label{eq:chemical_potential_gradient_ideal_gas}
+    \end{align}
+    代回(\ref{eq:maxwell_stefan_diffusion_final})，可以消掉$RT$
+    \begin{align}
+      C_i \nabla \mu_i &= \sum_{j\neq i} \frac{ RT}{\mathbcal{D}_{ij}}
+      \left(x_i \vec{\bm N}_j - x_j \vec{\bm N}_i\right) \nonumber\\
+      \frac{C_i \cancel{RT}}{x_i} \nabla x_i &= \sum_{j\neq i} \frac{\cancel{RT}}{\mathbcal{D}_{ij}}
+      \left(x_i \vec{\bm N}_j - x_j \vec{\bm N}_i\right) \nonumber\\
+      \frac{C_i}{\frac{C_i}{C}} \nabla x_i &= \sum_{j\neq i} \frac{1}{\mathbcal{D}_{ij}}
+      \left(x_i \vec{\bm N}_j - x_j \vec{\bm N}_i\right) \nonumber\\
+      \implies \quad \nabla x_i &= \sum_{j\neq i} \frac{1}{C \mathbcal{D}_{ij}} \left(
+        x_i \vec{\bm N}_j - x_j \vec{\bm N}_i
+      \right) \label{eq:maxwell_stefan_diffusion_ideal_gas}
+    \end{align}
+    如果是二元系統，右邊的$(x_i \vec{\bm N}_j - x_j \vec{\bm N}_i)$可以合併成一個變數:
+    \begin{align}
+      x_A \vec{\bm N}_B - x_B \vec{\bm N}_A &= 
+      \underbrace{x_A \vec{\bm N}_B}_A - \underbrace{x_A \vec{\bm N}_B}_B
+      + \underbrace{x_A\vec{\bm N}_A}_A -\underbrace{ x_A \vec{\bm N}_A}_B \nonumber\\
+      &= x_A \left(
+        \vec{\bm N}_A + \vec{\bm N}_B
+      \right) - \vec{\bm N}_A \left(
+        x_A + x_B
+      \right) \nonumber\\
+      &= x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
+    \end{align}
+    \item 二元系統、理想氣體，定溫定壓\\
+    物質為A,B，以A來看
+    \begin{align}
+      C_A \nabla \mu_A &= \frac{RT}{\mathbcal{D}_{AB}} (x_A \vec{\bm N}_B - x_B \vec{\bm N}_A) \nonumber\\
+      & = \frac{RT}{\mathbcal{D}_{AB}} \left(x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A\right) \\
+      \nabla x_A &= \frac{1}{C \mathbcal{D}_{AB}} \left(
+        x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
+      \right)
+    \end{align}
+    \item 二元系統，非理想流體，非定溫定壓\\
+    物質為A,B，以A來看\\
+    化學能的關係式為(\ref{eq:chemical_potential_non_ideal})
+    \begin{equation}
+      \mu_i = \mu_i^\circ(T,P) + RT \ln (a_i) 
+    \end{equation}
+    而對$\mu_A(T,p,a_A)$做全微分，要對溫度、壓力、活度做偏微分
+    \begin{align}
+      d\mu_A &= \left(\frac{\partial \mu_A}{\partial T}\right)_{P,a_A} dT +
+      \left(\frac{\partial \mu_A}{\partial P}\right)_{T,a_A} dP +
+      \left(\frac{\partial \mu_A}{\partial a_A}\right)_{T,P} da_A \nonumber\\
+      &= -S_A dT + V_A dP + RT \frac{1}{a_A} da_A
+    \end{align}
+    $S$為物質A的Molar Entropy，$V$為Molar Volume\\
+    而對空間取梯度
+    \begin{equation}
+      \nabla \mu_A = -S_A \nabla T + V_A \nabla P + RT \nabla\ln (a_A)
+    \end{equation}
+    而前兩項可以用狀態方程算出來，移到左側就修正了\\
+    故假設之後提到的$\nabla \mu_i$，都是減去這兩項之後的結果\\
+    而因為等號右邊是用$x_i$表示，因此要將$a_i$換成$x_i$
+    \begin{equation}
+      \nabla \mu_A +S_A \nabla T - V_A \nabla P = RT \left(
+        \frac{\partial (\ln a_A)}{\partial x_A}
+      \right)_{T,P} \nabla x_A \label{eq:chemical_potential_gradient_non_ideal}
+    \end{equation}
+    代回(\ref{eq:maxwell_stefan_diffusion_final})
+    \begin{equation}
+      C_A RT \left(
+        \frac{\partial (\ln a_A)}{\partial x_A}
+      \right)_{T,P} \nabla x_A = \frac{RT}{\mathbcal{D}_{AB}} \left(
+        x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
+      \right)
+    \end{equation}
+    可以消掉$RT$
+    \begin{equation}
+      C_A \left(
+        \frac{\partial (\ln a_A)}{\partial x_A}
+      \right)_{T,P} \nabla x_A = \frac{1}{\mathbcal{D}_{AB}} \left(
+        x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
+      \right)
+    \end{equation}
+    \item 寫成以\fbox{$\vec{\bm N}_A$}的形式，會換成Fick's Law
+    \begin{align}
+      C_A\mathbcal{D}_{AB}\left(
+        \frac{\partial (\ln a_A)}{\partial x_A}
+      \right)_{T,P} \nabla x_A &= x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A \nonumber\\
+      \vec{\bm N}_A &= x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \boxed{C_A}\mathbcal{D}_{AB}\left(
+        \frac{\partial (\ln a_A)}{\partial x_A}
+      \right)_{T,P} \nabla x_A \nonumber\\
+      \vec{\bm N}_A &= x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \boxed{x_AC}\mathbcal{D}_{AB}\left(
+        \frac{\partial (\ln a_A)}{\partial x_A}
+      \right)_{T,P} \nabla x_A \nonumber\\
+      \vec{\bm N}_A &= x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) -C \mathbcal{D}_{AB}\left(
+        \frac{\partial (\ln a_A)}{\partial \ln(x_A)}
+      \right)_{T,P} \nabla x_A
+    \end{align}
+    定義Fickian Diffusivity為
+    \begin{equation}
+      D_{AB} = \mathbcal{D}_{AB} \left(
+        \frac{\partial (\ln a_A)}{\partial \ln(x_A)}
+      \right)_{T,P}
+    \end{equation}
+    \fbox{$\mathbcal{D}_{AB}$ 比起 $D_{AB}$ 跟濃度更無關}\\
+    最後得到Fick's Law的形式
+    \begin{equation}
+      \boxed{\vec{\bm N}_A = x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - C D_{AB} \nabla x_A} \label{eq:ficks_law_general}
+    \end{equation}
+    而，中間那項可以代入莫耳平均速度的定義(\ref{eq:molar_average_velocity})\\
+    讓$\sum N_i = \vec{\bm u}^\ast \sum C_i$，可以直接加成濃度
+    \begin{equation}
+      x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) = x_A\left(
+        C_A \vec{\bm u}_A + C_B \vec{\bm u}_B
+      \right) = x_A C \vec{\bm u}^\ast = C_A \vec{\bm u}^\ast
+    \end{equation}
+    代回(\ref{eq:ficks_law_general})
+    \begin{equation}
+     \boxed{ \vec{\bm N}_A = C_A \vec{\bm u}^\ast - \underbrace{C D_{AB} \nabla x_A}_{\vec{\bm J}_A^\ast}}
+    \end{equation}
+    而回到最一開始的Governing Equation(\ref{eq:molar_flux_decomposition_volume_average})\\
+    第一項就是對流項，而第二項就是分子擴散項
+    \item 如果用小寫的來表示
+    \begin{equation}
+      \vec{\bm  n}_A = \rho_A \vec{\bm u}^\ast + \vec{\bm j}_A
+    \end{equation}
+    我們知道$C \vec{\bm u}^\ast = \sum_i C_i \vec{\bm u}_i$\\
+    乘上$M_A$，並利用(\ref{eq:species_molar_concentration})，可以得到
+    \begin{equation}
+      \rho \vec{\bm u}^\ast = \sum_i \rho_i \vec{\bm u}_i
+    \end{equation}
+    兩者個連接差在一個是以莫耳數表示，一個是以質量表示
+    \begin{equation}
+      \vec{\bm  N}_A  = \frac{\vec{\bm n}_A}{M_A} = \frac{1}{M_A}\left(
+        \rho_A \vec{\bm u} + \vec{\bm j}_A
+      \right) =  C_A \vec{\bm u}^\ast - \vec{\bm J}_A^\ast
+    \end{equation}
+    而$j_A=\rho_A(\vec{\bm u}_A -\vec{\bm_u})$，是相對於體積平均速度的分子擴散\\
+    將體積平均速度展開:
+    \begin{equation}
+      \vec{\bm u} = \frac{\left(\rho_A \vec{\bm u}_A + \rho_B \vec{\bm u}_B\right)}{\rho_A + \rho_B}
+    \end{equation}
+    定義$\omega_i = \frac{\rho_i}{\sum_j \rho_j}$為物質i的質量分率\\
+    則
+    \begin{equation}
+      \vec{\bm u} = \omega_A \vec{\bm u}_A + \omega_B \vec{\bm u}_B
+    \end{equation}
+    代入$j_A$中
+    \begin{align}
+      \vec{\bm j}_A &= \rho_A \left(\vec{\bm u}_A - \vec{\bm u}\right) \nonumber\\
+      &= \rho_A \left(\vec{\bm u}_A - \omega_A \vec{\bm u}_A - \omega_B \vec{\bm u}_B\right) \nonumber\\
+      &= \rho_A \left(
+        (1-\omega_A) \vec{\bm u}_A - \omega_B \vec{\bm u}_B
+      \right) \nonumber\\
+      &= \rho_A \left(
+        \omega_B \vec{\bm u}_A - \omega_B \vec{\bm u}_B
+      \right) \nonumber\\
+      &= \rho_A \omega_B \left(
+        \vec{\bm u}_A - \vec{\bm u}_B
+      \right)
+    \end{align}
+    而相似的，大寫的分子擴散
+    \begin{align}
+      \vec{\bm J}_A^\ast &= C_A \left(\vec{\bm u}_A - \vec{\bm u}^\ast\right) \nonumber\\
+      &= C_A \left(\vec{\bm u}_A - x_A \vec{\bm u}_A - x_B \vec{\bm u}_B\right) \nonumber\\
+      &= C_A \left(
+        (1-x_A) \vec{\bm u}_A - x_B \vec{\bm u}_B
+      \right) \nonumber\\
+      &= C_A \left(
+        x_B \vec{\bm u}_A - x_B \vec{\bm u}_B
+      \right) \nonumber\\
+      &= C_A x_B \left(
+        \vec{\bm u}_A - \vec{\bm u}_B
+      \right)
+    \end{align}
+    因此兩者之間具有以下比例關係
+    \begin{equation}
+      \boxed{\frac{\vec{\bm j}_A}{\vec{\bm J}_A^\ast} = \frac{\rho_A \omega_B}{C_A x_B} = \frac{M_A \omega_B}{x_B}
+      } \label{eq:molar_to_mass_diffusion_flux}
+    \end{equation}
+    另外$x$和$\omega$之間的關係為
+    \begin{equation}
+      x_A = \frac{\frac{\omega_A}{M_A}}{\frac{\omega_A}{M_A} + \frac{\omega_B}{M_B}}
+    \end{equation}
+    而因為$\omega_B = 1 - \omega_A$，因此
+    \begin{equation}
+      x_A = \frac{\frac{\omega_A}{M_A}}{\frac{\omega_A}{M_A} + \frac{1-\omega_A}{M_B}}
+    \end{equation}
+    微分:
+    \begin{equation}
+      \frac{d}{d\omega_A} x_A =\frac{
+        \frac{1}{M_A} \left(
+          \frac{\omega_A}{M_A} + \frac{1-\omega_A}{M_B}
+        \right) - \frac{\omega_A}{M_A} \left(
+          \frac{1}{M_A} - \frac{1}{M_B}
+        \right)
+      }{\left(
+        \frac{\omega_A}{M_A} + \frac{1-\omega_A}{M_B}
+      \right)^2}
+    \end{equation}
+  令平均分子量的倒數
+  \begin{equation}
+    \frac{1}{\overline{M}} = \frac{\omega_A}{M_A} + \frac{1-\omega_A}{M_B}
+  \end{equation}
+  則
+  \begin{equation}
+    \frac{d}{d\omega_A} x_A = \frac{1}{\overline{M}^2} \cdot \frac{1}{M_A M_B}
+  \end{equation}
+  因此
+  \begin{equation}
+    \frac{d x_A}{d \omega_A} = \frac{\overline{M}^2}{M_A M_B} \label{eq:dxA_domegaA}
+  \end{equation}
+  故
+  \begin{equation}
+    \nabla x_A = \frac{\overline{M}^2}{M_A M_B} \nabla \omega_A \label{eq:grad_xA_to_grad_omegaA}
+  \end{equation}
+  於是Fick's Law可以寫成以質量分率表示
+  \begin{align}
+    \vec{\bm J}_A^\ast &= - C D_{AB} \nabla x_A \nonumber\\
+    &= - C D_{AB} \cdot \frac{\overline{M}^2}{M_A M_B} \nabla \omega_A 
+  \end{align}
+  由(\ref{eq:molar_to_mass_diffusion_flux})，可得
+  \begin{equation}
+    \vec{\bm j}_A = \frac{M_A \omega_B}{x_B} \vec{\bm J}_A^\ast
+  \end{equation}
+  代入:
+  \begin{align}
+    \vec{\bm j}_A &= -CD_{AB}\cdot\left(
+      \frac{M_A \omega_B}{x_B}
+    \right)\cdot \frac{\overline{M}^2}{M_A M_B} \nabla \omega_A \nonumber\\
+    &= -CD_{AB} \cdot \frac{\omega_B}{x_B} \cdot \frac{\overline{M}^2}{M_B} \nabla \omega_A
+  \end{align}
+  而$C\cdot \overline{M} = \rho$，$x_B = \omega_B\frac{\overline{M}}{M_B}$\\
+  故
+  \begin{align}
+    \vec{\bm j}_A &= - CD_{AB} \cdot \frac{\omega_B}{x_B} \cdot \frac{\overline{M}^2}{M_B} \nabla \omega_A \nonumber\\
+    &= - \underbrace{C\overline{M}}_{\rho} D_{AB}\cdot \left(
+      \underbrace{\omega_B\frac{\overline{M}}{M_B}}_{x_B}\cdot \frac{1}{x_B}
+    \right) \nabla \omega_A \nonumber\\
+    &= - \rho D_{AB} \nabla \omega_A
+  \end{align}
+  因此以質量分率表示的Fick's Law為
+  \begin{equation}
+    \boxed{\vec{\bm j}_A = - \rho D_{AB} \nabla \omega_A} \label{eq:ficks_law_mass_fraction}
+  \end{equation}
+  或者:
+  \begin{equation}
+    \vec{\bm n}_A = \rho_A \vec{\bm u}^\ast - \rho D_{AB} \nabla \omega_A
+  \end{equation}
+  注意這只有二元系統可以這樣換
+  \item 簡略形式，二元系統，密度固定，Fickian擴散係數固定，能量平衡式
+  \begin{align}
+    \frac{\partial \omega_A}{\partial t} + \nabla \cdot \vec{\pm n}_A -r_A &= 0 \nonumber\\
+    \frac{\partial \omega_A}{\partial t} + \nabla \cdot \left(
+      \rho_A \vec{\bm u} + \vec{\bm j}_A
+    \right) - r_A &= 0 \nonumber\\
+    \frac{\partial \omega_A}{\partial t} + \nabla \cdot \left(
+      \rho_A \vec{\bm u} - \rho D_{AB} \nabla \omega_A
+    \right) - r_A &= 0 \nonumber\\
+    \frac{\partial \omega_A}{\partial t} + \nabla \cdot \left(
+      \rho_A \vec{\bm u} -  D_{AB} \nabla \rho_A
+    \right) - r_A &= 0 \nonumber\\
+    \frac{\partial \omega_A}{\partial t} + \rho_A \cancelto{0}{\nabla \cdot \vec{\bm u}} 
+    + \vec{\bm u} \cdot \nabla \rho_A -D_{AB} \nabla^2 \rho_A - r_A &=0 \nonumber\\
+    (\div M_A)\implies \quad \boxed{\frac{\partial C_A}{\partial t} 
+    + \vec{\bm u} \cdot \nabla C_A - D_{AB} \nabla^2 C_A - R_A} &=0\label{eq:mass_transport_simplified }
+  \end{align}
+  \item 更簡略形式，二元系統，密度固定，擴散係數固定，一物濃度極低\\
+  令$C_i\ll C_s$，$C_i$是溶質，$C_s$是溶劑\\
+  因此這時$C=C_s + C_i \approx C_s$為常數\\
+  平均速度也只會是溶劑的，$\vec{\bm u} \approx \vec{\bm u}_s$\\
+  化學能變化:
+  \begin{align}
+    \mu_i &= \mu_i^\circ + RT \ln (x_i P) \nonumber\\
+    \nabla \mu_i &= RT \nabla (\ln x_i )
+  \end{align}
+  從(\ref{eq:maxwell_stefan_diffusion})開始
+  \begin{align}
+    C_i \nabla \mu_i &= RT\frac{C_i C_s}{C \mathbcal{D}_{is}} \left(
+       \vec{\bm u}_s - \vec{\bm u}_i
+    \right) \nonumber\\
+    &\approx RT \frac{C_i C_s}{C_s \mathbcal{D}_{is}} \left(
+       \vec{\bm u} - \vec{\bm u}_i
+    \right) \nonumber\\
+    C_i RT\nabla (\ln C_i) &= RT \frac{C_i}{\mathbcal{D}_{is}} \left(
+       \vec{\bm u} - \vec{\bm u}_i
+    \right) \nonumber\\
+    \nabla (\ln C_i) &= \frac{1}{\mathbcal{D}_{is}} \left(
+       \vec{\bm u} - \vec{\bm u}_i
+    \right) \nonumber\\
+    \frac{1}{C_i}\nabla C_i &= \frac{1}{\mathbcal{D}_{is}} \left(
+       \vec{\bm u} - \vec{\bm u}_i
+    \right) \nonumber\\
+    -\mathbcal{D}_{is} \nabla C_i &= C_i\vec{\bm u} - \underbrace{C_i \vec{\bm u}_i}_{\vec{\bm N}_i} \nonumber\\
+    \vec{\bm N}_i &= C_i \vec{\bm u} - \underbrace{\mathbcal{D}_{is} \nabla C_i}_{\vec{\bm J}_i} \nonumber\\
+    \implies \quad &\boxed{\vec{\bm J}_i = -\mathbcal{D}_{is} \nabla C_i} \label{eq:ficks_law_dilute_solution}
+  \end{align}
+  能量平衡式
+  \begin{align}
+    \frac{\partial C_i}{\partial t} + \nabla \cdot \vec{\bm N}_i - R_i &= 0 \nonumber\\
+    \frac{\partial C_i}{\partial t} + \vec{\bm u} \cdot \nabla C_i - \mathbcal{D}_{is} \nabla^2 C_i - R_i &= 0
+  \end{align}
+  假設穩態，沒有反應
+  \begin{equation}
+    \boxed{\vec{\bm u} \cdot \nabla C_i = \mathbcal{D}_{is} \nabla^2 C_i} \label{eq:mass_transport_dilute_solution_steady_state}
+  \end{equation}
+    \item 對於incomprssible flow，$\nabla\cdot \vec {\bm u} = 0$，則
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} + \vec {\bm u} \cdot \nabla C_A = D_{AB}\nabla^2 C_A +R_A
+  \end{equation}
+  或寫成:
+  \begin{equation}
+    \frac{DC_A}{Dt} = D_{AB}\nabla^2 C_A +R_A
+  \end{equation}
+  \item 對於incomprssible flow，且沒有質量生成$R_A=0$，則
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} + \vec {\bm u} \cdot \nabla C_A = D_{AB}\nabla^2 C_A
+  \end{equation}
+  或寫成:
+  \begin{equation}
+    \frac{DC_A}{Dt} = D_{AB}\nabla^2 C_A
+  \end{equation}
+  \item 對於無流體流動$\vec {\bm u}=0$，且沒有反應
+  \begin{equation}
+    \frac{\partial C_A}{\partial t} = D_{AB}\nabla^2 C_A
+  \end{equation}
+  此為Fick's Second Law
+  \item 若為穩態，且無流體流動$\vec {\bm u}=0$，且沒有反應:
+  \begin{equation}
+    \nabla^2 C_A = 0
+  \end{equation}
+  此為Laplace Equation
+\end{itemize}
+\item 無因次群:
+\begin{itemize}
+  \item Schmidt Number:
+  \begin{equation}
+    \text{Sc} = \frac{\nu}{D_{AB}} = \frac{\mu}{\rho D_{AB}} = \frac{\text{Momentum Diffusivity}}{\text{Mass Diffusivity}}
+  \end{equation}
+  這裡也同熱對流有:
+  \begin{equation}
+    \text{Sc} = \left(\frac{\delta}{\delta_m}\right)^3 = \left(\frac{\text{Mass Boundary Layer}}{\text{Momentum Boundary Layer}}\right)^3
+  \end{equation}
+  的關係，但注意$\delta_m$是質量邊界層厚度，而不是熱對流的熱邊界層厚度
+  \item Lewis Number:
+  \begin{equation}
+    \text{Le} = \frac{\alpha}{D_{AB}} = \frac{k}{\rho C_p D_{AB}} = \frac{\text{Thermal Diffusivity}}{\text{Mass Diffusivity}}
+  \end{equation}
+  \item Prandtl Number:
+  \begin{equation}
+    \text{Pr} = \frac{\nu}{\alpha} = \frac{C_p\mu}{k} = \frac{\text{Momentum Diffusivity}}{\text{Thermal Diffusivity}}
+  \end{equation}
+  \item Sherwood Number:\\
+  對比熱對流，就是那邊的Nusselt Number，徑向的動量傳輸和質量傳輸比
+  \begin{equation}
+    \text{Sh} = \frac{k_cL}{D_{AB}} = \frac{\text{Mass Convection Rate}}{\text{Molecular Diffusion Rate}}
+  \end{equation}
+  若系統為圓柱或球:
+  \begin{equation}
+    \text{Sh} = \frac{k_cD}{D_{AB}}
+  \end{equation}
+  \item Peclet Number:\\
+  在軸向上的質量傳輸比
+  \begin{equation}
+    \text{Pe}_M =\text{Re}\cdot\text{Sc} = \frac{\rho u D}{\mu} = \frac{\text{Mass Convection Rate}}{\text{Molecular Diffusion Rate}}
+  \end{equation}
+  質量跟著液體流動方向傳遞\\
+  若$\text{Pe}_M$很大，代表軸向上的質量傳導可以被忽略
+  \item Stanton Number:
+  \begin{equation}
+    \text{St}_M = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}} = \frac{k_c}{\nu}
+  \end{equation}
+\end{itemize}
+\item 一些質量傳輸的經驗式:
+\begin{itemize}
+  \item 流體流過平板:
+  \begin{equation}
+    \text{Sh} = 0.664\text{Re}^{\frac{1}{2}}\text{Sc}^{\frac{1}{3}}
+  \end{equation}
+  \item 層流流過長直圓管，其壁面濃度均一(泡茶包)
+  \begin{equation}
+    \text{Sh} = 3.66 + f(\text{Re},\text{Sc},\frac{L}{D})
+  \end{equation}
+  \item 層流流過長直圓管，給予均勻質量通量(過濾器)
+  \begin{equation}
+    \text{Sh} = \frac{48}{11} + f(\text{Re},\text{Sc},\frac{L}{D})
+  \end{equation}
+  \item Plug Flow，流過長直圓管，給予均勻質量通量
+  \begin{equation}
+    \text{Sh} = 8 + f(\text{Re},\text{Sc},\frac{L}{D})
+  \end{equation}
+  \item 流過球面的流(泡澡球):
+  \begin{equation}
+    \text{Sh} = 2 + f(\text{Re},\text{Sc})
+  \end{equation}
+  \item Reynolds Analogy:(適用於$\text{Sc}=1$)
+  \begin{equation}
+    \frac{k_c}{u_\infty} = \text{St}_M = \frac{C_f}{2} = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}}
+  \end{equation}
+  \item Colburn Analogy:(適用於$0.6<\text{Sc}<2500$) (P.S. 熱對流那邊是$0.5<\text{Pr}<50$)
+  \begin{equation}
+    j_D = \text{St}_M\cdot \text{Sc}^{\frac{2}{3}} = \frac{C_f}{2}
+  \end{equation}
+  $j_D$是Colburn $j$ factor for mass transfer\\
+  所以:
+  \begin{equation}
+    j_H =  j_D = \frac{C_f}{2},\quad 0.6<\text{Sc}<2500,\quad 0.5<\text{Pr}<50
+  \end{equation}
+  \item Prandtl Analogy:(適用於忽略Drag)
+  \begin{equation}
+    \text{St}_M = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}}\left(\text{Sc}-1\right)} = \frac{k_c}{u_\infty}
+  \end{equation}
+  \item Von Karman Analogy:(適用於忽略Drag)
+  \begin{equation}
+    \text{St}_M = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}\left\{
+      \text{Sc}-1+\ln\left[1+\frac{5}{6}\left(\text{Sc}-1\right)\right]
+    \right\}}} = \frac{k_c}{u_\infty}
+  \end{equation}
+\end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}

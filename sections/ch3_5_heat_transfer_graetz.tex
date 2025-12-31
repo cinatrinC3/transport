@@ -872,7 +872,7 @@
       &= 1.615 \left(
         \text{Pe}\cdot \frac{2R}{L}
       \right)^{\frac{1}{3}} \nonumber\\
-      &= 1.615 \text{Gz}^{\frac{1}{3}}
+      &= 1.615 \text{Gz}^{\frac{1}{3}} \label{eq:leveque_average_nusselt_number}
     \end{align}
     \item 邊界層發展完全的深度$\delta_T/R = 1$，$L_{\text{entry}}$為:
     \begin{align}
@@ -1351,9 +1351,62 @@
   \end{equation}
   所以$A = \frac{1}{\Gamma(4/3)}$
   \begin{equation}
-    \boxed{\theta(\eta_T) = \frac{1}{\Gamma(4/3)} \int_0^{\eta_T} e^{-\eta_T^3} d\eta_T}
+    \boxed{\theta(\eta_T) = \frac{1}{\Gamma(4/3)} \int_0^{\eta_T} e^{-\eta_T^3} d\eta_T} \label{eq:graetz_temperature_profile}
   \end{equation}
-  \end{enumerate}
+  \item 衍生，熱邊界層深度與厚度\\
+  假設定義熱邊界層厚度為$\theta(\eta_T) = 0.99$，則由(\ref{eq:graetz_temperature_profile})可知
+  \begin{equation}
+    0.99 = \frac{1}{\Gamma(4/3)} \int_0^{\eta_{T}} e^{-x^3} dx \implies \eta_T=1.4037
+  \end{equation}
+  再將$\eta_T$代入(\ref{eq:graetz_deltaT_exact_solution})，求得熱邊界層厚度:
+  \begin{align}
+    & \delta_T(x) = \eta_T \cdot \left(
+      3.306 \cdot \text{Pr}^{-\frac{1}{3}} \text{Re}_x^{-\frac{1}{2}} x
+    \right) \nonumber\\
+    \Rightarrow & \boxed{\delta_T(x) = 4.629 \text{Pr}^{-\frac{1}{3}} \text{Re}_x^{-\frac{1}{2}} x} \label{eq:graetz_deltaT_final}
+  \end{align}
+  \item 衍生，熱傳係數$h$與Nusselt Number的推算\\
+  由截面的熱平衡，冷卻，吸熱，所以是正值
+  \begin{equation}
+    h(T_\infty -T_0) = +k\frac{\partial T}{\partial y}\bigg|_{y=0}
+  \end{equation}
+  解得:
+  \begin{align}
+    h &= \frac{k\frac{\partial T}{\partial y}\bigg|_{y=0}}{T_\infty - T_0} \nonumber\\
+    &= k\left(\frac{\partial \theta}{\partial y}\right)_{y=0} \nonumber\\
+    &= k\left(
+      \frac{\partial \theta}{\partial \eta_T} \cdot \frac{\partial \eta_T}{\partial y}
+    \right)_{\eta=0} \nonumber\\
+    &= k\left(
+      \frac{1}{\delta_T(x)} \frac{\partial \theta}{\partial \eta_T}
+    \right)_{\eta=0}
+  \end{align}
+  代入(\ref{eq:graetz_temperature_profile})和(\ref{eq:graetz_deltaT_exact_solution}):
+  \begin{align}
+    h &= k\left(
+      \frac{1}{x\cdot 3.306 \cdot \text{Pr}^{-\frac{1}{3}} \text{Re}_x^{-\frac{1}{2}}} 
+      \cdot \frac{1}{\Gamma(4/3)} \cdot \cancelto{1}{ e^{-\eta_T^3}\bigg|_{\eta_T=0}}
+    \right) \nonumber\\
+    &= 0.3387 \cdot \frac{k}{x} \cdot \text{Pr}^{\frac{1}{3}} \text{Re}_x^{\frac{1}{2}}
+  \end{align}
+  將$\frac{k}{x}$移到左邊，並乘以2，得到Nusselt Number(假設是圓管，故$D=2x$)
+  \begin{align}
+    & \frac{hx}{k} = 0.3387 \cdot \text{Pr}^{\frac{1}{3}} \text{Re}_x^{\frac{1}{2}} \nonumber\\
+    \Rightarrow & \frac{2hx}{k} = 0.6775 \cdot \text{Pr}^{\frac{1}{3}} \text{Re}_x^{\frac{1}{2}} \nonumber\\
+    \Rightarrow & \boxed{\text{Nu}_x = 0.6775 \cdot \text{Pr}^{\frac{1}{3}} \text{Re}_x^{\frac{1}{2}}}
+  \end{align} 
+  當時解Leveque假設的結果(\ref{eq:leveque_average_nusselt_number})比較:
+  \begin{equation}
+    \left<\text{Nu}\right>_L=0.615 \text{Gz}^{\frac{1}{3}} 
+  \end{equation}
+  其中$Gz$的定義:
+  \begin{equation}
+    \text{Gz} = \text{Pe} \cdot \frac{2R}{L}
+  \end{equation}
+  而$\text{Pe} = \text{Re}\cdot \text{Pr}$\\
+  顧可以看到兩者在雷諾數的指數關係與本題的是不同的($\frac{1}{2}$ vs. $\frac{1}{3}$)\\
+  因為Leveque假設是針對平均熱傳係數來算的，而本題是針對局部熱傳係數來算的
+\end{enumerate}
 \end{itemize}
 \end{CJK*}
 \end{document}

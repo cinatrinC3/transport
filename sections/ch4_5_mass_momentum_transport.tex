@@ -1,0 +1,189 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{質量輸送，質量與動量一起傳輸}
+\begin{itemize}
+  \item Mass transfer for a rotating disk
+  \begin{enumerate}
+    \item Limiting current $\rightarrow$ diffusion dominated
+    \item dilute species in aquerous solution
+    \item uniforming accessible的$v_z(z)$在旋轉下的轉換:
+    \begin{equation}
+      v_z(z) = \sqrt{\nu\omega} H(\eta),\quad \eta = z\sqrt{\frac{\omega}{\nu}}
+    \end{equation}
+    \item 寫出物種平衡式:
+    \begin{equation}
+      \cancel{\frac{\partial C_i}{\partial t}} + \nabla \cdot \vec{\bm N_i} - \cancel{R_i} = 0
+    \end{equation}
+    以及:
+    \begin{equation}
+      \vec{\bm N_i} = C_i \vec{\bm v} - D_{is} \nabla C_i
+    \end{equation}
+    代入後得到:
+    \begin{equation}
+      \vec{\bm v} \cdot \nabla C_i = D_{is} \nabla^2 C_i
+    \end{equation}
+    \item 令$\vec{\bm v}\approx v_z {\bm\delta}_z$ only，且$v_z(z)$\\
+    P.S.$v_r=r\omega F(\xi)$，$v_\theta=r\omega G(\xi)$\\
+    列出最簡化形式的物種平衡式(Dilute):
+    \begin{equation}
+      v_z(z)\frac{d C_i}{dz} = D_{is}\frac{d^2 C_i}{dz^2}
+    \end{equation}
+    \item Boundary conditions:
+    \begin{align}
+      C_i(\infty) &= C_\infty\\
+      C_i(0) &= C_0 \to 0 \text{limiting current}
+    \end{align}
+    \item 無因次化濃度:
+    \begin{equation}
+      \theta_i = \frac{C_i(z)-C_0}{C_\infty -C_0}
+    \end{equation}
+    代入後:
+    \begin{equation}
+      v_z(z)\frac{d\theta_i}{dz}=D_{is}\frac{d^2\theta_i}{dz^2}
+    \end{equation}
+    邊界條件改為:
+    \begin{align}
+      \theta_i(\infty) &= 1\\
+      \theta_i(0) &=0
+    \end{align}
+    代入uniforming accessible的$v_z(z)$:
+    \begin{equation}
+      v_z(z)= \sqrt{\nu\omega} H(\eta), \quad \eta = z\sqrt{\frac{\omega}{\nu}}, \quad
+      d\eta = dz\sqrt{\frac{\omega}{\nu}}
+    \end{equation}
+    代入後:
+    \begin{equation}
+      \sqrt{\nu\omega}H(\eta)\sqrt{\frac{\omega}{\nu}}\frac{d\theta_i}{d\eta} 
+      = D_{is}\frac{\omega}{\nu}\frac{d^2\theta_i}{d\eta^2}
+    \end{equation}
+    移項:
+    \begin{equation}
+      H(\eta)\frac{d\theta_i}{d\eta} = \frac{D_{is}}{\nu}\frac{d^2\theta_i}{d\eta^2}
+    \end{equation}
+    \item 定義Schmidt number!
+    \begin{equation}
+      \text{Sc} = \frac{\nu}{D_{is}}
+    \end{equation}
+    \item 寫出ODE:
+    \begin{equation}
+      \frac{d^2\theta_i}{d\eta^2} - \text{Sc} H(\eta)\frac{d\theta_i}{d\eta} = 0
+    \end{equation}
+    利用Reduction of order求解:
+    \begin{equation}
+      \theta_i(\eta) = \frac{
+        \int_0^\eta e^{\text{Sc}\int_0^q H(\tilde\eta)d\tilde\eta}dq
+      }{
+        \int_0^\infty e^{\text{Sc}\int_0^q H(\tilde\eta)d\tilde\eta}dq
+      }
+    \end{equation}
+    \item 令$P = \frac{d\theta_i}{d\eta}$，則:
+    \begin{equation}
+      P' - \text{Sc} H(\eta) P = 0
+    \end{equation}
+    \item 解出$P$:
+    \begin{align}
+      \frac{dP}{P} &=\text{Sc}H(\eta)d\eta\\
+      \ln P\big|_0^\eta &= \int_0^\eta \text{Sc}H(\tilde \eta)d\tilde\eta\\
+      \ln P(\eta) = \int_0^\eta \text{Sc}H(\tilde \eta)d\tilde\eta + \ln P(0)\\
+      P(\eta) = P(0) e^{\int_0^\eta \text{Sc}H(\tilde \eta)d\tilde\eta}
+    \end{align}
+    \item 積分$P$得到$\theta_i$:
+    \begin{align}
+      \theta_i(\eta)\bigg|_{\theta_i(0)}^{\theta_i(\eta)} &= \int_0^\eta P(0) 
+      e^{\int_0^q \text{Sc}H(\tilde \eta)d\tilde\eta} dq\\
+      \theta_i(\eta) &= P(0) \int_0^\eta e^{\int_0^q \text{Sc}H(\tilde \eta)d\tilde\eta} dq
+    \end{align}
+    \item 利用邊界條件$\theta_i(\infty)=1$
+    \begin{equation}
+      \theta(\infty) =1 \implies P(0) =\frac{1}{
+        \int_0^\infty e^{\int_0^q \text{Sc}H(\tilde \eta)d\tilde\eta} dq
+      }
+    \end{equation}
+    \item 計算Current / flux:
+    \begin{align}
+      -N_{iz} &= D_{is} \frac{dC_i(0)}{dz}\nonumber\\
+      & = D_{is}\left(C_\infty - C_0\right) \frac{d\theta_i(0)}{d\eta}\frac{d\eta}{dz}\nonumber\\
+      &= D_{is}\left(C_\infty - C_0\right) \frac{P(0)}{\sqrt{\frac{\nu}{\omega}}}\frac{d\theta_i(0)}{d\eta}\nonumber\\
+      &= D_{is}\left(C_\infty - C_0\right)\sqrt{\nu\omega} \cdot P(0)\nonumber\\
+      \frac{N}{\sqrt{\nu\omega}\left(C_\infty - C_0\right)} &=\frac{P(0)}{\text{Sc}} \label{eq:ch4_5_mass_momentum_Nondim_flux}
+    \end{align}
+    \item 用Newton's law of viscosity求出$W$:
+    \begin{equation}
+      W = k_cA_{\text{char}}\Delta C = k_c A_{\text{char}} (C_\infty - C_0) = N A_{\text{char}}
+    \end{equation}
+    代表:
+    \begin{equation}
+      k_c (C_\infty - C_0) = N
+    \end{equation}
+    代回(\ref{eq:ch4_5_mass_momentum_Nondim_flux}):
+    \begin{equation}
+      \frac{k_c (C_\infty - C_0)}{\sqrt{\nu\omega}(C_\infty - C_0)} = 
+      \boxed{\frac{k_c}{\sqrt{\nu\omega}}} = \frac{P(0)}{\text{Sc}} 
+      = \frac{1}{\text{Sc}\int_0^\infty e^{\int_0^q \text{Sc}H(\tilde \eta)d\tilde\eta} dq}
+    \end{equation}
+    而$\frac{k_c}{\sqrt{\nu\omega}}$即為Stanton number
+    \item 針對$H(\eta)$做近似:\\
+    在Sc很大時，可以假設質傳的boundary layer很薄
+    \begin{equation}
+      H(\eta) \approx -0.5102\eta^2 + \frac{1}{3}\eta^3 + \frac{-0.616}{6}\eta^4
+    \end{equation}
+    若保留第一項而已:
+    \begin{align}
+      \text{St} &= \frac{1}{\text{Sc}\int_0^\infty e^{\int_0^q \text{Sc}H(\tilde \eta)d\tilde\eta} dq} \nonumber\\
+      &\approx \frac{1}{\text{Sc}}\int_0^\infty e^{\int_0^q -0.5102\text{Sc}\cdot \tilde\eta^2 d\tilde\eta} dq \nonumber\\
+      &= \frac{1}{\text{Sc}}\int_0^\infty e^{-0.1701\text{Sc}\cdot q^3} dq
+    \end{align}
+    讓$a=0.1701$，$t=a\text{Sc}\cdot q^3$，則:
+    \begin{align}
+      q &= \left(\frac{t}{a\text{Sc}}\right)^{\frac{1}{3}}\\
+      dq &= \frac{1}{3}\left(\frac{1}{a\text{Sc}}\right)^{\frac{1}{3}} t^{-\frac{2}{3}} dt
+    \end{align}
+    改寫為:
+    \begin{align}
+      \int_0^\infty e^{-a\text{Sc}\cdot q^3} dq &= 
+      \frac{1}{3}\left(a\text{Sc}\right)^{-\frac{1}{3}}\int_0^\infty t^{-\frac{2}{3}} e^{-t} dt \nonumber\\
+      &= \frac{1}{3}\left(a\text{Sc}\right)^{-\frac{1}{3}} \Gamma\left(\frac{1}{3}\right)
+    \end{align}
+    最後得到:
+    \begin{equation}
+      \boxed{\text{St}=0.6204 \text{Sc}^{-\frac{2}{3}}}
+    \end{equation}
+    \item 如果Sc很小時，代表$\eta$可以很大，則$H(\eta)\approx 0.88447$是個常數\\
+    而此時:
+    \begin{equation}
+      \text{St} \approx 0.88447
+    \end{equation}
+    \item 若以St為縱軸，Sc為橫軸繪圖，可以得到下圖:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \begin{loglogaxis}[
+            width=10cm, height=8cm, xmin=0.05, xmax=5000, ymin=0.004, ymax=2,
+            axis lines = left, axis line style = {thick, -latex}, % Arrows at ends
+            xlabel = {$\text{Sc} = \nu/D$}, ylabel = {$\text{St}=\frac{k_c}{\sqrt{\omega \nu}}$},
+            every axis x label/.style={at={(ticklabel* cs:1.05)}, anchor=west},
+            every axis y label/.style={at={(ticklabel* cs:1.05)}, anchor=south},
+            xtick={0.1, 1, 10, 100, 1000},
+            xticklabels={0.1, 1, 10, 100, $10^3$},
+            ytick={0.01, 0.1, 1},
+            yticklabels={0.01, 0.1, 1},
+            grid=none,
+          ]
+          \addplot [gray, domain=0.05:200, samples=2] {0.88447};
+          \node at (axis cs: 80, 1.2) {\bfseries 0.88447};
+          \addplot [red, thick, domain=20:5000, samples=10] {0.6204 * x^(-2/3)};
+          \node[red, anchor=west] (eqlabel) at (axis cs: 150, 0.08) {$\bm 0.6204 Sc^{-\frac{2}{3}}$};
+          \draw[red, ->, thick] (eqlabel.west) -- (axis cs: 80, 0.04);
+          \draw[ultra thick, black] 
+              (axis cs: 0.1, 0.88447).. controls (axis cs: 1, 0.88447) and (axis cs: 20, 0.06) .. 
+              (axis cs: 2000, {0.6204 * 2000^(-2/3)});
+          \draw[thin, black] (axis cs: 800, 0.004) -- (axis cs: 800, 0.015);
+          \end{loglogaxis}
+        \end{tikzpicture}
+      \caption{Stanton number as a function of Schmidt number}
+      \end{figure}
+  \end{enumerate}
+\end{itemize}
+\end{CJK*}
+\end{document}
