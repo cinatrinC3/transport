@@ -54,7 +54,8 @@
         \frac{2}{3}\mu - \kappa
       \right)\left(\nabla \cdot \vec {\bm u}\right) \bm\delta
     \end{equation}
-    而因為\fbox{數學上黏度會被乘進去壓力項}，所以加上$\kappa$，可以想成各向抗壓性(Dilatational Viscosity)\\
+    而因為\fbox{數學上黏度會被乘進去壓力項}\\
+    所以加上$\kappa$，可以想成各向抗壓性(Dilatational Viscosity)\\
     來消掉斜對角多算的部分，另外因為黏度這個純量是來自9個項，所以在定義上有其權重分配:\\
     實際上可以由角動量守恆證明以下性質，但大學就不講這麼多了
     \begin{equation}
@@ -88,21 +89,23 @@
       \end{equation}
       而一個流體的力平衡則由四個力組成: 慣性力、壓力、黏滯力、重力
       \begin{equation}
-        \underbrace{\frac{\partial}{\partial t}(\rho \vec {\bm u})}{\text{Momentum Accu.}} = 
-        - \underbrace{\nabla \cdot (\rho \vec {\bm u} \vec {\bm u})}_{\text{Inertial Force}} -
-        \underbrace{\nabla P}_{\text{Pressure Force}} +
-        \underbrace{\nabla \cdot \tau}_{\text{Viscous Force}} +
-        \underbrace{\rho \vec {\bm g}}_{\text{Gravity Force}}
+        \underbrace{\frac{\partial}{\partial t}(\rho \vec {\bm u})}_{\text{動量累積}} = 
+        - \underbrace{\nabla \cdot (\rho \vec {\bm u} \vec {\bm u})}_{\text{慣性力}} -
+        \underbrace{\nabla P}_{\text{壓力}} +
+        \underbrace{\nabla \cdot \overline{\overline{\bm \tau}}}_{\text{黏滯力}} +
+        \underbrace{\rho \vec {\bm g}}_{\text{重力}}
       \end{equation}
-      而將$\nabla \cdot (\rho \vec {\bm u} \vec {\bm u})$移到等號左邊，與$\frac{\partial}{\partial t}(\rho \vec {\bm u})$合併\\
+      而將$\nabla \cdot (\rho \vec {\bm u} \vec {\bm u})$移到等號左邊\\
+      與$\frac{\partial}{\partial t}(\rho \vec {\bm u})$合併\\
       這是將固定座標的微分，轉換為移動座標的微分
       \begin{equation}
         \frac{\partial}{\partial t}(\rho \vec {\bm u}) + \nabla \cdot (\rho \vec {\bm u} \vec {\bm u}) = \frac{D(\rho \vec {\bm u})}{Dt}
       \end{equation}
-      此步驟的推導可以看(\ref{eq:material_derivative_relation})，甚至還要用到Equation of continuity\\
+      此步驟的推導可以看(\ref{eq:material_derivative_relation})\\
+      甚至還要用到Equation of continuity\\
       因此此步驟其實假設了恆溫恆密度流體
       \begin{equation}
-        \rho \frac{D\vec {\bm u}}{Dt} = -\nabla P + \nabla \cdot \tau + \rho \vec {\bm g}
+        \rho \frac{D\vec {\bm u}}{Dt} = -\nabla P + \nabla \cdot \overline{\overline{\bm \tau}} + \rho \vec {\bm g}
       \end{equation}
       若為牛頓流體，且黏度、密度不變，則可化簡為Navier-Stokes Equation
       \begin{equation}
@@ -125,15 +128,20 @@
       \begin{align}
         \underbrace{\frac{\partial}{\partial t}\left(\frac{1}{2}\rho u^2\right)}_{\text{總動能變化}}
         =&-\underbrace{\left(\nabla \cdot \frac{1}{2}\rho u^2 \vec{\bm u}\right)}_{\text{傳送的動能變化}}
-        -\underbrace{\nabla \cdot p \vec{\bm u}}_{\text{周遭壓力做功}} \nonumber \\
-        &-\underbrace{p\left(-\nabla \cdot \vec{\bm u}\right)}_{\text{可逆的動能轉內能}}
-        -\underbrace{-\tau : \nabla \vec{\bm u}}_{\text{不可逆的動能轉內能}} \nonumber \\
-        &-\underbrace{\nabla\cdot [\overline{\overline{\tau}} \cdot \vec{\bm u}]}_{\text{黏力做功}} 
+        -\underbrace{\nabla \cdot P \vec{\bm u}}_{\text{周遭壓力做功}} \nonumber \\
+        &-\underbrace{\left[P\left(-\nabla \cdot \vec{\bm u}\right)\right]}_{\text{可逆的動能轉內能}}
+        -\underbrace{\left[-\overline{\overline{\bm \tau}}  : \nabla \vec{\bm u}\right]}_{\text{不可逆的動能轉內能}} \nonumber \\
+        &-\underbrace{\nabla\cdot [\overline{\overline{\bm \tau}} \cdot \vec{\bm u}]}_{\text{黏力做功}} 
         + \underbrace{\rho \vec{\bm u}\cdot \vec{\bm g} }_{\text{外力做功}} \label{eq:mechanical_energy_equation}
       \end{align}
+      P.S.\fbox{前面的正負號，只是流出減流入做高斯定理，出和入的方向，都和法向量相反!}\\
+      所以以下探討的正負，都不管前面的符號，只管括弧中的正負\\
+      注意中間那兩項\fbox{動能轉內能}，可逆的結果可正可負，視體積收縮或膨脹而定\\
+      \fbox{而因為散度為正，代表體積傾向膨脹，對外做功，所以括弧內有負號}\\
+      \fbox{不可逆是一種耗散，括弧內恆正，所以括弧內有負號}\\
       大概因為其他人都是能量的微分形式，唯有重力不是，所以定義單位質量的重力位能$\hat{\bm \Phi}$
       \begin{equation}
-        g = - \nabla \hat{\bm \Phi}
+        \vec{\bm g} = - \nabla \hat{\bm \Phi}
       \end{equation}
       如此一來便可以將最後一項改寫成:
       \begin{equation}
@@ -152,16 +160,16 @@
           \nabla \cdot \left(
             \frac{1}{2}\rho u^2 + \rho \hat{\bm \Phi}
           \right) \vec{\bm u}
-        \right] - \nabla \cdot p \vec{\bm u} \nonumber \\
-        &- p\left(-\nabla \cdot \vec{\bm u}\right) - (-\tau : \nabla \vec{\bm u}) \nonumber \\
-        &- \nabla \cdot [\overline{\overline{\tau}} \cdot \vec{\bm u}] 
+        \right] - \nabla \cdot P \vec{\bm u} \nonumber \\
+        &- P\left(-\nabla \cdot \vec{\bm u}\right) - (-\overline{\overline{\bm \tau}} : \nabla \vec{\bm u}) \nonumber \\
+        &- \nabla \cdot [\overline{\overline{\bm \tau}} \cdot \vec{\bm u}] 
         \label{eq:mechanical_energy_equation_modified}
       \end{align}
-      而其中不可逆的動能轉內能項$-\tau : \nabla \vec{\bm u}$\\
+      而其中不可逆的動能轉內能項，$-\overline{\overline{\bm \tau}} : \nabla \vec{\bm u}$\\
       實際上就是流體的耗散函數(Dissipation function)\\
       如同後面例題會提到的假設，流體在管中造成的壓力損失\\
-      是來自為了抵抗形變所耗損的能量，所以才會是力乘以形變速率的形式\\
-      而那九項中，也可以再進一步提出壓力的影響與剪力的影響:
+      是來自為了抵抗形變所耗損的能量，所以才會是\fbox{力($\tau$)乘以形變速率($u$)的形式}\\
+      如果$\overline{\overline{\bm \tau}}$是牛頓流體，則可以代入其定義
       \begin{equation}
         -\overline{\overline{\bm \tau}}: \nabla \vec{\bm u} =\frac{2}{3}\mu \sum_{i=1}^{3}\sum_{j=1}^{3}\left[
           \left(
@@ -171,47 +179,130 @@
           \nabla \cdot \vec{\bm u}
         \right)^2 = \mu \bm \Phi_u + \kappa \bm \Phi_b \label{eq:viscous_dissipation}
       \end{equation}
-      能量平衡式通常不會用微觀的形式來表示，而會用巨觀來表示\\
-      積分式中對於流入或流出控制體積的前三項，則利用Gauss定理轉換成整塊東西的表面積分
+      $\bm \Phi_u$為剪切耗散函數(Shear Dissipation Function)\\
+      $\bm \Phi_b$為體積耗散函數(Bulk Dissipation Function)\\
+      兩者皆恆正，代表不可逆的能量耗散，並分別代表流體的抗剪和抗壓能力
+    \item 巨觀的能量平衡式:\\
+      積分式中對於流入或流出控制體積的前三項
+      \begin{equation}
+        \int_{\text{CV}} \left[
+          -\nabla \cdot \left(
+            \frac{1}{2}\rho u^2 + \rho \hat{\bm \Phi}
+          \right) \vec{\bm u}
+          - \nabla \cdot P \vec{\bm u}
+          - \nabla \cdot [\overline{\overline{\bm \tau}} \cdot \vec{\bm u}]
+        \right] dV
+      \end{equation}
+      可以利用Gauss定理轉換成表面積分
+      \begin{equation}
+        \int_{\text{CS}} \left[
+          \left(
+            \frac{1}{2}\rho u^2 + \rho \hat{\bm \Phi}
+          \right) \vec{\bm u}
+          + P \vec{\bm u}
+          + \overline{\overline{\bm \tau}} \cdot \vec{\bm u}
+        \right] \cdot \vec{\bm n} dA
+      \end{equation}
+      而控制體積內的後三項
+      \begin{equation}
+        \int_{\text{CV}} \left[
+          - P\left(-\nabla \cdot \vec{\bm u}\right)
+          - (-\overline{\overline{\bm \tau}} : \nabla \vec{\bm u})
+        \right] dV
+      \end{equation}
+      則代表流體內部因為可逆和不可逆的動能轉內能
+      \begin{equation}
+        E_c = -\int_{\text{CV}} P\left(-\nabla \cdot \vec{\bm u}\right) dV
+      \end{equation}
+      以及
+      \begin{equation}
+        E_v = -\int_{\text{CV}} \left[-\overline{\overline{\bm \tau}} : \nabla \vec{\bm u} \right] dV
+      \end{equation}
+      因此整個控制體積的機械能平衡式為:
+      \begin{equation}
+        \frac{d}{dt}\left(
+          K_{\text{tot}} + \bm \Phi_{\text{tot}}
+        \right) = \int_{\text{CS}} \left[
+          \left(
+            \frac{1}{2}\rho u^2 + \rho \hat{\bm \Phi}
+          \right) \vec{\bm u}
+          + P \vec{\bm u}
+          + \overline{\overline{\bm \tau}} \cdot \vec{\bm u}
+        \right] \cdot \vec{\bm n} dA  + E_c + E_v
+      \end{equation}
+      其中$K_{\text{tot}}$為控制體積內的總動能:
+      \begin{equation}
+        K_{\text{tot}} = \int_{\text{CV}} \frac{1}{2}\rho u^2 dV
+      \end{equation}
+      $\bm \Phi_{\text{tot}}$為控制體積內的總位能:
+      \begin{equation}
+        \bm \Phi_{\text{tot}} = \int_{\text{CV}} \rho \hat{\bm \Phi} dV
+      \end{equation}
+    \item 應用於單一進口和單一出口的系統:\\
+      假設控制體積只有一個進口和一個出口，且流體在截面上的速度分布均勻\\
+      則表面積分可以寫成:
+      \begin{align}
+        &\int_{\text{CS}} \left[
+          \left(
+            \frac{1}{2}\rho u^2 + \rho \hat{\bm \Phi}
+          \right) \vec{\bm u}
+          + P \vec{\bm u}
+          + \overline{\overline{\bm \tau}} \cdot \vec{\bm u}
+        \right] \cdot \vec{\bm n} dA \nonumber \\
+        =& \left[ \left(
+          \frac{1}{2}\rho_1 \left<u_1^3\right> + \rho_1 \hat{\bm \Phi}_1 \left<u_1\right> + P_1 \left<u_1\right>
+        \right) S_1 \right] \nonumber \\
+        &- \left[ \left(
+          \frac{1}{2}\rho_2 \left<u_2^3\right> + \rho_2 \hat{\bm \Phi}_2 \left<u_2\right> + P_2 \left<u_2\right>
+        \right) S_2 \right]
+      \end{align}
+      其中$S_1$和$S_2$分別為進口和出口的截面積\\
+      $\left<u_1\right>$和$\left<u_2\right>$分別為進口和出口的平均速度\\
+      $\left<u_1^3\right>$和$\left<u_2^3\right>$分別為進口和出口的速度三次方的平均值\\
+      另外假設控制體積內有外力對流體做功$W_m$\\
+      則整個機械能平衡式為:
       \begin{align}
         \frac{d}{dt}\left(
           K_{\text{tot}} + \bm \Phi_{\text{tot}}
-        \right) =&\left[ \frac{1}{2}\rho_1\left<
-          u_1^3\right>S_1 + \rho_1\hat{\bm \Phi}_1 \left<u_1\right>S_1 + P_1 \left<u_1\right>S_1\right]\nonumber\\
-          & - \left[\frac{1}{2}\rho_2\left<
-          u_2^3\right>S_2 + \rho_2\hat{\bm \Phi}_2 \left<u_2\right>S_2 + P_2 \left<u_2\right>S_2\right] \nonumber \\
-        & + W_m - E_c - E_v
+        \right) =&\left[ \left(
+          \frac{1}{2}\rho_1\left<u_1^3\right> + \rho_1\hat{\bm \Phi}_1 \left<u_1\right> + P_1 \left<u_1\right>
+        \right) S_1 \right]\nonumber\\
+        & - \left[\left(
+          \frac{1}{2}\rho_2\left<u_2^3\right> + \rho_2\hat{\bm \Phi}_2 \left<u_2\right> + P_2 \left<u_2\right>
+        \right) S_2 \right] \nonumber \\
+        & + W_m + E_c + E_v
       \end{align}
-      其中$W_m$代表外力額外作功給流體的量(因為中括弧的第三項已經包含了狀態差所做的功)\\
-      而代入質量流率定義$w_1 = \rho_1\left<u_1\right>S_1$，$w_2 = \rho_2\left<u_2\right>S_2$後，並假設Steady State\\
-      最後得到機械能守恆方程式:
+      若假設Steady State，且控制體積內的位能不變，則左邊為0\\
+      並且將位能改寫成高度$h$的形式:
       \begin{equation}
-        \boxed{\Delta \left(
-          \frac{1}{2}\left<u_1^2\right> + gh_1 + \frac{P_1}{\rho_1}
-        \right) w_1 - \sum\left(
-          \frac{1}{2}\left<u_2^2\right> + gh_2 + \frac{P_2}{\rho_2}
-        \right) w_2 = -W_m + E_c+ E_v}
+        \hat{\bm \Phi} = gh
       \end{equation}
-      上述的$E_c$代表可逆的，因為壓縮造成的內能上升:
+      則得到:
+      \begin{align}
+        0 =& \left[ \left(
+          \frac{1}{2}\rho_1\left<u_1^3\right> + \rho_1 gh_1 \left<u_1\right> + P_1 \left<u_1\right>
+        \right) S_1 \right] \nonumber \\
+        & - \left[\left(
+          \frac{1}{2}\rho_2\left<u_2^3\right> + \rho_2 gh_2 \left<u_2\right> + P_2 \left<u_2\right>
+        \right) S_2 \right] \nonumber \\
+        & + W_m + E_c + E_v
+      \end{align}
+      將上式除以$w$，並整理，得到機械能守恆方程式:
       \begin{equation}
-        E_c = -\int_{\text{CV}} p\left(-\nabla \cdot \vec{\bm u}\right) dV
+        \frac{1}{2}\left(\frac{\left<u_2^3\right>}{\left<u_2\right>} - 
+        \frac{\left<u_1^3\right>}{\left<u_1\right>}\right) + g(h_2 - h_1) 
+        + \left(\frac{P_2}{\rho_2} - \frac{P_1}{\rho_1}\right) 
+        = \frac{-W_m + E_c + E_v}{w}
       \end{equation}
-      若流體不可壓縮，則$E_c =0$\\
-      而$E_v$代表不可逆的，因為黏滯造成的內能上升，恆正:
-      \begin{equation}
-        E_v = -\int_{\text{CV}} \overline{\overline{\bm \tau}} : \nabla \vec{\bm u} dV
-      \end{equation}
-      若流體可壓縮，但是穩態，利用:
-      \begin{equation}
-        \nabla \cdot (\rho \vec{\bm u}) = \nabla \rho \cdot \vec{\bm u} + \rho (\nabla \cdot \vec{\bm u}) =0
-      \end{equation}
-      則可以將$E_c$改寫成:
+    \item 機械能守恆方程式的衍生，以及動能修正因子:\\
+      若流體不可壓縮，則密度不變，$E_c =0$\\
+      若流體可壓，但是穩態，則可以將$E_c$改寫成:
       \begin{equation}
         E_c = \int_{\text{CV}} \frac{p}{\rho} (\nabla \rho \cdot \vec{\bm u}) dV
       \end{equation}
       若假設任一截面下的密度和壓力相同，則可以近似為:
       \begin{equation}
-        E_c = -w\Delta \left(\frac{p}{\rho}\right) + w\int_1^2\frac{1}{\rho} dP
+        E_c = -w\Delta \left(\frac{p}{\rho}\right) + w\int_1^2\frac{1}{\rho} dP 
       \end{equation}
       往前併入機械能守恆方程式，則變成:
       \begin{equation}

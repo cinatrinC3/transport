@@ -420,7 +420,7 @@
         \right) r^\ast R(r^\ast; \lambda_n) dr^\ast
       \right] e^{-\lambda_n^2 z^\ast} R(r^\ast; \lambda_n)}
     \end{equation}
-    \item 用Adiabatic Mixing Cup的溫度($T_{\text{AMC}}$)來找到$\lambda_n$\\
+    \item 用Adiabatic Mixing Cup的溫度($T_{\text{AMC}}$)來找到$\lambda_n$ \label{sec:graetz_amc_temperature}\\
     實驗上，其實就是找到任一個截面的平均溫度，利用讓流體流進一個絕熱的杯子\\
     等流體在裡面熱平衡後，測量溫度，就是平均溫度\\
     不過這裡的\fbox{截面平均溫度是加權除過流速}的，因為流速快的部分，進去杯子的量也多\\
@@ -884,7 +884,7 @@
       \Rightarrow & \frac{L_{\text{entry}}}{2R} = \left(
         \frac{1}{2.912}
       \right)^3 \text{Pe} \nonumber\\
-      \Rightarrow & \boxed{L_{\text{entry}} = 0.0405 \text{Pe} \cdot 2R}
+      \Rightarrow & \boxed{L_{\text{entry}} = 0.0405 \text{Pe} \cdot 2R} \label{eq:leveque_entry_length}
     \end{align}
     P.S. 也就是說假設Pe是1000的話，入口約略是40倍管直徑
   \end{enumerate}
@@ -1113,19 +1113,19 @@
     \item 同樣，利用Goldilock Argument，判定左邊那陀係數應該接近1\\
     因此可以得到兩邊界層的比例關係:
     \begin{equation}
-      \frac{\rho \hat C_P U \delta_T^3}{k L\delta} = 1 
+      \frac{\rho \hat C_P U \delta_T^3}{k L\delta} = a \approx 1
     \end{equation}
     以$\delta_T$來看:
     \begin{equation}
-      \delta_T = \left(
+      \delta_T = a\left(
         \frac{kL \delta}{ \rho \hat C_P U}
-      \right)^{\frac{1}{3}} =  \left(
+      \right)^{\frac{1}{3}} =  a\left(
         \frac{kL}{ \rho \hat C_P U\delta^2}
       \right)^{\frac{1}{3}} \delta
     \end{equation}
     同除$\delta$，得到:
     \begin{equation}
-      \boxed{\frac{\delta_T}{\delta} = \left(
+      \boxed{\frac{\delta_T}{\delta} = a\left(
         \frac{kL}{\rho \hat C_P U\delta^2}
         \right)^{\frac{1}{3}}} \label{eq:graetz_deltaT_over_delta}
     \end{equation}
@@ -1137,26 +1137,30 @@
     \end{equation}
     代入(\ref{eq:graetz_deltaT_over_delta}):
     \begin{align}
-      & \frac{\delta_T}{\delta} = \left(
+      & \frac{\delta_T}{\delta} = a\left(
         \frac{kL}{\rho \hat C_P U} \cdot \frac{\rho U}{\mu L}
       \right)^{\frac{1}{3}} \nonumber\\
-      \Rightarrow & \frac{\delta_T}{\delta} = \left(
+      \Rightarrow & \frac{\delta_T}{\delta} = a\left(
         \frac{k}{\hat C_P \mu}
       \right)^{\frac{1}{3}} \nonumber\\
-      \Rightarrow & \boxed{\frac{\delta_T}{\delta} = \text{Pr}^{-\frac{1}{3}}}
+      \Rightarrow & \boxed{\frac{\delta_T}{\delta} = a\text{Pr}^{-\frac{1}{3}}}
     \end{align}
     也就是說當Prandtl Number越大，熱傳邊界層相對於流體邊界層就越薄\\
     衍生，如果將$\frac{\delta_T}{L}$表示出來:
     \begin{align}
       & \frac{\delta_T}{L} = \frac{\delta_T}{\delta} \cdot \frac{\delta}{L} \nonumber\\
-      \Rightarrow & \boxed{\frac{\delta_T}{L} = \text{Re}_L^{-\frac{1}{2}} \text{Pr}^{-\frac{1}{3}}}
+      \Rightarrow & \boxed{\frac{\delta_T}{L} = a\text{Re}_L^{-\frac{1}{2}} \text{Pr}^{-\frac{1}{3}}}
     \end{align}
     然後把熱傳係數相關的Nusselt Number也表示出來(見\ref{eq:graetz_nusselt_number})
     \begin{align}
       & \text{Nu}_L = \frac{hL}{k}, \quad h = \frac{k}{\delta_T} \nonumber\\
       \Rightarrow & \text{Nu}_L = \frac{k}{\delta_T}\cdot \frac{L}{k} = \frac{L}{\delta_T} \nonumber\\
-      \Rightarrow & \boxed{\text{Nu}_L = \text{Re}_L^{\frac{1}{2}} \text{Pr}^{\frac{1}{3}}}
+      \Rightarrow & \boxed{\text{Nu}_L = a^{-1}\text{Re}_L^{\frac{1}{2}} \text{Pr}^{\frac{1}{3}}}
     \end{align}
+    而這個的數值解則是$a^{-1} = 0.664$，與Blasius解法相同
+    \begin{equation}
+      \text{Nu}_L = 0.664 \text{Re}_L^{\frac{1}{2}} \text{Pr}^{\frac{1}{3}} \label{eq:graetz_nusselt_number_final}
+    \end{equation}
     \item 不過剛剛也只是假設兩個邊界層發展比例固定，而產生的因次關係推導\\
     解題上還需回到只利用流體邊界層內流體是線性的這個假設\\
     不能將全部都以$y_T^\ast$來表示

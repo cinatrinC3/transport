@@ -560,6 +560,39 @@
   \begin{itemize}
     \item 紊流的整體Shear stress，為$r$為水力半徑時的Shear stress\\
     注意半徑為$R$的圓管的水力半徑$R_h = \frac{\pi R^2}{2\pi R} = \frac{R}{2}$
+    \item 邊界層的發展:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (-1,0) -- (14,0);
+        \draw (0,0) .. controls (2,2) and (3,2) .. (6,2);
+        \draw (6,2) .. controls (8,4) and (9,4) .. (10,4);
+        \draw[dashed] (6,2) .. controls (8,0.5) and (9,0.5) .. (10,0.5);
+        \node at (8,1.7) {Sub Layer};
+        \draw (10,4) -- (14,4);
+        \node at (4, 1) {層流邊界層};
+        \node at (12, 2) {紊流邊界層};
+        \draw[<->] (0,-0.5) -- (6,-0.5) node[midway, fill=white] {$\delta_{laminar}$};
+        \draw[<->] (6,-0.5) -- (10,-0.5) node[midway, fill=white] {$\delta_{transition}$};
+        \draw[<->] (10,-0.5) -- (14,-0.5) node[midway, fill=white] {$\delta_{turbulent}$};
+        \draw[red, dashed] (0,0) .. controls (1,0.5) and (2,0.5) .. (6,0.5) -- (14,0.5);
+        \draw[->, blue] (-2,1) -- (0,1);
+        \draw[->, blue] (-2,2) -- (0,2);
+        \draw[->, blue] (-2,3) -- (0,3);
+        \draw[->, blue] (-2,4) -- (0,4);
+        \draw[->, blue] (-2,5) -- (0,5);
+        \node[anchor=south, red] at (8,0) {\tiny Stagnant Fluid(靜止層)};
+        \node[anchor=south, red] at (12,0) {\tiny 純傳導};
+        \node[anchor=south, teal] at (12,0.5) {\tiny 對流+傳導};
+        \draw[->, red] (5.5,0) -- (5.5,0.5) node[midway, left] {$q_k$};
+        \draw[teal, decorate, decoration={snake, amplitude=3pt, segment length=4pt}] 
+          (5.5,0.5) -- (5.5,1.2);
+        \draw[->, teal] (5.5,1.2) -- (5.5,1.5) node[anchor=south]{$q_c$};
+        \draw[dashed] (6,-1) -- (6,5);
+        \draw[dashed] (10,-1) -- (10,5);
+      \end{tikzpicture}
+      \caption{紊流邊界層發展示意圖}
+    \end{figure}
   \end{itemize}
 \end{itemize}
 \end{CJK*}

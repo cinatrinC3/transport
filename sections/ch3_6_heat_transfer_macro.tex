@@ -1,0 +1,256 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{巨觀下的熱量傳輸，LMTD、沸騰、經驗式}
+\begin{itemize}
+  \item Forced Convection in the tube or the duct\\
+  回顧上一章說到的$\theta_{\text{AMC}}$，Adiabatic Mixing Cup Temperature
+  (見\ref{sec:graetz_amc_temperature}節)\\
+  但當時是先從微觀的關係，積分出含加權流速的各截面溫度\\
+  而另一種解題方式，則是直接從巨觀下來近似\\
+  若題目的需求只是算平均的性質，或是流體本身可以均一表示\\
+  即可以使用此方法\\
+  假設欲加熱一段流體，流體內部軸向的所有熱傳導皆可忽略(即$\text{Pe}_H \gg 1$)\\
+  各截面假設溫度均勻，直徑為$D$，長度為$L$的管子\\
+  流體進入溫度$T_0$，管壁維持在$T_s(>T_0)$，流體平均流速為$\left<u\right>$
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (8,3);
+      \draw[->] (-2,1.5) -- (0,1.5) node[midway, above] {$\left<u\right>$};
+      \draw[<->] (0,-1) -- (8,-1) node[midway, below] {$L$};
+      \fill[pattern=north east lines, pattern color=blue] (6,0) rectangle (6.5,3);
+      \draw[dashed, blue] (6,0) -- (6,3);
+      \draw[dashed, blue] (6.5,0) -- (6.5,3);
+      \node[anchor=north] at (6.25,0) {$dx$};
+      \draw[decorate, decoration=snake] (6.25,4.2) -- (6.25,3.2);
+      \draw[->] (6.25, 3.2) -- (6.25, 3);
+      \node[anchor=south] at (6.25,4.2) {$q_c$};
+      \draw[->] (0,-0.5) -- (2,-0.5) node[right] {$x$};
+      \draw[<->] (1,0) -- (1,3) node[midway, right] {$D$};
+      \draw[->] (5,1) -- (6,1) node[midway, below] {$\cancel{q_c}$};
+      \draw[->] (5,2) -- (6,2) node[midway, above] {\small$\dot H\big|_x$};
+      \draw[->] (6.5,2) -- (7.5,2) node[midway, above] {\small $\dot H\big|_{x+dx}$};
+      \node at (4,1.5) {$\text{Pe}_H \gg 1$};
+      \draw[dashed] (0,0) -- (0,-1.5);
+      \draw[->] (6.5,1) -- (7.5,1) node[midway, below] {$\cancel{q_c}$};
+      \node[anchor=south] at (0,3) {$T_0$};
+      \node[anchor=south] at (8,3) {$T_L$};
+      \node[anchor=south] at (4,3) {$T_s=\text{const}>T_0$};
+      \draw[->] (8,1.5) -- (10,1.5) node[midway, above] {$\left<u\right>$};
+    \end{tikzpicture}
+    \caption{Forced Convection in a tube with constant wall temperature}
+    \label{fig:forced_convection_tube_constant_wall_temperature}
+  \end{figure}
+  \begin{itemize}
+    \item 微分方程式:\\
+      在任意一小段$dx$中，流體吸收的熱量
+      \begin{equation}
+        d\dot H = \dot m C_P dT(x) = \rho \left<u\right> \frac{\pi D^2}{4} C_P dT(x)
+      \end{equation}
+       $\dot  m = \rho \left<u\right> A_c$，$A_c = \frac{\pi D^2}{4}$為截面積\\
+      而外界提供的熱量
+      \begin{equation}
+        dQ = q_c (\pi D) dx = h (T_s - T(x)) (\pi D) dx
+      \end{equation}
+      熱平衡:
+      \begin{equation}
+        \rho \left<u\right> \frac{\pi D^2}{4} C_P dT(x) = h (T_s - T(x)) (\pi D) dx
+      \end{equation}
+      分離變數:
+      \begin{equation}
+        \frac{dT(x)}{T_s - T(x)} = \frac{4h}{\rho C_P \left<u\right> D} dx
+      \end{equation}
+      積分邊界為$x=0$時$T=T_0$，$x=L$時$T=T_L$，得到系統溫度特性
+      \begin{align}
+        \int_{T_0}^{T_L} \frac{dT(x)}{T_s - T(x)} &= \int_0^L \frac{4h}{\rho C_P \left<u\right> D} dx \\
+        \left. -\ln\left(T_s - T(x)\right) \right|_{T_0}^{T_L} &= \left. \frac{4h}{\rho C_P \left<u\right> D} x \right|_0^L \\
+        -\ln\left(T_s - T_L\right) + \ln\left(T_s - T_0\right) &= \frac{4hL}{\rho C_P \left<u\right> D} 
+      \end{align}
+      而假設各截面溫度為$T(x)$，就可將上式改寫成:
+      \begin{equation}
+        \boxed{\ln \frac{T_s - T_0}{T_s - T(x)} = \frac{4h x}{\rho C_P \left<u\right> D}} \label{eq:temperature_distribution_derivation}
+      \end{equation}
+    \item 巨觀的熱平衡，推出$q$:\\
+      外界提供的總熱量
+      \begin{equation}
+        q = \int_0^L q_c (\pi D)dx = \int_0^L h(T_s -T(x)) (\pi D) dx
+      \end{equation}
+      將式\ref{eq:temperature_distribution_derivation}的$T_s - T(x)$代入上式\\
+      但\fbox{不要從這邊解，不然要跑出LMTD很不直觀}，有更神奇的作法\\
+      改從\fbox{整個流體的總吸熱量}
+      \begin{equation}
+        q = \dot H\big|_{L} - \dot H\big|_0 = \dot m C_P (T_L - T_0) 
+        = \rho \left<u\right> \frac{\pi D^2}{4} C_P (T_L - T_0) \label{eq:total_heat_absorbed}
+      \end{equation}
+      將\fbox{$C_P$}從\ref{eq:temperature_distribution_derivation}表示，代入上式
+      \begin{equation}
+        C_P = \frac{4hL}{\rho \left<u\right> D \ln \frac{T_s - T_0}{T_s - T_L}}
+      \end{equation}
+      代入(\ref{eq:total_heat_absorbed})，得到
+      \begin{equation}
+        q = \rho \left<u\right> \frac{\pi D^2}{4} \cdot \frac{4hL}{\rho \left<u\right> D \ln \frac{T_s - T_0}{T_s - T_L}} (T_L - T_0)
+      \end{equation}
+      將最後的$(T_L - T_0)$改成($(T_s -T_0) - (T_s -T_L)$)，也就是LMTD的分子
+      \begin{equation}
+        q = h (\pi D L) \underbrace{\frac{(T_s - T_0) - (T_s - T_L)}{\ln \frac{T_s - T_0}{T_s - T_L}}}_{\text{LMTD}}
+      \end{equation}
+      最後得到:
+      \begin{equation}
+        \boxed{q = h (\pi D L) (\text{LMTD})} \label{eq:heat_transfer_lmtd}
+      \end{equation}
+  \end{itemize}
+  \item 沸騰的4個階段
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,4) -- (0,0) -- (4,0) -- (4,4);
+      \draw [decorate, decoration={snake, amplitude=1mm, segment length=3mm}, blue] (0,3) -- (4,3);
+      \fill [pattern =north east lines, pattern color=red] (0,0) rectangle (4,-0.5);
+      \draw[red, dashed] (0,0) -- (0, -0.5) -- (4,-0.5) -- (4,0);
+      \node at (2,1.5) {$H_2O$};
+      \draw[decorate, decoration=snake, red] (0.5,0) -- (0.5,0.8);
+      \draw[->, red] (0.5,0.8) -- (0.5,1);
+      \draw[decorate, decoration=snake, red] (1,0) -- (1,0.8);
+      \draw[->, red] (1,0.8) -- (1,1);
+      \draw[decorate, decoration=snake, red] (1.5,0) -- (1.5,0.8);
+      \draw[->, red] (1.5,0.8) -- (1.5,1);
+      \draw[decorate, decoration=snake, red] (2,0) -- (2,0.8);
+      \draw[->, red] (2,0.8) -- (2,1);
+      \draw[decorate, decoration=snake, red] (2.5,0) -- (2.5,0.8);
+      \draw[->, red] (2.5,0.8) -- (2.5,1);
+      \draw[decorate, decoration=snake, red] (3,0) -- (3,0.8);
+      \draw[->, red] (3,0.8) -- (3,1);
+      \draw[decorate, decoration=snake, red] (3.5,0) -- (3.5,0.8);
+      \draw[->, red] (3.5,0.8) -- (3.5,1);
+      \node[anchor=north, red] at (2,-0.5) {加熱面(Wall)，$T_w$};
+    \end{tikzpicture}
+    \caption{Boiling Heat Transfer Regimes}
+    \label{fig:boiling_heat_transfer_regimes}
+  \end{figure}
+  \begin{enumerate}
+    \item 自然對流:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,4) -- (0,0) -- (4,0) -- (4,4);
+        \draw [decorate, decoration={snake, amplitude=1mm, segment length=3mm}, blue] (0,3) -- (4,3);
+        \fill [pattern =north east lines, pattern color=red] (0,0) rectangle (4,-0.5);
+        \draw[red, dashed] (0,0) -- (0, -0.5) -- (4,-0.5) -- (4,0);
+        \draw[->, red] (2,0) -- (2,1) node[above] {浮力};
+        \node[anchor=south west, red] at (0,0) {$\rho\downarrow$};
+        \node[anchor=north west, red] at (0,3) {$\rho\uparrow$};
+        \node[anchor=north, red] at (2,-0.5) {加熱面(Wall)，$T_w$};
+      \end{tikzpicture}
+      \caption{Natural Convection Boiling Regime}
+      \label{fig:natural_convection_boiling_regime}
+    \end{figure}
+    熱流密度小於約$10^4 \mathrm{W/m^2}$時，流體靠自然對流帶走熱量\\
+    $T_w -100^\circ C < 5$，因水蒸氣不夠，無法形成泡泡
+    \item 微小氣泡產生，核沸騰(Nucleate Boiling):
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,4) -- (0,0) -- (4,0) -- (4,4);
+        \draw [decorate, decoration={snake, amplitude=1mm, segment length=3mm}, blue] (0,3) -- (4,3);
+        \fill [pattern =north east lines, pattern color=red] (0,0) rectangle (4,-0.5);
+        \draw[red, dashed] (0,0) -- (0, -0.5) -- (4,-0.5) -- (4,0);
+        \draw[->, red] (2,0) -- (2,1) node[above] {$q$};
+        \pgfmathsetseed{414} 
+        \foreach \i in {1,...,10} {
+          \pgfmathsetmacro{\x}{0.4 + 3.2*rnd}
+          \pgfmathsetmacro{\y}{0.4 + 2.2*rnd}
+          \draw[blue] (\x,\y) circle (0.1);
+        }
+        \node[anchor=north, red] at (2,-0.5) {加熱面(Wall)，$T_w$};
+      \end{tikzpicture}
+      \caption{Nucleate Boiling Regime}
+      \label{fig:nucleate_boiling_regime}
+    \end{figure}
+    熱流密度約在$10^4 - 10^6 \mathrm{W/m^2}$之間\\
+    $5< T_w -100^\circ C < 20$，流體開始產生微小氣泡
+    \item 過度狀態沸騰，Transition Boiling:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,4) -- (0,0) -- (4,0) -- (4,4);
+        \draw [decorate, decoration={snake, amplitude=1mm, segment length=3mm}, blue] (0,3) -- (4,3);
+        \fill [pattern =north east lines, pattern color=red] (0,0) rectangle (4,-0.5);
+        \draw[red, dashed] (0,0) -- (0, -0.5) -- (4,-0.5) -- (4,0);
+        \draw[->, red] (2,0) -- (2,1) node[above] {$q$};
+        \pgfmathsetseed{1376} 
+        \foreach \i in {1,...,30} {
+          \pgfmathsetmacro{\x}{0.4 + 3.2*rnd}
+          \pgfmathsetmacro{\y}{0.4 + 2.2*rnd}
+          \draw[blue] (\x,\y) circle (0.2);
+        }
+        \draw [blue] (0.8,0) arc (0:180:0.3 and 0.15);
+        \draw [blue] (1.6,0) arc (0:180:0.3 and 0.15);
+        \draw [blue] (3,0) arc (0:180:0.3 and 0.15);
+        \draw [blue] (3.8,0) arc (0:180:0.3 and 0.15);
+        \node[anchor=north, red] at (2,-0.5) {加熱面(Wall)，$T_w$};
+      \end{tikzpicture}
+      \caption{Transition Boiling Regime}
+      \label{fig:transition_boiling_regime}
+    \end{figure}
+    熱流密度約在$10^6 - 10^7 \mathrm{W/m^2}$之間\\
+    $20< T_w -100^\circ C < 100$
+    氣泡開始積聚在加熱面上，來不及排走\\
+    因為氣體的熱傳導率較低\\
+    導致產生更大的熱阻，熱傳效率降低
+    \item 膜沸騰，Film Boiling:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,4) -- (0,0) -- (4,0) -- (4,4);
+        \draw [decorate, decoration={snake, amplitude=1mm, segment length=3mm}, blue] (0,3) -- (4,3);
+        \fill [pattern =north east lines, pattern color=red] (0,0) rectangle (4,-0.5);
+        \draw[red, dashed] (0,0) -- (0, -0.5) -- (4,-0.5) -- (4,0);
+        \node[anchor=north, red] at (2,-0.5) {加熱面(Wall)，$T_w$};
+        \pgfmathsetseed{523} 
+        \foreach \i in {1,...,100} {
+          \pgfmathsetmacro{\x}{0.2 + 3.6*rnd}
+          \pgfmathsetmacro{\y}{0.2 + 2.6*rnd}
+          \draw[blue!80] (\x,\y) circle (0.1);
+        }
+        \draw[->, red] (2,0) -- (2,1) node[above] {$q$};
+      \end{tikzpicture}
+      \caption{Film Boiling Regime}
+      \label{fig:film_boiling_regime}
+    \end{figure}
+    熱流密度大於約$10^7 \mathrm{W/m^2}$時\\
+    $T_w -100^\circ C > 100$，氣泡均勻的覆蓋在整個液體中\\
+    單位面積熱傳效率與溫度回歸正相關
+  \end{enumerate}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (0,0) -- (14,0);
+      \node[anchor=north] at (7, -0.5) {$\Delta T = T_w - T_{\text{sat}} \; (^\circ\text{C})$};
+      \draw[->] (0,0) -- (0,9) node[left] {$\frac{q}{A} (\text{W/m}^2)$};
+      \foreach \y/\label in {1/10^3, 3/10^4, 5/10^5, 7/10^6} {
+        \draw (0,\y) -- (0.15,\y);
+        \node[left] at (0,\y) {$\label$};
+      }
+      \draw (0.5, 1) to[out=50, in=250] (2.5, 2.5)           % Nucleate (start)
+        to[out=70, in=180] (6, 7)             % Peak (C)
+        to[out=0, in=110] (8.5, 4)            % Transition
+        to[out=290, in=170] (10, 3.2)         % Minimum (D)
+        to[out=350, in=230] (13.5, 8.5);      % Film Boiling
+      \draw[dashed] (2.5, 0) -- (2.5, 9);
+      \node[anchor=north] at (2.5, 0) {5};
+      \draw[dashed] (6, 0) -- (6, 9);
+      \node[anchor=north] at (6, 0) {20};
+      \draw[dashed] (10, 0) -- (10, 9);
+      \node[anchor=north] at (10, 0) {100};
+      \node at (1.25, 8.5) {自然對流};
+      \node at (4.25, 8.5) {核沸騰};
+      \node at (8, 8.5) {過度狀態沸騰};
+      \node at (12, 8.5) {膜沸騰};
+    \end{tikzpicture}
+    \caption{Boiling Heat Transfer Curve}
+    \label{fig:boiling_heat_transfer_curve}
+  \end{figure}
+\end{itemize}
+\end{CJK*}
+\end{document}

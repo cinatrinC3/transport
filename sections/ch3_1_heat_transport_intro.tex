@@ -94,25 +94,206 @@ Same Analogy as Momentum Transport
         \end{equation}
         而整陀流體的能量($\rho \hat E \vec{\bm u}$)又可以分成動能和內能
         \begin{equation}
-        \left(\frac{1}{2}\rho \left|\vec{\bm u}\right|^2 + \rho \hat U\right)\vec{\bm u} = \rho \hat E \vec{\bm u}
+          \left(\frac{1}{2}\rho \left|\vec{\bm u}\right|^2 + \rho \hat U\right)\vec{\bm u} = \rho \hat E \vec{\bm u} \label{eq:convective_energy_flux}
         \end{equation}
-        不過因為這些$\hat E$之類的在一團東西流動時很難取得\\
-        所以有牛頓冷卻定律 (Newton's Law of Cooling)
+        \begin{itemize}
+        \item 發生條件:
+          \begin{enumerate}
+            \item 溫度差
+            \item \fbox{流動的}連續介質，所以固體就沒有了
+          \end{enumerate}
+        \item 以流動方向做分類:
+        \begin{figure}[H]
+          \centering
+          \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+            \draw (0,0) rectangle (4,3);
+            \fill[pattern=north east lines, draw=black] (0,0) rectangle (4,0.3);
+            \fill[pattern=north east lines, draw=black] (0,2.7) rectangle (4,3);
+            \draw[->] (-2,1.5) -- (0,1.5) node[midway, above] {$v_\infty$};
+            \draw[decorate, decoration={snake,amplitude=3pt,segment length=5pt}] (2,0.3) -- (2,1.05);
+            \draw[-> ](2,1.05) -- (2,1.5) node[above] {$q_c$};
+            \node[anchor=north west, red] at (2.5, 2.67) {$A$};
+            \draw[red, dashed] (1.5,0.33) rectangle (2.5,2.67);
+            \draw[->] (0.5,1.5) -- (1.5,1.5) node[midway, above] {$\dot H$};
+            \node[anchor=north] at (1,1.5) {$\dot m$};
+          \end{tikzpicture}
+          \caption{熱對流方向示意圖}
+        \end{figure}
+        \begin{enumerate}
+          \item 徑向熱對流 (Radial convection): 熱傳方向與流體流動方向垂直\\
+          不過因為這些$\hat E$之類的在一團東西流動時很難取得\\
+          不過因為這些$\hat E$之類的在一團東西流動時很難取得\\
+          所以有牛頓冷卻定律 (Newton's Law of Cooling)
+          \begin{equation}
+            q_c = hA\left(T_s - T_\infty\right)
+          \end{equation}
+          $h$是Heat Transfer Coefficient，或是Film Coefficient\\
+          $A$是熱傳方向的垂直面積\\
+          只要知道這個$h$，就可以算出來熱對流的速率\\
+          但實務上$h$很難獲得，而且\fbox{這個$h$不是物性}，而是經驗值\\
+          所以當用Governing Equation算熱對流時，\fbox{不會一開始就出現$h$}\\
+          而是要先算出熱對流的速率，再反推$h$\\
+          計算方式分成兩大類:
+          \begin{itemize}
+            \item 無因次數(Nusselt Number, $\text{Nu}$)法
+            \begin{equation}
+              \text{Nu} = \text{Nu}_N + \text{Nu}_F = 
+              f(\text{Pr}, \text{Gr}, \frac{L}{D}) + f(\text{Pr}, \text{Re}, \frac{L}{D})
+            \end{equation}
+            \fbox{拆成強制對流與自然對流兩種情況}\\
+            \fbox{適用於各種流動狀況}\\
+            P.S. Re 和 Gr 不會在同一條式子裡同時出現\\
+            但由於在流體各處這些無因次數會不同\\
+            所以須訂一些\fbox{整體平均}的描述方式
+            \renewcommand{\arraystretch}{2}
+            \begin{table}[H]
+              \centering
+              \begin{tabular}{c|c|c}
+                變數 & local & average \\
+                \hline
+                Heat Transfer Coefficient, $h$  & $h_x \propto x^{-\frac{1}{2}}=\frac{a}{\sqrt{x}}$ 
+                & $\overline{h} = \frac{1}{L}\int_0^L h_x dx = 2\frac{a}{\sqrt{L}}$ \\
+                Fanning Friction Factor, $C_f$ & 
+                $C_{f,x} = \frac{\tau_{w,x}}{\frac{1}{2}\rho u_\infty^2}$ & 
+                $\overline{C_{f}} = \frac{1}{L}\int_0^L C_{f,x} dx$ \\
+                \hline
+                Reynolds Number & $\text{Re}_x = \frac{\rho u_\infty x}{\mu}$ & 
+                  $\text{Re}_L = \frac{\rho u_\infty L}{\mu}$ \\
+                \hline
+                Nusselt Number & $\text{Nu}_x = \frac{h_x x}{k_f}=\frac{a\sqrt{x}}{k_f}$ & 
+                  $\overline{\text{Nu}_L} = \frac{\overline{h} L}{k_f} = 2\frac{a\sqrt{L}}{k_f}$ \\
+                $\frac{\overline{\text{Nu}_L}}{\text{Nu}_L} = 2$ & & \\
+              \end{tabular}
+              \caption{熱傳經驗式的局部與整體平均}
+            \end{table}
+            \item 無因次數(Stanton Number, $\text{St}_H$)法
+            \begin{equation}
+              \text{St}_H = f(\text{Pr}, C_f)  = \frac{\text{Nu}}{\text{Re}\cdot \text{Pr}}
+            \end{equation}
+            \fbox{只能用於強制對流、直角坐標、圓柱座標$z$向流動}
+          \end{itemize}
+          又根據動力不同可分成
+          \begin{itemize}
+            \item 自然對流(Nature convection):\\
+              又稱為Free convection\\
+              流體原本不流動，但因流體內部溫度不同\\
+              因而產生溫度差，溫度不同造成密度的不同，進而產生對流\\
+              所以主要會跟浮力(Buoyant force)有關
+            \item 強制對流(Forced convection):\\
+              又稱為機械對流(Mechanical convection)\\
+              由機械裝置，如泵浦、風扇、壓縮機，所造成的流動，進而產生對流
+          \end{itemize}
+          而強制對流的$h$會比自然對流的大很多\\
+          以Nusselt Number進行計算時\\
+          會根據Grashof Number(Gr) (\ref{eq:grashof_number})大小來選擇忽略自然對流與否
+          \begin{equation}
+            \text{Gr} = \frac{L^3\rho^2g\beta\left(T_s-T_\infty\right)}{\mu^2} =
+            \frac{\text{Buoyancy Force}}{\text{Viscous Force}}
+          \end{equation}
+          若只考慮\fbox{自然對流，則Re可忽略}，$\text{Nu}_N = f(\text{Pr},\text{Gr},\frac{L}{D})$\\
+          若只考慮\fbox{強制對流，則Gr可忽略}，$\text{Nu}_F = f(\text{Pr},\text{Re},\frac{L}{D})$\\
+          因此，會將Nusselt Number分成自然對流和強制對流兩項評估:
+          \begin{equation}
+            \text{Nu} = \text{Nu}_N \pm \text{Nu}_F
+          \end{equation}
+          Richardson Number (Ri)，則量化了自然對流和強制對流的相對重要性
+          \begin{equation}
+            \text{Ri} = \frac{\text{Gr}}{\text{Re}^2} = \frac{\text{Buoyancy Force}}{\text{Shear Force}}
+          \end{equation}
+          之所以會是平方，是因為浮力大小正比於密度差，但慣性力跟剪力都是正比於速度平方\\
+          或單純，只是這樣訂數量級差距能在1附近
+          \begin{equation}
+            \begin{cases}
+              \text{Ri} \gg 1 & \text{Nu} = \text{Nu}_N \\
+              \text{Ri} \ll 1 & \text{Nu} = \text{Nu}_F \\
+              \text{Ri} \approx 1 & \text{Nu} = \text{Nu}_N \pm \text{Nu}_F
+            \end{cases}
+          \end{equation}
+          \item 當流體沒有流動時，熱對流會只剩下自然對流\\
+          假想一顆熱球在空氣中降溫，只計算\fbox{空氣的熱傳導}是不夠精確的\\
+          因為靠近球體的空氣會被加熱，密度變小而上升\\
+          進而帶走熱量，所以會有自然對流的現象發生\\
+          或者說，當流體沒流流動時，會額外假想它外圍一圈的氣體在流動\\
+          因此定義Rayleigh Number (Ra)\\
+          來量化自然對流相較熱傳導的影響(類似Peclet Number)
+          \begin{equation}
+            \text{Ra} = \text{Gr}\cdot \text{Pr} = \frac{L^3\rho^2g\beta\left(T_s-T_\infty\right)}{\mu^2}
+            \cdot \frac{C_p \mu}{k} = \frac{\text{Buoyancy Force}}{\text{Thermal Diffusion}}
+          \end{equation}\
+          若$\text{Ra} > 10^6$，要考慮自然對流
+          \item 軸向熱對流 (Axial convection): 熱傳方向與流體流動方向平行\\
+          流體流走會帶走熱量，所以熱量會隨著流體流動而改變
+          \begin{equation}
+            \boxed{\dot H = \dot m C_p \left(T_\infty - T_\infty\right) 
+            = \rho u A C_p \left(T_\infty - T_\infty\right)
+            = \rho C_p \vec{\bm u}\cdot\nabla T}
+          \end{equation}
+          P.S. 可以看出，對流當中的軸向改變，是會併入Governing Equation中的\\
+          因此$\vec{\bm q}_c$並不會出現在軸向熱對流的計算上\\
+          所以其實有一個廣義的熱對流，包含軸向和徑向兩種熱對流\\
+          以及一個狹義的熱對流，只有徑向熱對流，$h$和$q_c$都是指狹義的熱對流
+        \end{enumerate}
+      \end{itemize}
+      \item 熱輻射(Heat radiation): 由電磁波的方式傳遞熱量\\
+        只要有溫差就會發生\\
+        而固體因為會擋住光，通常會忽略熱輻射\\
+        使用Stefan-Boltzmann Law計算:
         \begin{equation}
-          q_c = hA\Delta T
+          q_r(1\to 2) = A_1 F_{1\to 2} \sigma \left(T_1^4 - T_2^4\right) \label{eq:stefan_boltzmann_law}
         \end{equation}
-        其中$h$為熱傳係數，單位是$W/m^2\cdot K$\\
-        基本上就是不管控制邊界外的另一邊是怎麼拿走能量的\\
-        只要知道這個$h$，就可以算出來熱對流的速率\\
-        但實務上$h$很難獲得\\
-        因為會受容器的形狀、流速、流動方式、流體的物性(密度、黏度、熱容、熱導係數)、加熱方式而影響\\
-        通常使用熱對流經驗式，計算，再代入獲得$h$
-      \item 熱輻射(Heat radiation)
+        只會考定義，但不會考計算，另外溫度要代絕對溫度($K$)
+        \begin{figure}[H]
+          \centering
+          \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+            \draw (0,0) -- (4,0);
+            \fill[pattern=north east lines] (0,0) rectangle (4,-0.3);
+            \node[anchor=south] at (3,0) {$T_2$(Low)};
+            \draw (0,3) -- (3.5, 4) node[midway, below right] {$T_1$(High)};
+            \fill [pattern=north east lines] (0,3) -- (3.5,4) -- (3.3,4.2) -- (-0.2,3.2) -- cycle;
+            \node[anchor=north] at (2,-0.3) {Surface 2};
+            \node[anchor=south east] at (1.45, 3.7) {Surface 1 ($A_1$)};
+            \draw[red, ->] (1,3.1) -- (2, 0.5) node[midway, above right] {$q_r$};
+            \draw[red, dashed,domain=225:270, smooth] plot ({3*cos(\x)}, {3+3*sin(\x)});
+            \draw[red, dashed,domain=276:315, smooth] plot ({3.5+4.0311*cos(\x)}, {4+4.0311*sin(\x)});
+          \end{tikzpicture}
+          \caption{熱輻射示意圖}
+          \label{fig:heat_radiation}
+        \end{figure}
+        其中$F_{1\to 2}$是View Factor或稱為Shape Factor\\
+        指的是1號面積所發出的光，到達2表面積的比例\\
+        所以如果是球殼內部給球殼外部，那就是1了\\
+        跟接觸者的面積有約略正比的關係\\
+        有Reciprocity Relation:
         \begin{equation}
-          q_r(1\to 2) = A_1 F_{1\to 2} \sigma \left(T_1^4 - T_2^4\right)
+          A_1 F_{1\to 2} = A_2 F_{2\to 1}
         \end{equation}
-        (後面有詳細記介紹$\implies$\ref{fig:heat_radiation})
-      \item 將上面三種$q_k,q_c,q_r$加在一起，針對這三個$q$的能量守恆\\
+        而$\sigma$是Stefan-Boltzmann constatnt=$5.67\times 10^{-8}\quad [W/m^2K^4]$\\
+        同熱對流遇到的問題$q_r$也是只能用在巨觀的統計\\
+        但不同的事，確實是可以把這項塞入Governing Equation中的熱平衡\\
+        \fbox{對流之所以不行，是因為他混了物質運動和能量傳遞兩種機制}\\
+        可是輻射純粹是能量傳遞，所以可以直接塞入Governing Equation裡。\\
+        但是是沒有意義的，因為對每一個微小控制體積\\
+        都要去計算$\nabla \cdot \vec{\bm q}_r$，實務上不會這樣做\\
+        而且物體內部的輻射，大概會變成實驗測量的熱傳係數上的誤差\\
+        所以通常還是以巨觀的熱平衡來處理
+        \begin{equation}
+          -k\frac{\partial T}{\partial n}\big|_{\text{surface}} = h\left(T_s - T_\infty\right) + \varepsilon \sigma \left(T_s^4 - T_\infty^4\right)
+        \end{equation}
+        $n$是法向量方向\\
+        $\varepsilon$是Emissivity，代表表面積對黑體的輻射效率\\
+        黑體的$\varepsilon=1$，而一般物體$0<\varepsilon<1$\\
+        主要跟表面積的材質、顏色、粗糙度有關\\
+        黑色、粗糙的表面積，會比較接近黑體\\
+        而光滑、銀色的表面積，會比較接近鏡面反射\\
+        但當然你還是能把他們全部併入$h$，所以才說$h$很雜\\
+        P.S. Rosseland Model假設在流體非常稠(光學無法透視)的情況下\\
+        熱輻射可以近似成熱傳導的一種形式
+        \begin{equation}
+          \vec{\bm q}_r \approx -\frac{16\sigma T^3}{3k_{\text{abs}}}\nabla T
+        \end{equation}
+        $k_{\text{abs}}$是Absorption Coefficient，代表流體對輻射的吸收能力\\
+        這樣就可以把熱輻射也塞入Governing Equation中了
+      \item 將上面三種$q_k,q_c,q_r$加在一起，針對這三個$q$的\fbox{巨觀能量守恆}\\
       會將\fbox{熱傳導放在$E_{\text{in}},~E_{\text{out}}$中}\\
       而\fbox{熱對流和熱輻射放在$E_{\text{gen}}$中}，因為這兩個是\fbox{單向}的能量傳遞\\
       只會從控制體積中流出或流入，但這也是方便而已，不用糾結為什麼對流是$E_{\text{gen}}$\\
@@ -122,12 +303,8 @@ Same Analogy as Momentum Transport
         \begin{equation}
           \overline{\overline{\bm \pi}} = P{\bm \delta\bm \delta} + \overline{\overline{\bm \tau}}
         \end{equation}
-        其實就是一個單位向量$I$乘上壓力，變成對角矩陣，再加上黏性應力張量
-        \begin{equation}
-          \overline{\overline{\bm \pi}} \cdot \vec{\bm u}
-        \end{equation}
+        其實就是一個單位向量$I$乘上壓力，變成對角矩陣，再加上黏性應力張量\\
         來源於做功的定義，一坨流體移動了一個距離\\
-        跟剛剛$\overline{\overline{\bm \kappa}}$一樣，這邊也可以用張量的形式表示\\
         分子運動作功的Flux:
         \begin{equation}
           \left[\overline{\overline{\bm \pi}} \cdot \vec{\bm u}\right]
@@ -151,19 +328,25 @@ Same Analogy as Momentum Transport
         因為根據題目不同很可能會把流場的傳遞、來自熱源的輸入等等簡併為焓\\
         根據高斯定理，將表面積分轉成體積積分:
         \begin{equation}
-          \frac{\partial}{\partial t} (\rho \hat E) = - \nabla \cdot \vec{\bm e} + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)
+          \underbrace{- \nabla \cdot \vec{\bm e}}_{\text{能量進出}} + 
+          \underbrace{\rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)}_{\text{整陀東西被作功}} = 
+          \underbrace{\frac{\partial}{\partial t} (\rho \hat E)}_{\text{能量變化}} 
         \end{equation}
         將$\vec{\bm e}$用(\ref{eq:energy_flux_definition})式代入:
         \begin{equation}
-          \frac{\partial}{\partial t} (\rho \hat E) = - \nabla \cdot \left(
-            \rho \hat E \vec{\bm u}\right)  - \nabla \cdot \left(\overline{\overline{\bm \pi}} \cdot \vec{\bm u}\right)
-             - \nabla \cdot \vec{\bm q} + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)
+          \underbrace{\frac{\partial}{\partial t} (\rho \hat E)}_{\text{能量變化}} = \underbrace{- 
+          \overbrace{\nabla \cdot \left(\rho \hat E \vec{\bm u}\right)}^{\text{整陀流走}}  - 
+          \overbrace{\nabla \cdot \left(\overline{\overline{\bm \pi}} \cdot \vec{\bm u}\right)}^{\text{分子運動作功}} -
+          \overbrace{\nabla \cdot \vec{\bm q}}^{\text{熱傳導}}
+          }_{\text{能量進出}} + \underbrace{\rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)}_{\text{整陀東西被作功}}
         \end{equation}
+        同樣的，因為在參考座標不動的偏微分觀察那個\fbox{整陀流走}\\
+        包含了\fbox{他的慣性和外加的變化}，所以改為實時導數\\
         利用以下性質:
         \begin{equation}
           \nabla \cdot s \vec{\bm u} = \nabla s \cdot \vec{\bm u} + s \left(\nabla \cdot \vec{\bm u}\right)
         \end{equation}
-        展開:
+        展開$\nabla \cdot \left(\rho \hat E \vec{\bm u}\right)$:
         \begin{align}
           & {\color{blue}\frac{\partial}{\partial t} (\rho \hat E)} = - {\color{red}\nabla \cdot \left(
             \rho \hat E \vec{\bm u}\right)}  - \nabla \cdot \left(\overline{\overline{\bm \pi}} \cdot \vec{\bm u}\right)
@@ -172,16 +355,29 @@ Same Analogy as Momentum Transport
           {\color{blue}\rho \frac{\partial \hat E}{\partial t} + \hat E \frac{\partial \rho}{\partial t} } +
           {\color{red}\nabla\hat E \cdot \rho \vec{\bm u} + \hat E \left(\nabla \cdot \rho \vec{\bm u}\right)}  = 
            - \nabla \cdot \vec{\bm q} 
-          - \nabla \cdot \left[\left(
-            P{\bm \delta\bm \delta} + \overline{\overline{\bm \tau}}
+          - \nabla \cdot \left[\left(\cancel{
+            P\bm \delta\bm \delta} + \overline{\overline{\bm \tau}}
           \right) \cdot \vec{\bm u}\right]
-          + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)
+          + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right) \nonumber\\
+          &
+          \underbrace{\rho \frac{\partial \hat E}{\partial t}}_{\text{開始那陀能量變化}}
+          + \underbrace{\nabla\hat E \cdot \rho \vec{\bm u}}_{\text{開始那陀慣性流走}}
+          + \underbrace{\hat E \frac{\partial \rho}{\partial t}}_{\text{額外質量變化}}
+          + \underbrace{\hat E \left(\nabla \cdot \rho \vec{\bm u}\right)}_{\text{額外質量流走}} \nonumber\\
+          &\quad\quad = 
+           - \underbrace{\nabla \cdot \vec{\bm q}}_{\text{熱傳導}}
+           - \underbrace{\nabla \cdot\left(\overline{\overline{\bm \tau}} \cdot \vec{\bm u}\right)}_{\text{分子運動作功}} 
+           + \underbrace{\rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)}_{\text{整陀東西被作功}}
         \end{align}
-        把$\hat E$丟到左邊，並利用Equation of Continuity:
+        P.S. $\bm \delta\bm \delta$，會變成單位矩陣$I$哦\\
+        所以$\nabla \cdot I = 0$，沒有散度\\
+        所以壓力才沒有梯度\\
+        把$\hat E$丟到左邊，並利用Equation of Continuity:\\
+        質量變化等於質量流入流出差:
         \begin{equation}
           \frac{\partial \rho}{\partial t} + \nabla \cdot \rho \vec{\bm u} = 0
         \end{equation}
-        可得到:
+        消除掉兩項後，前兩項以實時導數合併:
         \begin{align}
           &\rho \left(
             \frac{\partial \hat E}{\partial t} + \vec{\bm u} \cdot \nabla \hat E
@@ -191,49 +387,99 @@ Same Analogy as Momentum Transport
            - \nabla \cdot \vec{\bm q}
            - \nabla \cdot\left(\overline{\overline{\bm \tau}} \cdot \vec{\bm u}
            \right) + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right) \nonumber\\
-           &\rho \frac{D\hat E}{Dt} = 
-           - \nabla \cdot \vec{\bm q}
-           - \nabla \cdot\left(\overline{\overline{\bm \tau}} \cdot \vec{\bm u}
-           \right) + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)
+           &
+           \boxed{\underbrace{\rho \frac{D\hat E}{Dt}}_{\text{能量變化}} = 
+           - \underbrace{\nabla \cdot \vec{\bm q}}_{\text{熱傳導}}
+           - \underbrace{\nabla \cdot\left(\overline{\overline{\bm \tau}} \cdot \vec{\bm u} \right)}_{\text{分子運動作功}}
+          + \underbrace{\rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)}_{\text{整陀東西被作功}}} \label{eq:total_energy_equation}
         \end{align}
-        這才是真正的能量方程式，但因為$\hat E$包含太多項了，我們利用之前的\\
-        力學能平衡式，也就是流體流動的能量方程式，用來算壓降那些的(\ref{eq:mechanical_energy_equation})式:
+        將$\hat E$展開成動能和內能項(\ref{eq:convective_energy_flux})式:
         \begin{equation}
-          \rho \frac{D}{Dt}\left(\frac{1}{2}\left|\vec{\bm u}\right|^2\right) = 
-          -\vec{\bm u} \cdot \nabla P 
-          -\nabla \cdot \left(\overline{\overline{\bm \tau}} \cdot \vec{\bm u}\right)
-          + \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) + \rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)
+          \hat E = \underbrace{\left(\frac{1}{2}\rho\left|\vec{\bm u}\right|^2\right)\vec{\bm u}}_{\text{動能}} 
+          + \underbrace{\left(\rho \hat U\right)\vec{\bm u}}_{\text{內能}} \label{eq:total_energy_decomposition}
         \end{equation}
-        兩式相減後得到:
+        而動能又能透過(\ref{eq:mechanical_energy_equation})式，展開
         \begin{equation}
-          \rho \frac{D\hat U}{Dt} = 
-          - \nabla \cdot \vec{\bm q} 
-          - P  \nabla \cdot \vec{\bm u} 
-          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
+          \boxed{\underbrace{\rho \frac{D}{Dt}\left(\frac{1}{2}\left|\vec{\bm u}\right|^2\right)}_{\text{動能變化}} = 
+          - \underbrace{\vec{\bm u} \cdot \nabla P}_{\text{可逆的動能轉內能}} 
+          - \underbrace{\nabla \cdot \left(\overline{\overline{\bm \tau}} \cdot \vec{\bm u}\right)}_{\text{黏力做功}}
+          - \underbrace{\left[- \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)\right]}_{\text{不可逆的動能轉內能}}
+          \underbrace{+ \rho \left(\vec{\bm u} \cdot \vec{\bm g}\right)}_{\text{外力做功}}} \label{eq:kinetic_energy_equation}
         \end{equation}
-        利用$\hat H = \hat U + P\hat V\to \hat U + P\frac{1}{\rho}$，可以換成:
+        P.S. 不可逆的動能轉內能，可以看做\fbox{力$\times$形變速率}\\
+        代表為了抵抗控制體積的形變("耗散")，所必須耗損的能量\\
+        但因為這樣$\hat E$，包含太多項了\\
+        我們將包含所有能量的(\ref{eq:total_energy_equation})，減去代表動能的(\ref{eq:kinetic_energy_equation})式\\
+        就能得到只包含內能的能量方程式:
+        \begin{equation}
+          \boxed{\underbrace{\rho \frac{D\hat U}{Dt}}_{\text{內能變化}} = 
+          - \underbrace{\nabla \cdot \vec{\bm q}}_{\text{熱傳導}} 
+          - \underbrace{P  \nabla \cdot \vec{\bm u}}_{\text{可逆的動能轉內能}} 
+          - \underbrace{\overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)}_{\text{不可逆的動能轉內能}}}
+        \end{equation}
+        P.S. 這邊$\overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)$的正負跟動能的不一樣哦\\
+        畢竟是內能動能互轉的關係\\
+        (沒有耗散能+內能，因為耗散會以熱或形變轉為內能，只是無法利用而已)\\
+        而耗散能，也就會是物化中的Entropy Production
+        \begin{equation}
+          \frac{\partial}{\partial t}\rho\hat S= -\left(
+            \nabla \cdot (\rho \hat S \vec{\bm u})
+          \right) - \left(
+            \nabla \cdot \frac{\vec{\bm q}}{T}
+          \right) - \frac{1}{T^2}\left(
+            \vec{\bm q} \cdot \nabla T
+          \right) - \frac{1}{T}\left(
+            \overline{\overline{\bm \tau}} : \nabla \vec{\bm u}
+          \right)
+        \end{equation}
+        P.S. 右邊第一項跟流體慣性有關\\
+        第二、三項是熱傳導造成的可以用可逆方式轉回的能量$Q=T\Delta S$\\
+        第四項則是黏性應力造成的不可逆耗散能\\
+        不過大部分時候，我們不會想以等體積的描述，$U, C_V$來計算\\
+        而可逆的動能轉內能，與內能變化相加，正是\fbox{焓的變化}\\
+        $\hat H = \hat U + P\hat V = \hat U + \frac{P}{\rho}$(P.S. 單位質量體積就是密度)\\
+        但因為左邊已經是實時導數，所以透過將左邊展開，來跟右邊的壓力項消去:
+        \begin{equation}
+          \hat U = \hat H - \frac{P}{\rho} \implies \rho \frac{D\hat U}{Dt} 
+          = \rho \frac{D\hat H}{Dt} - \rho \frac{D}{Dt}\left(\frac{P}{\rho}\right)
+        \end{equation}
+        代入後得到:
         \begin{align}
           \rho \frac{D\hat H}{Dt} -\rho \frac{D}{Dt}\left(\frac{P}{\rho}\right) &= 
-          -\nabla \cdot \vec{\bm q} -
-           \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \nonumber\\
+          -\nabla \cdot \vec{\bm q} - P \nabla \cdot \vec{\bm u}
+           - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \nonumber\\
            \rho \frac{D\hat H}{Dt} -\frac{D P}{Dt} + \frac{P}{\rho}\frac{D \rho}{Dt} &=
            -\nabla \cdot \vec{\bm q} - P \nabla \cdot \vec{\bm u}
            - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
         \end{align}
         利用Equation of Continuity: 
+        \begin{align}
+          \frac{\partial \rho}{\partial t} + \nabla \cdot( \rho \vec{\bm u}) &= 0\nonumber\\
+          \underbrace{\frac{\partial \rho}{\partial t} + \vec{\bm u} \cdot \nabla \rho}_{\frac{D \rho}{Dt}} 
+          + \rho \left(\nabla \cdot \vec{\bm u}\right) &= 0
+        \end{align}
+        所以:
         \begin{equation}
-          \frac{\partial \rho}{\partial t} + \nabla \cdot \rho \vec{\bm u} = 0 \implies \frac{D \rho}{Dt} =
-           -\rho \left(\nabla \cdot \vec{\bm u}\right)
+          \frac{D \rho}{Dt} = - \rho \left(\nabla \cdot \vec{\bm u}\right)
         \end{equation}
         代入後得到:
         \begin{align}
-           \rho\frac{D\hat H}{Dt} - \frac{D P}{Dt} - \cancel{\frac{P}{\rho}\left(-\rho \nabla \cdot \vec{\bm u}\right)} &= 
+          & \rho\frac{D\hat H}{Dt} - \frac{D P}{Dt} 
+          + \frac{P}{\cancel{\rho}}\left(-\cancel{\rho} \nabla \cdot \vec{\bm u}\right) = 
+          -\nabla \cdot \vec{\bm q} 
+          - P \nabla \cdot \vec{\bm u}
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \nonumber\\
+          & \rho\frac{D\hat H}{Dt} - \frac{D P}{Dt} 
+          -\cancel{ P \nabla \cdot \vec{\bm u}} = 
           -\nabla \cdot \vec{\bm q} 
           -\cancel{ P \nabla \cdot \vec{\bm u}}
           - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \nonumber\\
-          \implies \quad \rho \frac{D\hat H}{Dt} &= -\nabla \cdot \vec{\bm q} + \frac{D P}{Dt} 
-          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right) \label{eq:energy_equation_intermediate}
+          \implies \quad &\boxed{\rho \frac{D\hat H}{Dt} = -\nabla \cdot \vec{\bm q} + \frac{D P}{Dt} 
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)} \label{eq:energy_equation_intermediate}
         \end{align}
+        但大部分時候，考慮熱傳問題時\\
+        我們會希望能以溫度來表示能量方程式\\
+        因為能假設固定熱容，固定熱傳導率等等\\
         為了要把式子變成溫度的形式，需利用熱力學關係式\\
         利用物化的$\hat H(T,P)$，換掉$\rho \frac{D\hat H}{Dt}$:
         \begin{align}
@@ -251,8 +497,11 @@ Same Analogy as Momentum Transport
             \frac{1}{\rho} - T\left(
               \frac{\partial }{\partial T}\left(\frac{1}{\rho}\right)
             \right)_P
-          \right] dP \nonumber\\
-          \therefore \quad \rho \frac{D\hat H}{Dt} &= \rho \hat C_p \frac{DT}{Dt} + \rho \left[
+          \right] dP
+        \end{align}
+        取實時導數:
+        \begin{align}
+          \rho \frac{D\hat H}{Dt} &= \rho \hat C_p \frac{DT}{Dt} + \rho \left[
             \frac{1}{\rho} - T\left(
               \frac{\partial }{\partial T}\left(\frac{1}{\rho}\right)
             \right)_P
@@ -282,16 +531,84 @@ Same Analogy as Momentum Transport
           \right] \frac{D P}{Dt} = -\nabla \cdot \vec{\bm q} + \cancel{\frac{D P}{Dt} }
           - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)  
         \end{equation}
-        會得到最終移除力學能項的能量方程式:
+        會得到最終移除力學能項，以溫度表達的能量方程式:
         \begin{equation}
-          \rho \hat C_p \frac{DT}{Dt} = -\nabla \cdot \vec{\bm q} 
+          \boxed{\rho \hat C_p \frac{DT}{Dt} = -\nabla \cdot \vec{\bm q} 
           - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
           + \left(
             \frac{\partial \ln \rho}{\partial \ln T}
-          \right)_P\frac{D_P}{D_t}
+          \right)_P\frac{DP}{Dt}}
         \end{equation}
-        其中$\overline{\overline{\bm \tau}}:\left(\nabla \vec {\bm u}\right)$在流量傳輸中有提過他的展開\\
-        見(\ref{eq:viscous_dissipation})式
+        P.S. 如果是理想氣體，$\left(\frac{\partial \ln \rho}{\partial \ln T}\right)_P=-1$\\
+        至此，我們透過將能量(位能、動能、耗散)間加減\\
+        以及將內能換為以溫度表示的方式，列出了數條能量方程式\\
+        將其餘能量平衡式表列如下:
+        \begin{table}[H]
+          \centering
+          \begin{tabular}{c|c|c}
+            \hline
+            描述能量 & 能量方程式  & 備註\\
+            \hline
+            $\hat E=\hat K + \hat U + \hat \Phi$ &
+            $\underbrace{\rho \frac{D\hat E}{Dt}}_{\text{能量變化}} = 
+           - \underbrace{\nabla \cdot \vec{\bm q}}_{\text{熱傳導}}
+           - \underbrace{\nabla \cdot\left(\overline{\overline{\bm \tau}} \cdot \vec{\bm u} \right)}_{\text{分子運動作功}}
+          + \underbrace{\rho \left(\vec{\bm v} \cdot \vec{\bm g}\right)}_{\text{整陀東西被作功}}$ & 通用\\
+          \hline 
+            $\hat U$ & $\underbrace{\rho \frac{D\hat U}{Dt}}_{\text{內能變化}} = 
+          - \underbrace{\nabla \cdot \vec{\bm q}}_{\text{熱傳導}} 
+          - \underbrace{P  \nabla \cdot \vec{\bm u}}_{\text{可逆動能耗損}} 
+          - \underbrace{\overline{\overline{\bm \tau}} : 
+            \left(\nabla \vec{\bm u}\right)}_{\text{不可逆動能耗損}}$ & 密度固定\\
+          \hline
+            $\hat H$ & $\underbrace{\rho \frac{D\hat H}{Dt}}_{\text{焓變化}} = 
+          - \underbrace{\nabla \cdot \vec{\bm q}}_{\text{熱傳導}} + \underbrace{\frac{D P}{Dt}}_{\text{壓力變化}} 
+          - \underbrace{\overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)}_{\text{不可逆動能耗損}}$ & 密度可變\\
+          \hline
+            $\hat K$ & $\underbrace{\rho \frac{D}{Dt}\left(\frac{1}{2}\left|\vec{\bm u}\right|^2\right)}_{\text{動能變化}} = 
+          - \underbrace{\vec{\bm u} \cdot \nabla P}_{\text{可逆動能轉內能}} 
+          - \underbrace{\vec{\bm u} \cdot \left[
+            \nabla \cdot \overline{\overline{\bm \tau}}
+          \right]}_{\text{黏力做功}}
+          \underbrace{+ \rho \left(\vec{\bm u} \cdot \vec{\bm g}\right)}_{\text{外力做功}}$ & 動量守恆\\
+          \hline
+            $\hat K+\hat U$ &
+            $\underbrace{\rho \frac{D}{Dt}\left(\frac{1}{2}\left|\vec{\bm u}\right|^2 + \hat U\right)}_{\text{機械能變化}} = 
+          - \underbrace{\nabla \cdot \vec{\bm q}}_{\text{熱傳導}}
+          - \underbrace{\nabla \cdot (P \vec{\bm u})}_{\text{可逆動能轉內能}}
+          - \underbrace{\overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)}_{\text{不可逆動能轉內能}}
+          + \underbrace{\rho \left(\vec{\bm u} \cdot \vec{\bm g}\right)}_{\text{外力做功}}$ & 無耗散能\\
+          \hline
+          $\hat C_P, T$ &
+          $\rho \hat C_p \frac{DT}{Dt} = -\nabla \cdot \vec{\bm q} 
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
+          + \left(
+            \frac{\partial \ln \rho}{\partial \ln T}
+          \right)_P\frac{DP}{Dt}$ & 熱力學\\
+          \hline
+          $\hat C_V, T$ &
+          $\rho \hat C_v \frac{DT}{Dt} = -\nabla \cdot \vec{\bm q} 
+          - \overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)
+          - T\left(
+            \frac{\partial P}{\partial T}
+          \right)_\rho\left(\nabla \cdot \vec{\bm u}\right)$ &
+          熱力學\\
+          \hline
+          $\hat S$ &
+          $\frac{\partial}{\partial t}\rho\hat S= -\left(
+            \nabla \cdot (\rho \hat S \vec{\bm u})
+          \right) - \left(
+            \nabla \cdot \frac{\vec{\bm q}}{T}
+          \right) - \frac{1}{T^2}\left(
+            \vec{\bm q} \cdot \nabla T
+          \right) - \frac{1}{T}\left(
+            \overline{\overline{\bm \tau}} : \nabla \vec{\bm u}
+          \right)$ & 熵產生\\
+          \hline
+          \end{tabular}
+          \caption{各種能量方程式總整理}
+          \label{tab:various_energy_equations}
+        \end{table}
       \item Equation of Energy的簡化形式\\
         根據不同的假設條件，可以將上式進一步簡化，常見的假設條件有:
         \begin{enumerate}
@@ -398,98 +715,6 @@ Same Analogy as Momentum Transport
     \begin{equation}
       \alpha = \frac{k}{\rho \hat{C}_p}
     \end{equation}
-  \end{itemize}
-  \item 無因次群:\\
-  其實解題還是可以用無因次分析去得到一些無因次群\\
-  只是這樣很麻煩，所以要記一些有物理意義、有名字的無因次群\\
-  質傳還會有，見表以快速從表目錄查詢:\\
-  故意寫成不約分的形式，以方便與物理意義對應\\
-  很多地方的特徵長度可能會要求是水力直徑$D_h$、特徵流速是平均流速$\left<u\right>$
-  \renewcommand{\arraystretch}{2}
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{c|c|c|c}
-      名稱 & 符號 & 定義 & 意義\\
-      \hline
-      Reynolds Number & Re & $\frac{\rho u^2/L}{\mu u/L^2}$ & $\frac{\text{慣性力}}{\text{黏滯力}}$\\
-      Euler Number & Eu & $\frac{P}{\rho u^2}$ & $\frac{\text{壓力力}}{\text{慣性力}}$\\
-      Prandtl Number & Pr & $\frac{\nu}{\alpha}$ & $\frac{\text{動量擴散}}{\text{熱傳擴散}}$\\
-      Peclet Number (Heat) & $\text{Pe}_H$ & $\frac{\rho \hat C_P u\Delta T/L}{k\Delta T/L^2}$
-      & $\frac{\text{軸向熱對流}}{\text{徑向熱傳導}}$\\
-      Froude Number & Fr & $\frac{\rho u^2/L}{\rho g}$ & $\frac{\text{慣性力}}{\text{重力}}$\\
-      Brinkman Number & Br & $\frac{\mu (u/L)^2}{k\Delta T/L^2}$ & $\frac{\text{黏滯耗散}}{\text{熱傳導}}$\\
-      Schmidt Number & Sc & $\frac{\nu}{D_{AB}}$&\\
-      Lewis Number & Le & $\frac{\alpha}{D_{AB}}$&\\
-      Nusselt Number & Nu & $\frac{hL}{k}$&\\
-      Sherwood Number & Sh & $\frac{h_\infty L}{D_{AB}}$&\\
-      Biot Number & Bi & $\frac{1/k_S}{1/h\left(\frac{V}{A}\right)}$& $\frac{\text{內部阻力}}{\text{外部阻力}}$\\
-      Fourier Number & Fo & $\frac{kA\Delta T/L}{\rho V C_P \Delta T/t}$& $\frac{\text{熱傳導}}{\text{熱儲存速率}\dot H}$\\
-      Grashof Number & Gr & $\frac{L^3\rho^2g\beta\left(T_s-T_\infty\right)}{\mu^2}$&\\
-      Stanton Number (Heat) & $\text{St}_H$ & $\frac{\text{Nu}}{\text{Re}\cdot\text{Pr}}$&
-    \end{tabular}
-    \caption{Heat and Mass Transfer Dimensionless Groups}
-  \end{table}
-  \begin{itemize}
-    \item Prandtl Number (Pr):\\
-      \fbox{流傳和熱傳}的比例
-      \begin{equation}
-        \text{Pr} = \frac{\nu}{\alpha} = \frac{C_p\mu}{k} = \frac{\text{Momentum Diffusivity}}{\text{Thermal Diffusivity}}
-      \end{equation}
-      或是速度邊界層厚度和熱傳邊界層厚度的比例
-      \begin{equation}
-        \text{Pr} = \left(\frac{\delta}{\delta_t}\right)^3 = \left(\frac{\text{Momentum Boundary Layer}}{\text{Thermal Boundary Layer}}\right)^3
-      \end{equation}
-    \item Schmidt Number:
-      \begin{equation}
-        \text{Sc} = \frac{\nu}{D_{AB}} = \frac{\mu}{\rho D_{AB}} = \frac{\text{Momentum Diffusivity}}{\text{Mass Diffusivity}}
-      \end{equation}
-    \item Lewis Number:
-      \begin{equation}
-        \text{Le} = \frac{\alpha}{D_{AB}} = \frac{k}{\rho C_p D_{AB}} = \frac{\text{Thermal Diffusivity}}{\text{Mass Diffusivity}}
-      \end{equation}
-    \item Nusselt Number:
-      \fbox{徑向熱傳和軸向熱傳}的比例\\
-      或者說\fbox{對流和傳導}的比例
-      \begin{equation}
-        \text{Nu} =
-        \frac{\left.\frac{\partial \left(T_s -T\right)}{\partial y}\right|_{y=0}}{\frac{\left(T_s-T_\infty\right)}{L}} 
-        = \frac{hL}{k} = \frac{\text{Heat Convection Rate}}{\text{Heat Conduction Rate}}
-      \end{equation}
-      若系統為圓柱或球:
-      \begin{equation}
-        \text{Nu} = \frac{hD}{k}
-      \end{equation}
-    \item Sherwood Number:
-      \begin{equation}
-        \text{Sh} = \frac{h_\infty L}{D_{AB}}
-      \end{equation}
-    \item Biot Number:\\
-      應用於固體或靜止流體內的熱傳導，系統內是不流動的物質，而外部有流動流體
-      \begin{equation}
-        \text{Bi} = \frac{h\left(\frac{V}{A}\right)}{k_S} = \frac{\text{Internal Resistance}}{\text{External Resistance}}
-      \end{equation}
-      $k_S$是固體的熱傳導係數\\
-      可由Bi值判斷系統內部是否有熱傳存在(固體內部溫度是否均一)
-    \item Peclet Number:
-      \fbox{軸向上熱對流和熱傳導}的比例
-      \begin{equation}
-        \text{Pe}_H =\text{Re}\cdot\text{Pr} = \frac{\rho C_p\nu D}{k} = \frac{\text{Heat Convection Rate}}{\text{Heat Conduction Rate}}
-      \end{equation}
-      熱跟著液體流動方向傳遞\\
-      若$\text{Pe}_H$很大，代表軸向上的熱傳導可以被忽略
-    \item Grashof Number:\\
-      重力對熱對流的影響，自然對流比例較大時用
-      \begin{equation}
-        \text{Gr} = \frac{L^3\rho^2g\beta\left(T_s-T_\infty\right)}{\mu^2} = \frac{\text{Buoyancy Force}}{\text{Viscous Force}}
-      \end{equation}
-      $\beta$是熱膨脹係數\\
-      另外，若只考慮自然對流，則Re可忽略，$\text{Nu} = f(\text{Pr},\text{Gr},\frac{L}{D})$\\
-      若只考慮強制對流，則Gr可忽略，$\text{Nu} = f(\text{Pr},\text{Re},\frac{L}{D})$
-    \item Stanton Number:
-      \begin{equation}
-        \text{St}_H = \frac{\text{Nu}}{\text{Re}\cdot\text{Pr}} = \frac{h}{\rho C_p u}
-      \end{equation}
-      是Dimensionless的整體熱傳係數(包含熱對流和熱傳導)
   \end{itemize}
   \item 熱量不同傳輸方式下的熱阻
   \begin{itemize}
@@ -639,82 +864,35 @@ Same Analogy as Momentum Transport
             \end{equation}
         \end{itemize}
     \end{itemize}
-    \item 對流(Convection): 物質整體的熱量傳遞
-    \begin{itemize}
-      \item 發生條件:
-        \begin{enumerate}
-          \item 溫度差
-          \item \fbox{流動的}連續介質，所以固體就沒有了
-        \end{enumerate}
-      \item 種類
-        \begin{enumerate}
-          \item 自然對流(Nature convection):\\
-          流體原本不流動，但因流體內部溫度不同\\
-          因而產生溫度差，溫度不同造成密度的不同，進而產生對流\\
-          所以主要會跟浮力有關
-          \item 強制對流(Forced convection):\\
-          由機械裝置，如泵浦、風扇、壓縮機，所造成的流動，進而產生對流
-        \end{enumerate}
-      \item 使用牛頓冷卻定律:
-        \begin{equation}
-          q_c = hA\left(T_s - T_\infty\right)
-        \end{equation}
-        $A$是熱傳方向的垂直面積\\
-        而強制對流的$h$會比自然對流的大很多
-      \item 對流熱阻$R_c$:
-        \begin{equation}
-          R_c = \frac{1}{hA} \label{eq:thermal_resistance_convection}
-        \end{equation}
-    \end{itemize}
+    \item 對流(Convection):對流熱阻$R_c$:
+      \begin{equation}
+        R_c = \frac{1}{hA} \label{eq:thermal_resistance_convection}
+      \end{equation}
     \item 輻射(Heat Radiation): 由電磁波的方式傳遞熱量\\
-    只要有溫差就會發生\\
-    而固體因為會擋住光，通常會忽略熱輻射\\
-    使用Stefan-Boltzmann Law計算:
-    \begin{equation}
-      q_r(1\to 2) = A_1 F_{1\to 2} \sigma \left(T_1^4 - T_2^4\right)
-    \end{equation}
-    只會考定義，但不會考計算，另外溫度要代絕對溫度($K$)
-    \begin{figure}[H]
-      \centering
-      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
-        \draw (0,0) -- (4,0);
-        \fill[pattern=north east lines] (0,0) rectangle (4,-0.3);
-        \node[anchor=south] at (3,0) {$T_2$(Low)};
-        \draw (0,3) -- (3.5, 4) node[midway, below right] {$T_1$(High)};
-        \fill [pattern=north east lines] (0,3) -- (3.5,4) -- (3.3,4.2) -- (-0.2,3.2) -- cycle;
-        \node[anchor=north] at (2,-0.3) {Surface 2};
-        \node[anchor=south east] at (1.45, 3.7) {Surface 1 ($A_1$)};
-        \draw[red, ->] (1,3.1) -- (2, 0.5) node[midway, above right] {$q_r$};
-        \draw[red, dashed,domain=225:270, smooth] plot ({3*cos(\x)}, {3+3*sin(\x)});
-        \draw[red, dashed,domain=276:315, smooth] plot ({3.5+4.0311*cos(\x)}, {4+4.0311*sin(\x)});
-      \end{tikzpicture}
-      \caption{熱輻射示意圖}
-      \label{fig:heat_radiation}
-    \end{figure}
-    其中$F_{1\to 2}$是View Factor或稱為Shape Factor\\
-    指的是1號面積所發出的光，到達2表面積的比例\\
-    所以如果是球殼內部給球殼外部，那就是1了\\
-    跟接觸者的面積有約略正比的關係\\
-    有Reciprocity Relation:
-    \begin{equation}
-      A_1 F_{1\to 2} = A_2 F_{2\to 1}
-    \end{equation}
-    而$\sigma$是Stefan-Boltzmann constatnt=$5.67\times 10^{-8}\quad [W/m^2K^4]$\\
-    還是使用牛頓冷卻定律:
-    \begin{equation}
-      q_r = h_r A_1 \Delta T
-    \end{equation}
-    強制把$\Delta T$換出來:
-    \begin{align}
-      q_r &= \frac{\Delta T}{R_r} \nonumber\\
-      &=\frac{\Delta T}{\frac{\Delta T}{A_1 F_{1\to 2}\sigma(T_1^4-T_2^4)}}
-    \end{align}
-    所以$R_r$:
-    \begin{equation}
-      \boxed{R_r=\frac{T_1-T_2}{A_1F_{1\to 2}\sigma \left(T_1^4-T_2^4\right)}}
-    \end{equation}
-    P.S. 這個任何座標都可以用
-    \item 熱對流雨熱輻射可以用\fbox{並聯}的方式結合起來:
+      由(\ref{eq:stefan_boltzmann_law})
+      \begin{equation}
+        q_r(1\to 2) = A_1 F_{1\to 2} \sigma \left(T_1^4 - T_2^4\right)
+      \end{equation}
+      試圖以牛頓冷卻定律的形式來表示輻射熱流:
+      \begin{equation}
+        q_r = h_r A_1 \Delta T
+      \end{equation}
+      透過將兩式相等，來求出$h_r$\\
+      而熱阻$R_r$就會是$\frac{1}{h_r A_1}$\\
+      故:
+      \begin{equation}
+        q_r = h_r A_1 \Delta T = A_1 F_{1\to 2} \sigma \left(T_1^4 - T_2^4\right)
+      \end{equation}
+      整理後:
+      \begin{equation}
+        h_r = \frac{F_{1\to 2} \sigma \left(T_1^4 - T_2^4\right)}{T_1 - T_2}
+      \end{equation}
+      故輻射熱阻$R_r$:
+      \begin{equation}
+        \boxed{R_r = \frac{1}{A_1 F_{1\to 2} \sigma \frac{T_1^4 - T_2^4}{T_1 - T_2}}} \label{eq:thermal_resistance_radiation}
+      \end{equation}
+      P.S. 這個任何座標都可以用
+      用\fbox{並聯}的方式結合起來:
       \begin{equation}
         q_{\text{total}} = q_c + q_r = \frac{\Delta T}{R_c} + \frac{\Delta T}{R_r} = \frac{\Delta T}{R_{\text{total}}}
       \end{equation}
@@ -857,35 +1035,57 @@ Same Analogy as Momentum Transport
     $f(\text{Re},\text{Pr},\frac{L}{D})$函數，題目會給\\
     $\text{St}_H$是$f(\text{Pr},C_f)$的函數，$C_f$是范寧摩擦因子
     \begin{itemize}
-      \item 流體流過平板:
+      \item 流體流過平板: (見\ref{eq:graetz_nusselt_number_final})
         \begin{equation}
-          \text{Nu} = 0.664\text{Re}^{0.5}\text{Pr}^{1/3}
+          \overline{\text{Nu}}_L = 0.664\text{Re}_L^{0.5}\text{Pr}^{1/3}
         \end{equation}
       \item 層流流過長直圓管，其壁面溫度均一(泡熱水)
         \begin{equation}
-          \text{Nu} = 3.66 + f(\text{Re},\text{Pr},\frac{L}{D})
+          \overline{\text{Nu}}_L = 3.66 + f(\text{Re},\text{Pr},\frac{L}{D})
         \end{equation}
-      \item 層流流過長直圓管，給予均勻熱通量(過火)
+        見(\ref{eq:leveque_entry_length})，當$L\gg D,\quad \frac{L}{D}>40$\\
+        可忽略$f(\text{Re},\text{Pr},\frac{L}{D})$項
         \begin{equation}
-          \text{Nu} = \frac{48}{11} + f(\text{Re},\text{Pr},\frac{L}{D})
+          \overline{\text{Nu}}_L = 3.66
         \end{equation}
-      \item Plug Flow，流過長直圓管，給予均勻熱通量
+      \item 層流流過長直圓管，給予均勻熱通量(\fbox{火焰加熱煮水})
         \begin{equation}
-          \text{Nu} = 8 + f(\text{Re},\text{Pr},\frac{L}{D})
+          \overline{\text{Nu}}_L = \frac{48}{11} + f(\text{Re},\text{Pr},\frac{L}{D})
+        \end{equation}
+        同樣，當$L\gg D,\quad \frac{L}{D}>40$，可忽略$f(\text{Re},\text{Pr},\frac{L}{D})$項
+        \begin{equation}
+          \boxed{\overline{\text{Nu}}_L = \frac{48}{11} \approx 4.36}
+        \end{equation}
+      \item Plug Flow，流過長直圓管，給予均勻熱通量(\fbox{火焰加熱煮空氣})
+        \begin{equation}
+          \overline{\text{Nu}}_L = 8 + f(\text{Re},\text{Pr},\frac{L}{D})
+        \end{equation}
+        同樣，當$L\gg D,\quad \frac{L}{D}>40$，可忽略$f(\text{Re},\text{Pr},\frac{L}{D})$項
+        \begin{equation}
+          \boxed{\overline{\text{Nu}}_L = 8}
         \end{equation}
       \item 流過球面的流:
         \begin{equation}
-          \text{Nu} = 2 + f(\text{Re},\text{Pr})
+          \overline{\text{Nu}}_L = 2 + f(\text{Re},\text{Pr})
         \end{equation}
-      \item Reynolds Analogy:(適用於$Pr=1$)
+        同樣，當流體是\fbox{Creeping flow}，$\text{Re}\ll 1$，可忽略$f(\text{Re},\text{Pr})$項
         \begin{equation}
-          \frac{h}{\rho C_p u_\infty} = \text{St}_H = \frac{C_f}{2}
+          \boxed{\overline{\text{Nu}}_L = 2}
         \end{equation}
-      \item Colburn Analogy:(適用於$0.5<\text{Pr}<50$)
+      \item Reynolds Analogy:(適用於$Pr=1$，No Form drag)\\
+        P.S. 也也是因為要No form drag所所以只能是直角坐標系
+        \begin{equation}
+          \frac{h}{\rho C_p u_\infty} = \boxed{\text{St}_H = \frac{C_f}{2}}
+        \end{equation}
+      \item Colburn Analogy:(適用於$0.5<\text{Pr}<50$，No Form drag)
         \begin{equation}
           j_H = \left(\frac{\text{Nu}}{\text{Re}\text{Pr}}\right)\cdot \text{Pr}^{\frac{2}{3}} = \frac{C_f}{2}
         \end{equation}
         $j_H$是Colburn $j$ factor
+        而且
+        \begin{equation}
+          \boxed{\text{St}_H = \frac{h}{\rho C_p u_\infty} = j_H \text{Pr}^{-\frac{2}{3}}}
+        \end{equation}
       \item Prandtl Analogy:(適用於忽略Drag)
         \begin{equation}
           \text{St}_H = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}}\left(\text{Pr}-1\right)} = \frac{h}{\rho C_p u}

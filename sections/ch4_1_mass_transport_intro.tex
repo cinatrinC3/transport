@@ -117,7 +117,25 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
   + \underbrace{\quad\vec{\bm j}_i\quad}_{\text{分子擴散}} \label{eq:transport_flux_comparison}
 \end{align}
 \begin{itemize}
-  \item Governing Equation:
+  \item Governing Equation:\\
+  擴散分成兩種:
+  \begin{enumerate}
+    \item molecular diffusion:\\
+    當介質\fbox{不流動}時，因物質濃度差異，而產生分子擴散\\
+    固體的介質會慢於液體，液體又慢於氣體\\
+    若是固體則通常適用Fick's Law\\
+    e.g.
+    \begin{itemize}
+      \item $H_2$於$\text{Pd}_{s}$中擴散
+      \item 尿素於洋菜中擴散
+      \item 氦氣在玻璃中擴散
+      \item 有機物於薄膜中擴散
+    \end{itemize}
+    若是液體則通常適用Fick's First Law
+    \item Mass convection:\\
+    當介質\fbox{流動}時，物質會跟著介質一起流動，而產生質量傳送\\
+    會類似於熱傳導中的對流
+  \end{enumerate}
   \begin{itemize}
     \item 對一個物質的質量守恆:
     \begin{equation}
@@ -576,6 +594,32 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
   \end{equation}
   此為Laplace Equation
 \end{itemize}
+\item 擴散係數的影響因子(依照重要程度排序)
+\begin{enumerate}
+  \item 介質(分子間距離):\\
+  氣體的擴散係數最大，液體次之，固體最小\\
+  因為氣體分子間距較大，分子運動較自由，擴散較快\\
+  反之固體分子間距較小，分子運動受限，擴散較慢
+  \item 溫度: 溫度越高，分子熱運動越劇烈，擴散係數越大
+  \begin{equation}
+    D_{AB} \propto \sqrt{T} \quad \text{(氣體)}
+  \end{equation}
+  \item 分子量(分子移動速率):
+  \begin{equation}
+    v \propto \sqrt{\frac{T}{M}} \implies D_{AB} \propto \frac{1}{\sqrt{M}}
+  \end{equation}
+  \item 壓力(分子數量):\\
+   壓力越高，分子間距越小，擴散係數越小
+\end{enumerate}
+\item 對比熱量輸送的經驗式$h$，因為氣體或液體的質傳行為複雜\\
+故統合為一個如$h$一般的質傳係數$k_c,k_y,k_p$\\
+這些數值通常無法直接計算，只能透過實驗或邊界條件下的質量或能量守恆來得到:
+\begin{equation}
+  \boxed{N_A=k_c\Delta(C_A) = k_y \Delta (y_A) = k_p \Delta (P_A)}
+\end{equation}
+$k_c,k_y,k_p$分別為以濃度、莫耳分率、分壓表示的質傳係數\\
+而對比熱對流會用Nusselt Number或Stanton Number (Heat) 來求出$h$\\
+質傳會用Sherwood Number或Stanton Number (Mass)來求出$k_c,k_y,k_p$
 \item 無因次群:
 \begin{itemize}
   \item Schmidt Number:
