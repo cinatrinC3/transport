@@ -28,13 +28,15 @@
 \counterwithin{figure}{section}
 \graphicspath{images}
 \pgfplotsset{compat=1.18} 
-\setlength{\headheight}{15pt}
+\setlength{\headheight}{26pt}
 \numberwithin{equation}{subsection}
+
 \renewcommand\cftsecafterpnum{\par\addvspace{1pt}}
 \newcommand{\mcirc}[1]{\text{\textcircled{\footnotesize #1}}}
 \newcommand \dbar {{d\mkern-6mu\mathchar'26\mkern-3mu}}
 \newcommand*{\rttensor}[1]{\bar{\bar{#1}}}
 \makeatletter
+\newcommand{\rightbotmark}{\expandafter\@rightmark\botmark}
 \DeclareFontFamily{U}{tipa}{}
 \DeclareFontShape{U}{tipa}{m}{n}{<->tipa10}{}
 \newcommand{\arc@char}{{\usefont{U}{tipa}{m}{n}\symbol{62}}}%
@@ -64,14 +66,16 @@
 \makeatother
 \title{單元操作筆記}
 \author{B10504001 化工五 唐麒鈞}
+\fancyhf{}
+\cfoot{\thepage}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\renewcommand{\subsectionmark}[1]{\markright{\thesubsection\ \ #1}}
 \begin{document}
 \begin{CJK*}{UTF8}{bkai}
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{B10504001$\textrm{  }$化工五$\textrm{  }$唐麒鈞}
-\rhead{單元操作筆記}
-\cfoot{\thepage}
+\pagenumbering{roman}
+\pagestyle{plain}
 \maketitle
+\thispagestyle{empty}
 \newpage
 \tableofcontents
 \newpage
@@ -79,12 +83,23 @@
 \newpage
 \listoftables
 \newpage
+\pagenumbering{arabic}
+\renewcommand{\headrule}{%
+  \hrule width\headwidth height 0.4pt % The standard horizontal line
+  \vspace{2pt}                        % Small gap between line and text
+  {\footnotesize \hfill \rightbotmark}   % \hfill pushes text to the right
+}
+\pagestyle{fancy}
+\rhead{單元操作-\leftmark}
+\lhead{B10504001$\textrm{  }$化工五$\textrm{  }$唐麒鈞}
 \section{各種數學工具}
 \subfile{sections/ch0_1_math_tools}
 \subfile{sections/ch0_2_coordinates}
+\newpage
 \section{流體力學導論}
 \subfile{sections/ch1_fluid_intro}
 \subfile{sections/ch1_2_dimensionless}
+\newpage
 \section{動量輸送}
 \subfile{sections/ch2_0_momentum_transport}
 \subfile{sections/ch2_1_laminar_flow}
@@ -92,6 +107,7 @@
 \subfile{sections/ch2_3_multi_variable_steady}
 \subfile{sections/ch2_4_unsteady_state}
 \subfile{sections/ch2_5_boundary_layer_dev}
+\newpage
 \section{熱量輸送}
 \subfile{sections/ch3_1_heat_transport_intro}
 \subfile{sections/ch3_2_heat_transfer_solve}
@@ -99,6 +115,7 @@
 \subfile{sections/ch3_4_heat_transfer_unsteady}
 \subfile{sections/ch3_5_heat_transfer_graetz}
 \subfile{sections/ch3_6_heat_transfer_macro}
+\newpage
 \section{質量傳輸}
 \subfile{sections/ch4_1_mass_transport_intro}
 \subfile{sections/ch4_2_mass_transport_basic}
@@ -106,196 +123,12 @@
 \subfile{sections/ch4_4_mass_transport_boundary_layer}
 \subfile{sections/ch4_5_mass_momentum_transport}
 \subfile{sections/ch4_6_mass_thermal_transport}
+\subfile{sections/ch4_7_mass_transport_reaction}
+\newpage
 \section{單元操作}
-\subsection{熱交換器}
-\begin{itemize}
-  \item 原理: 利用熱傳導與熱對流的方式，藉由一金屬介面使兩個部混合的流體，將熱量由高溫傳到低溫，達到加熱或冷卻的目的\\
-  定義$T_{H,i},T_{H,o},T_{C,i},T_{C,o}$分別是熱交換器中高溫流體進入、出口溫度，低溫流體進入、出口溫度
-  \item 依照結構可分為:
-  \begin{enumerate}
-    \item Double pipe heat exchanger(又稱 Single-pass heat exchanger)
-    \begin{equation}
-      q = \dot m_H C_{p,H}\left(T_{H,i}-T_{H,o}\right) = \dot m_C C_{p,C}\left(T_{C,o}-T_{C,i}\right)
-    \end{equation}
-    \item Shell-and-tube heat exchanger\\
-    會使用(X-Y Shell and Tube Heat Exchanger)的方式來表示，其中$X$代表Shell的數量，$Y$代表Tube的數量
-    \begin{equation}
-      q = \dot m_H C_{p,H}\left(T_{H,i}-T_{H,o}\right) = \dot m_C C_{p,C}\left(T_{C,o}-T_{C,i}\right)
-    \end{equation}
-    一樣的式子，但這裡熱傳的常數是被乘上一個修正因子Correction Factor(F)後的\\
-    而$F$則會根據不同的Shell-and-tube heat exchanger有不同的(F-Y)關係圖\\
-    關係圖上也會因為不同的$\frac{T_{H,i}-T_{H,o}}{T_{C,i}-T_{C,o}}$數值而有不同的線
-  \end{enumerate}
-  \item 依照流體流動方式可分為:
-  \begin{enumerate}
-    \item Counterflow heat exchanger(反向流熱交換器)
-    \item Co-current flow heat exchanger(同向流熱交換器)
-  \end{enumerate}
-  而流向只影響$T_{H,o},T_{C,o},T_{H,i},T_{C,i}$的加減關係，適用相同式子
-  \item 解題方式有兩種:
-  \begin{enumerate}
-    \item Log Mean Temperature Difference(LMTD) Method\\
-    ($T_{H,i},T_{H,o},T_{C,i},T_{C,o}$)的四個參數中，要知道其中3個才能使用
-    \begin{equation}
-      \text{LMTD} = \frac{\Delta T_1-\Delta T_2}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)}
-    \end{equation}
-    注意:$1,2$指的是交換器的位置，無關高低溫\\
-    舉例來說\\
-    Double pipe heat exchanger，且為Counterflow heat exchanger，則:
-    \begin{equation}
-      \Delta T_1 = T_{H,i}-T_{C,o},\quad \Delta T_2 = T_{H,o}-T_{C,i}
-    \end{equation}
-    Double pipe heat exchanger，且為Co-current flow heat exchanger，則:
-    \begin{equation}
-      \Delta T_1 = T_{H,i}-T_{C,i},\quad \Delta T_2 = T_{H,o}-T_{C,o}
-    \end{equation}
-    而只要對Double pipe heat exchanger，都適用:
-    \begin{equation}
-      q = U\cdot A\cdot \text{LMTD}
-    \end{equation}
-    而對Shell-and-tube heat exchanger:
-    \begin{equation}
-      q = F_G\cdot UA \text{LMTD}
-    \end{equation}
-    有一種特殊情況是，當$\Delta T_1 = \Delta T_2$時，這時$\text{LMTD}$會變成$\frac{0}{0}$的未定義狀態\\
-    這時要使用L'Hopital's Rule
-    \begin{equation}
-      \text{LMTD} = \frac{\Delta T_1-\Delta T_2}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)} = 
-      \Delta T_2 \cdot \frac{\frac{\Delta T_1}{\Delta T_2}-1}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)}
-    \end{equation}
-    令$\frac{\Delta T_1}{\Delta T_2} = x$，則根據L'Hopital's Rule:
-    \begin{equation}
-      \lim_{x\rightarrow 1}\left(\Delta T_2\cdot\frac{x-1}{\ln x} \right) =  \Delta T_2 x = \Delta \frac{T_1}{T_2} = \Delta T_1
-    \end{equation}
-    故此時$\Delta T_1 = \Delta T_2$
-    \item Number of Transfer Units(NTU) Method\\
-    只需知道$(T_{H,i},T_{C,i})$，也就是兩流體進入交換器的溫度，配合實驗找到效率(Effectiveness, $\varepsilon$)，即可求得\\
-    $\varepsilon$的定義:
-    \begin{equation}
-      \varepsilon = \frac{\text{熱交換器的真實熱傳速率}}{\text{具有無限大熱傳面積的熱傳速率}}
-    \end{equation}
-    $\varepsilon$會是$f(\text{NTU},\frac{C_\text{min}}{C_\text{max}})$的函數\\
-    定義NTU:
-    \begin{equation}
-      \text{NTU}=\frac{UA}{C_\text{min}}
-    \end{equation}
-    故在$A=\infty$時，會有最大的
-    \begin{equation}
-      q(A=\infty) = C_{\text{min}}\left(T_{H,i}-T_{C,i}\right) 
-    \end{equation}
-    其中$C_\text{min}$是兩個介質中的Minimum heat capacity\\
-    也就是:
-    \begin{equation}
-      \begin{cases}
-         C_H > C_C \Rightarrow C_H=C_\text{max},~C_C=C_\text{min} \\
-         C_C > C_H \Rightarrow C_C=C_\text{max},~C_H=C_\text{min}
-      \end{cases}
-    \end{equation}
-    得到:
-    \begin{equation}
-      q_{\text{act}}= \varepsilon\cdot C_{\text{min}}\left(T_{H,i}-T_{C,i}\right)
-    \end{equation}
-  \end{enumerate}
-\end{itemize}
-\subsection{蒸發器 Evaporator}
-藉由加熱使溶劑因沸騰而汽化，以去除溶劑達到溶液純化的目的
-\begin{itemize}
-  \item 蒸發器的種類
-  \begin{enumerate}
-    \item 橫管式蒸發器:
-    \begin{itemize}
-      \item 水蒸氣於管內流動、溶液於管外流動
-      \item 自然對流的加熱方式，加熱效果較差，高黏度流體效果更差
-      \item 不適用易產生泡沫或結垢的流體
-      \item 構造簡單、價格低廉、適合小規模生產
-    \end{itemize}
-    \item 垂直短管式蒸發器
-    \begin{itemize}
-      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
-      \item 自然對流的加熱方式，可加裝擋板以消除泡沫，並增加對流效果
-      \item 適用於易產生泡沫的流體，但結垢仍然不行
-      \item 構造簡單，價格不貴
-    \end{itemize}
-    \item 垂直長管式蒸發器
-    \begin{itemize}
-      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
-      \item 自然對流的加熱方式，但因為很長，熱傳效果更好
-      \item 溶液只要經管一次，即可完成蒸發的目的，大幅縮短加熱時間
-      \item 適用於易產生泡沫的流體、對溫度敏感的流體、同樣不適合用在易結垢的
-      \item 不適合用在會有鹽類析出、黏度高的流體
-    \end{itemize}
-    \item 強制循環式蒸發器
-    \begin{itemize}
-      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
-      \item 加裝循環泵浦作為融業的強制循環、強制對流、熱傳效果更好、大幅縮短加熱時間
-      \item 適用於易產生泡沫的流體、對溫度敏感的流體、黏度高的流體
-      \item 由於氣液飛濺的情形嚴重、泵浦的動力消耗、成本較高
-    \end{itemize}
-    \item 夾套式蒸發器(攪膜蒸發器)
-  \end{enumerate}
-  而根據操作也可以歸類成:
-  \begin{enumerate}
-    \item 單效蒸發器(Single-effect evaporator)
-    \item 多效蒸發器(multiple-effect evaporator)
-    \begin{enumerate}
-      \item 順向多效蒸發器
-      \item 逆向多效蒸發器
-    \end{enumerate}
-  \end{enumerate}
-  兩者的比較
-  \begin{center}
-  \begin{tabular}{|c|c|c|}
-    \hline   & 單效 & 多效 \\\hline
-    操作成本 &  相同 & 相同 \\\hline
-    蒸發總量 & 少 & 多\\\hline
-    經濟效益 & 小 & 大\\\hline
-    設備成本 & 少 & 多\\\hline
-    操作性  & 易 & 難\\\hline
-    物料損失 & 少 & 多\\\hline
-    最終濃度 & 小 & 大\\\hline
-    溫度 & $T_1$ & $T_1>T_2>\cdots>T_n$\\\hline
-    壓力 & $P_1$ & $P_1>P_2>\cdots>P_n$ \\\hline
-  \end{tabular}
-  \end{center}
-  \item 蒸發器的名詞介紹
-  \begin{itemize}
-  \item 蒸發量(Capacity),$V$:\\
-    單位時間所去除溶劑的質量
-    \item 蒸氣使用量(Steam Consumption),$S$:
-    單位時間，蒸發器使用(消耗)的蒸氣質量
-    \item 經濟效益(Economy),$\eta$:
-    每使用單位質量蒸氣，所能去除溶劑的質量
-    \begin{equation}
-      \eta = \frac{V}{S}
-    \end{equation}
-  \end{itemize}
-  \item 單效蒸發器的計算範例\\
-  假設一單效蒸發器，進料$F$，狀態$T_F,X_F,h_F$，經過蒸氣$S$加熱後\\
-  變為蒸氣$V$，狀態$T_1,X_V,H_V$，留下濃縮液$L$，狀態$T_1,X_L,h_L$\\
-  蒸氣$S$通入前狀態$T_S,H_S$，通入後凝結變成液體，溫度不變，狀態$T_S,h_S$
-  \begin{itemize}
-    \item 整體質量平衡:
-    \begin{equation}
-      F= L+V
-    \end{equation}
-    \item 溶質質量平衡:
-    \begin{equation}
-      FX_F=LX_L
-    \end{equation}
-    \item 熱平衡:
-    \begin{equation}
-      F\cdot h_F + S\cdot \lambda = L\cdot h_K + V\cdot H_V
-    \end{equation}
-    其中$\lambda$為蒸氣的潛熱
-    \begin{equation}
-      \lambda = H_S -h_S
-    \end{equation}
-    \item 蒸發器的熱傳方程
-    \begin{equation}
-      Q = S\cdot(H_S -h_S) = S\cdot \lambda = UA(T_S-T_1)
-    \end{equation}
-  \end{itemize}
-\end{itemize}
+\subfile{sections/ch5_0_unit_operation_intro}
+\subfile{sections/ch5_1_unit_operation_exchanger}
+\subfile{sections/ch5_2_unit_operation_evaporator}
 \subsection{蒸餾 Distillation}
 藉由加熱使混合物之各成分因蒸氣壓的不同而分離
 \begin{itemize}

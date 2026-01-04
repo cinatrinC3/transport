@@ -1,221 +1,90 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 \begin{CJK*}{UTF8}{bkai}
-\subsection{質量輸送，Stefan Problem、Pseudo-steady State}
+\subsection{質量輸送，Equimolar counterdiffusion}
 \begin{figure}[H]
   \centering
   \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
-    \draw (0,6) -- (0,0) -- (2,0) -- (2,6);
-    \fill[pattern=north east lines, pattern color=blue] (0,0) rectangle (2,2);
-    \node[anchor=west] at (2,1) {揮發性液體A};
-    \draw[->] (-1,0) -- (-1,1) node[above] {$z$};
-    \draw[<->] (-0.5, 0) -- (-0.5,6) node[midway, left] {$L$};
-    \draw[dashed] (-1.5,0) -- (0,0);
-    \draw[dashed] (-1.5,6) -- (0,6);
-    \draw[blue, dashed] (0,2) -- (2,2);
-    \draw[->, red] (-2,6.5) -- (0, 6.5);
-    \draw[->, red] (-2,7) -- (0,7);
-    \draw[->, red] (-2,7.5) -- (0,7.5);
-    \node[red, anchor=south] at (-1,7.5) {空氣B};
-    \draw[decorate, decoration=snake, blue] (1.33,2) -- (1.33,5.5);
-    \draw[->, blue] (1.33,5.5) -- (1.33,6) node[above] {揮發};
-    \node[anchor=west] at (2,2) {$z_l(t)$: 液面};
-    \draw[decorate, decoration=snake, red] (0.66,6) -- (0.66,2.5);
-    \draw[->, red] (0.66,2.5) -- (0.66,2);
-    \def\xShift{6}
-    \def\yShift{2}
-    \draw[->] (\xShift,0) -- (\xShift,5) node[above] {$X$,莫耳分率};
-    \draw[->] (\xShift,0) -- (\xShift+6,0) node[right] {$z$};
-    \draw[dashed] (\xShift+5,0) -- (\xShift+5,3.5);
-    \node[anchor=north] at (\xShift+5,0) {$L$};
-    \draw[blue, ->] (\xShift,3.8-\yShift) .. controls (\xShift+2,3.8-\yShift) and (\xShift+3.8, 3.5-\yShift) .. (\xShift+5,2.9-\yShift);
-    \draw[red, <-] (\xShift, 0.5+\yShift) .. controls (\xShift+2,0.5+\yShift) and (\xShift+3.8,0.8+\yShift) .. (\xShift+5,1.4+\yShift);
-    \node[anchor=east] at (\xShift, 3.8-\yShift) {$\frac{P_{\text{sat}}}{P}$};
-    \node[anchor=east] at (\xShift, 0.5+\yShift) {$X_{B0}$};
-    \draw[dashed] (\xShift,3.5) -- (\xShift+5,3.5);
-    \node[anchor=east] at (\xShift,3.5) {1};
-    \node[anchor=north east] at (\xShift,0) {0};
+    \fill[white, draw=black, ultra thick] (0,-0.3) rectangle (10,0.3);
+    \fill[white, draw=black] (0,0) circle (2.5);
+    \fill[white, draw=black] (10,0) circle (2.5);
+    \draw[dashed] (2.5, 0) -- (2.5, -3);
+    \draw[dashed] (7.5, 0) -- (7.5, -3);
+    \fill[white] (0,-0.3) rectangle (10,0.3);
+    \node at (0,2) {Pure A};
+    \node at (10,2) {Pure B};
+    \draw[<->] (2.5,-2) -- (7.5,-2) node[midway, fill=white] {$L$};
+    \fill[pattern=north east lines, pattern color=blue] (5.75, -0.3) rectangle (6.25, 0.3);
+    \draw[dashed, blue] (5.75, -0.3) -- (5.75, 0.3);
+    \draw[dashed, blue] (6.25, -0.3) -- (6.25, 0.3);
+    \node[anchor=east, teal] at (5.25,0) {\small $N_A$};
+    \node[anchor=west, red] at (6.75,0) {\small $N_B$};
+    \draw[->, teal] (5.25,0.15) -- (6.75,0.15);
+    \draw[->, red] (6.75,-0.15) -- (5.25,-0.15);
+    \node[anchor=south] at (6, 0.3) {C.V.};
+    \draw[->] (2.5, -1) -- (3.5, -1) node[right] {$z$};
   \end{tikzpicture}
-  \caption{Stefan Problem示意圖}
+  \caption{Equimolar counterdiffusion示意圖}
 \end{figure}
 \begin{itemize}
-  \item 測量揮發液體擴散係數的方法
-  \item 液面高度為$z_l$，會隨著蒸發而降低\\
-  但我們假設\fbox{quasi-steady state}，假設濃度擴散的速度遠比液體下降的速度要快\\
-  換句話說，令$z_l$是定值
-  \item 寫出邊界條件
+  \item 假設A、B兩種物質在管道兩端，在$t_0$時開始擴散
+  \item 擴散前後兩容器$P,V,T$皆不變，理想氣體，代表\fbox{Equimolar counterdiffusion}
+  \begin{equation}
+    N_A = -N_B
+  \end{equation}
+  \item寫出出Fick's law
+  \begin{equation}
+    N_A = -D_{AB}\frac{dC_A}{dz} + y_A \cancelto{0}{(N_A+N_B)} \implies N_A = -D_{AB}\frac{dC_A}{dz}
+  \end{equation}
+  \item 兩邊積分
+  \begin{equation}
+    N_A\int_0^L dz = -D_{AB}\int_{C_{A1}}^{C_{A2}} dC_A \implies N_A L = -D_{AB}\left(C_{A2}-C_{A1}\right)
+  \end{equation}
+  \item 得到$N_A(z)$為常數
+  \begin{equation}
+    N_A = \frac{D_{AB}}{L}\left(C_{A1}-C_{A2}\right)
+  \end{equation}
+  也可以換成:
   \begin{align}
-    x_A(z_l) &= \frac{P_{\text{sat}}}{P} \label{eq:ch4_3_stefan_bc1}\\
-    x_B(z_l) &= 1 - \frac{P_{\text{sat}}}{P} \label{eq:ch4_3_stefan_bc2}\\
-    x_B(L) &= X_{B0} \label{eq:ch4_3_stefan_bc3}
-  \end{align}
-  \item 寫出氣相中的質量平衡:
-  \begin{equation}
-    \cancel{\frac{\partial C_i}{\partial t}} + \nabla \cdot \vec{\bm N_i} - \cancel{R_i} = 0 \implies \nabla \cdot \vec{\bm N_i} = 0
-  \end{equation}
-  而這代表了
-  \begin{align}
-    \frac{d N_{Az}}{dz} = 0 \implies & N_{Az} = C_1\label{eq:ch4_3_stefan_N_Az}\\
-    \frac{d N_{Bz}}{dz} = 0 \implies & N_{Bz} = C_2\label{eq:ch4_3_stefan_N_Bz}
-  \end{align}
-  將(\ref{eq:ch4_3_stefan_N_Bz})代入邊界條件，\fbox{空氣無法擴散進入液體}\\
-  也就是$N_{Bz}(z_l) = 0$，得到$C_2 = 0$，所以$N_{Bz} = 0$在整個氣相中成立\\
-  P.S. 這不代表就沒有$x_B$，只是沒有淨通量\\
-  可以想成\fbox{空氣的擴散只是為了填補液體的蒸發(對流)}，所以淨通量為0
-  \item 根據Fick's Law，解出濃度分布:
-  \begin{align}
-    N_{Az}&=x_A\left(N_{Az}+\cancel{N_{Bz}}\right) - C D_{AB}\frac{dx_{A}}{dz} \nonumber\\
-    (1-x_A)N_{Az} &= - C D_{AB}\frac{dx_{A}}{dz} \nonumber\\
-    \frac{1}{1-x_A}dx_A &= - \frac{N_{Az}}{C D_{AB}}dz = C_3 dz \label{eq:ch4_3_stefan_diff_eq} \\
-    \implies \ln(1-x_A) &= C_3 z + C_4 \nonumber\\
-    \implies x_A &= 1 - e^{C_3 z + C_4} \label{eq:ch4_3_stefan_xA_distribution}
-  \end{align}
-  \item 將邊界條件(\ref{eq:ch4_3_stefan_bc1}), (\ref{eq:ch4_3_stefan_bc3})代入(\ref{eq:ch4_3_stefan_xA_distribution})，
-  解出常數$C_3, C_4$:
-  \begin{align}
-    \text{由}~z=z_l:~& \frac{P_{\text{sat}}}{P} = 1 - e^{C_3 z_l + C_4} \nonumber\\
-    \implies & C_4 = \ln\left(1 - \frac{P_{\text{sat}}}{P}\right) - C_3 z_l \label{eq:ch4_3_stefan_C4}\\
-    \text{由}~z=L:~& X_{B0} = 1 - e^{C_3 L + C_4} \nonumber\\
-    \implies & C_3 = \frac{1}{L - z_l} \ln\left(\frac{1 - X_{B0}}{1 - \frac{P_{\text{sat}}}{P}}\right) \label{eq:ch4_3_stefan_C3}
-  \end{align}
-  \item 將(\ref{eq:ch4_3_stefan_C3}), (\ref{eq:ch4_3_stefan_C4})代入(\ref{eq:ch4_3_stefan_xA_distribution})，得到濃度分布:
-  \begin{equation}
-    \boxed{x_A = 1 - \left(1 - \frac{P_{\text{sat}}}{P}\right)^{\frac{L-z}{L-z_l}} \left(1 - X_{B0}\right)^{\frac{z - z_l}{L - z_l}}}
-  \end{equation}
-  \item 將(\ref{eq:ch4_3_stefan_C3})代入(\ref{eq:ch4_3_stefan_N_Az})，得到揮發速率:
-  \begin{equation}
-    \boxed{N_{Az} = \frac{C D_{AB}}{L - z_l} \ln\left(\frac{1 - X_{B0}}{1 - \frac{P_{\text{sat}}}{P}}\right)}
-  \end{equation}
-  \item 針對$N_{Bz}$:
-  \begin{equation}
-    N_{Bz} = x_B\left(N_{Az} + \cancel{N_{Bz}}\right) - C D_{AB} \frac{dx_B}{dz} = 0
-  \end{equation}
-  可以得到
-  \begin{equation}
-    \frac{1}{x_B} dx_B = \frac{N_{Az}}{C D_{AB}} dz
-  \end{equation}
-  \item 積分後得到:
-  \begin{align}
-    \ln x_B &= \frac{N_{Az}}{C D_{AB}} z + C_5 \nonumber\\
-    \implies x_B &= e^{\frac{N_{Az}}{C D_{AB}} z + C_5}
-  \end{align}
-  \item 將邊界條件(\ref{eq:ch4_3_stefan_bc2}), (\ref{eq:ch4_3_stefan_bc3})代入，解出常數$C_5$與驗證$N_{Az}$:
-  \begin{align}
-    \text{由}~z=z_l:~& 1 - \frac{P_{\text{sat}}}{P} = e^{\frac{N_{Az}}{C D_{AB}} z_l + C_5} \nonumber\\
-    \implies & C_5 = \ln\left(1 - \frac{P_{\text{sat}}}{P}\right) - \frac{N_{Az}}{C D_{AB}} z_l \\
-    \text{由}~z=L:~& X_{B0} = e^{\frac{N_{Az}}{C D_{AB}} L + C_5} \nonumber\\
-    \implies & N_{Az} = \frac{C D_{AB}}{L - z_l} \ln\left(\frac{1 - X_{B0}}{1 - \frac{P_{\text{sat}}}{P}}\right)
-  \end{align}
-  \item 針對液體:
-  \begin{equation}
-    \frac{\pi R^2\rho_A dz_l}{M_A dt} = -N_{Az}(z_l) \pi R^2
-  \end{equation}
-  代入$N_{Az}$，得到:
-  \begin{equation}
-    \frac{dz_l}{dt} = - \frac{M_A C D_{AB}}{\rho_A (L - z_l)} \ln\left(\frac{1 - X_{B0}}{1 - \frac{P_{\text{sat}}}{P}}\right)
-  \end{equation}
-  積分後得到液面高度隨時間變化:
-  \begin{equation}
-    \boxed{z_l(t) = L - \sqrt{(L - z_{l0})^2 - \frac{2 M_A C D_{AB}}{\rho_A} \ln\left(\frac{1 - X_{B0}}{1 - \frac{P_{\text{sat}}}{P}}\right) t}}
-  \end{equation}
-  \item 回顧Pseudo Steady State approximation，代表若要符合\\
-  液面下降速率遠小於濃度擴散速率:
-  \begin{equation}
-    \left|\frac{dz_l}{dt}\right| \ll \frac{D_{AB}}{L}
-  \end{equation}
-  則:
-  \begin{equation}
-    \frac{M_A C D_{AB}}{\rho_A (L - z_l)} \ln\left(\frac{1 - X_{B0}}{1 - \frac{P_{\text{sat}}}{P}}\right) \ll \frac{D_{AB}}{L} \implies
-    \frac{C}{\frac{\rho_A}{M_A}} \ll 1
-  \end{equation}
-  \item 將問題衍生為Multicomponent Stefan Problem\\
-  假設空氣$B$是由0.79的氮氣$N_2$與0.21的氧氣$O_2$組成\\
-  稱揮發性物質為$1$，氮氣為$2$，氧氣為$3$\\
-  質量平衡式:
-  \begin{equation}
-    \cancel{\frac{\partial C_i}{\partial t}} + \nabla \cdot \vec{\bm N_i} - \cancel{R_i} = 0 \implies \nabla \cdot \vec{\bm N_i} = 0
-  \end{equation}
-  \item 邊界條件:
-  \begin{align}
-    \frac{dN_{1z}}{dz} = 0 & \implies N_{1z} = C_1 \\
-    \frac{dN_{2z}}{dz} = 0 & \implies N_{2z} = C_2 = 0 \\
-    \frac{dN_{3z}}{dz} = 0 & \implies N_{3z} = C_3 = 0
-  \end{align}
-  P.S. 會等於0原因同上，氣體無法進入液體
-  \item 寫出Stefan-Maxwell方程式:
-  \begin{equation}
-    C_i\nabla \mu_i = \sum_{j\neq i} \frac{RT}{\mathbcal{D}_{ij}} \left(
-      x_i \vec{\bm N_j} - x_j \vec{\bm N_i}
-    \right)
-  \end{equation}
-  假設為理想氣體
-  \begin{equation}
-    \nabla x_i = \sum_j \frac{1}{C D_{ij}} \left(
-      x_i \vec{\bm N_j} - x_j \vec{\bm N_i}
-    \right)
-  \end{equation}
-  列出$C-1=2$個獨立方程式:
-  \begin{align}
-    \frac{dx_2}{dz} &= \frac{1}{C D_{21}}\left(
-      x_2 N_{1z} - x_1 \cancel{N_{2z}}
-    \right)+ \frac{1}{C D_{23}}\left(
-      x_2 \cancel{N_{3z}} - x_3 \cancel{N_{2z}}
+    N_A &= \frac{D_{AB}}{L} C\left(
+      y_{A1}-y_{A2}
     \right) \nonumber\\
-    &= \frac{N_{1z}}{C D_{21}} x_2 \label{eq:ch4_3_stefan_multi_dx2}\\
-    \frac{dx_3}{dz} &= \frac{1}{C D_{31}}\left(
-      x_3 N_{1z} - x_1 \cancel{N_{3z}}
-    \right)+ \frac{1}{C D_{32}}\left(
-      x_3 \cancel{N_{2z}} - x_2 \cancel{N_{3z}}
+    N_A &= \frac{P D_{AB}}{R T L} \left(
+      y_{A1}-y_{A2}
     \right) \nonumber\\
-    &= \frac{N_{1z}}{C D_{31}} x_3 \label{eq:ch4_3_stefan_multi_dx3}
+    &= \frac{D_{AB}}{RTL}\left(
+      P_{A1}-P_{A2}
+    \right)
   \end{align}
-  \item 積分(\ref{eq:ch4_3_stefan_multi_dx2}), (\ref{eq:ch4_3_stefan_multi_dx3}):
+  \item 算出濃度分布$C_A(z)$\\
+  透過Equation of Continuity
   \begin{align}
-    \ln x_2 &= \frac{N_{1z}}{C D_{21}} z + C_6 \nonumber\\
-    \implies x_2 &= C_6e^{\frac{N_{1z}}{C D_{21}} z} \\
-    \ln x_3 &= \frac{N_{1z}}{C D_{31}} z + C_7 \nonumber\\
-    \implies x_3 &= C_7 e^{\frac{N_{1z}}{C D_{31}} z }
+    \cancelto{\text{S.S.}}{\frac{\partial C_A}{\partial t}} + \nabla\cdot N_A &= \cancel{R_A}\nonumber\\
+    \frac{dN_A}{dz} &= 0 \nonumber\\
+    \frac{d}{dz}\left(-
+      D_{AB}\frac{dC_A}{dz}
+    \right) &= 0 \nonumber\\
+    \implies \quad \frac{d^2 C_A}{dz^2} &= 0\nonumber\\
+    \implies \quad C_A(z) &= C_1 + C_2 z
   \end{align}
-  由於$x_2(L) = x_{2L}=0.79$，$x_3(L) = x_{3L}=0.21$，所以:
+  代入邊界條件:
   \begin{align}
-    x_2 &= 0.79 e^{\frac{N_{1z}}{C D_{21}} (z - L)} \\
-    x_3 &= 0.21 e^{\frac{N_{1z}}{C D_{31}} (z - L)}
+    C_A(0) &= C_{A1} = C_1 \nonumber\\
+    C_A(L) &= C_{A2} = C_1 + C_2 L \nonumber\\
+    \implies \quad C_2 &= \frac{C_{A2}-C_{A1}}{L}
   \end{align}
-  \item 由於$x_1 + x_2 + x_3 = 1$，所以:
+  最後得到:
   \begin{equation}
-    x_1 = 1 - 0.79 e^{\frac{N_{1z}}{C D_{21}} (z - L)} - 0.21 e^{\frac{N_{1z}}{C D_{31}} (z - L)}
+    \boxed{C_A(z) = C_{A1} + \left(
+      \frac{C_{A2}-C_{A1}}{L}
+    \right) z}
   \end{equation}
-  而同時
+  P.S. $N_B=-N_A$:
   \begin{equation}
-    x_1(z_l) = \frac{P_{\text{sat}}}{P} = 1 - 0.79 e^{\frac{N_{1z}}{C D_{21}} (z_l - L)} - 0.21 e^{\frac{N_{1z}}{C D_{31}} (z_l - L)}
+    C_B(z) = C_{B1} + \left(
+      \frac{C_{B2}-C_{B1}}{L}
+    \right) z
   \end{equation}
-  無法解析解，只能用數值方法求解$N_{1z}$
-  \item 液體中的質量平衡:
-  \begin{equation}
-    \frac{\rho_A}{M_A} \frac{dz}{dt} = -N_{1z}(z_l(t))
-  \end{equation}
-  以及液面高度隨時間變化:
-  \begin{equation}
-    z_l(t) = z_{l0} - \frac{M_A}{\rho_A} \int_0^t N_{1z}(z_l(t)) dt
-  \end{equation}
-  邊界條件:
-  \begin{equation}
-    z_l(0) = z_{l0}
-  \end{equation}
-  \item  跟熱量與動量傳輸不同，質量傳輸在介面之間是允許濃度跳躍的\\
-  而連續的方程式是在介面處兩處化學能相同:
-  \begin{equation}
-    \mu_A^{\text{liq}} (z_l) = \mu_A^{\text{gas}} (z_l)
-  \end{equation}
-  而由此開展開來，若液體為純液體，氣相為理想氣體，則得到
-  \begin{align}
-    \mu_A^{\text{liq}} (z_l) &= \mu_A^{\circ,\text{liq}} \nonumber\\
-    \mu_A^{\text{gas}} (z_l) &= \mu_A^{\ast} + RT \ln\left(X_A(z_l)P\right) 
-  \end{align}
-  合併後可得:
-  \begin{equation}
-    x_A(z_l) = \frac{P_{\text{sat}}}{P},~C_A^\text{gas}(z_l) = \frac{P_1^{\text{sat}}}{RT}
-\end{equation}
-\end{itemize}
+ \end{itemize}
 \end{CJK*}
 \end{document}

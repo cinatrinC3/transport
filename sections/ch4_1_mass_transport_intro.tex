@@ -124,6 +124,10 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     當介質\fbox{不流動}時，因物質濃度差異，而產生分子擴散\\
     固體的介質會慢於液體，液體又慢於氣體\\
     若是固體則通常適用Fick's Law\\
+    用於二元系統 (後面會有詳細推導)
+    \begin{equation}
+      J_{Az} = -D_{AB}\frac{dC_a}{dz}
+    \end{equation}
     e.g.
     \begin{itemize}
       \item $H_2$於$\text{Pd}_{s}$中擴散
@@ -131,7 +135,15 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
       \item 氦氣在玻璃中擴散
       \item 有機物於薄膜中擴散
     \end{itemize}
-    若是液體則通常適用Fick's First Law
+    若是液體或氣體則用Fick's First Law\\
+    用於二元系統 (後面會有詳細推導)
+    \begin{equation}
+      N_{Az} = J_{Az}+ x_A(N_{Az}+N_{Bz}) = -C D_{AB} \frac{dx_A}{dz} + x_A (N_{Az}+N_{Bz})
+    \end{equation}
+    而不管是什麼狀態，都可以使用經驗式
+    \begin{equation}
+      N_A = k_c\Delta C_A = k_y \Delta y_A = k_x \Delta x_A
+    \end{equation}
     \item Mass convection:\\
     當介質\fbox{流動}時，物質會跟著介質一起流動，而產生質量傳送\\
     會類似於熱傳導中的對流
@@ -366,7 +378,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
       \right)_{T,P}
     \end{equation}
     \fbox{$\mathbcal{D}_{AB}$ 比起 $D_{AB}$ 跟濃度更無關}\\
-    最後得到Fick's Law的形式
+    最後得到Fick's 1st Law的形式
     \begin{equation}
       \boxed{\vec{\bm N}_A = x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - C D_{AB} \nabla x_A} \label{eq:ficks_law_general}
     \end{equation}
@@ -593,6 +605,136 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     \nabla^2 C_A = 0
   \end{equation}
   此為Laplace Equation
+  \item 對比熱量輸送的經驗式$h$，因為氣體或液體的質傳行為複雜\\
+  因此在分子擴散外的，質傳對流有以下Governing Equation，及經驗式
+  \begin{itemize}
+    \item 微觀下多分子的能量平衡式:\\
+    Multicomponent Microscopic Energy Balance\\
+    會連結質量傳輸的部分
+    \begin{equation}
+      \underbrace{\frac{\partial}{\partial t}\left(
+        \rho \hat U + \frac{1}{2}\rho\left|\vec{\bm u}\right|^2
+      \right)}_{E_{\text{acc}}} = \underbrace{-\nabla\cdot \vec{\bm e}}_{E_{\text{in}}-E_{\text{out}}}
+      + \underbrace{\rho\left(\vec{\bm v}\cdot \vec{\bm g}\right)}_{E_{\text{gen}}}
+    \end{equation}
+    其中$\vec{\bm e}$為總能量通量:
+    \begin{equation}
+      \boxed{\vec{\bm e} = \left(\rho \hat U + \frac{1}{2}\rho\left|\vec{\bm u}\right|^2\right)\vec{\bm u} 
+      + \vec{\bm q} + \underbrace{ \overline{\overline{\bm \pi}} \cdot \vec{\bm u}}_{P\bm \delta\bm\delta 
+      + \overline{\overline{\bm \tau}}\cdot \vec{\bm u}}}
+    \end{equation}
+    對單物質系統
+    \begin{equation}
+      \vec{\bm q} = -k\nabla T
+    \end{equation}
+    對多物質系統
+    \begin{equation}
+      \vec{\bm q} = -k\nabla T + \sum_{i=1}^N \hat H_i \vec{\bm J}_i + \vec{\bm q}^{(T)}
+    \end{equation}
+    其中
+    \begin{align}
+      \hat H_i &= \left(\frac{\partial H}{\partial n_i}\right)_{T,P,n_j,j\neq i}, \quad \text{Molar Enthalpy of species }i\\
+      \vec{\bm J}_i &= \text{Diffusive Molar Flux of species }i\\
+      \vec{\bm q}^{(T)} &= \text{Duforer, Thermal Diffusion soret effect}
+    \end{align}
+    所以$\vec{\bm e}$又可以寫成其他形式
+    \begin{equation}
+      \boxed{\vec{\bm e} = \underbrace{\rho \hat U\vec{\bm u}}_{
+        \sum (C_i\hat H_i) \vec{\bm u}
+      } + \frac{1}{2}\rho\left|\vec{\bm u}\right|^2\vec{\bm u}
+      + \left(-k\nabla T + \sum_{i=1}^N \hat H_i \vec{\bm J}_i + \vec{\bm q}^{(T)}\right)
+      + P\bm \delta\bm\delta \cdot \vec{\bm u} + \overline{\overline{\bm \tau}}\cdot \vec{\bm u}}
+    \end{equation}
+    假設省略動能項$\frac{1}{2}\rho\left|\vec{\bm u}\right|^2\vec{\bm u}$
+    、Duforer effect$\vec{\bm q}^{(T)}$\\
+    耗散項$\overline{\overline{\bm \tau}} : \left(\nabla \vec{\bm u}\right)$、
+    變形項$P\bm \delta\bm\delta \cdot \vec{\bm u}$\\
+    則微觀能量方程式變成:
+    \begin{align}
+      \vec {\bm e} &= -k\nabla T + \sum_{i=1}^N \hat H_i \vec{\bm J}_i + \sum_i (C_i \hat H_i) \vec{\bm u}\\
+      \quad  &= -k\nabla T +\sum_{i=1}^N\left[
+        \hat H_i \left(\vec{\bm J}_i + C_i \vec{\bm u}\right)
+      \right] \nonumber\\
+      &= \boxed{-k\nabla T + \sum_{i=1}^N \hat H_i \vec{\bm N}_i}
+    \end{align}
+    若沒有重力，穩態下的微觀能量平衡，就跟Equation of Continuity一樣
+    \begin{equation}
+      \boxed{\nabla \cdot \vec{\bm e} = 0}
+    \end{equation}
+    \item  對流質量傳輸產生的條件:
+      \begin{enumerate}
+        \item 某成分有濃度差
+        \item 有流動的連續介質
+      \end{enumerate}
+    \item 二元對流的質量傳輸
+      \begin{equation}
+        \boxed{\vec{\bm N}_A = k_c\cdot \Delta C_A = k_c\left(C_{A_1}-C_{A_2}\right)=k_c\cdot C\cdot\left(y_{A_1}-y_{A_2}\right)}
+      \end{equation}
+      $k_c$是質量傳輸係數\\
+      也可以寫成壓力單位下:
+      \begin{equation}
+        \boxed{\vec{\bm N}_A = k_c\Delta C_A = k_p\Delta p_A = k_y\Delta y_A}
+      \end{equation}
+      $k_p$是壓力單位下的傳輸係數，$k_y$是莫爾單位下的傳輸係數\\
+      P.S. $k_y = k_p\cdot P = k_c C$\\
+      同熱對流的$h$，質量傳輸係數$k_{c,p,y}$也很難獲得\\
+      因為會受容器的形狀、流速、流動方式、流體的物性(密度、黏度、熱容、熱導係數)、質傳方式而影響\\
+      通常使用質量傳輸經驗式，計算，再代入獲得$k_{c,p,y}$
+    \item 而對比熱對流會用Nusselt Number或Stanton Number (Heat) 來求出$h$\\
+      質傳會用Sherwood Number或Stanton Number (Mass)來求出$k_c,k_y,k_p$
+  \end{itemize}
+  \item 小結，解題分類:
+  \begin{itemize}
+    \item 多為二元系統，一維、穩態\\
+    不是就乖乖搞Maxwell-Stefan Diffusion(\ref{eq:maxwell_stefan_diffusion})
+    \begin{equation}
+      C_A \nabla \mu_A = \frac{RT}{\mathbcal{D}_{AB}} \left(
+        x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
+      \right)
+    \end{equation}
+    \item 若為固體，則可以使用Fick's Law
+    \begin{equation}
+      \vec{\bm J}_A = - D_{AB} \nabla C_A
+    \end{equation}
+    \item 若為流體，則分子擴散+質傳對流，可分為以下幾種情形\\
+    可以說是簡單的質傳問題
+    \begin{enumerate}
+      \item 沒有反應，且一個物質靜止(Stagnant)
+      \begin{equation}
+        \vec{\bm N}_B = 0 \implies \vec{\bm N}_A = - C D_{AB} \nabla x_A
+      \end{equation}
+      \item 沒有反應，A和B是等莫耳交換流(由一方驅動，另一方填補)
+      \begin{equation}
+        \vec{\bm N}_A = -\vec{\bm N}_B \implies \vec{\bm N}_A = \frac{-C D_{AB}}{1-2x_A} \nabla x_A
+      \end{equation}
+      \item 沒有反應，A和B其中一方非常稀薄(Dilute Solution)
+      \begin{equation}
+        x_A \to 0 \quad \text{or}\quad x_B \to 0 \implies \vec{\bm N}_A = - C D_{AB} \nabla x_A
+      \end{equation}
+      \item 沒有反應\\
+      使用Fick's First Law的完整形式
+      \begin{equation}
+        \vec{\bm N}_A = x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - C D_{AB} \nabla x_A
+      \end{equation}
+      \item 有反應，但反應是非勻相反應(Heterogeneous Reaction)
+      \item 有反應，且反應是勻相反應(Homogeneous Reaction)
+      \item 有反應，但是是孔洞觸媒的反應
+    \end{enumerate}
+    以上這幾種的解題，又分成短時間與長時間的質傳問題\\
+    兩者都算是穩態，但長時間則變成假的穩態(Quasi-Steady State)\\
+    和必須要用非穩態算的不同，簡單的質傳問題\\
+    會假設擴散需要的時間遠小於巨觀變化(例如液面下降)所需時間\\
+    長時間的問題，只是在算完擴散項後，再帶入巨觀變化的方程式中\\
+    而不是直接把兩個變化同時算在一起
+    \item 雖然是二維，但沒有反應、穩態
+    \begin{equation}
+      \frac{\partial^2 C_A}{\partial x^2} + \frac{\partial^2 C_A}{\partial y^2} = 0
+    \end{equation}
+    \item 一維、沒有反應，但不是穩態
+    \begin{equation}
+      \frac{\partial C_A}{\partial t} = D_{AB} \frac{\partial^2 C_A}{\partial x^2}
+    \end{equation}
+  \end{itemize}
 \end{itemize}
 \item 擴散係數的影響因子(依照重要程度排序)
 \begin{enumerate}
@@ -611,15 +753,44 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
   \item 壓力(分子數量):\\
    壓力越高，分子間距越小，擴散係數越小
 \end{enumerate}
-\item 對比熱量輸送的經驗式$h$，因為氣體或液體的質傳行為複雜\\
-故統合為一個如$h$一般的質傳係數$k_c,k_y,k_p$\\
-這些數值通常無法直接計算，只能透過實驗或邊界條件下的質量或能量守恆來得到:
-\begin{equation}
-  \boxed{N_A=k_c\Delta(C_A) = k_y \Delta (y_A) = k_p \Delta (P_A)}
-\end{equation}
-$k_c,k_y,k_p$分別為以濃度、莫耳分率、分壓表示的質傳係數\\
-而對比熱對流會用Nusselt Number或Stanton Number (Heat) 來求出$h$\\
-質傳會用Sherwood Number或Stanton Number (Mass)來求出$k_c,k_y,k_p$
+故分子的擴散可以根據平均自由徑$\lambda$分成兩種\\
+平均自由徑$\lambda$是指分子兩次碰撞之間的平均距離
+\begin{enumerate}
+  \item Molecular Diffusion(分子擴散):\\
+  當$\lambda$遠小於系統的特徵長度$d$時，分子擴散佔主導地位\\
+  此時分子間頻繁碰撞，擴散行為可用Fick's Law描述
+  \item Knudsen Diffusion(克努森擴散):\\
+  當例如在孔洞中，$\lambda$遠大於系統的特徵長度$d$時，克努森擴散佔主導地位\\
+  那碰撞就不在跟其他分子，而是跟孔洞壁面碰撞\\
+  此時擴散行為可用Knudsen擴散方程式描述
+  \begin{equation}
+    D_{K} = \frac{2}{3} r_p \sqrt{\frac{8RT}{\pi M}}
+  \end{equation}
+  其中$r_p$是孔洞半徑
+\end{enumerate}
+\item 質傳的四大定律(經驗式):
+\begin{itemize}
+  \item Film Theory(薄膜定律)
+    \begin{equation}
+      k_c \propto D_{AB}
+    \end{equation}
+  \item Penetration Theory(穿透定律)
+    \begin{equation}
+      k_c \propto \sqrt{D_{AB}}
+    \end{equation}
+  \item Boundary Layer Theory(邊界層定律)
+    \begin{equation}
+      k_c \propto D_{AB}^{\frac{2}{3}}
+    \end{equation}
+  \item Two Films Theory(雙薄膜定律)
+    \begin{equation}
+      \frac{1}{K_y} = \frac{1}{k_{y}} + \frac{m'}{k_x}
+    \end{equation}
+    或
+    \begin{equation}
+      \frac{1}{K_x} = \frac{1}{k_x} + \frac{1}{ky\cdot m''}
+    \end{equation}
+\end{itemize}
 \item 無因次群:
 \begin{itemize}
   \item Schmidt Number:
@@ -686,12 +857,22 @@ $k_c,k_y,k_p$分別為以濃度、莫耳分率、分壓表示的質傳係數\\
   \begin{equation}
     \frac{k_c}{u_\infty} = \text{St}_M = \frac{C_f}{2} = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}}
   \end{equation}
-  \item Colburn Analogy:(適用於$0.6<\text{Sc}<2500$) (P.S. 熱對流那邊是$0.5<\text{Pr}<50$)
+  P.S. 回顧熱對流那邊，如果Pr也等於1，則有Complete Reynolds Analogy:
+  \begin{equation}
+    St_H = St_M = \frac{C_f}{2} = \frac{\text{Nu}}{\text{Re}\cdot\text{Pr}}
+  \end{equation}
+  也就是說當Sc=Pr=1時，熱質傳行為相同
+  \begin{equation}
+    \text{Sc} = \text{Pr} = 1 \implies St_H = St_M = \frac{C_f}{2}
+  \end{equation}
+  \item Colburn Analogy:(適用於$0.6<\text{Sc}<2500$)\\
+   (P.S. 熱對流那邊是$0.5<\text{Pr}<50$)\\
+   可以說是Modified Reynolds Analogy
   \begin{equation}
     j_D = \text{St}_M\cdot \text{Sc}^{\frac{2}{3}} = \frac{C_f}{2}
   \end{equation}
   $j_D$是Colburn $j$ factor for mass transfer\\
-  所以:
+  所以有Complete Colburn Analogy:
   \begin{equation}
     j_H =  j_D = \frac{C_f}{2},\quad 0.6<\text{Sc}<2500,\quad 0.5<\text{Pr}<50
   \end{equation}

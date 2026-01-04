@@ -1,6 +1,386 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 \begin{CJK*}{UTF8}{bkai}
-\subsection{質量輸送，非穩態、邊界層}
+\subsection{質量輸送，Two-Film Theory}
+\begin{itemize}
+  \item Two-Films Theory\\
+  又稱為Two-Resistance Theory，可用於\\
+  吸收塔(氣體A$\to$液體A)、氣提塔(液體A$\to$氣體A)、萃取塔(液體A$\to$另一液體A)\\
+  雙膜理論的想法是，希望可以將兩相各自的質傳係數配合液氣間的物化關係\\
+  看成一個整體都是氣相或液相的質傳係數\\
+  就如同熱量傳輸時把熱阻相加一樣\\
+  所以必須成立的兩個假設是:
+  \begin{enumerate}
+    \item A於兩相接觸面達到平衡兩相的平衡
+    \item 在兩相接觸面的兩邊都分別存在一個Stagnant film\\
+    在此膜內，質傳只有分子擴散
+  \end{enumerate}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw [dashed] (0,0) -- (0, 5);
+      \node at (-2.5, 5) {Liquid};
+      \node at (2.5, 5) {Gas};
+      \node[anchor=south] at (0,5) {Interface};
+      \node[anchor=north,red] at (0,0) {熱傳};
+      \draw[->, blue] (2,0.5) -- (0.3,0.5) node[midway, below] {質傳};
+      \draw[->, blue] (-0.3,0.5) -- (-2,0.5) node[midway, below] {質傳};
+      \node[blue, anchor=west] at (2,0.5) {$N_A$};
+      \node[blue, anchor=east] at (-2,0.5) {$N_A$};
+      \draw[->, blue] (5,4) .. controls (3,4) and (1,4) .. (0.3,2.5);
+      \draw[dashed, red] (0.3,5) rectangle (-0.3,0);
+      \draw[->, blue] (-0.3,2.0) .. controls (-1,0.8) and (-2,0.8) .. (-5,0.8);
+      \node[anchor=south, blue] at (5,4) {$y_{A,g}\to x_{A}^\ast$};
+      \node[anchor=north] at (5,4) {$x_{A}^\ast = \frac{y_{A,g}}{H_A}$};
+      \node[anchor=west, blue] at (0.3,2.5) {$y_{A,i}$};
+      \node[anchor=south, blue] at (-5,0.8) {$x_{A,l}\to y_A^\ast$};
+      \node[anchor=north] at (-5,0.8) {$y_A^\ast = H_A x_{A,l}$};
+      \node[anchor=east, blue] at (-0.3,2.0) {$x_{A,i}$};
+      \fill[pattern=north east lines, pattern color=red] (-0.3,2) rectangle (0.3,2.5);
+      \draw[dashed, red] (-0.3,2) -- (0.3,2);
+      \draw[dashed, red] (-0.3,2.5) -- (0.3,2.5);
+      \draw[dashed, blue!50] (0.3,2.5) rectangle (5,4);
+      \node[anchor=south] at (2.65,2.5) {Local Gas Phase};
+      \node[anchor=north] at (2.65,2.5) {質傳係數$k_y$};
+      \draw[dashed, blue!50] (-5,0.8) rectangle (-0.3,2);
+      \node[anchor=north] at (-2.65,2) {Local Liquid Phase};
+      \node[anchor=south] at (-2.65,2) {質傳係數$k_x$};
+      \node[anchor=north west, red] at (0.3,2) {亨利定律,$\color{black}\frac{y_{A,i}}{x_{A,i}}=H_A$};
+    \end{tikzpicture}
+    \caption{Two-Film Theory示意圖}
+  \end{figure}
+  物質A於兩相間的質傳現象\\
+  因為$A$與氣體與液體之間達成相平衡，而且在假設$A$的濃度很低\\
+  可以說$A$在氣相與液相的濃度符合亨利定律(Henry's Law)
+  \begin{equation}
+    y_{A} = \frac{k_A}{P} x_{A} = H_A x_{A} \label{eq:ch4_4_henry_law_frac}
+  \end{equation}
+  P.S. $k_A$單位是$\text{atm}$，為亨利常數\\
+  $H_A\equiv\frac{k_A}{P}$是無因次的亨利常數，在恆溫下為定值($k_A(T)$為溫度的函數)\\
+  也可以換成以濃度來表示的
+  \begin{equation}
+    y_AP = P_A = x_A k_A = \frac{C_A}{C}k_A = H_A' C_A
+  \end{equation}
+  $H_A' \equiv \frac{k_A}{C}$是以濃度表示的亨利常數，單位是$\frac{\text{atm}}{\text{mol/L}}$，在恆溫下為定值\\
+  而(\ref{eq:ch4_4_henry_law_frac})可以寫為:
+  \begin{equation}
+    H_A = \frac{y_A}{x_A}
+  \end{equation}
+  也就是上圖中交界面的斷層差\\
+  如果\fbox{$H_A>1$，$y_A>x_A$，表示$A$較喜歡在氣相中}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw [dashed] (0,0) -- (0, 3);
+      \draw [->] (3,3) .. controls (2,3) and (1,3) .. (0.3,1.5);
+      \draw [->] (-0.3,1.0) .. controls (-1,0.5) and (-2,0.5) .. (-3,0.5);
+      \node[anchor=south] at (1.5,3) {G};
+      \node[anchor=south] at (-1.5,3) {L};
+      \draw[dashed, ->] (0.3,1.5) -- (-0.3,1.0);
+    \end{tikzpicture}
+    \caption{雙膜理論，A不易溶於液相中}
+  \end{figure}
+  如果\fbox{$H_A<1$，$y_A<x_A$，表示$A$較喜歡在液相中}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw [dashed] (0,0) -- (0, 3);
+      \draw [->] (3,3) .. controls (2,3) and (1,3) .. (0.3,1.5);
+      \def\yShift{1.3}
+      \draw [->] (-0.3,1.0+\yShift) .. controls (-1,0.5+\yShift) and (-2,0.5+\yShift) .. (-3,0.5+\yShift);
+      \node[anchor=south] at (1.5,3) {G};
+      \node[anchor=south] at (-1.5,3) {L};
+      \draw[dashed, ->] (0.3,1.5) -- (-0.3,1.0+\yShift);
+    \end{tikzpicture}
+    \caption{雙膜理論，A易溶於液相中}
+  \end{figure}
+  而根據質傳定律，可以寫出一個通式，與四個質傳方程式:\\
+  通式:
+  \begin{equation}
+    N_A = \underbrace{\left(\text{質傳係數}\right)}_{\text{後求}}\times\underbrace{\left(\text{質傳驅動力}\right)}_{\text{先求}}
+  \end{equation}
+  根據兩相的濃度差，求出質傳驅力，此為Local Phase\\
+  液相$A$濃度差是$x_{A,i}-x_{A,l}$，氣相$A$濃度差是$y_{A,g}-y_{A,i}$\\
+  質傳係數分別是$k_x,k_y$\\
+  接著\fbox{將進入交換區的$y_{A,g},x_{A,l}$硬根據亨利定律換算成$x_A^\ast,y_A^\ast$}\\
+  然後根據兩相整個一起看的最大濃度差，此為Overall Phase\\
+  而氣相是指假設整塊都是氣相，$\boxed{y_{A,g}-y_A^\ast}$，質傳係數是$K_y$\\
+  液相是指假設整塊都是液相，$\boxed{x_A^\ast - x_{A,l}}$，質傳係數是$K_x$\\
+  P.S.\\
+  若操作上是等莫爾交換A與B，則擴散係數$k_y,k_x$\\
+  會改成Equimolar的擴散係數$k'_y,k'_x$\\
+  同理整體的擴散係數$K_y,K_x$\\
+  也會改成Equimolar的擴散係數$K'_y,K'_x$\\
+  則會有以下四個質傳方程式:\\
+  (都是質傳係數乘以質傳驅動力的形式，以上圖的箭頭前後高度差可以看出)
+  \begin{enumerate}
+    \item  Local Gas Phase:
+      \begin{equation}
+        N_A = k_y\left(y_{A,g}-y_{A,i}\right),\quad \text{或}\quad N_A = k'_y\left(y_{A,g}-y_{A,i}\right)
+      \end{equation}
+    \item Local Liquid Phase:
+      \begin{equation}
+        N_A = k_x\left(x_{A,i}-x_{A,l}\right), \quad \text{或}\quad N_A = k'_x\left(x_{A,i}-x_{A,l}\right)
+      \end{equation}
+    \item Overall Gas Phase:
+      \begin{equation}
+        N_A = K_y\left(y_{A,g}-y_A^\ast\right), \quad \text{或}\quad N_A = K'_y\left(y_{A,g}-y_A^\ast\right)
+      \end{equation}
+    \item Overall Liquid Phase:
+      \begin{equation}
+        N_A = K_x\left(x_A^\ast-x_{A,l}\right), \quad \text{或}\quad N_A = K'_x\left(x_A^\ast-x_{A,l}\right)
+      \end{equation}
+  \end{enumerate}
+  P.S. \fbox{這四條方程的$N_A$都是相等的，因為質傳是連續的}\\
+  一般題目都會假設在Equimolar Counterdiffusion下的情形\\
+  能消去Fick's 1st law的第二項$y_A(N_A+N_B)$\\
+  再困難一些會假設再$B$是Stagnant的情形\\
+  只能消去$N_B$，但會多出一個$y_A$項目，而只能用Try-and-Error的方式求解
+  \begin{itemize}
+    \item 假設是Equimolar Counterdiffusion，$N_A=-N_B$\\
+      Local Phase\\
+      根據Fick's 1st Law，在氣相中:
+      \begin{align}
+        N_A &= -D_{AB}C_g\frac{dy_A}{dz}+y_A\cancel{\left(N_A+N_B\right)} \nonumber\\
+        &= -D_{AB}C_g\frac{dy_A}{dz}
+      \end{align}
+      積分後得到:
+      \begin{equation}
+        N_A = \frac{D_{AB}C_g}{L}\left(y_{A,g}-y_{A,i}\right)
+      \end{equation}
+      因此找到了質傳係數
+      \begin{equation}
+        \boxed{k'_y = \frac{D_{AB}C_g}{L}}
+      \end{equation}
+      同理，在液相中:
+      \begin{equation}
+        N_A = \frac{D_{AB}C_l}{L}\left(x_{A,i}-x_{A,l}\right)
+      \end{equation}
+      因此找到了質傳係數:
+      \begin{equation}
+        \boxed{k'_x = \frac{D_{AB}C_l}{L}}
+      \end{equation}
+      P.S. \fbox{Overall Phase的那兩個質傳係數$K'_y,K'_x$，不是從這裡來的哦!}\\
+      已知$y_{A,g}, x_{A,l}$，想要求出交界面的濃度$y_{A,i}, x_{A,i}$\\
+      將兩個Local Phase的式子合併:
+      \begin{align}
+        &k'_y\left(y_{A,g}-y_{A,i}\right) = k'_x\left(x_{A,i}-x_{A,l}\right) \nonumber\\
+        \implies \quad & \frac{y_{A,g}-y_{A,i}}{x_{A,i}-x_{A,l}} = \frac{k'_x}{k'_y} \nonumber\\
+        & \frac{\boxed{y_{A,g}}-y_{A,i}}{\boxed{x_{A,l}}-x_{A,i}} = -\boxed{\frac{k'_x}{k'_y}}
+      \end{align}
+      可以發現框起來的是已知，左邊可以想成是\\
+      點($x_{A,l},y_{A,g}$)，和點($x_{A,i},y_{A,i}$)相減的$\frac{\Delta y}{\Delta x}$\\
+      因為$\frac{k'_x}{k'_y}$是已知的常數，會是定值\\
+      所以$(x_{A,i},y_{A,i})$會是在一條斜率為$-\frac{k'_x}{k'_y}$的直線上\\
+      只要將已知的點($x_{A,l},y_{A,g}$)帶入，畫出斜率為$-\frac{k'_x}{k'_y}$的直線\\
+      並利用亨利定律決定該直線上的哪一點($y_{A,i}=H_A x_{A,i}$)
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw[->] (0,0) -- (5,0) node[right] {$x_A$};
+          \draw[->] (0,0) -- (0,5) node[above] {$y_A$};
+          \draw[dashed] (0,4) -- (1,4);
+          \draw[dashed] (1,0) -- (1,4);
+          \fill[black] (1,4) circle (2pt);
+          \node[anchor=south] at (1,4) {$(x_{A,l},y_{A,g})$};
+          \node[anchor=east] at (0,4) {$y_{A,g}$};
+          \node[anchor=north] at (1,0) {$x_{A,l}$};
+          \draw[->] (1,4) -- (4.5,0.5);
+          \node[anchor=south west] at (2.5,2.5) {$m=-\frac{k'_x}{k'_y}$};
+          \path[name path=line1] (0,0) .. controls (3,0) and (5,2) .. (5,5);
+          \path[name path=line2] (1,4) -- (4.5,0.5);
+          \path[name intersections={of=line1 and line2, by=I}];
+          \fill[red] (I) circle (2pt);
+          \draw[red] (0,0) .. controls (3,0) and (5,2) .. (5,5);
+          \node[anchor=west,red] at (5,5) {$y_{A}=\frac{k_A(T)}{P}x_{A}$};
+          \node[anchor=west,red] at (I) {$(x_{A,i},y_{A,i})$};
+          \draw[dashed] (I) -- (I|-0,0) node[anchor=north] {$x_{A,i}$};
+          \draw[dashed] (I) -- (0,0 |- I) node[anchor=east] {$y_{A,i}$};
+        \end{tikzpicture}
+        \caption{已知邊界濃度，求交界面濃度示意圖}
+      \end{figure}
+      當題目假設濃度很稀薄，且亨利定律在各溫度下為定值，則可用代數法，得到($x_{A,i},y_{A,i}$)
+      \begin{align}
+        &\frac{y_{A,g}-y_{A,i}}{x_{A,i}-x_{A,l}} = -\frac{k'_x}{k'_y} \nonumber\\
+        \implies \quad & y_{A,g}-y_{A,i} = -\frac{k'_x}{k'_y}\left(x_{A,i}-x_{A,l}\right) \nonumber\\
+        \implies \quad & y_{A,g} + \frac{k'_x}{k'_y} x_{A,l} = y_{A,i} + \frac{k'_x}{k'_y} x_{A,i} \nonumber\\
+        \implies \quad & y_{A,g} + \frac{k'_x}{k'_y} x_{A,l} = H_A x_{A,i} + \frac{k'_x}{k'_y} x_{A,i} \nonumber\\
+        \implies \quad & y_{A,g} + \frac{k'_x}{k'_y} x_{A,l} = \left(H_A + \frac{k'_x}{k'_y}\right) x_{A,i} \nonumber\\
+        \implies \quad & \boxed{x_{A,i} = \frac{y_{A,g} + \frac{k'_x}{k'_y} x_{A,l}}{H_A + \frac{k'_x}{k'_y}}}
+      \end{align}
+    \item 假設$B$是Stagnant，也就是$B$不會擴散到$A$，則\\
+    Local Phase\\
+    根據Fick's 1st Law，在氣相中:
+    \begin{align}
+      N_A &= -D_{AB} C\cdot \frac{dy_A}{dz}+y_A\left(N_A+\cancel{N_B}\right) \nonumber\\
+      &= -D_{AB} C\cdot \frac{dy_A}{dz}+y_A N_A \nonumber\\
+      \Rightarrow N_A\left(1-y_A\right) &= -D_{AB} C_g\cdot \frac{dy_A}{dz} \nonumber\\
+      \Rightarrow N_A &= -\frac{D_{AB}C_g}{1-y_A}\cdot \frac{dy_A}{dz}
+    \end{align}
+    積分:
+    \begin{align}
+      N_A\int_{0}^{Lg} dz &= -D_{AB}C_g\int_{y_{A,g}}^{y_{A,i}} \frac{1}{1-y_A} dy_A \nonumber\\
+      N_A L_g &= \left(
+        \frac{D_{AB}C_g}{1-y_A}
+      \right)\ln \left(\frac{1-y_{A,i}}{1-y_{A,g}}\right) \nonumber\\
+      \Rightarrow N_A &= \frac{D_{AB}C_g}{L_g}\cdot \ln \left(\frac{1-y_{A,i}}{1-y_{A,g}}\right)
+    \end{align}
+    而$\frac{D_{AB}C_g}{L_g}$是氣相中Equimolar的質量傳輸係數$k'_y$\\
+    將常數換掉後可寫成這樣:
+    \begin{equation}
+      N_A = k_y'\ln\left(
+        \frac{1-y_{A,i}}{1-y_{A,g}}
+      \right)
+    \end{equation}
+    定義Log Mean Concentration Difference:
+    \begin{equation}
+      \text{LM} = \frac{\mcirc{2}-\mcirc{1}}{\ln\left(\frac{\mcirc{2}}{\mcirc{1}}\right)} \label{eq:ch4_4_log_mean_concentration_difference}
+    \end{equation}
+    則可以將$N_A$換出LM:
+    \begin{align}
+       N_A &= k_y'\ln\left(
+        \frac{1-y_{A,i}}{1-y_{A,g}}
+      \right) \nonumber\\
+      &= k_y' \cdot \frac{y_{A,g}-y_{A,i}}{\frac{y_{A,g}-y_{A,i}}{ \ln\left(
+        \frac{1-y_{A,i}}{1-y_{A,g}}
+      \right)}} \nonumber\\
+      &= k_y' \cdot \frac{y_{A,g}-y_{A,i}}{
+        \frac{(1-y_{A,i})-(1-y_{A,g})}{\ln\left(
+          \frac{1-y_{A,i}}{1-y_{A,g}}
+        \right)}} \nonumber\\
+      &= k_y' \cdot \frac{y_{A,g}-y_{A,i}}{\left[1-y_A\right]_{i, LM}}
+    \end{align}
+    所以換句話說$k_y$會是$k_y'$的函數:
+    \begin{equation}
+      \boxed{k_y = \frac{k_y'}{\left[1-y_A\right]_{i, LM}},
+      \quad N_A = k_y\left(y_{A,g}-y_{A,i}\right)}
+    \end{equation}
+    同理，在液相中:
+    \begin{equation}
+      \boxed{k_x = \frac{k_x'}{\left[1-x_A\right]_{i, LM}},
+      \quad N_A = k_x\left(x_{A,i}-x_{A,l}\right)}
+    \end{equation}
+    \item 從Local Phase的質傳係數，求Overall Phase的質傳係數\\
+    此步驟為純粹的數學推導，能獲得兩個如電阻並聯的關係式
+    \begin{equation}
+      I\to\text{相同的Flux} = \frac{V}{R}  
+    \end{equation}
+    以及一個很直觀的合比定律
+    \begin{equation}
+      \left.
+      \begin{matrix}
+        \frac{A1}{B1} = N_A \\
+        \\
+        \frac{A2}{B2} = N_A \\
+      \end{matrix}\right\} \implies \underbrace{\frac{A1 + A2}{B1 + B2}}_{\text{新的V/R}} = N_A
+    \end{equation}
+    以氣相為例，將氣相Local Phase的式子，與氣相Overall Region寫成歐姆定律的形式:
+    \begin{align}
+      N_A &= \frac{y_{A,g}-y_{A,i}}{\frac{1}{k_y}} \label{eq:ch4_4_local_gas_ohm}\\
+      N_A &= \frac{y_{A,g}-y_A^\ast}{\frac{1}{K_y}} \label{eq:ch4_4_overall_gas_ohm}
+    \end{align}
+    將Overall Region的驅動力，拆出Local Phase的部分($y_{A,g}-y_{A,i}$)
+    \begin{equation}
+      N_A = \frac{y_{A,g}-y_A^\ast}{\frac{1}{K_y}} =
+      \frac{\left(y_{A,g}-y_{A,i}\right)+\left(y_{A,i}-y_A^\ast\right)}{\frac{1}{K_y}}
+    \end{equation}
+    將液相的Local Phase的式子，改寫成上式多出的$y_{A,i}-y_A^\ast$:
+    \begin{align}
+      N_A &= k_x\left(x_{A,i}-x_{A,l}\right) \nonumber\\
+      &= k_x\frac{y_{A,i}-y_A^\ast}{\frac{y_{A,i}-y_A^\ast}{x_{A,i}-x_{A,l}}}
+    \end{align}
+    並定義$m'$(取名來自於斜率的感覺)
+    \begin{equation}
+      m' = \frac{y_{A,i}-y_A^\ast}{x_{A,i}-x_{A,l}}
+    \end{equation}
+    則可以將上式改寫為歐姆定律的形式:
+    \begin{equation}
+      N_A = \frac{y_{A,i}-y_A^\ast}{\frac{m'}{k_x}} \label{eq:ch4_4_local_liquid_ohm}
+    \end{equation}
+    最後，利用合比定律，將(\ref{eq:ch4_4_local_gas_ohm})與(\ref{eq:ch4_4_local_liquid_ohm})\\
+    分子與分子相加，分母與分母相加，得到:
+    \begin{equation}
+      N_A = \frac{\left(y_{A,g}-y_{A,i}\right)+\left(y_{A,i}-y_A^\ast\right)}{\frac{1}{k_y}+\frac{m'}{k_x}}
+    \end{equation}
+    會等同於(\ref{eq:ch4_4_overall_gas_ohm})，因此可以得到:
+    \begin{equation}
+      \boxed{\frac{1}{K_y} = \frac{1}{k_y}+\frac{m'}{k_x}}
+    \end{equation}
+    同理，在液相中\\
+    由Local Phase與Overall Phase的歐姆定律形式:
+    \begin{align}
+      N_A &= \frac{x_{A,i}-x_{A,l}}{\frac{1}{k_x}} \\
+      N_A &= \frac{x_A^\ast - x_{A,l}}{\frac{1}{K_x}}
+    \end{align}
+    將Overall Phase的驅動力拆出Local Phase的部分($x_{A,i}-x_{A,l}$):
+    \begin{equation}
+      N_A = \frac{\left(x_{A,i}-x_{A,l}\right)+\left(x_A^\ast - x_{A,i}\right)}{\frac{1}{K_x}}
+    \end{equation}
+    將氣相的Local Phase的式子，改寫成上式多出的$x_A^\ast - x_{A,i}$:
+    \begin{align}
+      N_A &= k_y\left(y_{A,g}-y_{A,i}\right) \nonumber\\
+      &= k_y\frac{x_A^\ast - x_{A,i}}{\frac{x_A^\ast - x_{A,i}}{y_{A,g}-y_{A,i}}}
+    \end{align}
+    其中$m''$定義為(注意為了保持$y/x$的形式，分子分母互換):
+    \begin{equation}
+      m'' = \frac{y_{A,g}-y_{A,i}}{x_A^\ast - x_{A,i}}
+    \end{equation}
+    則可以將上式改寫為歐姆定律的形式:
+    \begin{equation}
+      N_A = \frac{x_A^\ast - x_{A,i}}{\frac{1}{m'' k_y}} \label{eq:ch4_4_local_gas_ohm_2}
+    \end{equation}
+    最後，利用合比定律，將液相與氣相的Local Phase的式子\\
+    分子與分子相加，分母與分母相加，得到:
+    \begin{equation}
+      N_A = \frac{\left(x_{A,i}-x_{A,l}\right)+\left(x_A^\ast - x_{A,i}\right)}{\frac{1}{k_x}+\frac{1}{m'' k_y}}
+    \end{equation}
+    會等同於Overall Phase的式子，因此可以得到:
+    \begin{equation}
+      \boxed{\frac{1}{K_x} = \frac{1}{k_x}+\frac{1}{m'' k_y}}
+    \end{equation}
+    \item 圖形上的意義:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick, scale=1.6]
+        \draw[->] (0,0) -- (6,0) node[right] {$x_A$};
+        \draw[->] (0,0) -- (0,5) node[above] {$y_A$};
+        \draw[dashed] (0,4) -- (1,4);
+        \draw[dashed] (1,0) -- (1,4);
+        \fill[black] (1,4) circle (2pt);
+        \node[anchor=south] at (1,4) {$(x_{A,l},y_{A,g})$};
+        \node[anchor=east] at (0,4) {$y_{A,g}$};
+        \node[anchor=north] at (1,0) {$x_{A,l}$};
+        \draw[->] (1,4) -- (4.5,0.5);
+        \path[name path=line1] (0,0) .. controls (2,0) and (5,3) .. (5,5);
+        \path[name path=line2] (1,4) -- (4.5,0.5);
+        \path[name path=v1] (1,0) -- (1,5);
+        \path[name path=h1] (0,4) -- (5,4);
+        \path[name intersections={of=line1 and line2, by=I}];
+        \fill[black] (I) circle (2pt);
+        \path[name intersections={of=v1 and line1, by=I2}];
+        \fill[blue] (I2) circle (2pt);
+        \path[name intersections={of=h1 and line1, by=I3}];
+        \fill[red] (I3) circle (2pt);
+        \draw[dashed] (1,4) -- (I3);
+        \draw[dashed, red,->] (I3) -- (I3|-0,0) node[anchor=north] {$x_A^\ast$};
+        \draw[dashed, blue,->] (I2) -- (0,0 |- I2) node[anchor=east] {$y_A^\ast$};
+        \draw[black] (0,0) .. controls (2,0) and (5,3) .. (5,5);
+        \node[anchor=west,black] at (5,5) {$y_{A}=\frac{k_A(T)}{P}x_{A}$};
+        \node[anchor=west,black] at (I) {$(x_{A,i},y_{A,i})$};
+        \draw[dashed] (I) -- (I|-0,0) node[anchor=north] {$x_{A,i}$};
+        \draw[dashed] (I) -- (0,0 |- I) node[anchor=east] {$y_{A,i}$};
+        \draw[dashed, blue] (I2) -- (I) node[midway, above left] {$m'$};
+        \draw[dashed, red] (I3) -- (I) node[midway, above left] {$m''$};
+        \draw (1,4) -- (I) node[midway, above right] {$m$};
+        \node[anchor=west, blue] at (I2) {$(x_{A,l},y_A^\ast)$};
+        \node[anchor=west] at (I3) {$(x_A^\ast,y_{A,g})$};
+        \node[blue, anchor=west] at (6.5,1) {\large$m' = \frac{y_{A,i}-y_A^\ast}{x_{A,i}-x_{A,l}}$};
+        \node[red, anchor=west] at (6.5,3) {\large$m'' = \frac{y_{A,g}-y_{A,i}}{x_A^\ast - x_{A,i}}$};
+        \node[anchor=west] at (6.5,2) {\large$m = -\frac{k'_x}{k'_y} = \frac{y_{A,g}-y_{A,i}}{x_{A,l}-x_{A,i}}$};
+      \end{tikzpicture}
+      \caption{質傳係數與斜率的關係示意圖}
+    \end{figure}
+  \end{itemize}
+\end{itemize}
 \end{CJK*}
 \end{document}

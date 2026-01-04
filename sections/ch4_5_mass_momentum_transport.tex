@@ -1,7 +1,7 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 \begin{CJK*}{UTF8}{bkai}
-\subsection{質量輸送，質量與動量一起傳輸}
+\subsection{質量輸送，質量與動量一起傳輸、Penetration Theory}
 \begin{itemize}
   \item Mass transfer for a rotating disk
   \begin{enumerate}
@@ -183,6 +183,286 @@
         \end{tikzpicture}
       \caption{Stanton number as a function of Schmidt number}
       \end{figure}
+  \end{enumerate}
+  \item 滲透理論 (Penetration Theory)
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) -- (0,6);
+      \draw [<->] (-0.6, 0 )-- (-0.6, 6) node [midway, fill=white] {$L$};
+      \fill[pattern=north east lines] (0,0) rectangle (-0.3, 6);
+      \draw[dashed] (3,0) -- (3,6);
+      \node at (5,3.5) {Gas A};
+      \draw[->] (3,6) -- (2,6) node[left] {$x$};
+      \draw[dashed] (3,6) -- (4,6);
+      \draw[->] (3.5, 6) -- (3.5,5) node[below] {$z$};
+      \draw[blue] (0,4) -- (3,4);
+      \draw[blue, dashed] (0,4) .. controls (0,3) and (2,3) .. (3,3);
+      \path[name path=A] (0,4) .. controls (0,3) and (2,3) .. (3,3);
+      \path[name path=Ba] (0.5,4) -- (0.5,2);
+      \path[name path=Bb] (1,4) -- (1,2);
+      \path[name path=Bc] (1.5,4) -- (1.5,2);
+      \path[name path=Bd] (2,4) -- (2,2);
+      \path[name path=Be] (2.5,4) -- (2.5,2);
+      \path[name intersections={of=A and Ba, by=Ca}];
+      \path[name intersections={of=A and Bb, by=Cb}];
+      \path[name intersections={of=A and Bc, by=Cc}];
+      \path[name intersections={of=A and Bd, by=Cd}];
+      \path[name intersections={of=A and Be, by=Ce}];
+      \draw[blue, ->] (0.5,4) -- (Ca);
+      \draw[blue, ->] (1,4) -- (Cb);
+      \draw[blue, ->] (1.5,4) -- (Cc);
+      \draw[blue, ->] (2,4) -- (Cd);
+      \draw[blue, ->] (2.5,4) -- (Ce);
+      \node[anchor=south] at (1.5, 4) {$u_z(x)$};
+      \draw[<->] (2,0.5) -- (3,0.5) node[midway, below] {$\delta$};
+      \draw[red,dashed] (2,0) -- (2,6);
+      \draw[red] (0,2) -- (3,2);
+      \node[anchor=south] at (1.5, 2) {$C_A(x)$};
+      \draw[red, dashed] (0,2) -- (2,2) ..controls (3,2) and (3,1.5) .. (3,1);
+      \node[anchor=west] at (3,1) {$C_{A0}$};
+      \draw[->,blue] (1.5,7) -- (1.5,6.5);
+      \draw[->,blue] (2,7) -- (2,6.5);
+      \draw[->,blue] (2.5,7) -- (2.5,6.5);
+      \draw[->,blue] (0.5,7) -- (0.5,6.5);
+      \draw[->,blue] (1,7) -- (1,6.5);
+      \draw[dashed, blue] (0,6.5) rectangle (3,7);
+      \draw[dashed] (-1,0) -- (0,0);
+      \draw[dashed] (-1,6) -- (0,6);
+      \draw[red, ->] (4, 2.5) -- (2.5,2.5);
+      \node[anchor=west] at (4,2.5) {$N_A(z)\big|_{x=0}$};
+    \end{tikzpicture}
+    \caption{Penetration Theory示意圖，吸收塔}
+  \end{figure}
+  \begin{enumerate}
+    \item Laminar flow, Penetration distance $\delta$ is small, S.S.\\
+    \fbox{$\text{Pe}_M$ is large}，z方向對流遠大於z方向擴散
+    \item 先求速率分佈:\\
+    Laminar flow in z direction:
+    \begin{equation}
+      u_z(z) =  u_{\text{max}}\left[
+        1-\left(\frac{x}{\delta}\right)^2
+      \right]
+    \end{equation}
+    P.S. 這邊的$\delta$不是質傳的Penetration distance，而是流體力學的Boundary layer thickness\\
+    但不過沒關係，因為題目說Penertration distance很小\\
+    所以直接刪掉視為在穿透區間內$u_z$為常數即可
+    \begin{equation}
+      u_z(z) \approx u_{\text{max}}
+    \end{equation}
+    \item 求$C_A(x,z)$\\
+    帶入Equation of Continuity:
+    \begin{equation}
+      \cancel{\frac{\partial C_A}{\partial t}} + \vec{\bm u}\cdot\nabla C_A = D_{AB}\nabla^2 C_A
+      + \cancel{R_A}
+    \end{equation}
+    2D:
+    \begin{equation}
+      \cancel{u_x}\frac{\partial C_A}{\partial x} + \underbrace{u_z \frac{\partial C_A}{\partial z}}_{z\text{方向質量對流}} = D_{AB}
+      \left(
+        \underbrace{\frac{\partial^2 C_A}{\partial x^2}}_{\text{x方向擴散}} 
+        + \underbrace{\cancelto{\text{Pe}_M}{\frac{\partial^2 C_A}{\partial z^2}}}_{z\text{方向擴散}}
+      \right)
+    \end{equation}
+    得到微分方程:
+    \begin{equation}
+      u_{\text{max}}\frac{\partial C_A}{\partial z} = D_{AB}\frac{\partial^2 C_A}{\partial x^2}
+      \label{eq:ch4_5_mass_momentum_penetration_PDE}
+    \end{equation}
+    邊界條件:
+    \begin{align}
+      C_A(x,0) &= 0 \\
+      C_A(0,z) &= C_{A0} \\
+      C_A(\delta,z) &=0
+    \end{align}
+    而由於後兩個邊界條件是非齊次的，所以不能用分離變數法\\
+    故使用結合變數法:
+    \begin{equation}
+      C_A(x,z) \to C_A(\eta)
+    \end{equation}
+    省略因次分析後(跟流體力學時的方法相同)，見(\ref{sec:ch2_5_boundary_layer_dev})\\
+    但建議就背起來，令
+    \begin{equation}
+      \boxed{\eta= ax^bz^c  = \frac{x}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}}
+    \end{equation}
+    代入(\ref{eq:ch4_5_mass_momentum_penetration_PDE})後，得到ODE:
+    \begin{align}
+      \frac{\partial C_A}{\partial z} &= 
+      \frac{d C_A}{d\eta} \frac{\partial \eta}{\partial z} \nonumber\\
+      &= \frac{d C_A}{d\eta}\cdot\frac{\partial}{\partial z}\left(
+        \frac{x}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}
+      \right) \nonumber\\
+      &= \frac{d C_A}{d\eta}\frac{x}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}}}\cdot
+       \left(-\frac{1}{2}z^{-\frac{3}{2}}\right) \nonumber\\
+      &= -\frac{\eta}{2z}\frac{d C_A}{d\eta}
+    \end{align}
+    另一邊:
+    \begin{align}
+      \frac{\partial C_A}{\partial x} &=
+      \frac{d C_A}{d\eta} \frac{\partial \eta}{\partial x} \nonumber\\
+      &= \frac{d C_A}{d\eta}\cdot \frac{\partial}{\partial x}\left(
+        \frac{x}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}
+      \right) \nonumber\\
+      &= \frac{d C_A}{d\eta}\cdot \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}} \cancelto{1}{\frac{\partial x}{\partial x}} \nonumber\\
+      &= \frac{d C_A}{d\eta}\cdot \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}
+    \end{align}
+    再次求二次導數:
+    \begin{align}
+      \frac{\partial^2 C_A}{\partial x^2} &=
+      \frac{\partial}{\partial x}\left(
+        \frac{d C_A}{d\eta}\cdot \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}
+      \right) \nonumber\\
+      &= \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}} \cdot
+      \frac{\partial}{\partial x}\left(
+        \frac{d C_A}{d\eta}
+      \right) \nonumber\\
+      &= \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}} \cdot
+      \frac{d^2 C_A}{d\eta^2} \cdot \frac{\partial \eta}{\partial x} \nonumber\\
+      &= \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}} \cdot
+      \frac{d^2 C_A}{d\eta^2} \cdot \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}} \nonumber\\
+      &= \frac{1}{4\frac{D_{AB}}{u_{\text{max}}}z} \cdot \frac{d^2 C_A}{d\eta^2}
+    \end{align}
+    代入(\ref{eq:ch4_5_mass_momentum_penetration_PDE}):
+    \begin{align}
+      u_{\text{max}}\left(-\frac{\eta}{2z}\frac{d C_A}{d\eta}\right) &=
+      D_{AB}\left(\frac{1}{4\frac{D_{AB}}{u_{\text{max}}}z} \cdot \frac{d^2 C_A}{d\eta^2}\right) \nonumber\\
+      -\frac{u_{\text{max}}\eta}{2z}\frac{d C_A}{d\eta} &=
+      \frac{u_{\text{max}}}{4z} \cdot \frac{d^2 C_A}{d\eta^2}
+    \end{align}
+    移項後得到ODE:
+    \begin{equation}
+      \frac{d^2 C_A}{d\eta^2} + 2\eta \frac{d C_A}{d\eta} = 0
+    \end{equation}
+    \item 解ODE:\\
+    令 $P = \frac{d C_A}{d\eta}$:
+    \begin{align}
+      \frac{dP}{d\eta} + 2\eta P &= 0\\
+      \frac{dP}{P} &= -2\eta d\eta\\
+      \ln P\big|_{C_1}^\eta &= -\eta^2\\
+      \ln P(\eta) - \ln P(C_1) &= -\eta^2\\
+      \ln P(\eta) = -\eta^2 + \ln P(C_1)\\
+      P(\eta) = C_2 e^{-\eta^2}
+    \end{align}
+    一整個ERF的感覺:\\
+    代回$P$:
+    \begin{align}
+      \frac{d C_A}{d\eta} &= C_2 e^{-\eta^2}\\
+      C_A(\eta) &= C_2 \int_0^\eta e^{-\tilde\eta^2} d\tilde\eta + C_3
+    \end{align}
+    換掉Boundary condition:\\
+    P.S. 第三個Boundary condition，先換成無限的形式:
+    \begin{equation}
+      C_A(\delta,z) = 0 \to C_A(\infty, z) = 0
+    \end{equation}
+    再利用:$\eta = \frac{x}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}$\\
+    當$x=\delta$時，$\eta\to\infty$\\
+    故:
+    \begin{align}
+      C_A(0) &= C_{A0}\\
+      C_A(\infty) &=  0
+    \end{align}
+    利用$C_A(0) = C_{A0}$求出$C_3$:
+    \begin{equation}
+      C_A(0) = C_2 \int_0^0 e^{-\tilde\eta^2} d\tilde\eta + C_3 = C_{A0} \implies C_3 = C_{A0}
+    \end{equation}
+    再利用$C_A(\infty) =0$求出$C_2$:
+    \begin{align}
+      C_A(\infty) &= C_2 \int_0^\infty e^{-\tilde\eta^2} d\tilde\eta + C_{A0} = 0\\
+      C_2 \cdot \frac{\sqrt{\pi}}{2} + C_{A0} &= 0 \nonumber\\
+      \implies C_2 = -\frac{2}{\sqrt{\pi}} C_{A0}
+    \end{align}
+    代入$C_2$，最後得到:
+    \begin{align}
+      C_A(\eta) &= C_{A0}\left[
+        1 - \frac{2}{\sqrt{\pi}}\int_0^\eta e^{-\tilde\eta^2} d\tilde\eta
+      \right] \nonumber\\
+      &=C_{A0}\left[
+        1 - \text{erf}(\eta)
+      \right] \nonumber\\
+      &= \boxed{C_{A0} \text{erfc}(\eta)}
+    \end{align}
+    \item 代入$\eta$:
+    \begin{equation}
+      C_A(x,z) = C_{A0} \text{erfc}\left(
+        \frac{x}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}
+      \right) \label{eq:ch4_5_mass_momentum_penetration_concentration}
+    \end{equation}
+    為濃度分佈式
+    \item 求Molar Flux，$N_A(z)\big|_{x=0}$\\
+    代入Fick's first law:
+    \begin{equation}
+      N_A = -D_{AB}\frac{\partial C_A}{\partial x} + y_A(N_A+N_B)
+    \end{equation}
+    但因為Penetration distance很小，A的濃度很低，故可以忽略對流項，$y_A\to 0$\\
+    故:
+    \begin{equation}
+      N_A = -D_{AB}\frac{\partial C_A}{\partial x}
+    \end{equation}
+    代入(\ref{eq:ch4_5_mass_momentum_penetration_concentration}):\\
+    記得Error function的微分會搞Leibniz rule
+    \begin{align}
+      \frac{d}{dx}\text{erf}(\eta) &= \frac{d}{dx}\left[
+        \frac{\int_0^\eta e^{-\tilde\eta^2} d\tilde\eta}{\int_0^\infty e^{-\tilde\eta^2} d\tilde\eta}
+      \right] \nonumber\\
+      &= \frac{\sqrt{\pi}}{2} \cdot \frac{d}{dx}\left[
+        \int_0^\eta e^{-\tilde\eta^2} d\tilde\eta
+      \right] \nonumber\\
+      &= \frac{\sqrt{\pi}}{2} \cdot \left[
+        \int_0^\eta \frac{\partial}{\partial x} e^{-\tilde\eta^2} d\tilde\eta + 
+        \frac{\partial \eta}{\partial x} e^{-\eta^2}\big|_{\tilde\eta=\eta}
+        - \frac{\partial 0}{\partial x} e^{-0^2}\big|_{\tilde\eta=0}
+      \right] 
+    \end{align}
+    當$x=0$時，$\eta=0$，故
+    \begin{align}
+      &\frac{\sqrt{\pi}}{2} \cdot \left[
+        \int_0^\eta \frac{\partial}{\partial x} e^{-\tilde\eta^2} d\tilde\eta + 
+        \frac{\partial \eta}{\partial x} e^{-\eta^2}\big|_{\tilde\eta=\eta}
+        - \frac{\partial 0}{\partial x} e^{-0^2}\big|_{\tilde\eta=0}
+      \right]_{\eta=0} \nonumber\\
+      =& \frac{\sqrt{\pi}}{2} \cdot \left[
+        \int_0^0 \frac{\partial}{\partial x} e^{-\tilde\eta^2} d\tilde\eta + 
+        \frac{\partial \eta}{\partial x} e^{-\eta^2}\big|_{\tilde\eta=0}
+        - \frac{\partial 0}{\partial x} e^{-0^2}\big|_{\tilde\eta=0}
+      \right] \nonumber\\
+      =& \frac{\sqrt{\pi}}{2} \cdot \frac{\partial \eta}{\partial x}\bigg|_{\eta=0} \nonumber\\
+      =& \frac{\sqrt{\pi}}{2} \cdot \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}
+    \end{align}
+    代入$N_A$:
+    \begin{align}
+      N_A(z)\big|_{x=0} &= -D_{AB}\frac{\partial C_A}{\partial x}\bigg|_{x=0} \nonumber\\
+      &= -D_{AB} C_{A0} \cdot \frac{d}{dx}\text{erfc}(\eta)\bigg|_{x=0} \nonumber\\
+      &= -D_{AB} C_{A0} \cdot \frac{d}{dx}\left[
+        1- \text{erf}(\eta)
+      \right]_{x=0} \nonumber\\
+      &= D_{AB} C_{A0} \frac{2}{\sqrt{\pi}}\left[
+        \frac{1}{2\sqrt{\frac{D_{AB}}{u_{\text{max}}}z}}
+      \right] \nonumber\\
+      &= \boxed{C_{A0} \sqrt{\frac{D_{AB} u_{\text{max}}}{\pi z}} }
+    \end{align}
+    \item 求經驗質傳係數 $k_c$
+    \begin{equation}
+      N_A(z)\big|_{x=0} = k_c (C_{A0}-0) \implies \boxed{k_c = \frac{N_A(z)\big|_{x=0}}{C_{A0}} 
+      = \sqrt{\frac{D_{AB} u_{\text{max}}}{\pi z}}}
+    \end{equation}
+    此為\fbox{滲透定律，Penetration theory}:
+    \begin{equation}
+      k_c \propto \sqrt{D_{AB}}
+    \end{equation}
+    \item 積分求Total Molar transfer rate $W_A$:\\
+    剛剛是求出了在任意在$x=0$上的$yz$平面上的\fbox{點}的Molar flux $N_A(z)\big|_{x=0}$\\
+    現在要積分整個表面才能得到Total Molar transfer rate\\
+    假設每一層z方向的有橫向寬度$W$
+    \begin{equation}
+      W_A = \int_0^W\int_0^L N_A(z)\big|_{x=0} dz dy
+    \end{equation}
+    代入$N_A(z)\big|_{x=0}$:
+    \begin{align}
+      W_A &= \int_0^W\int_0^L C_{A0} \sqrt{\frac{D_{AB} u_{\text{max}}}{\pi z}} dz dy \nonumber\\
+      &= C_{A0} \sqrt{\frac{D_{AB} u_{\text{max}}}{\pi}} \int_0^W dy \int_0^L z^{-\frac{1}{2}} dz \nonumber\\
+      &= C_{A0} \sqrt{\frac{D_{AB} u_{\text{max}}}{\pi}} \cdot W \cdot 2L^{\frac{1}{2}} \nonumber\\
+      &= \boxed{2 C_{A0} W \sqrt{\frac{D_{AB} u_{\text{max}} L}{\pi}}}
+    \end{align}
   \end{enumerate}
 \end{itemize}
 \end{CJK*}

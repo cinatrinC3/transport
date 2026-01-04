@@ -1,0 +1,382 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{質量輸送，有反應發生}
+\begin{itemize}
+  \item Steady-State, 1-D molecular diffusion, heterogeneous reaction
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (-2,-0.3) -- (0,-0.3) -- (0, -2.665) -- (10, -2.665)
+      -- (10, -0.3) -- (12, -0.3);
+      \draw (-2, 0.3) -- (0, 0.3) -- (0, 2.665) -- (10, 2.665)
+      -- (10, 0.3) -- (12, 0.3);
+      \draw[->] (-3,0) -- (-2,0) node[midway, above] {$A$};
+      \draw[->] (12,0) -- (13,0) node[midway, above] {$A+B$};
+      \node[anchor=south] at (5, 2.665) {Reaction: $2A_{(g)}\rightarrow B_{(g)}$};
+      \def\r{0.5}           % Radius
+      \def\diam{1.0}        % Diameter
+      \def\dx{1.0}          % Horizontal spacing (1 * diameter)
+      \def\dy{0.866025}     % Vertical spacing (sin(60) * diameter)
+      \def\yBottom{-2.665}  % The bottom y-coordinate of your box
+      \foreach \j in {0,...,5} {
+        \pgfmathsetmacro{\y}{\yBottom + \r + \j*\dy}
+        \ifodd\j 
+            \foreach \i in {0,...,8} {
+                \pgfmathsetmacro{\x}{\diam + \i*\dx}
+                \draw[blue] (\x,\y) circle (\r);
+            }
+        \else 
+            \foreach \i in {0,...,9} {
+                \pgfmathsetmacro{\x}{\r + \i*\dx}
+                \draw[blue] (\x,\y) circle (\r);
+            }
+        \fi
+    }
+    \end{tikzpicture}
+    \caption{heterogeneous reaction example}
+  \end{figure}
+  \begin{itemize}
+    \item 假設$A$在氣相中擴散到固體表面，並在表面發生反應生成$B$\\
+    並假設這個\fbox{反應瞬間完成}，也就是它不是個反應工程問題，而是個質傳問題\\
+    並且假設\fbox{觸媒很大顆可以視為平面}\\
+    所以在控制體積中，實際上並沒有反應發生，稱為\fbox{非均相反應}\\
+    這時可以將問題簡化成
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \fill[pattern=north east lines, pattern color=red, draw=red] (0,0) rectangle (10,-0.3);
+        \node[anchor=east] at (0,0) {$z=\delta$};
+        \draw (0,3) -- (10, 3);
+        \node[anchor=east] at (0,3) {$z=0$};
+        \draw[->] (2.5, 3) -- (2.5, 0) node[midway, left] {$N_A$};
+        \draw[->] (7.5, 0) -- (7.5, 3) node[midway, right] {$N_B$};
+        \node[anchor=south east] at (2.5,0) {$y_{As}$};
+        \node[anchor=north east] at (2.5,3) {$y_{A0}$};
+        \node[anchor=south] at (5,0) {2A $\rightarrow$ B};
+        \node[anchor=south] at (5,3) {A,B 濃度不再變化};
+        \draw[dashed] (0,1.75) rectangle (10,2.25);
+        \node at (5,2) {\tiny C.V.};
+        \node[anchor=south] at (5, 2.25) {A,B Counterdiffusion};
+      \end{tikzpicture}
+      \caption{non-homogeneous reaction simplification}
+    \end{figure}
+    因反應在觸媒表面發生，A會被消耗，於氣相中產生濃度差，產生質傳\\
+    而反應生成了B，B與氣相也產生濃度差，產生質傳
+    \item 寫出Fick's 1st Law:
+      \begin{equation}
+        N_A = -D_{AB}C\frac{d y_A}{dz}+ y_A(N_A + N_B)
+      \end{equation}
+      由於反應是$2A \rightarrow B$，所以$N_B = -\frac{1}{2}N_A$，代入上式得
+      \begin{equation}
+        N_A = -D_{AB}C\frac{d y_A}{dz}+ \frac{1}{2}y_A N_A \label{eq:ch4_7_ficks_law_reaction_start}
+      \end{equation}
+      此為1階微分方程式，整理得
+      \begin{align}
+        \int_0^\delta N_A dz &= -D_{AB}C \int_{y_{A0}}^{y_{As}} \frac{dy_A}{1-\frac{1}{2}y_A} \nonumber \\
+        (u=1-\frac{1}{2}y_A) & (du = -\frac{1}{2}dy_A) \nonumber\\
+        N_A\delta &= 2D_{AB}C \int_{u_0}^{u_s} \frac{du}{u} \nonumber \\
+        N_A\delta &= 2D_{AB}C [\ln|u|]_{u_0}^{u_s} \nonumber \\
+        N_A\delta &= -2D_{AB}C \ln\left(\frac{1-\frac{1}{2}y_{As}}{1-\frac{1}{2}y_{A0}}\right) \nonumber \\
+        \therefore \quad N_A &= \frac{-2D_{AB}C}{\delta}
+         \ln\left(\frac{1-\frac{1}{2}y_{As}}{1-\frac{1}{2}y_{A0}}\right) \label{eq:ch4_7_ficks_law_reaction}
+      \end{align}
+      因為\fbox{瞬間反應}，所以在表面$y_{As}=0$，代入上式得
+      \begin{equation}
+        \boxed{N_A = \frac{2D_{AB}C}{\delta} \ln\left(\frac{1}{1-\frac{1}{2}y_{A0}}\right)}
+      \end{equation}
+      P.S. 如果為1級反應
+      \begin{equation}
+        N_A\big|_{z=\delta} = k C_{As} = k C y_{As} \implies y_{As} = \frac{N_A(\delta)}{kC}
+      \end{equation}
+      代入(\ref{eq:ch4_7_ficks_law_reaction})得
+      \begin{equation}
+        N_A = \frac{-2D_{AB}C}{\delta}
+         \ln\left(\frac{1-\frac{1}{2}\frac{N_A(\delta)}{kC}}{1-\frac{1}{2}y_{A0}}\right)
+      \end{equation}
+      這時$N_A$無法直接求出，需要用Try-and-Error的方法求解
+    \item 求濃度分布:\\
+    透過Equation of Continuity可知，在steady-state下，質傳通量不變
+    \begin{equation}
+      \cancel{\frac{\partial C_A}{\partial t}} +\nabla \cdot N_A = \cancel{R_A}
+      \implies \nabla \cdot N_A = 0
+    \end{equation}
+    在1-D下，將Control Volume的$N_A$代入Fick's 1st Law\\
+    P.S. 不能用剛剛(\ref{eq:ch4_7_ficks_law_reaction})式，因為那是整個區域的通量，不是局部的通量\\
+    要用在他積分之前的式子(\ref{eq:ch4_7_ficks_law_reaction_start})
+    \begin{align}
+      N_A &= -D_{AB}C\frac{d y_A}{dz}+ \frac{1}{2}y_A N_A \nonumber\\
+      N_A &= \frac{-D_{AB}C}{1-\frac{1}{2}y_A}\frac{d y_A}{dz} \label{eq:ch4_7_ficks_law_reaction_local}
+    \end{align}
+    再代入$\frac{d N_A}{dz} = 0$中
+    \begin{align}
+      \frac{d}{dz}\left(
+        \frac{-D_{AB}C}{1-\frac{1}{2}y_A}\frac{d y_A}{dz}
+      \right) &= 0 \nonumber \\
+      \implies \quad \frac{d}{dz}\left(
+        \frac{1}{1-\frac{1}{2}y_A}\frac{d y_A}{dz}
+      \right) &= 0
+      \implies \quad 
+      \frac{1}{1-\frac{1}{2}y_A}\frac{d y_A}{dz} = C_1 \nonumber\\
+      \implies \quad 
+      2 \ln \frac{1}{1-\frac{1}{2}y_A} &= C_1 z + C_2 \label{eq:ch4_7_concentration_distribution_reaction}
+    \end{align}
+    而邊界條件
+    \begin{align}
+      y_A(0) &= y_{A0} \\
+      y_A(\delta) &= y_{As}
+    \end{align}
+    代入(\ref{eq:ch4_7_concentration_distribution_reaction})式中可求得$C_1, C_2$
+    \begin{align}
+      y_A(0) = y_{A0} &\implies 2 \ln \frac{1}{1-\frac{1}{2}y_{A0}} = C_2 \\
+      y_A(\delta) = y_{As} &\implies 2 \ln \frac{1}{1-\frac{1}{2}y_{As}} = 
+      C_1 \delta + 2 \ln \frac{1}{1-\frac{1}{2}y_{A0}} \nonumber \\
+      &\implies C_1 = \frac{2}{\delta} \ln \frac{1-\frac{1}{2}y_{A0}}{1-\frac{1}{2}y_{As}}
+    \end{align}
+    代入(\ref{eq:ch4_7_concentration_distribution_reaction})式中，得
+    \begin{align}
+      2 \ln \frac{1}{1-\frac{1}{2}y_A} &= 
+      \frac{2z}{\delta} \ln \frac{1-\frac{1}{2}y_{A0}}{1-\frac{1}{2}y_{As}} +
+      2 \ln \frac{1}{1-\frac{1}{2}y_{A0}} \nonumber \\
+      \implies \quad 
+      \ln \left(
+        \frac{1}{1-\frac{1}{2}y_A}
+      \right) &= \frac{z}{\delta} \ln \left(
+        \frac{1-\frac{1}{2}y_{A0}}{1-\frac{1}{2}y_{As}}
+      \right) + \ln \left(
+        \frac{1}{1-\frac{1}{2}y_{A0}}
+      \right) 
+    \end{align}
+    整理得
+    \begin{equation}
+      \ln \left(
+        \frac{1-\frac{1}{2}y_{As}}{1-\frac{1}{2}y_{A}}
+      \right) = \frac{z}{\delta} \ln \left(
+        \frac{1-\frac{1}{2}y_{As}}{1-\frac{1}{2}y_{A0}}
+      \right)
+    \end{equation}
+  如果快速反應，$y_{As}=0$，則
+  \begin{equation}
+    \ln \left(
+      \frac{1}{1-\frac{1}{2}y_{A}}
+    \right) = \frac{z}{\delta} \ln \left(
+      \frac{1}{1-\frac{1}{2}y_{A0}}
+    \right)
+  \end{equation}
+  如果一級反應，$y_{As} = \frac{N_A(\delta)}{kC}$，則
+  \begin{equation}
+    \ln \left(
+      \frac{1-\frac{1}{2}\frac{N_A(\delta)}{kC}}{1-\frac{1}{2}y_{A}}
+    \right) = \frac{z}{\delta} \ln \left(
+      \frac{1-\frac{1}{2}\frac{N_A(\delta)}{kC}}{1-\frac{1}{2}y_{A0}}
+    \right)
+  \end{equation}
+  \end{itemize}
+  \item Steady-State, 1-D molecular diffusion, homogeneous reaction
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (3,4);
+      \draw (0,4) -- (0,5);
+      \draw (3,4) -- (3,5);
+      \fill[pattern=crosshatch dots, pattern color=blue] (0,0) rectangle (3,4);
+      \node[anchor=east] at (0,0) {$z=\delta$};
+      \node[anchor=east] at (0,4) {$z=0$};
+      \draw[->] (1.5, 4.5) -- (1.5, 3.5);
+      \node[anchor=south] at (1.5,4.5) {Gas $A$};
+      \node[anchor=east] at (0,2) {Liquid $B$};
+      \node[anchor=west] at (3,2) {$aA_{(l)}+bB_{(l)}\rightarrow P_{(l)}$};
+      \draw[dashed] (0,0.8) rectangle (3,1.2);
+      \node[anchor=east] at (0,1) {C.V.};
+    \end{tikzpicture}
+    \caption{homogeneous reaction example}
+  \end{figure}
+  \begin{itemize}
+    \item 以質傳視角來看，有1級勻相反應發生\\
+    雖然看起來是非均相反應\\
+    但實際上是$A$先變成溶液中的$A_{(l)}$，再與$B_{(l)}$反應生成$P_{(l)}$\\
+    而同時液體中，有濃度差，故Control Volume中有反應發生
+    \item 記得要\fbox{先解出濃度分布}，再解通量
+    畢竟Fick's 1st Law根本就沒考慮反應項\\
+    P.S. 這題目跟反應係數無關\\
+    然後這種題目只會出現一級或零級反應，因為超過解不出來
+    \item 寫出Equation of Continuity:
+    \begin{equation}
+      \frac{\partial C_A}{\partial t} +\nabla \cdot N_A = R_A
+    \end{equation}
+    在steady-state下，$\frac{\partial C_A}{\partial t} = 0$，且在1-D下
+    \begin{equation}
+      \frac{d N_A}{dz} = R_A
+    \end{equation}
+    假設為1級反應，$R_A = -k C_A$，代入上式得
+    \begin{equation}
+      \frac{d N_A}{dz} = -k C_A
+    \end{equation}
+    再代入Fick's 1st Law，並假設氣體在\fbox{液體中濃度極低}，$y_A \approx 0$
+    \begin{align}
+      N_A &= -D_{AB}\frac{d C_A}{dz} + \cancel{y_A}(N_A + N_B) \nonumber \\
+      N_A &= -D_{AB}\frac{d C_A}{dz} \nonumber \\
+      \implies \quad 
+      \frac{d}{dz}\left(
+        -D_{AB}\frac{d C_A}{dz}
+      \right) = -k C_A \nonumber \\
+      \implies \quad 
+      D_{AB}\frac{d^2 C_A}{dz^2} - k C_A &= 0 \label{eq:ch4_7_homogeneous_reaction_diff_eq}
+    \end{align}
+    此為2階微分方程式，令:
+    \begin{equation}
+      C_A = e^{\lambda z} \implies D_{AB}\lambda^2 e^{\lambda z} - k e^{\lambda z} = 0
+    \end{equation}
+    整理得特徵方程式:
+    \begin{equation}
+      D_{AB}\lambda^2 - k = 0 \implies \lambda = \pm \sqrt{\frac{k}{D_{AB}}}
+    \end{equation}
+    假設為相異實數根，且邊界條件是無限的(可以消去一個常數)
+    \begin{equation}
+      C_A = C_1 e^{\sqrt{\frac{k}{D_{AB}}} z} + C_2 e^{-\sqrt{\frac{k}{D_{AB}}} z}
+    \end{equation}
+    如果相異實數，但邊界條件有限，則通解為
+    \begin{equation}
+      C_A = C_1 \cosh \left(
+        \sqrt{\frac{k}{D_{AB}}} z
+      \right) + C_2 \sinh \left(
+        \sqrt{\frac{k}{D_{AB}}} z
+      \right) \label{eq:ch4_7_homogeneous_reaction_concentration_distribution}
+    \end{equation}
+    若為重根，則通解為
+    \begin{equation}
+      C_A = C_1 + C_2 z
+    \end{equation}
+    若為複根，則通解為
+    \begin{equation}
+      C_A = e^{\alpha z} (C_1 \cos \beta z + C_2 \sin \beta z)
+    \end{equation}
+    \begin{enumerate}
+      \item 相異實根，並假設$z=\delta$時，沒有殘留A:
+      \begin{align}
+        C_A(0) &= C_{A0} = \frac{CPy_A}{k_A}, \quad k_A(\text{亨利常數})\\
+        C_A(\delta) &= 0
+      \end{align}
+      用(\ref{eq:ch4_7_homogeneous_reaction_concentration_distribution})式
+      \begin{equation}
+        C_A = C_1 \cosh \left(
+        \sqrt{\frac{k}{D_{AB}}} z
+      \right) + C_2 \sinh \left(
+        \sqrt{\frac{k}{D_{AB}}} z
+      \right)
+      \end{equation}
+      代入邊界條件得
+      \begin{align}
+        C_{A0} &= C_1\\
+        0 &= C_{A0} \cosh \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right) + C_2 \sinh \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right) \nonumber \\
+        \implies \quad C_2 &= -C_{A0} \coth \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right)
+      \end{align}
+      代入通解得濃度分布
+      \begin{equation}
+        C_A = C_{A0} \left[
+          \cosh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right) - \coth \left(
+            \sqrt{\frac{k}{D_{AB}}} \delta
+          \right) \sinh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right)
+        \right]
+      \end{equation}
+      再代入Fick's 1st Law得通量
+      \begin{align}
+        N_A &= -D_{AB}\frac{d C_A}{dz} \nonumber\\
+        &= 
+        -D_{AB} C_{A0} \sqrt{\frac{k}{D_{AB}} \left[
+          \sinh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right) - \coth \left(
+            \sqrt{\frac{k}{D_{AB}}} \delta
+          \right) \cosh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right)
+        \right]} \nonumber \\
+        \therefore \quad N_A\big|_{z=0} &= 
+         C_{A0} \sqrt{k\cdot D_{AB}} \coth \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right) \label{eq:ch4_7_homogeneous_reaction_flux}
+      \end{align}
+      P.S. 若反應速率無限快，$k \rightarrow \infty$，則
+      $\coth(\infty) \rightarrow 1$，代入(\ref{eq:ch4_7_homogeneous_reaction_flux})式得
+      \begin{equation}
+        N_A\big|_{z=0} = C_{A0} \sqrt{k\cdot D_{AB}} \quad (k \rightarrow \infty)
+      \end{equation}
+      \item 假設杯子有底部，底部會殘留A，但$A$卡在那$N_A=0$:
+      \begin{align}
+        C_A(0) &= C_{A0} = \frac{CPy_A}{k_A}, \quad k_A(\text{亨利常數})\\
+        N_A(\delta) &= 0 \implies \boxed{\frac{d C_A}{dz}\big|_{z=\delta}} = 0
+      \end{align}
+      第二個邊界條件跟絕熱的邊界條件很像\\
+      用(\ref{eq:ch4_7_homogeneous_reaction_concentration_distribution})式
+      \begin{equation}
+        C_A = C_1 \cosh \left(
+        \sqrt{\frac{k}{D_{AB}}} z
+      \right) + C_2 \sinh \left(
+        \sqrt{\frac{k}{D_{AB}}} z
+      \right)
+      \end{equation}
+      代入邊界條件得
+      \begin{align}
+        C_{A0} &= C_1\\
+        0 &= -C_1 \sqrt{\frac{k}{D_{AB}}} \sinh \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right) + C_2 \sqrt{\frac{k}{D_{AB}}} \cosh \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right) \nonumber \\
+        \implies \quad C_2 &= C_{A0} \tanh \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right)
+      \end{align}
+      代入通解得濃度分布
+      \begin{equation}
+        C_A = C_{A0} \left[
+          \cosh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right) + \tanh \left(
+            \sqrt{\frac{k}{D_{AB}}} \delta
+          \right) \sinh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right)
+        \right]
+      \end{equation}
+      再代入Fick's 1st Law得通量
+      \begin{align}
+        N_A &= -D_{AB}\frac{d C_A}{dz} \nonumber\\
+        &= 
+        -D_{AB} C_{A0} \sqrt{\frac{k}{D_{AB}} \left[
+          \sinh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right) + \tanh \left(
+            \sqrt{\frac{k}{D_{AB}}} \delta
+          \right) \cosh \left(
+            \sqrt{\frac{k}{D_{AB}}} z
+          \right)
+        \right]} \nonumber \\
+        \therefore \quad N_A\big|_{z=0} &= 
+         C_{A0} \sqrt{k\cdot D_{AB}} \tanh \left(
+          \sqrt{\frac{k}{D_{AB}}} \delta
+        \right) \label{eq:ch4_7_homogeneous_reaction_flux_bottom}
+      \end{align}
+      同樣的，若反應速率無限快，$k \rightarrow \infty$，則
+      $\tanh(\infty) \rightarrow 1$，代入(\ref{eq:ch4_7_homogeneous_reaction_flux_bottom})式得
+      \begin{equation}
+        N_A\big|_{z=0} = C_{A0} \sqrt{k\cdot D_{AB}} \quad (k \rightarrow \infty)
+      \end{equation}
+    \end{enumerate}
+  \end{itemize}
+  \item 孔洞觸媒內部的質傳問題
+\end{itemize}
+\end{CJK*}
+\end{document}
+

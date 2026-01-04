@@ -1,0 +1,85 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{單元操作介紹}
+\begin{itemize}
+  \item 單元操作(Unit Operation)是指在化工過程中\\
+  將物料進行處理、轉換或分離的基本操作單位。\\
+  這些操作通常涉及物理或化學變化，並且是工業生產過程中的重要組成部分。
+  \item 常見的單元操作包括:
+  \begin{enumerate}
+    \item 反應器(Reactor): 用於進行化學反應的設備
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (4,2);
+        \node at (2,1) {反應器};
+        \draw[->] (-2,1) -- (0,1);
+        \node[anchor=east] at (-2,1) {A};
+        \draw[->] (4,1) -- (6,1);
+        \node[anchor=west] at (6,1) {A+B};
+      \end{tikzpicture}
+      \caption{反應器示意圖}
+    \end{figure}
+    \item 分離器(Separator): 用於將混合物分離成不同組分的設備
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,4) arc(180:0:1 and 0.5) -- (2,0) arc(0:-180:1 and 0.5) -- cycle;
+        \node at (1,3) {分離器};
+        \draw[decorate, decoration=snake, blue] (0,2) -- (2,2);
+        \draw[->] (-1,2) -- (0,2);
+        \node[anchor=east] at (-1,2) {A+B};
+        \draw[->] (1,4.5) -- (1,5) -- (3,5) node[right] {B};
+        \draw[->] (1,-0.5) -- (1,-1) -- (3,-1) node[right] {A};
+      \end{tikzpicture}
+      \caption{分離器示意圖}
+    \end{figure}
+    需要找到分離物質之間的矛盾點
+    \begin{itemize}
+      \item 蒸發性差異
+      \begin{itemize}
+        \item 揮發性高的成分容易蒸發，一個會揮發、一個不會\\
+          使用蒸發(Evaporate)器(Evaporator)
+        \item 都會揮發，但揮發性不同\\
+          使用蒸餾(Distillation)器(Distiller)
+      \end{itemize}
+      \item 溶解度差異
+      \begin{itemize}
+        \item 氣體，以液體捕捉\\
+          使用吸收(Absorb)塔(Absorption Tower)
+        \item 液體，以氣體捕捉\\
+          使用洗滌(Stripping)塔(Stripping Tower)
+        \item 由一種液體，轉移到另一種液體\\
+          使用萃取(Extract)器(Extractor)
+        \item 由固體，轉移到液體\\
+          使用浸出(Leaching)器(Leacher)
+      \end{itemize}
+      \item 將水從成分中移除或加入:
+      \begin{itemize}
+        \item 使用乾燥(Drying)器(Dryer)將水分從固體中移除
+        \item 使用增濕(Humidifying)器(Humidifier)將水分加入氣體中
+        \item 使用除溼(Dehumidifying)器(Dehumidifier)將水分從氣體中移除
+      \end{itemize}
+      \item 固體與固體以密度差分離:
+      \begin{itemize}
+        \item 使用篩分(Screening)器(Screen)將不同粒徑的固體分離
+        \item 使用沉降(Settling)器(Settler)將密度不同的固體分離
+      \end{itemize}
+    \end{itemize}
+    \item 單元之間的串接系統(Piping System): \\
+    將不同的單元操作設備連接起來，形成完整的生產流程
+    \begin{itemize}
+      \item Pumps: 用於輸送液體
+      \item Compressors: 用於壓縮氣體
+      \item Turbines: 用於從流體中提取能量
+      \item Valves: 用於控制流體的流量和壓力
+      \item Pipes: 用於連接不同的設備，傳輸流體
+      \item Flow Meters: 用於測量流體的流量
+      \item Heat Exchangers: 用於在不同流體之間傳遞熱量的設備
+    \end{itemize}
+    \item 攪拌器(Mixer): 用於混合不同物料的設備
+  \end{enumerate}
+\end{itemize}
+\end{CJK*}
+\end{document}

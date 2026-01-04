@@ -50,8 +50,12 @@
       & $\frac{\text{動量擴散}}{\text{熱傳擴散}}$ & $\uparrow$無熱邊界層\\
     Nusselt Number & Nu & $\frac{hL}{k}$
       & $\frac{\text{徑向熱對流}}{\text{徑向熱傳導}}$& 由$k$導$h$\\
+    Sherwood Number & Sh & $\frac{k_c L}{D_{AB}}$
+     & $\frac{\text{徑向質量對流}}{\text{徑向質量擴散}}$& 由$D_{AB}$導$k_c$\\
     Peclet Number (Heat) & $\text{Pe}_H$ & $\frac{\rho \hat C_P u\Delta T/L}{k\Delta T/L^2}$
       & $\frac{\text{軸向熱對流}}{\text{軸向熱傳導}}$& $\uparrow$忽略軸向熱傳導\\
+    Peclet Number (Mass) & $\text{Pe}_M$ & $\frac{\rho u D}{D_{AB}}$
+      & $\frac{\text{軸向質量對流}}{\text{軸向質量擴散}}$& $\uparrow$忽略軸向質量擴散\\
     Grashof Number & Gr & $\frac{L^3\rho^2g\beta\left(T_s-T_\infty\right)}{\mu^2}$
       & $\frac{\text{浮力}}{\text{黏滯力}}$ & $\downarrow$強制對流 \\
     Richardson Number & Ri & $\frac{\text{Gr}}{\text{Re}^2}$
@@ -62,17 +66,17 @@
       & $\frac{\text{慣性力}}{\text{重力}}$&\\
     Brinkman Number & Br & $\frac{\mu (u/L)^2}{k\Delta T/L^2}$ 
       & $\frac{\text{黏滯耗散}}{\text{熱傳導}}$&\\
-    Schmidt Number & Sc & $\frac{\nu}{D_{AB}}$
-      & $\frac{\text{動量擴散}}{\text{質量擴散}}$&\\
+    Schmidt Number & Sc & $\frac{\nu}{D_{AB}},\left(\frac{\delta}{\delta_m}\right)^3$
+      & $\frac{\text{動量擴散}}{\text{質量擴散}}$& $\uparrow$無質量邊界層\\
     Lewis Number & Le & $\frac{\alpha}{D_{AB}}$
      & $\frac{\text{熱傳擴散}}{\text{質量擴散}}$&\\
-    Sherwood Number & Sh & $\frac{h_\infty L}{D_{AB}}$
-      &&\\
     Biot Number & Bi & $\frac{1/k_S}{1/h\left(\frac{V}{A}\right)}$
       & $\frac{\text{內部阻力}}{\text{外部阻力}}$ & $\downarrow$均-0.1-異$\uparrow$ \\
     Fourier Number & Fo & $\frac{kA\Delta T/L}{\rho V C_P \Delta T/t}$
       & $\frac{\text{熱傳導}}{\text{熱儲存速率}\dot H}$&\\
     Stanton Number (Heat) & $\text{St}_H$ & $\frac{\text{Nu}}{\text{Re}\cdot\text{Pr}}$
+      && \\
+    Stanton Number (Mass) & $\text{St}_M$ & $\frac{\text{Sh}}{\text{Re}\cdot\text{Sc}}$
       &&
   \end{tabular}
   \caption{Heat and Mass Transfer Dimensionless Groups}
@@ -99,6 +103,18 @@
     \begin{equation}
       \text{Sc} = \frac{\nu}{D_{AB}} = \frac{\mu}{\rho D_{AB}} = \frac{\text{Momentum Diffusivity}}{\text{Mass Diffusivity}}
     \end{equation}
+    一樣，可以是\fbox{速度邊界層厚度和質量邊界層厚度的比例}
+    \begin{equation}
+      \text{Sc} = \left(\frac{\delta}{\delta_m}\right)^3 = \left(\frac{\text{Momentum Boundary Layer}}{\text{Mass Boundary Layer}}\right)^3
+    \end{equation}
+    用於質傳經驗式
+    \begin{equation}
+      \begin{cases}
+        \text{Sc} > 1 & \delta > \delta_m, \text{大部分液體溶質, 水(2.6～8.0)} \\
+        \text{Sc} < 1 & \delta < \delta_m, \text{氣體溶質, 空氣(0.6～0.8)} \\
+        \text{Sc} = 1 & \delta = \delta_m, \text{超臨界流體，水蒸氣}
+      \end{cases}
+    \end{equation}
   \item Lewis Number:
     \begin{equation}
       \text{Le} = \frac{\alpha}{D_{AB}} = \frac{k}{\rho C_p D_{AB}} = \frac{\text{Thermal Diffusivity}}{\text{Mass Diffusivity}}
@@ -113,20 +129,72 @@
     \end{equation}
     因此Nusselt Number可寫成:
     \begin{equation}
-      \text{Nu} =
+      \text{Nu}_L =
       \frac{\left.\frac{\partial \left(T_s -T\right)}{\partial y}\right|_{y=0}}{\frac{\left(T_s-T_\infty\right)}{L}} 
       = \frac{hL}{k} = \frac{\text{Radius Heat Convection Rate}}{\text{Radius Heat Conduction Rate}}
     \end{equation}
     P.S. 不要和Biot Number搞混了，特徵長度是橫向的\\
     若系統為圓柱或球:
     \begin{equation}
-      \text{Nu}_L = \frac{hD}{k}
+      \text{Nu}_D = \frac{hD}{k}
     \end{equation}
     P.S. 因為這裡可以用直徑當特徵長度，而直徑和卡氏用的$L$是不同的意義\\
     為了避免錯誤比較與混淆，故加上下標$L$表示用直徑當特徵長度
-  \item Sherwood Number:
+  \item Sherwood Number:\\
+    質傳的Nusselt Number\\
+    也是用來求出影響因素複雜的質傳係數$k_c$\\
+    由質傳定義式:
     \begin{equation}
-      \text{Sh} = \frac{h_\infty L}{D_{AB}}
+      \text{Sh} = \frac{k_c L}{D_{AB}}
+    \end{equation}
+    可以假想流體表面有一層不會流動的靜止層，在這層之間質量傳輸以分子擴散為主\\
+    這層靜止層的厚度即為質量邊界層厚度$\delta_m$\\
+    而過了這層靜止層後，質量傳輸以對流為主\\
+    因此Sh可以看成是\fbox{徑向質量對流和徑向質量擴散}的比例\\
+    對比Nusselt Number的求法(假設A的濃度極稀薄，來對比)
+    \begin{equation}
+      -D_{AB}\frac{\partial C_A}{\partial y}\bigg|_{y=0} + \cancel{y_A}\left(
+        N_A + N_B
+      \right) = k_c\left(C_{A,s} - C_{A,\infty}\right)
+    \end{equation}
+    而同樣，假設是平板，以特徵長度$L$來定義Sh
+    \begin{equation}
+      \text{Sh}_L = \frac{\left.\frac{\partial \left(C_{A,s} - C_A\right)}{\partial y}\right|_{y=0}}{\frac{\left(C_{A,s}-C_{A,\infty}\right)}{L}} = \frac{h_\infty L}{D_{AB}}
+    \end{equation}
+    如果是圓柱或球:
+    \begin{equation}
+      \text{Sh}_D = \frac{k_c D}{D_{AB}}
+    \end{equation}
+  \item Fourier Number:\\
+    用於非定常態熱傳導問題
+    \begin{equation}
+      \text{Fo} = \frac{kA\Delta T/L}{\rho V C_P \Delta T/t} = \frac{\text{Heat Conduction Rate}}{\text{Heat Storage Rate}}
+    \end{equation}
+    代表系統內熱傳導的速率和系統內熱儲存速率的比例\\
+    Fo越大，代表熱傳導越快，系統內溫度變化越快
+  \item Rayleigh Number:\\
+    自然對流的強度
+    \begin{equation}
+      \text{Ra} = \text{Gr}\cdot \text{Pr} = \frac{L^3\rho^2g\beta\left(T_s-T_\infty\right)}{\mu^2} \cdot \frac{C_p\mu}{k}
+      = \frac{\text{Natural Convection}}{\text{Heat Conduction}}
+    \end{equation}
+    Ra用於判斷自然對流和熱傳導的相對重要性\\
+    若$\text{Ra} < 10^6$，代表熱傳導較重要\\
+    若$\text{Ra} > 10^6$，代表自然對流較重要
+  \item Richardson Number:\\
+    自然對流和強制對流的相對重要性
+    \begin{equation}
+      \text{Ri} = \frac{\text{Gr}}{\text{Re}^2} = \frac{\text{Natural Convection}}{\text{Forced Convection}}
+    \end{equation}
+    若$\text{Ri} \ll 1$，代表強制對流較重要\\
+    若$\text{Ri} \gg 1$，代表自然對流較重要
+  \item Froude Number:
+    \begin{equation}
+      \text{Fr} = \frac{\rho u^2/L}{\rho g} = \frac{\text{Inertial Force}}{\text{Gravitational Force}}
+    \end{equation} 
+  \item Brinkman Number:
+    \begin{equation}
+      \text{Br} = \frac{\mu (u/L)^2}{k\Delta T/L^2} = \frac{\text{Viscous Dissipation}}{\text{Heat Conduction}}
     \end{equation}
   \item Biot Number:\\
     應用於固體或靜止流體內的熱傳導，系統內是不流動的物質，而外部有流動流體
@@ -144,6 +212,13 @@
       = \frac{\text{Heat Convection Rate}}{\text{Heat Conduction Rate}}}
     \end{equation}
     若$\text{Pe}_H$很大，代表軸向上的熱傳導可以被忽略
+  \item Peclet Number (Mass):\fbox{軸向質量對流和軸向質量擴散}的比例
+    \begin{equation}
+      \boxed{\text{Pe}_M = \text{Re}\cdot\text{Sc} = \frac{\rho u D}{D_{AB}} 
+      = \frac{\rho \vec{\bm u}\cdot \nabla C_A}{D_{AB}\nabla^2 C_A}
+      = \frac{\text{Mass Convection Rate}}{\text{Mass Diffusion Rate}}}
+    \end{equation}
+    若$\text{Pe}_M$很大($10^4$以上)，代表軸向上的質量擴散可以被忽略
   \item Grashof Number:\\
     重力對熱對流的影響，\fbox{自然對流比較大}時用
     \begin{equation}
@@ -167,11 +242,18 @@
     改為溫度差$\times$體積變化靈敏度($\rho \beta \Delta T$)\\
     另外，若只考慮\fbox{自然對流，則Re可忽略}，$\text{Nu}_N = f(\text{Pr},\text{Gr},\frac{L}{D})$\\
     若只考慮\fbox{強制對流，則Gr可忽略}，$\text{Nu}_F = f(\text{Pr},\text{Re},\frac{L}{D})$
-  \item Stanton Number:
+  \item Stanton Number (Heat):\\
+    用於對流熱傳的Dimensionless熱傳係數
     \begin{equation}
       \text{St}_H = \frac{\text{Nu}}{\text{Re}\cdot\text{Pr}} = \frac{h}{\rho C_p u}
     \end{equation}
     是Dimensionless的整體熱傳係數(包含熱對流和熱傳導)
+  \item Stanton Number (Mass):\\
+    用於對流質傳的Dimensionless質傳係數
+    \begin{equation}
+      \text{St}_M = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}} = \frac{k_c}{\rho u}
+    \end{equation}
+    是Dimensionless的整體質傳係數(包含質對流和質擴散)
   \end{itemize}
 \end{itemize}
 \end{CJK*}

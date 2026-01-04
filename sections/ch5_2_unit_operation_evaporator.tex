@@ -1,0 +1,104 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{蒸發器 Evaporator}
+藉由加熱使溶劑因沸騰而汽化，以去除溶劑達到溶液純化的目的
+\begin{itemize}
+  \item 蒸發器的種類
+  \begin{enumerate}
+    \item 橫管式蒸發器:
+    \begin{itemize}
+      \item 水蒸氣於管內流動、溶液於管外流動
+      \item 自然對流的加熱方式，加熱效果較差，高黏度流體效果更差
+      \item 不適用易產生泡沫或結垢的流體
+      \item 構造簡單、價格低廉、適合小規模生產
+    \end{itemize}
+    \item 垂直短管式蒸發器
+    \begin{itemize}
+      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
+      \item 自然對流的加熱方式，可加裝擋板以消除泡沫，並增加對流效果
+      \item 適用於易產生泡沫的流體，但結垢仍然不行
+      \item 構造簡單，價格不貴
+    \end{itemize}
+    \item 垂直長管式蒸發器
+    \begin{itemize}
+      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
+      \item 自然對流的加熱方式，但因為很長，熱傳效果更好
+      \item 溶液只要經管一次，即可完成蒸發的目的，大幅縮短加熱時間
+      \item 適用於易產生泡沫的流體、對溫度敏感的流體、同樣不適合用在易結垢的
+      \item 不適合用在會有鹽類析出、黏度高的流體
+    \end{itemize}
+    \item 強制循環式蒸發器
+    \begin{itemize}
+      \item 水蒸氣於管外流動，溶液於管內流動，濃縮液則由底部流出
+      \item 加裝循環泵浦作為融業的強制循環、強制對流、熱傳效果更好、大幅縮短加熱時間
+      \item 適用於易產生泡沫的流體、對溫度敏感的流體、黏度高的流體
+      \item 由於氣液飛濺的情形嚴重、泵浦的動力消耗、成本較高
+    \end{itemize}
+    \item 夾套式蒸發器(攪膜蒸發器)
+  \end{enumerate}
+  而根據操作也可以歸類成:
+  \begin{enumerate}
+    \item 單效蒸發器(Single-effect evaporator)
+    \item 多效蒸發器(multiple-effect evaporator)
+    \begin{enumerate}
+      \item 順向多效蒸發器
+      \item 逆向多效蒸發器
+    \end{enumerate}
+  \end{enumerate}
+  兩者的比較
+  \begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline   & 單效 & 多效 \\\hline
+    操作成本 &  相同 & 相同 \\\hline
+    蒸發總量 & 少 & 多\\\hline
+    經濟效益 & 小 & 大\\\hline
+    設備成本 & 少 & 多\\\hline
+    操作性  & 易 & 難\\\hline
+    物料損失 & 少 & 多\\\hline
+    最終濃度 & 小 & 大\\\hline
+    溫度 & $T_1$ & $T_1>T_2>\cdots>T_n$\\\hline
+    壓力 & $P_1$ & $P_1>P_2>\cdots>P_n$ \\\hline
+  \end{tabular}
+  \end{center}
+  \item 蒸發器的名詞介紹
+  \begin{itemize}
+  \item 蒸發量(Capacity),$V$:\\
+    單位時間所去除溶劑的質量
+    \item 蒸氣使用量(Steam Consumption),$S$:
+    單位時間，蒸發器使用(消耗)的蒸氣質量
+    \item 經濟效益(Economy),$\eta$:
+    每使用單位質量蒸氣，所能去除溶劑的質量
+    \begin{equation}
+      \eta = \frac{V}{S}
+    \end{equation}
+  \end{itemize}
+  \item 單效蒸發器的計算範例\\
+  假設一單效蒸發器，進料$F$，狀態$T_F,X_F,h_F$，經過蒸氣$S$加熱後\\
+  變為蒸氣$V$，狀態$T_1,X_V,H_V$，留下濃縮液$L$，狀態$T_1,X_L,h_L$\\
+  蒸氣$S$通入前狀態$T_S,H_S$，通入後凝結變成液體，溫度不變，狀態$T_S,h_S$
+  \begin{itemize}
+    \item 整體質量平衡:
+    \begin{equation}
+      F= L+V
+    \end{equation}
+    \item 溶質質量平衡:
+    \begin{equation}
+      FX_F=LX_L
+    \end{equation}
+    \item 熱平衡:
+    \begin{equation}
+      F\cdot h_F + S\cdot \lambda = L\cdot h_K + V\cdot H_V
+    \end{equation}
+    其中$\lambda$為蒸氣的潛熱
+    \begin{equation}
+      \lambda = H_S -h_S
+    \end{equation}
+    \item 蒸發器的熱傳方程
+    \begin{equation}
+      Q = S\cdot(H_S -h_S) = S\cdot \lambda = UA(T_S-T_1)
+    \end{equation}
+  \end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}
