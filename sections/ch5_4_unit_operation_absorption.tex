@@ -1,0 +1,1006 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+  \subsection{吸收與氣提，Absorption and Stripping}
+  吸收與氣提本質上是同件事，只是質傳方向相反
+  \begin{itemize}
+    \item 吸收(Absorption)：$G(A)\rightarrow L(A)$
+    \item 氣提(Stripping)：$L(A)\rightarrow G(A)$
+  \end{itemize}
+  因此兩個單元操作的\fbox{操作線是相同的}\\
+  而且McCabe-Thiele法也可以用在吸收與氣提上
+  \begin{itemize}
+    \item 吸收的熱力學
+    \begin{itemize}
+      \item 物質本性
+      \item 溫度\\
+      亨利定律的常數與溫度有關\\
+      可以使用Van't Hoff方程式來計算
+      \begin{equation}
+        \frac{d\ln K_{\text{abs}}}{dT}=\frac{\Delta H_{\text{abs}}}{RT^2}
+      \end{equation}
+      也可以看出$K_{\text{abs}}$隨溫度上升而下降，代表溫度越高，越不利於吸收
+      \item 壓力\\
+      可以假設大部分氣體對液體的溶解度很小，而溶質於液體中是稀薄的\\
+      可以符合亨利定律
+      \begin{equation}
+        y_AP= x_Ak_A(T)
+      \end{equation}
+      也代表越高壓，越有利於吸收\\
+      另外因為吸收塔中具有壓力梯度，因此亨利定律常數並不是固定的\\
+      而操作方程可以寫成
+      \begin{equation}
+        y_{A,i}P_i = x_{A,i}k_A(T_i),\quad\text{or}\quad y_{A,i}=H_A(T_i,P_i)x_{A,i}
+      \end{equation}
+      圖形上有兩種
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick, scale=1.2]
+          \draw [->] (0,0) -- (5,0) node[anchor=west] {$x_A$};
+          \draw [->] (0,0) -- (0,5) node[anchor=south] {$y_A$};
+          \draw (0,0) .. controls (2,4) and (3,4) .. (4,4);
+          \node[anchor=west] at (4,4) {E.L.};
+          \node[anchor=north] at (2.5,0) {A易溶於液體};
+          \def\xShift{6}
+          \draw [->] (0+\xShift,0) -- (5+\xShift,0) node[anchor=west] {$x_A$};
+          \draw [->] (0+\xShift,0) -- (0+\xShift,5) node[anchor=south] {$y_A$};
+          \draw (0+\xShift,0) .. controls (1+\xShift,0) and (2+\xShift,0) .. (4+\xShift,4);
+          \node[anchor=south] at (4+\xShift,4) {E.L.};
+          \node[anchor=north] at (2.5+\xShift,0) {A難溶於液體}; 
+        \end{tikzpicture}
+        \caption{吸收操作線示意圖}
+      \end{figure}
+      而通常考試都會假設溶液非常稀薄，故可以視為線性
+    \end{itemize}
+    P.S. 和蒸餾做對比，\fbox{蒸餾}適合在\fbox{低溫、低壓}下分離物質\\
+    而\fbox{吸收}則適合在\fbox{低溫、高壓}下分離物質\\
+    而吸收塔的低溫，通常就是指室溫
+    \item 如何提高吸收、氣提的質傳效果
+    \begin{itemize}
+      \item 增加質傳面積，採用\fbox{填充塔}
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,0) rectangle (2, 6);
+          \fill[pattern=crosshatch dots, pattern color=blue] (0,0) rectangle (2,6);
+          \draw [->] (-2,7) -- (0.5,7) -- (0.5,6);
+          \draw [->] (1.5,6) -- (1.5,7);
+          \node[anchor=south] at (1.5,7) {Gas out};
+          \draw [->] (0.5,0) -- (0.5,-1) -- (-2,-1);
+          \draw [->] (1.5,-1) -- (1.5,0);
+          \node[anchor=east] at (-2,7) {Liquid in};
+          \node[anchor=east] at (-2,-1) {Liquid out};
+          \node[anchor=north] at (1.5,-1) {Gas in};
+          \node[anchor=west] at (2,3) {惰性填充物};
+          \def\r{0.2}
+          \def\dx{2*\r}
+          \def\dy{sqrt(3)*\r}
+          \foreach \j in {0,...,16} {%
+            \pgfmathsetmacro{\y}{\r + \j*\dy}%
+            \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+              \foreach \i in {0,...,3} {%
+                \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+                \fill[white, draw=black] (\x,\y) circle (\r);%
+              }%
+            \else % Even rows: not shifted, 5 circles
+              \foreach \i in {0,...,4} {%
+                \pgfmathsetmacro{\x}{\r + \i*\dx}%
+                \fill[white, draw=black] (\x,\y) circle (\r);%
+              }%
+            \fi
+          }
+        \end{tikzpicture}
+        \caption{填充塔示意圖}
+      \end{figure}
+      而填充塔有三個效應:
+      \begin{enumerate}
+        \item 孔道現象，Channeling effect：\\
+          填充材料在塔內若\fbox{緊密程度不均勻}，液體會往空間大(阻力小)的方向流動\\
+          使得塔內填充材料，不能完全濕潤，降低質傳效率\\
+          \fbox{要避免發生}，而尤其越是\fbox{整齊排列，反而越容易發生}此現象\\
+          避免方法:\\
+          \fbox{增加液體流量}，但這會使吸收濃度下降\\
+          \fbox{增加D/d的比例}，更寬的塔，更小的填充物
+          \begin{equation}
+            \boxed{\frac{D}{d} > 8}
+          \end{equation}
+          \fbox{使用機械填充}
+        \item Loading Point：\\
+          填充塔內氣體流速過高，會導致液體無法均勻分佈在填充物上
+        \item Flooding Point：\\
+          填充塔內氣體流速過高，會導致液體無法順利流下，造成液體積聚
+      \end{enumerate}
+      \item Loading Point 與 Flooding Point 的實驗:
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,6) -- (0,0) -- (2,0) --(2,1) -- (2.35,1) arc(90:0:0.15)
+          -- (2.5,0.3) arc(180:270:0.3) -- (3.2, 0) arc(270:360:0.3) -- (3.5,4) -- (3.2,4) 
+          -- (3.2,0.45) arc(360:270:0.15) -- (2.95,0.3) arc(270:180:0.15) -- (2.8,1.0) arc(0:90:0.3) -- (2,1.3) -- (2,6) -- cycle;
+          \fill[pattern=crosshatch dots, pattern color=blue] (0,0) rectangle (2,3);
+          \draw [->, blue] (-2,6.5) -- (0.4,6.5) -- (0.4,6);
+          \draw [->, blue] (0.4,6.5) -- (0.8,6.5) -- (0.8,6);
+          \draw [->, blue] (0.8,6.5) -- (1.2,6.5) -- (1.2,6);
+          \draw [->, blue] (1.2,6.5) -- (1.6,6.5) -- (1.6,6);
+          \draw [->] (1,6) -- (1,7);
+          \node[anchor=south] at (1,7) {Gas out};
+          \draw [->, blue] (0.5,0) -- (0.5,-1) -- (-2,-1);
+          \draw [->] (3,-1) -- (1.5,-1) -- (1.5,0);
+          \node[anchor=west] at (3,-1) {G};
+          \draw [<->] (-0.3,0) -- (-0.3,3) node[midway, left] {填充塔高$L$};
+          \fill [pattern=north east lines, pattern color=red] 
+            (2.5,0.7) -- (2.5,0.3) arc(180:270:0.3) -- (3.2, 0) arc(270:360:0.3) -- (3.5,3) -- (3.2,3)
+            -- (3.2,0.45) arc(360:270:0.15) -- (2.95,0.3) arc(270:180:0.15) -- (2.8,0.7) -- cycle;
+          \draw[<->] (3,0.7) -- (3,3) node[midway, left] {$\Delta h$};
+          \def\r{0.2}
+          \def\dx{2*\r}
+          \def\dy{sqrt(3)*\r}
+          \foreach \j in {0,...,8} {%
+            \pgfmathsetmacro{\y}{\r + \j*\dy}%
+            \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+              \foreach \i in {0,...,3} {%
+                \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+                \fill[white, draw=black] (\x,\y) circle (\r);%
+              }%
+            \else % Even rows: not shifted, 5 circles
+              \foreach \i in {0,...,4} {%
+                \pgfmathsetmacro{\x}{\r + \i*\dx}%
+                \fill[white, draw=black] (\x,\y) circle (\r);%
+              }%
+            \fi
+          }
+        \end{tikzpicture}
+        \caption{Loading Point 與 Flooding Point 示意圖}
+      \end{figure}
+      改變氣體流量$G$，測量填充塔內壓力計所得壓差$\Delta h$
+      \begin{equation}
+        -\Delta P = (\rho^\ast -\rho) \frac{g}{g_c}\Delta h
+      \end{equation}
+      由$\Delta h$可以推回$\Delta P$(就是壓差計呀)\\
+      接著再對G與$- \Delta P$作圖(因為非線性)，但為正相關
+      \begin{equation}
+        G\propto (-\Delta P)^n
+      \end{equation}
+      所以要取對數，並取填充塔高$L$為特徵長度，也就是以$\log G$為橫軸，$\log(\frac{-\Delta P}{L})$為縱軸作圖
+      \begin{equation}
+        \log G = n \log\left(\frac{-\Delta P}{L}\right) + \text{const}
+      \end{equation}
+      作圖後發現初期為一直線，但過一點後斜率變大\\
+      代表氣體的阻力增加很多，這個轉折點就是Loading Point
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw [->] (0,0) -- (7,0) node[anchor=west] {$\log\left(\frac{-\Delta P}{L}\right)$};
+          \draw [->] (0,0) -- (0,9) node[anchor=south] {$\log G$};
+          \draw (0.5,0.5) .. controls (4,3.5) and (4.33,3.57) .. (5,5) ..controls (6,7.5) and (6,7) .. (6,8);
+          \path[name path=line1] (4.15,0) -- (4.15,5);
+          \path[name path=line2, overlay] (0.5,0.5) .. controls (4,3.5) and (4.33,3.57) .. (5,5) ..controls (6,7.5) and (6,7) .. (6,8);
+          \path[name path=line3, overlay] (5.9,0) -- (5.9,10);
+          \path[name intersections={of=line3 and line2, by={B}}];
+          \path[name intersections={of=line1 and line2, by={A}}];
+          \draw[dashed] (4.15,0) -- (A);
+          \node[anchor=east] at (A) {Loading Point};
+          \draw[dashed] (5.9,0) -- (B);
+          \node[anchor=west] at (B) {Flooding Point};
+          \fill[pattern=north east lines] (3.8,0) rectangle (5.1,0.5);
+          \draw[dashed] (3.8,0) rectangle (5.1,0.5);
+          \node[anchor=south] at (4.45,0.5) {正常操作區間};
+          \node[anchor=north] at (3.8, 0) {\small $50\%$};
+          \node[anchor=north] at (5.1, 0) {\small $75\%$};
+          \node[anchor=north west] at (5.9,0) {\small $100\%$};
+        \end{tikzpicture}
+        \caption{Loading Point 與 Flooding Point 作圖示意圖}
+      \end{figure}
+      在轉折點處，由於液體向下的力量等於氣體向上的力量\\
+      導致液體\fbox{滯留}在填充塔內，無法順利流下\\
+      而氣體向上流的阻力也大增\\
+      而斜率開始變大的點，就是Loading Point\\
+      因為從這個點以後，氣體往上都是要克服(承載)這坨液體的重量\\
+      而當繼續加大氣體流量，會發現斜率趨近於無限大\\
+      此時液體已經無法流下，整個填充塔都\fbox{被液體淹沒，並噴出塔頂}\\
+      這個點就是Flooding Point\\
+      而正常的操作區間建議在Flooding Point的$50\%\sim 75\%$之間\\
+      P.S. 與Loading Point無太直接關係\\
+      但通常Loading Point約在Flooding Point的$50\%$附近
+    \end{itemize}
+    \item 連續式填充塔\\
+    同時包含吸收和氣提兩個單元操作\\
+    又可分為兩種操作方式
+    \begin{itemize}
+      \item 逆流式(Counter-current)：\\
+      吸收與氣提同時進行\\
+      吸收塔頂端進入氣體，底端進入液體\\
+      吸收塔頂端流出吸收後的液體，底端流出氣提後的氣體
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \def\xShift{0}
+          \draw (0+\xShift,0) rectangle (2+\xShift,6);
+          \fill[pattern=crosshatch dots, pattern color=blue] (0+\xShift,0) rectangle (2+\xShift,6);
+          \draw [->, blue] (-2+\xShift,7) -- (0.5+\xShift,7) -- (0.5+\xShift,6);
+          \draw [->, red] (1.5+\xShift,6) -- (1.5+\xShift,7) -- (4+\xShift,7);
+          \node[anchor=west] at (4+\xShift,7) {$G_2,y_{A2}$};
+          \draw [->, blue] (0.5+\xShift,0) -- (0.5+\xShift,-1) -- (-2+\xShift,-1);
+          \draw [->, red] (4+\xShift,-1) -- (1.5+\xShift,-1) -- (1.5+\xShift,0);
+          \node[anchor=east] at (-2+\xShift,7) {$L_2,x_{A2}$};
+          \node[anchor=east] at (-2+\xShift,-1) {$L_1,x_{A1}$};
+          \node[anchor=west] at (4+\xShift,-1) {$G_1,y_{A1}$};
+          \node[anchor=west] at (2+\xShift,3) {惰性填充物};
+          \node[anchor=north] at (-0.75+\xShift,-1) {A$\uparrow$ + C};
+          \node[anchor=north] at (2.75+\xShift,-1) {A$\uparrow$ + B};
+          \node[anchor=south] at (-0.75+\xShift,7) {A$\downarrow$ + C};
+          \node[anchor=south] at (2.75+\xShift,7) {A$\downarrow$ + B};
+          \def\r{0.2}
+          \def\dx{2*\r}
+          \def\dy{sqrt(3)*\r}
+          \foreach \j in {0,...,16} {%
+            \pgfmathsetmacro{\y}{\r + \j*\dy}%
+            \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+              \foreach \i in {0,...,3} {%
+                \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+                \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+              }%
+            \else % Even rows: not shifted, 5 circles
+              \foreach \i in {0,...,4} {%
+                \pgfmathsetmacro{\x}{\r + \i*\dx}%
+                \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+              }%
+            \fi
+          }
+          \node[fill=white, draw=black] at (1+\xShift,3) {$\xleftarrow{A}$};
+        \end{tikzpicture}
+        \caption{逆流式吸收氣提填充塔示意圖}
+      \end{figure}
+      質量平衡:
+      \begin{equation}
+        G_1 + L_2 = G_2 + L_1
+      \end{equation}
+      組成$A$的平衡:
+      \begin{equation}
+        G_1y_{A1} + L_2x_{A2} = G_2y_{A2} + L_1x_{A1} \label{eq:abs_strip_A_balance}
+      \end{equation}
+      令$G_S$為氣體中不會交換的Inert Gas B的流量
+      \begin{equation}
+        G_S = G_{1B} = G_{2B}
+      \end{equation}
+      換成$A$的平衡式
+      \begin{align}
+        G_S = G_{1B} = G_1(1-y_{A1}) &\implies G_1 = \frac{G_S}{1-y_{A1}} \\
+        G_S = G_{2B} = G_2(1-y_{A2}) &\implies G_2 = \frac{G_S}{1-y_{A2}}
+      \end{align}
+      令$L_S$為液體中不會交換的Inert Liquid C的流量
+      \begin{equation}
+        L_S = L_{1C} = L_{2C}
+      \end{equation}
+      換成$A$的平衡式
+      \begin{align}
+        L_S = L_{1C} = L_1(1-x_{A1}) &\implies L_1 = \frac{L_S}{1-x_{A1}} \\
+        L_S = L_{2C} = L_2(1-x_{A2}) &\implies L_2 = \frac{L_S}{1-x_{A2}}
+      \end{align}
+      將以上四式代入式(\ref{eq:abs_strip_A_balance})，可得操作線方程式$f(x_A,y_A)$
+      \begin{equation}
+        \boxed{
+          G_S\frac{y_{A1}}{1-y_{A1}} + L_S\frac{x_{A2}}{1-x_{A2}} = G_S\frac{y_{A2}}{1-y_{A2}} + L_S\frac{x_{A1}}{1-x_{A1}}
+        }
+      \end{equation}
+      不過此操作線不是直線，因此再令$Y_A = \frac{y_A}{1-y_A}, X_A = \frac{x_A}{1-x_A}$，可得線性操作線方程式
+      \begin{align}
+        &\boxed{G_SY_{A1}+ L_SX_{A2} = G_SY_{A2} + L_SX_{A1}} \nonumber \\
+        \implies &\boxed{G_S(Y_{A1}-Y_{A2}) = L_S(X_{A1}-X_{A2})}\nonumber \\
+        \implies &\boxed{\frac{Y_{A1}-Y_{A2}}{X_{A1}-X_{A2}} = \frac{L_S}{G_S}}
+      \end{align}
+      此式隱含了三個已知資訊，點($X_{A1}, Y_{A1}$)、點($X_{A2}, Y_{A2}$)、斜率($\frac{L_S}{G_S}$)\\
+      \fbox{其實操作線只是想表達液氣互換的比例在質量守恆下為$L/G$}\\
+      另外注意到一點是，當假設非常稀薄時，不管是$Y_A$或$X_A$都近似等於原本的濃度$y_A$或$x_A$
+      \begin{align}
+        Y_A = \frac{y_A}{1-y_A} &\approx y_A \\
+        X_A = \frac{x_A}{1-x_A} &\approx x_A
+      \end{align}
+      因此操作線在非常稀薄的情況下，也可以寫成
+      \begin{equation}
+        \boxed{\frac{y_{A1}-y_{A2}}{x_{A1}-x_{A2}} = \frac{L_S}{G_S}}
+      \end{equation}
+      \item 共流式(Co-current)：\\
+      吸收與氣提同時進行\\
+      吸收塔頂端進入氣體，底端進入液體\\
+      吸收塔底端流出吸收後的液體，頂端流出氣提後的氣體
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick, scale=1.2]
+          \def\xShift{0}
+          \draw (0+\xShift,0) rectangle (2+\xShift,6);
+          \fill[pattern=crosshatch dots, pattern color=blue] (0+\xShift,0) rectangle (2+\xShift,6);
+          \draw [<-, blue] (-2+\xShift,7) -- (0.5+\xShift,7) -- (0.5+\xShift,6);
+          \draw [->, red] (1.5+\xShift,6) -- (1.5+\xShift,7) -- (4+\xShift,7);
+          \node[anchor=west] at (4+\xShift,7) {$G_2,y_{A2}$};
+          \draw [<-, blue] (0.5+\xShift,0) -- (0.5+\xShift,-1) -- (-2+\xShift,-1);
+          \draw [->, red] (4+\xShift,-1) -- (1.5+\xShift,-1) -- (1.5+\xShift,0);
+          \node[anchor=east] at (-2+\xShift,7) {$L_2,x_{A2}$};
+          \node[anchor=east] at (-2+\xShift,-1) {$L_1,x_{A1}$};
+          \node[anchor=west] at (4+\xShift,-1) {$G_1,y_{A1}$};
+          \node[anchor=west] at (2+\xShift,3) {惰性填充物};
+          \node[anchor=north] at (-0.75+\xShift,-1) {A$\downarrow$ + C};
+          \node[anchor=north] at (2.75+\xShift,-1) {A$\uparrow$ + B};
+          \node[anchor=south] at (-0.75+\xShift,7) {A$\uparrow$ + C};
+          \node[anchor=south] at (2.75+\xShift,7) {A$\downarrow$ + B};
+          \def\r{0.2}
+          \def\dx{2*\r}
+          \def\dy{sqrt(3)*\r}
+          \foreach \j in {0,...,16} {%
+            \pgfmathsetmacro{\y}{\r + \j*\dy}%
+            \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+              \foreach \i in {0,...,3} {%
+                \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+                \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+              }%
+            \else % Even rows: not shifted, 5 circles
+              \foreach \i in {0,...,4} {%
+                \pgfmathsetmacro{\x}{\r + \i*\dx}%
+                \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+              }%
+            \fi
+          }
+        \end{tikzpicture}
+        \caption{共流式吸收氣提填充塔示意圖}
+      \end{figure}
+      操作線的推導與逆流式相似\\
+      質量平衡後
+      \begin{equation}
+        G_S\frac{y_{A1}}{1-y_{A1}} + L_S\frac{x_{A1}}{1-x_{A1}} = G_S\frac{y_{A2}}{1-y_{A2}} + L_S\frac{x_{A2}}{1-x_{A2}}
+      \end{equation}
+      令$Y_A = \frac{y_A}{1-y_A}, X_A = \frac{x_A}{1-x_A}$代入後得到
+      \begin{align}
+        G_SY_{A1} + L_SX_{A1} &= G_SY_{A2} + L_SX_{A2} \\
+        \implies G_S(Y_{A1}-Y_{A2}) &= L_S(X_{A2}-X_{A1}) \\
+        \implies \frac{Y_{A1}-Y_{A2}}{X_{A2}-X_{A1}} &= \frac{L_S}{G_S}
+      \end{align}
+      但可以看到這樣所表示的是$(X_{A2},Y_{A1})$與$(X_{A1},Y_{A2})$兩點的連線斜率\\
+      這並不直觀，所以就乘上一個負號，得到
+      \begin{equation}
+        \boxed{\frac{Y_{A1}-Y_{A2}}{X_{A1}-X_{A2}} = -\frac{L_S}{G_S}}
+      \end{equation}
+      而對比逆流式，可以把負號想成是流向，只是是相反的\\
+      同樣，當假設非常稀薄時，可以近似成
+      \begin{equation}
+        \boxed{\frac{y_{A1}-y_{A2}}{x_{A1}-x_{A2}} = -\frac{L_S}{G_S}}
+      \end{equation}
+    \end{itemize}
+    \item 操作線與平衡線推算理論板數\\
+    同蒸餾塔一樣，可以使用McCabe-Thiele法來推算理論板數\\
+    稱之為\fbox{相當理論板數}，Equivalent Theoretical Stages, ETS\\
+    只不過吸收與氣提的操作線有些不同\\
+    以\fbox{逆流}式\fbox{吸收塔}為例
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0,0) .. controls (2,2) and (4,4) .. (5,4);
+        \node[anchor=west] at (5,4) {E.L.};
+        \def\XAone{4};
+        \def\YAone{5.5};
+        \def\XAtwo{0.5};
+        \def\YAtwo{1};
+        \draw[blue] (\XAtwo,\YAtwo) -- (\XAone,\YAone) coordinate (A);
+        \node[blue,anchor=south west] at (A) {O.L.};
+        \path[name path=equili] (0,0) .. controls (2,2) and (4,4) .. (5,4);
+        \path[name path=oper] (\XAtwo,\YAtwo) -- (\XAone,\YAone);
+        \path[name path=verA] (\XAone,0) -- (\XAone,6);
+        \path[name intersections={of=equili and verA, by={PA}}];
+        \draw[orange] (PA) -- (\XAone,\YAone);
+        \node[anchor=north west] at (PA) {板1};
+        \path[name path=horA] (PA) -- (0, 0|-PA);
+        \path[name intersections={of=oper and horA, by={PB}}];
+        \draw[orange] (PB) -- (PA);
+        \path[name path=verB] (PB) -- (PB|-0,0);
+        \path[name intersections={of=equili and verB, by={PC}}];
+        \draw[orange] (PC) -- (PB);
+        \node[anchor=north west] at (PC) {板2};
+        \path[name path=horB] (PC) -- (0, 0|-PC);
+        \path[name intersections={of=oper and horB, by={PD}}];
+        \draw[orange] (PD) -- (PC);
+        \path[name path=verD] (PD) -- (PD|-0,0);
+        \path[name intersections={of=equili and verD, by={PE}}];
+        \draw[orange] (PE) -- (PD);
+        \node[anchor=north west] at (PE) {板3};
+        \path[name path=horE] (PE) -- (0, 0|-PE);
+        \path[name intersections={of=oper and horE, by={PF}}];
+        \draw[orange] (PF) -- (PE);
+        \path[name path=verF] (PF) -- (PF|-0,0);
+        \path[name intersections={of=equili and verF, by={PG}}];
+        \draw[orange] (PG) -- (PF);
+        \node[anchor=north west] at (PG) {板4};
+        \draw[dashed] (\XAtwo,0) -- (\XAtwo, \YAtwo);
+        \path[name path=lastV] (\XAtwo,0) -- (\XAtwo,6);
+        \path[name path=lastH] (PG) -- (0, 0|-PG);
+        \path[name intersections={of=lastV and lastH, by={PH}}];
+        \draw[orange] (PG) -- (PH);
+        \node[anchor=east] at (PH) {\mcirc{2}};
+        \node[anchor=east] at (\XAone,\YAone) {\mcirc{1}};
+        \def\xShift{10}
+        \draw (0+\xShift,0) rectangle (2+\xShift,6);
+        \node[anchor=west] at (2+\xShift,0) {\mcirc{1}};
+        \node[anchor=west] at (2+\xShift,6) {\mcirc{2}};
+        \fill[pattern=crosshatch dots, pattern color=blue] (0+\xShift,0) rectangle (2+\xShift,6);
+        \draw [->, blue] (-2+\xShift,7) -- (0.5+\xShift,7) -- (0.5+\xShift,6);
+        \draw [->, red] (1.5+\xShift,6) -- (1.5+\xShift,7) -- (4+\xShift,7);
+        \node[anchor=west] at (4+\xShift,7) {$G_2,y_{A2}$};
+        \draw [->, blue] (0.5+\xShift,0) -- (0.5+\xShift,-1) -- (-2+\xShift,-1);
+        \draw [->, red] (4+\xShift,-1) -- (1.5+\xShift,-1) -- (1.5+\xShift,0);
+        \node[anchor=east] at (-2+\xShift,7) {$L_2,x_{A2}$};
+        \node[anchor=east] at (-2+\xShift,-1) {$L_1,x_{A1}$};
+        \node[anchor=west] at (4+\xShift,-1) {$G_1,y_{A1}$};
+        \node[anchor=west] at (2+\xShift,3) {惰性填充物};
+        \node[anchor=north] at (-0.75+\xShift,-1) {A$\uparrow$ + C};
+        \node[anchor=north] at (2.75+\xShift,-1) {A$\uparrow$ + B};
+        \node[anchor=south] at (-0.75+\xShift,7) {A$\downarrow$ + C};
+        \node[anchor=south] at (2.75+\xShift,7) {A$\downarrow$ + B};
+        
+        \def\r{0.2}
+        \def\dx{2*\r}
+        \def\dy{sqrt(3)*\r}
+        \foreach \j in {0,...,16} {%
+          \pgfmathsetmacro{\y}{\r + \j*\dy}%
+          \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+            \foreach \i in {0,...,3} {%
+              \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+              \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+            }%
+          \else % Even rows: not shifted, 5 circles
+            \foreach \i in {0,...,4} {%
+              \pgfmathsetmacro{\x}{\r + \i*\dx}%
+              \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+            }%
+          \fi
+        }
+        \node[fill=white, draw=black] at (1+\xShift,3) {$\xleftarrow{A}$};
+      \end{tikzpicture}
+      \caption{逆流式吸收塔理論板數推算示意圖}
+      \label{fig:abs_strip_McCabe_Thiele}
+    \end{figure}
+    因為是吸收塔，所以目標是$G(A)\rightarrow L(A)$\\
+    這代表氣體進料的\mcirc{1}處的$Y_{A1}$是\fbox{大於}\mcirc{1}處平衡線\\
+    \mcirc{1}處的$X_{A1}$是\fbox{小於}\mcirc{1}處平衡線\\
+    所以氣相$A$才會往液相移動\\
+    而斜率為$\frac{L_S}{G_S}$為正\\
+    操作線會在平衡線的\fbox{左上}方\\
+    而理論板的畫法，從進料點\mcirc{1}的操作線開始往下畫水平線\\
+    同蒸餾塔時理論板的意義相同\\
+    理論板是平衡的板子，所以會在\fbox{平衡線}上\\
+    如果改為\fbox{逆流式}的\fbox{氣提塔}，則操作線會在平衡線的\fbox{右下}方
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0,0) .. controls (2,2) and (4,4) .. (5,4);
+        \node[anchor=west] at (5,4) {E.L.};
+        \def\XAone{1};
+        \def\YAone{0.5};
+        \def\XAtwo{4};
+        \def\YAtwo{3};
+        \draw[blue] (\XAone,\YAone) -- (\XAtwo,\YAtwo)  coordinate (A);
+        \node[blue,anchor=south west] at (A) {O.L.};
+        \path[name path=equili] (0,0) .. controls (2,2) and (4,4) .. (5,4);
+        \path[name path=oper] (\XAtwo,\YAtwo) -- (\XAone,\YAone);
+        \path[name path=horA] (\XAtwo,\YAtwo) -- (0, \YAtwo);
+        \path[name intersections={of=equili and horA, by={PA}}];
+        \draw[orange] (PA) -- (\XAtwo,\YAtwo);
+        \node[anchor=south east] at (PA) {板1};
+        \path[name path=verA] (PA) -- (PA|-0,0);
+        \path[name intersections={of=oper and verA, by={PB}}];
+        \draw[orange] (PB) -- (PA);
+        \path[name path=horB] (PB) -- (0, 0|-PB);
+        \path[name intersections={of=equili and horB, by={PC}}];
+        \draw[orange] (PC) -- (PB);
+        \node[anchor=south east] at (PC) {板2};
+        \path[name path=verC] (PC) -- (PC|-0,0);
+        \path[name intersections={of=oper and verC, by={PD}}];
+        \draw[orange] (PD) -- (PC);
+        \path[name path=horD] (PD) -- (0, 0|-PD);
+        \path[name intersections={of=equili and horD, by={PE}}];
+        \draw[orange] (PE) -- (PD);
+        \node[anchor=south east] at (PE) {板3};
+        \path[name path=verE] (PE) -- (PE|-0,0);
+        \path[name intersections={of=oper and verE, by={PF}}];
+        \draw[orange] (PF) -- (PE);
+        \path[name path=horF] (PF) -- (0, 0|-PF);
+        \path[name intersections={of=equili and horF, by={PG}}];
+        \draw[orange] (PG) -- (PF);
+        \node[anchor=south east] at (PG) {板4};
+        \path[name path=verG] (PG) -- (PG|-0,0);
+        \path[name intersections={of=oper and verG, by={PH}}];
+        \draw[orange] (PG) -- (PH);
+        \path[name path=horH] (PH) -- (0, 0|-PH);
+        \path[name intersections={of=equili and horH, by={PI}}];
+        \draw[orange] (PI) -- (PH);
+        \node[anchor=south east] at (PI) {板5};
+        \draw[dashed] (0,\YAone) -- (\XAone, \YAone);
+        \path[name path=lastH] (0,\YAone) -- (6,\YAone);
+        \path[name path=lastV] (PI) -- (PI|-0,0);
+        \path[name intersections={of=lastH and lastV, by={PJ}}];
+        \draw[orange] (PI) -- (PJ);
+        \node[anchor=north] at (PJ) {\mcirc{1}};
+        \node[anchor=east] at (\XAtwo,\YAtwo) {\mcirc{2}};
+        \def\xShift{10}
+        \draw (0+\xShift,0) rectangle (2+\xShift,6);
+        \node[anchor=west] at (2+\xShift,0) {\mcirc{1}};
+        \node[anchor=west] at (2+\xShift,6) {\mcirc{2}};
+        \fill[pattern=crosshatch dots, pattern color=blue] (0+\xShift,0) rectangle (2+\xShift,6);
+        \draw [->, blue] (-2+\xShift,7) -- (0.5+\xShift,7) -- (0.5+\xShift,6);
+        \draw [->, red] (1.5+\xShift,6) -- (1.5+\xShift,7) -- (4+\xShift,7);
+        \node[anchor=west] at (4+\xShift,7) {$G_2,y_{A2}$};
+        \draw [->, blue] (0.5+\xShift,0) -- (0.5+\xShift,-1) -- (-2+\xShift,-1);
+        \draw [->, red] (4+\xShift,-1) -- (1.5+\xShift,-1) -- (1.5+\xShift,0);
+        \node[anchor=east] at (-2+\xShift,7) {$L_2,x_{A2}$};
+        \node[anchor=east] at (-2+\xShift,-1) {$L_1,x_{A1}$};
+        \node[anchor=west] at (4+\xShift,-1) {$G_1,y_{A1}$};
+        \node[anchor=west] at (2+\xShift,3) {惰性填充物};
+        \node[anchor=north] at (-0.75+\xShift,-1) {A$\downarrow$ + C};
+        \node[anchor=north] at (2.75+\xShift,-1) {A$\downarrow$ + B};
+        \node[anchor=south] at (-0.75+\xShift,7) {A$\uparrow$ + C};
+        \node[anchor=south] at (2.75+\xShift,7) {A$\uparrow$ + B};
+        \def\r{0.2}
+        \def\dx{2*\r}
+        \def\dy{sqrt(3)*\r}
+        \foreach \j in {0,...,16} {%
+          \pgfmathsetmacro{\y}{\r + \j*\dy}%
+          \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+            \foreach \i in {0,...,3} {%
+              \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+              \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+            }%
+          \else % Even rows: not shifted, 5 circles
+            \foreach \i in {0,...,4} {%
+              \pgfmathsetmacro{\x}{\r + \i*\dx}%
+              \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+            }%
+          \fi
+        }
+        \node[fill=white, draw=black] at (1+\xShift,3) {$\xrightarrow{A}$};
+      \end{tikzpicture}
+      \caption{逆流式氣提塔理論板數推算示意圖}
+    \end{figure}
+    因為是氣提塔，所以目標是$L(A)\rightarrow G(A)$\\
+    這代表液體進料的\mcirc{1}處的$X_{A1}$是\fbox{大於}\mcirc{1}處平衡線\\
+    \mcirc{1}處的$Y_{A1}$是\fbox{小於}\mcirc{1}處平衡線\\
+    所以液相$A$才會往氣相移動\\
+    而斜率為$\frac{L_S}{G_S}$為正\\
+    操作線會在平衡線的\fbox{右下}方\\
+    而理論板的畫法，從液體進料點\mcirc{2}的操作線開始往左畫水平線\\
+    同樣理論板的意義相同\\
+    理論板是平衡的板子，所以會在\fbox{平衡線}上\\
+    至於順流式的吸收塔與氣提塔\\
+    則因為斜率為負號，因此無法畫出理論板
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0,0) .. controls (2,2) and (4,4) .. (5,4);
+        \node[anchor=west] at (5,4) {E.L.};
+        \def\XAone{1};
+        \def\YAone{5};
+        \def\XAtwo{3};
+        \def\YAtwo{3};
+        \draw[blue] (\XAone,\YAone) -- (\XAtwo,\YAtwo) node[midway, above right] {O.L.};
+        \node[anchor=south east] at (\XAone,\YAone) {\mcirc{1}};
+        \node[anchor=north west] at (\XAtwo,\YAtwo) {\mcirc{2}};
+        \node[anchor=north] at (3,-1) {Co-current 吸收塔};
+        \def\xShift{9}
+        \draw[->] (0+\xShift,0) -- (6+\xShift,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0+\xShift,0) -- (0+\xShift,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0+\xShift,0) .. controls (2+\xShift,2) and (4+\xShift,4) .. (5+\xShift,4);
+        \node[anchor=west] at (5+\xShift,4) {E.L.};
+        \def\XAone{5+\xShift};
+        \def\YAone{1};
+        \def\XAtwo{4+\xShift};
+        \def\YAtwo{2};
+        \draw[blue] (\XAone,\YAone) -- (\XAtwo,\YAtwo) node[midway, above right] {O.L.};
+        \node[anchor=north west] at (\XAone,\YAone) {\mcirc{1}};
+        \node[anchor=south east] at (\XAtwo,\YAtwo) {\mcirc{2}};
+        \node[anchor=north] at (3+\xShift,-1) {Co-current 吸收塔};
+      \end{tikzpicture}
+      \caption{共流式吸收氣提塔無法推算理論板示意圖}
+    \end{figure}
+    而其中斜率都為$\frac{L_S}{G_S}$的絕對值
+    \item 最佳操作條件設計:(必須要已知四條物流的其中三條)\\
+    對於\fbox{吸收}來說，我們想要最小液體流量$L_{S,\text{min}}$來達到目標\\
+    並希望能有最高的$x_{A1}$\\
+    可惜這需要無限多個理論板才能達到\\
+    同樣的，對於\fbox{氣提}來說，我們想要最小氣體流量$G_{S,\text{min}}$來達到目標\\
+    並希望能有最低的$y_{A1}$\\
+    可惜這也需要無限多個理論板才能達到\\
+    但我們仍然可以透過繪製操作線來求得其意義\\
+    以剛剛的(\ref{fig:abs_strip_McCabe_Thiele})逆流式吸收塔為例
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0,0) .. controls (3.45,3.94) and (5,5) .. (6,5);
+        \node[anchor=west] at (5,4) {E.L.};
+        \def\YAone{4.5};
+        \def\XAtwo{0.5};
+        \def\YAtwo{1.5};
+        \path[name path=equili] (0,0) .. controls (3.45,3.94) and (5,5) .. (6,5);
+        \path[name path=horA] (0,\YAone) -- (6,\YAone);
+        \path[name intersections={of=equili and horA, by={PA}}];
+        \draw[dashed] (0,\YAone) -- (PA) node[midway, above] {$\leftarrow$\mcirc{1}$\rightarrow$};
+        \draw[ultra thick, blue] (PA) -- (\XAtwo,\YAtwo);
+        \draw[dashed,blue] (PA) -- (PA|-0,0) node[midway, right] {斜率:$\left(\frac{L_S}{G_S}\right)_{\text{min}}$};
+        \draw[dashed, blue] (\XAtwo,\YAtwo) -- (1,\YAone);
+        \draw[dashed, blue] (\XAtwo,\YAtwo) -- (1.5,\YAone);
+        \draw[dashed, blue] (\XAtwo,\YAtwo) -- (2,\YAone);
+        \draw[dashed, blue] (\XAtwo,\YAtwo) -- (2.5,\YAone);
+        \draw[dashed, blue] (\XAtwo,\YAtwo) -- (3,\YAone);
+        \draw[dashed, blue] (\XAtwo,\YAtwo) -- (3.5,\YAone);
+        \draw[dashed, blue] (\XAtwo,\YAtwo) -- (4,\YAone);
+        \node[anchor=north] at (PA|-0,0) {$x_{A1,\text{max}}$};
+        \node[anchor=north east] at (\XAtwo,\YAtwo) {\mcirc{2}};
+        \node[anchor=east] at (0,\YAone) {$y_{A1}$};
+        \draw[dashed] (0, \YAtwo) -- (\XAtwo, \YAtwo);
+        \draw[dashed] (\XAtwo,0) -- (\XAtwo, \YAtwo);
+        \node[anchor=north] at (\XAtwo,0) {$x_{A2}$};
+        \node[anchor=east] at (0, \YAtwo) {$y_{A2}$};
+        \def\xShift{11}
+        \draw (0+\xShift,0) rectangle (2+\xShift,6);
+        \node[anchor=west] at (2+\xShift,0) {\mcirc{1}};
+        \node[anchor=west] at (2+\xShift,6) {\mcirc{2}};
+        \fill[pattern=crosshatch dots, pattern color=blue] (0+\xShift,0) rectangle (2+\xShift,6);
+        \draw [->, blue] (-2+\xShift,7) -- (0.5+\xShift,7) -- (0.5+\xShift,6);
+        \draw [->, red] (1.5+\xShift,6) -- (1.5+\xShift,7) -- (4+\xShift,7);
+        \node[anchor=west] at (4+\xShift,7) {已知$G_2,y_{A2}$};
+        \draw [->, blue] (0.5+\xShift,0) -- (0.5+\xShift,-1) -- (-2+\xShift,-1);
+        \draw [->, red] (4+\xShift,-1) -- (1.5+\xShift,-1) -- (1.5+\xShift,0);
+        \node[anchor=east] at (-2+\xShift,7) {已知$L_2,x_{A2}$};
+        \node[anchor=east] at (-2+\xShift,-1) {最小$L_1$,最大$x_{A1}$？};
+        \node[anchor=west] at (4+\xShift,-1) {已知$G_1,y_{A1}$};
+        \node[anchor=west] at (2+\xShift,3) {惰性填充物};
+        \node[anchor=north] at (-0.75+\xShift,-1) {A$\uparrow$ + C};
+        \node[anchor=north] at (2.75+\xShift,-1) {A$\uparrow$ + B};
+        \node[anchor=south] at (-0.75+\xShift,7) {A$\downarrow$ + C};
+        \node[anchor=south] at (2.75+\xShift,7) {A$\downarrow$ + B};
+        \def\r{0.2}
+        \def\dx{2*\r}
+        \def\dy{sqrt(3)*\r}
+        \foreach \j in {0,...,16} {%
+          \pgfmathsetmacro{\y}{\r + \j*\dy}%
+          \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+            \foreach \i in {0,...,3} {%
+              \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+              \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+            }%
+          \else % Even rows: not shifted, 5 circles
+            \foreach \i in {0,...,4} {%
+              \pgfmathsetmacro{\x}{\r + \i*\dx}%
+              \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+            }%
+          \fi
+        }
+        \node[fill=white, draw=black] at (1+\xShift,3) {$\xleftarrow{A}$};
+      \end{tikzpicture}
+      \caption{逆流式吸收塔最佳操作條件示意圖}
+    \end{figure}
+    此時最佳$x_{A1,\text{max}}$為:
+    \begin{equation}
+      \text{斜率} = \left(\frac{G_S}{L_S}\right) = \frac{Y_{A2}-Y_{A1}}{X_{A1,\text{max}}-X_{A2}} \implies 
+      X_{A1,\text{max}} = X_{A2} + \frac{Y_{A2}-Y_{A1}}{\left(\frac{G_S}{L_S}\right)_{\text{min}}}
+    \end{equation}
+    由圖可以直接得到數值，若以代數法，即代入亨利定律的E.L.方程式與上式聯立即可求得\\
+    如果假設亨利定律不受壓力影響，則就是兩條直線的交點:\\
+    操作線:
+    \begin{equation}
+      Y_A = \left(\frac{G_S}{L_S}\right)_{\text{min}}(X_A - X_{A2}) + Y_{A2}
+    \end{equation}
+    平衡線:
+    \begin{equation}
+      Y_A = mX_A
+    \end{equation}
+    聯立後:
+    \begin{align}
+      \left(\frac{G_S}{L_S}\right)_{\text{min}}(X_A - X_{A2}) + Y_{A2} &= mX_A \\
+      \implies X_A\left(m - \left(\frac{G_S}{L_S}\right)_{\text{min}}\right) &= Y_{A2} + \left(\frac{G_S}{L_S}\right)_{\text{min}}X_{A2} \\
+      \implies \boxed{X_{A1,\text{max}} = \frac{Y_{A2} + \left(\frac{G_S}{L_S}\right)_{\text{min}}X_{A2}}{m - \left(\frac{G_S}{L_S}\right)_{\text{min}}}}
+    \end{align}
+    同理可對其他三種塔型進行最佳操作條件設計\\
+    逆流式氣提塔:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0,0) .. controls (3.45,3.94) and (5,5) .. (6,5);
+        \node[anchor=west] at (6,5) {E.L.};
+        \def\xa{2}
+        \def\ya{1}
+        \def\xb{5}
+        \draw[dashed] (0,\ya) -- (\xa, \ya);
+        \draw[dashed] (\xa,0) -- (\xa, \ya);
+        \node[anchor=north east] at (\xa,\ya) {\mcirc{1}};
+        \node[anchor=north] at (\xa,0) {$x_{A1}$};
+        \node[anchor=north] at (\xb,0) {$x_{A2}$};
+        \node[anchor=east] at (0,\ya) {$y_{A1}$};
+        \path[name path=equili] (0,0) .. controls (3.45,3.94) and (5,5) .. (6,5);
+        \path[name path=verA] (\xb,0) -- (\xb,6);
+        \path[name intersections={of=equili and verA, by={PA}}];
+        \draw[dashed] (\xb,0) -- (PA) coordinate[midway](M) node[midway, right] {\mcirc{2}};
+        \draw[->] (M) ++(0.4,0.4) -- +(0,0.5);
+        \draw[->] (M) ++(0.4,-0.4) -- +(0,-0.5); 
+        \draw[ultra thick, blue] (PA) -- (\xa,\ya);
+        \draw[dashed, blue] (PA) -- (0,0|-PA);
+        \node[anchor=east] at (0,0|-PA) {$y_{A2,\text{min}}$};
+        \draw[dashed, blue] (\xa, \ya) -- (\xb, 1.5);
+        \draw[dashed, blue] (\xa, \ya) -- (\xb, 2);
+        \draw[dashed, blue] (\xa, \ya) -- (\xb, 2.5);
+        \draw[dashed, blue] (\xa, \ya) -- (\xb, 3);
+        \draw[dashed, blue] (\xa, \ya) -- (\xb, 3.5);
+        \draw[dashed, blue] (\xa, \ya) -- (\xb, 4);
+      \end{tikzpicture}
+      \caption{逆流式氣提塔最佳操作條件示意圖}
+    \end{figure}
+    此時最佳$y_{A2,\text{min}}$為:
+    \begin{equation}
+      \text{斜率} = \left(\frac{G_S}{L_S}\right) = \frac{Y_{A2,\text{min}}-Y_{A1}}{X_{A2}-X_{A1}} \implies 
+      Y_{A2,\text{min}} = Y_{A1} + \left(\frac{G_S}{L_S}\right)_{\text{min}}(X_{A2}-X_{A1})
+    \end{equation}
+    由圖可以直接得到數值，若以代數法，即代入亨利定律的E.L.方程式與上式聯立即可求得\\
+    如果假設亨利定律不受壓力影響，則就是兩條直線的交點:\\
+    操作線:
+    \begin{equation}
+      Y_A = \left(\frac{G_S}{L_S}\right)_{\text{min}}(X_A - X_{A1}) + Y_{A1}
+    \end{equation}
+    平衡線:
+    \begin{equation}
+      Y_A = mX_A
+    \end{equation}
+    聯立後:
+    \begin{align}
+      \left(\frac{G_S}{L_S}\right)_{\text{min}}(X_A - X_{A1}) + Y_{A1} &= mX_A \\
+      \implies X_A\left(m - \left(\frac{G_S}{L_S}\right)_{\text{min}}\right) &= Y_{A1} + \left(\frac{G_S}{L_S}\right)_{\text{min}}X_{A1} \\
+      \implies \boxed{X_{A2,\text{min}} = \frac{Y_{A1} + \left(\frac{G_S}{L_S}\right)_{\text{min}}X_{A1}}{m - \left(\frac{G_S}{L_S}\right)_{\text{min}}}}
+    \end{align}
+    不能畫理論板的共流式吸收塔與氣提塔\\
+    還是能透過操作線來求得最佳操作條件
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick, scale=0.9]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0,0) .. controls (3.45,3.94) and (5,5) .. (6,5);
+        \node[anchor=west] at (6,5) {E.L.};
+        \def\xa{1}
+        \def\ya{5}
+        \def\yb{2.5}
+        \draw[dashed] (0,\ya) -- (\xa, \ya);
+        \draw[dashed] (\xa,0) -- (\xa, \yb);
+        \node[anchor=south west] at (\xa,\ya) {\mcirc{1}};
+        \node[anchor=north] at (\xa,0) {$x_{A1}$};
+        \node[anchor=east] at (0,\yb) {$y_{A2}$};
+        \node[anchor=east] at (0,\ya) {$y_{A1}$};
+        \path[name path=equili] (0,0) .. controls (3.45,3.94) and (5,5) .. (6,5);
+        \path[name path=horA] (0,\yb) -- (6,\yb);
+        \path[name intersections={of=equili and horA, by={PA}}];
+        \draw[ultra thick, blue] (PA) -- (\xa,\ya);
+        \draw[dashed, blue] (\xa,\ya) -- (\xa,\yb);
+        \draw[dashed, blue] (\xa,\ya) -- (\xa+0.3,\yb);
+        \draw[dashed, blue] (\xa,\ya) -- (\xa+0.6,\yb);
+        \draw[dashed, blue] (\xa,\ya) -- (\xa+0.9,\yb);
+        \node[anchor=north] at (\xa,\yb) {\mcirc{2}$\rightarrow$};
+        \draw[dashed] (0,\yb) -- (PA);
+        \draw[blue, dashed] (PA) -- (PA|-0,0);
+        \node[anchor=north] at (PA|-0,0) {$x_{A2,\text{max}}$};
+        \node[anchor=south] at (4, 1) {斜率:$-\left(\frac{L_S}{G_S}\right)_{\text{max}}$};
+        \node[anchor=north] at (3,-1) {Co-current 吸收塔};
+        \def\xShift{9}
+        \draw[->] (0+\xShift,0) -- (6+\xShift,0) node[anchor=west] {$X_A=\frac{x_A}{1-x_A}$};
+        \draw[->] (0+\xShift,0) -- (0+\xShift,6) node[anchor=south] {$Y_A=\frac{y_A}{1-y_A}$};
+        \draw(0+\xShift,0) .. controls (3.45+\xShift,3.94) and (5+\xShift,5) .. (6+\xShift,5);
+        \node[anchor=west] at (6+\xShift,5) {E.L.};
+        \def\xa{5+\xShift}
+        \def\xb{2+\xShift}
+        \def\ya{0.5}
+        \draw[dashed] (\xa,0) -- (\xa, \ya);
+        \draw[dashed] (0+\xShift,\ya) -- (\xb, \ya);
+        \node[anchor=north east] at (\xb,\ya) {\mcirc{2}};
+        \node[anchor=north] at (\xb,0) {$x_{A2}$};
+        \node[anchor=east] at (0+\xShift,\ya) {$y_{A1}$};
+        \node[anchor=north] at (\xa,0) {$x_{A1}$};
+        \path[name path=equili] (0+\xShift,0) .. controls (3.45+\xShift,3.94) and (5+\xShift,5) .. (6+\xShift,5);
+        \path[name path=verA] (\xb,0) -- (\xb,6);
+        \path[name intersections={of=equili and verA, by={PA}}];
+        \draw[ultra thick, blue] (PA) -- (\xa,\ya);
+        \draw[dashed, blue] (\xa,\ya) -- (\xb,\ya);
+        \draw[dashed, blue] (\xa,\ya) -- (\xb, \ya+0.3);
+        \draw[dashed, blue] (\xa,\ya) -- (\xb, \ya+0.6);
+        \draw[dashed, blue] (\xa,\ya) -- (\xb, \ya+0.9);
+        \draw[dashed, blue] (\xa,\ya) -- (\xb, \ya+1.2);
+        \draw[dashed] (\xb,0) -- (PA);
+        \draw[dashed,blue] (\xShift,0|-PA) -- (PA);
+        \node[anchor=east] at (0+\xShift,0|-PA) {$y_{A2,\text{max}}$};
+        \node[anchor=south east] at (\xb,\ya) {$\uparrow$};
+        \node[anchor=west] at (\xa, \ya) {\mcirc{1}};
+        \node at (2+\xShift,4.5) {斜率:$-\left(\frac{L_S}{G_S}\right)_{\text{max}}$};
+        \node[anchor=north] at (3+\xShift,-1) {Co-current 氣提塔};
+      \end{tikzpicture}
+      \caption{共流式吸收/氣提最佳操作條件示意圖}
+    \end{figure}
+    \item 塔高(The Height of the Tower):
+    \begin{equation}
+      \boxed{Z = H\times N}, \quad \text{H:Height of transfer unit, N:Number of transfer units}
+    \end{equation}
+    \begin{itemize}
+      \item Height of transfer unit(H):\\
+      單位質傳高度，代表在該高度下可完成單位質傳的效果
+      \begin{equation}
+        H(m) = \frac{\text{平均莫耳流率} (mol/s)}{\text{質傳係數} (mol/s/m)}
+      \end{equation}
+      \item Number of transfer units(N):\\
+      質傳單位數
+      \begin{equation}
+        N(\text{無單位}) = \frac{\text{總驅動力}}{\text{一個單元的驅動力}} = \int_{y_2}^{y_1} \frac{dy}{\Delta y} = \int_{x_2}^{x_1} \frac{dx}{\Delta x}
+      \end{equation}
+    \end{itemize}
+    推導來自質傳的雙膜定律(\ref{sec:two_film_model})
+    \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw [dashed] (0,0) -- (0, 5);
+      \node at (-2.5, 5) {Liquid};
+      \node at (2.5, 5) {Gas};
+      \node[anchor=south] at (0,5) {Interface};
+      \node[anchor=north,red] at (0,0) {熱傳};
+      \draw[->, blue] (2,0.5) -- (0.3,0.5) node[midway, below] {質傳};
+      \draw[->, blue] (-0.3,0.5) -- (-2,0.5) node[midway, below] {質傳};
+      \node[blue, anchor=west] at (2,0.5) {$N_A$};
+      \node[blue, anchor=east] at (-2,0.5) {$N_A$};
+      \draw[->, blue] (5,4) .. controls (3,4) and (1,4) .. (0.3,2.5);
+      \draw[dashed, red] (0.3,5) rectangle (-0.3,0);
+      \draw[->, blue] (-0.3,2.0) .. controls (-1,0.8) and (-2,0.8) .. (-5,0.8);
+      \node[anchor=south, blue] at (5,4) {$y_{A,g}\to x_{A}^\ast$};
+      \node[anchor=north] at (5,4) {$x_{A}^\ast = \frac{y_{A,g}}{H_A}$};
+      \node[anchor=west, blue] at (0.3,2.5) {$y_{A,i}$};
+      \node[anchor=south, blue] at (-5,0.8) {$x_{A,l}\to y_A^\ast$};
+      \node[anchor=north] at (-5,0.8) {$y_A^\ast = H_A x_{A,l}$};
+      \node[anchor=east, blue] at (-0.3,2.0) {$x_{A,i}$};
+      \fill[pattern=north east lines, pattern color=red] (-0.3,2) rectangle (0.3,2.5);
+      \draw[dashed, red] (-0.3,2) -- (0.3,2);
+      \draw[dashed, red] (-0.3,2.5) -- (0.3,2.5);
+      \draw[dashed, blue!50] (0.3,2.5) rectangle (5,4);
+      \node[anchor=south] at (2.65,2.5) {Local Gas Phase};
+      \node[anchor=north] at (2.65,2.5) {質傳係數$k_y$};
+      \draw[dashed, blue!50] (-5,0.8) rectangle (-0.3,2);
+      \node[anchor=north] at (-2.65,2) {Local Liquid Phase};
+      \node[anchor=south] at (-2.65,2) {質傳係數$k_x$};
+      \node[anchor=north west, red] at (0.3,2) {亨利定律,$\color{black}\frac{y_{A,i}}{x_{A,i}}=H_A$};
+      \def\xShift{8}
+      \draw (0+\xShift,0) rectangle (2+\xShift,6);
+      \draw[->, blue] (0.5+\xShift,0) -- (0.5+\xShift,-1);
+      \draw[<-, red] (1.5+\xShift,0) -- (1.5+\xShift,-1);
+      \draw[<-, blue] (0.5+\xShift,6) -- (0.5+\xShift,7);
+      \draw[->,red] (1.5+\xShift,6) -- (1.5+\xShift,7);
+      \node[anchor=south, red] at (1.5+\xShift,7) {$G_2$};
+      \node[anchor=north, red] at (1.5+\xShift,-1) {$G_1$};
+      \node[anchor=south, blue] at (0.5+\xShift,7) {$L_2$};
+      \node[anchor=north, blue] at (0.5+\xShift,-1) {$L_1$};
+      \fill[pattern=crosshatch dots, pattern color=blue] (0+\xShift,0) rectangle (2+\xShift,6);
+      \def\r{0.2}
+      \def\dx{2*\r}
+      \def\dy{sqrt(3)*\r}
+      \foreach \j in {0,...,16} {%
+        \pgfmathsetmacro{\y}{\r + \j*\dy}%
+        \ifodd\j % Odd rows: shifted by half dx, only 4 circles
+          \foreach \i in {0,...,3} {%
+            \pgfmathsetmacro{\x}{\r + 0.5*\dx + \i*\dx}%
+            \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+          }%
+        \else % Even rows: not shifted, 5 circles
+          \foreach \i in {0,...,4} {%
+            \pgfmathsetmacro{\x}{\r + \i*\dx}%
+            \fill[white, draw=black] (\x+\xShift,\y) circle (\r);%
+          }%
+        \fi
+      }
+      \node[fill=white, draw=black] at (1+\xShift,3) {$\xleftarrow{A}$};
+    \end{tikzpicture}
+    \caption{雙膜模型與塔高的關係示意圖}
+  \end{figure}
+  其中有四條平衡式:
+  \begin{align}
+    \text{Local Gas}: \quad N_A &= k_y (y- y_i) \\
+    \text{Local Liquid}: \quad N_A &= k_x (x_i - x) \\
+    \text{Overall Gas}: \quad N_A &= K_y (y - y^\ast)\\
+    \text{Overall Liquid}: \quad N_A &= K_x (x^\ast - x)
+  \end{align}
+  定義平均流率，
+  \begin{align}
+    \overline{G} &= \frac{G_1 + G_2}{2} \\
+    \overline{L} &= \frac{L_1 + L_2}{2}
+  \end{align}
+  P.S. 當非常稀薄時，就都相等\\
+  而由於$H$的定義中的質傳係數
+  \begin{equation}
+    H(m) = \frac{\text{平均莫耳流率} (mol/s)}{\text{質傳係數} (mol/s/m)}
+  \end{equation}
+  與上面的四條平衡式的$K_y,K_x,k_y,k_x (mol/s/m^2)$單位並不相同\\
+  而這個轉換的過程，就是塔高的由來
+  \begin{equation}
+    \text{質傳係數} (mol/s/m) = k_y,k_x,K_y,K_x (mol/s/m^2)\cdot a\left(
+      \frac{\text{質傳面積}(m^2)}{\text{塔體積}(m^3)}\cdot S (\text{塔截面積})(m^2)
+    \right)
+  \end{equation}
+  而$a$稱為單位塔體積的質傳面積(Specific surface area)\\
+  假設有一個半徑為$D$的塔，填充了半徑為$d$的球，因為質傳發生的地方在球的表面\\
+  因此
+  \begin{equation}
+    a =\frac{\text{質傳面積}}{\text{塔體積}}= \frac{8N \pi d^2}{\frac{\pi}{4}D^2L}
+    = \frac{32d^2}{D^2L} \quad (m^2/m^3)
+  \end{equation}
+  而因為一個吸收塔只會有一個$a$跟一個$S$，因此，四條平衡式可改寫為:
+  \begin{align}
+    \text{Local Gas}: \quad H_y &= \frac{\overline{G}}{k_y a S} \\
+    \text{Local Liquid}: \quad H_x &= \frac{\overline{L}}{k_x a S} \\
+    \text{Overall Gas}: \quad H_{oy} &= \frac{\overline{G}}{K_y a S} \\
+    \text{Overall Liquid}: \quad H_{ox} &= \frac{\overline{L}}{K_x a S}
+  \end{align}
+  並且寫下各自的驅動力$N_y, N_x, N_{oy}, N_{ox}$:
+  \begin{align}
+    \text{Local Gas}: \quad N_y &= \int_{y_1}^{y_2} \frac{dy}{(y - y_i)} \\
+    \text{Local Liquid}: \quad N_x &= \int_{x_2}^{x_1} \frac{dx}{(x_i - x)} \\
+    \text{Overall Gas}: \quad N_{oy} &= \int_{y_1}^{y_2} \frac{dy}{(y - y^\ast)}\\
+    \text{Overall Liquid}: \quad N_{ox} &= \int_{x_2}^{x_1} \frac{dx}{(x^\ast - x)}
+  \end{align}
+  而這個積分呢，會變出LM(見下面證明)
+  \begin{align}
+    N_y  &= \frac{1}{[y-y_i]_{\text{LM}}}\int_{y_1}^{y_2} dy = \frac{y_2 - y_1}{[y-y_i]_{\text{LM}}}\\
+    N_x  &= \frac{1}{[x_i - x]_{\text{LM}}}\int_{x_2}^{x_1} dx = \frac{x_1 - x_2}{[x_i - x]_{\text{LM}}}\\
+    N_{oy}  &= \frac{1}{[y - y^\ast]_{\text{LM}}}\int_{y_1}^{y_2} dy = \frac{y_2 - y_1}{[y - y^\ast]_{\text{LM}}}\\
+    N_{ox}  &= \frac{1}{[x^\ast - x]_{\text{LM}}}\int_{x_2}^{x_1} dx = \frac{x_1 - x_2}{[x^\ast - x]_{\text{LM}}}
+  \end{align}
+  其中那些Log Mean(LM)為:
+  \begin{align}
+    [y - y_i]_{\text{LM}} &= \frac{(y_2 - y_{2,i}) - (y_1 - y_{1,i})}
+      {\ln\frac{y_2 - y_{2,i}}{y_1 - y_{1,i}}} = \frac{y_2 - y_1}{\ln\frac{y_2 - y_{2,i}}{y_1 - y_{1,i}}} \\
+    [x_i - x]_{\text{LM}} &= \frac{(x_{2,i} - x_2) - (x_{1,i} - x_1)}
+      {\ln\frac{x_{2,i} - x_2}{x_{1,i} - x_1}} = \frac{x_1 - x_2}{\ln\frac{x_{2,i} - x_2}{x_{1,i} - x_1}} \\
+    [y - y^\ast]_{\text{LM}} &= \frac{(y_2 - y_2^\ast) - (y_1 - y_1^\ast)}{\ln\frac{y_2 - y_2^\ast}{y_1 - y_1^\ast}} 
+      = \frac{y_2 - y_1}{\ln\frac{y_2 - y_2^\ast}{y_1 - y_1^\ast}} \\  
+    [x^\ast - x]_{\text{LM}} &= \frac{(x_2^\ast - x_2) - (x_1^\ast - x_1)}{\ln\frac{x_2^\ast - x_2}{x_1^\ast - x_1}} 
+      = \frac{x_1 - x_2}{\ln\frac{x_2^\ast - x_2}{x_1^\ast - x_1}}
+  \end{align}
+  不要管前兩個Local的Log Mean，因為分子中的${y_i},{x_i}$無法直接知道\\
+  而後面兩個，$y^\ast,x^\ast$則可以由亨利定律代換:
+  \begin{equation}
+    y^\ast = H x
+  \end{equation}
+  因此整個吸收塔在確定了\fbox{四個物流}後，就可以計算出$N_{oy}, N_{ox}$，\\
+  再由質傳係數與平均流率計算出$H_{oy}, H_{ox}$\\
+  然後就可以計算出塔高
+  \begin{equation}
+    Z = H_{oy}\times N_{oy} \quad \text{或} \quad Z = H_{ox}\times N_{ox}
+  \end{equation}
+  \item 證明:
+  \begin{equation}
+    N_{oy}  = \frac{1}{[y - y^\ast]_{\text{LM}}}\int_{y_1}^{y_2} dy = \frac{y_2 - y_1}{[y - y^\ast]_{\text{LM}}}
+  \end{equation}
+  必須假設$A$非常稀薄，因此平衡線與操作線皆可視為直線，因此$y-y^\ast$也是直線\\
+  因此可設
+  \begin{equation}
+    y - y^\ast = ay +b
+  \end{equation}
+  因此
+  \begin{align}
+    N_{oy} &= \int_{y_1}^{y_2} \frac{dy}{ay + b} = \frac{1}{a}\int_{y_1}^{y_2} \frac{d(ay+b)}{ay + b} \\
+    &= \frac{1}{a}[\ln(ay+b)]_{y_1}^{y_2} = \frac{1}{a}\ln\frac{ay_2 + b}{ay_1 + b}
+  \end{align}
+  而
+  \begin{equation}
+    [y - y^\ast]_{\text{LM}} = \frac{(ay_2 + b) - (ay_1 + b)}{\ln\frac{ay_2 + b}{ay_1 + b}} = \frac{a(y_2 - y_1)}{\ln\frac{ay_2 + b}{ay_1 + b}}
+  \end{equation}
+  因此
+  \begin{equation}
+    N_{oy} = \frac{y_2 - y_1}{[y - y^\ast]_{\text{LM}}}
+  \end{equation}
+\end{itemize}
+\end{CJK*}
+\end{document}

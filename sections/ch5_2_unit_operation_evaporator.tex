@@ -2,8 +2,48 @@
 \begin{document}
 \begin{CJK*}{UTF8}{bkai}
 \subsection{蒸發器 Evaporator}
-藉由加熱使溶劑因沸騰而汽化，以去除溶劑達到溶液純化的目的
+藉由加熱使溶劑因沸騰而汽化，以去除溶劑達到溶液純化的目的\\
+只能用在一個會揮發另一個\fbox{不會揮發}的混合物\\
+常用於食品工業(果汁、牛奶)、製藥工業(抗生素、維他命)、化學工業(鹽水濃縮、硫酸濃縮)
 \begin{itemize}
+  \item 蒸發器不希望發生的兩件事:
+  \begin{enumerate}
+    \item 結垢(Fouling)\\
+    會使熱傳效果變差($k_{\text{fouling}}$很小)，所以$U,Q$都變小\\
+    增加操作成本\\
+    解決方法: 選擇適當的蒸發器種類、定期清洗
+    \item 泡沫(Formation of foam)
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) circle (1);
+        \draw (0,0) circle (1.2);
+        \draw[blue, decorate, decoration=snake] (-2, 0 ) -- (-1.2,0);
+        \draw[blue, decorate, decoration=snake] (1.2, 0 ) -- (2,0);
+        \node at (0,0) {Air};
+        \draw [->] (30:1.7) -- (30:1.2);
+        \node[anchor=west] at (30:1.7) {液膜(物料)};
+        \draw [->] (70:1.2) .. controls (70:1.5) and (70:2) .. (60:3);
+        \node[anchor=west] at (60:3) {蒸氣};
+        \def\xShift{5}
+        \def\yShift{-1.2}
+        \draw (\xShift,\yShift) -- (\xShift,1+\yShift) -- (\xShift+2,3+\yShift) -- (\xShift+2,4+\yShift);
+        \draw (\xShift+3,4+\yShift) -- (\xShift+3,3+\yShift) -- (\xShift+5,1+\yShift) -- (\xShift+5,0+\yShift);
+        \draw (\xShift+1,1+\yShift) -- (\xShift+2.5, 2.5+\yShift) -- (\xShift+4,1+\yShift);
+        \draw[blue] (\xShift+0.3, 1+\yShift) circle (0.2);
+        \draw[blue] (\xShift+1.5, 1.2+\yShift) circle (0.2);
+        \draw[blue] (\xShift+2.7, 2.7+\yShift) circle (0.2);
+        \draw[blue] (\xShift+3.5, 1.2+\yShift) circle (0.2);
+        \draw[blue] (\xShift+4.7, 0.8+\yShift) circle (0.2);
+        \draw[->, blue, dashed] (\xShift+1,1+\yShift) -- (\xShift+1,0+\yShift);
+        \draw[->, blue, dashed] (\xShift+4,1+\yShift) -- (\xShift+4,0+\yShift);
+        \node at (\xShift+2.5, 2+\yShift) {檔板};
+      \end{tikzpicture}
+      \caption{蒸發器產生泡沫與檔板示意圖}
+    \end{figure}
+    會使液體帶入蒸氣中，造成物料損失\\
+    解決方法: 選擇適當的蒸發器種類、加裝擋板
+  \end{enumerate}
   \item 蒸發器的種類
   \begin{enumerate}
     \item 橫管式蒸發器:
@@ -36,69 +76,268 @@
       \item 由於氣液飛濺的情形嚴重、泵浦的動力消耗、成本較高
     \end{itemize}
     \item 夾套式蒸發器(攪膜蒸發器)
+    \begin{itemize}
+      \item 唯一一種不會有水垢的問題
+      \item 中央有一個旋轉刮刀，會把進料物流全部撥到牆面，形成薄膜向下流
+      \item 垢雖會生成於牆面，但不會妨礙蒸氣的熱傳
+      \item 適用於易結垢、高黏度、對溫度敏感的流體
+      \item 成本高、操作困難
+    \end{itemize}
   \end{enumerate}
-  而根據操作也可以歸類成:
-  \begin{enumerate}
-    \item 單效蒸發器(Single-effect evaporator)
-    \item 多效蒸發器(multiple-effect evaporator)
-    \begin{enumerate}
-      \item 順向多效蒸發器
-      \item 逆向多效蒸發器
-    \end{enumerate}
-  \end{enumerate}
-  兩者的比較
-  \begin{center}
-  \begin{tabular}{|c|c|c|}
-    \hline   & 單效 & 多效 \\\hline
-    操作成本 &  相同 & 相同 \\\hline
-    蒸發總量 & 少 & 多\\\hline
-    經濟效益 & 小 & 大\\\hline
-    設備成本 & 少 & 多\\\hline
-    操作性  & 易 & 難\\\hline
-    物料損失 & 少 & 多\\\hline
-    最終濃度 & 小 & 大\\\hline
-    溫度 & $T_1$ & $T_1>T_2>\cdots>T_n$\\\hline
-    壓力 & $P_1$ & $P_1>P_2>\cdots>P_n$ \\\hline
-  \end{tabular}
-  \end{center}
   \item 蒸發器的名詞介紹
   \begin{itemize}
-  \item 蒸發量(Capacity),$V$:\\
-    單位時間所去除溶劑的質量
-    \item 蒸氣使用量(Steam Consumption),$S$:
-    單位時間，蒸發器使用(消耗)的蒸氣質量
-    \item 經濟效益(Economy),$\eta$:
+    \item 蒸發量(Capacity),$V$:\\
+    單位時間所\fbox{去除溶劑}的質量(H2O kg/hr)\\
+    肯定是越大越好\\
+    濃縮液濃度也會上升，效果好
+    \item 蒸氣使用量(Steam Consumption),$S$:\\
+    單位時間，蒸發器使用(消耗)的蒸氣質量(use H2O(g) kg/hr)\\
+    因為蒸氣很貴，越小越好，為\fbox{成本}
+    \item 經濟效益(Economy),$\eta$:\\
     每使用單位質量蒸氣，所能去除溶劑的質量
     \begin{equation}
       \eta = \frac{V}{S}
     \end{equation}
   \end{itemize}
-  \item 單效蒸發器的計算範例\\
-  假設一單效蒸發器，進料$F$，狀態$T_F,X_F,h_F$，經過蒸氣$S$加熱後\\
-  變為蒸氣$V$，狀態$T_1,X_V,H_V$，留下濃縮液$L$，狀態$T_1,X_L,h_L$\\
-  蒸氣$S$通入前狀態$T_S,H_S$，通入後凝結變成液體，溫度不變，狀態$T_S,h_S$
-  \begin{itemize}
-    \item 整體質量平衡:
-    \begin{equation}
-      F= L+V
-    \end{equation}
-    \item 溶質質量平衡:
-    \begin{equation}
-      FX_F=LX_L
-    \end{equation}
-    \item 熱平衡:
-    \begin{equation}
-      F\cdot h_F + S\cdot \lambda = L\cdot h_K + V\cdot H_V
-    \end{equation}
-    其中$\lambda$為蒸氣的潛熱
-    \begin{equation}
-      \lambda = H_S -h_S
-    \end{equation}
-    \item 蒸發器的熱傳方程
-    \begin{equation}
-      Q = S\cdot(H_S -h_S) = S\cdot \lambda = UA(T_S-T_1)
-    \end{equation}
-  \end{itemize}
+  蒸發器的設計方程可以歸類成:
+  \begin{enumerate}
+    \item 單效蒸發器(Single-effect evaporator)\\
+      只有一個蒸發單元
+      \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,4) -- (0,2) -- (2,1) -- (4,2) -- (4,4) -- cycle;
+        \draw[->] (2,1) -- (2,0) -- (4,0);
+        \node[anchor=west] at (4,0) {濃縮液 $L,x_L$};
+        \draw[->] (-2,5) -- (1,5) -- (1,4);
+        \node[anchor=east] at (-2,5) {進料 $F,x_F$};
+        \draw[->] (3,4) -- (3,5) -- (6,5);
+        \node[anchor=west] at (6,5) {蒸氣 $V, \cancelto{\text{消除泡泡}}{x_V}$};
+        \node at (0.5, 3.5) {$P_1$};
+        \node at (3.5,3.5) {$T_1$};
+        \node[anchor=south] at (-0.5,5) {$h_F,T_F$};
+        \node[anchor=south] at (4.5, 5) {$H_V,T_1$};
+        \draw[->, red] (-2,2.2) -- (0,2.2) node[midway, above] {$T_S,H_S$};
+        \draw[red] (0,2.2) -- (0.3,2.2);
+        \draw[decorate, decoration={coil, aspect=0.3, segment length=5pt, amplitude=3pt}, red] (0.3,2.2) -- (3.7,2.2);
+        \draw[red] (3.7,2.2) -- (4,2.2);
+        \draw[->, red] (4,2.2) -- (6,2.2) node[midway, above] {$T_S,h_S$};
+        \node[anchor=east,red] at (-2,2.2) {蒸氣進 $S,\cancel{x_S}$};
+        \node[anchor=west,red] at (6,2.2) {冷凝水出 $S,\cancel{x_S}$};
+        \node[red] at (6,1.5) {提供汽化熱($T_S$不變)};
+        \draw[blue, decorate, decoration=snake] (0,3) -- (4,3);
+        \draw[blue, decorate, decoration=snake] (2,3) -- (2,3.6);
+        \draw[->, blue] (2,3.6) -- (2,3.8);
+        \draw[blue, decorate, decoration=snake] (3,3) -- (3,3.6);
+        \draw[->, blue] (3,3.6) -- (3,3.8);
+        \draw[blue, decorate, decoration=snake] (1,3) -- (1,3.6);
+        \draw[->, blue] (1,3.6) -- (1,3.8);
+        \node[anchor=north] at (3,0) {$T_1, h_L$};
+      \end{tikzpicture}
+      \caption{單效蒸發器示意圖}
+    \end{figure}
+    每條物流都分別標註，流量、組成、溫度、焓值(液體小寫$h$, 蒸氣大寫$H$)\\
+    P.S. 組成是指欲濃縮物料的濃度\\
+    蒸氣熱源不含物料，沒有泡泡生成蒸氣輸出也不含物料\\
+    蒸氣進入蒸發器後，溫度不變，提供汽化熱，冷凝成冷凝水，焓值變小
+    \begin{itemize}
+      \item 整體質量平衡:
+      \begin{equation}
+        F+S = S+V+L \implies F=V+L
+      \end{equation}
+      \item 溶質質量平衡:
+      \begin{equation}
+        F x_F + S\cancel{x_S}  = S\cancel{x_S} + L x_L + V \cancel{x_V} \implies F x_F = L x_L
+      \end{equation}
+      \item 熱平衡(找到由水蒸氣提供的熱量):\\
+      進來的總能量=出去的總能量
+      \begin{equation}
+        F\cdot h_F + S\cdot H_S = S\cdot h_S + L\cdot h_L + V\cdot H_V
+      \end{equation}
+      解得:
+      \begin{equation}
+        F h_F + S(H_S - h_S) = L h_L + V H_V
+      \end{equation}
+      定義$\lambda$為蒸氣的潛熱
+      \begin{equation}
+        \lambda = H_S -h_S
+      \end{equation}
+      代入上式得:
+      \begin{equation}
+        F h_F + S\cdot \lambda = L h_L + V H_V
+      \end{equation}
+      \item 求出效率值:
+      \begin{equation}
+        \eta = \frac{V}{S} = \frac{H_S - h_S}{H_V - h_L} = \frac{\lambda}{H_V - h_L}
+      \end{equation}
+      \item 蒸發器的設計方程式\\
+      由於蒸發器是一種\fbox{熱傳裝置}，故使用$U$來表示熱傳效果\\
+      只要是熱傳裝置，如同熱交換器一樣，都會有綜合所有熱阻的$UA$值\\
+      而此題蒸發器相當於1-1 shell and tube heat exchanger，所以
+      \begin{equation}
+        Q = \cancelto{1}{F_G} UA\text{LMTD}
+      \end{equation}
+      而且這個蒸發器的\\
+      $\Delta T_\mcirc{1} = T_S - T_1$，$\Delta T_\mcirc{2} = T_S - T_1$\\
+      P.S. 因為有攪拌，而且溫度入口並沒有直接碰到加熱管\\
+      甚至還隔了氣液介面，所以都是$T_1$\\
+      故LMTD要用L'Hopital's Rule計算 (\ref{eq:lmtd_evaporator_lhospital})
+      \begin{align}
+        \text{LMTD} &= \frac{\Delta T_{\mcirc{1}}-\Delta T_{\mcirc{2}}}
+        {\ln\left(\frac{\Delta T_{\mcirc{1}}}{\Delta T_{\mcirc{2}}}\right)} \nonumber\\
+        &=\frac{0}{0}\nonumber\\
+        \xrightarrow[\text{L'Hopital's Rule}]{} \quad \Delta T_{\mcirc{1}} &= \Delta T_{\mcirc{2}} = T_S - T_1
+      \end{align}
+      最後設計方程式為:
+      \begin{equation}
+        Q = UA (T_S - T_1)
+      \end{equation}
+    \end{itemize}
+    \item 多效蒸發器(multiple-effect evaporator)\\
+    一定是串聯，不會並聯\\
+    因為目的是在\fbox{增加產物的濃度}，而\fbox{不是增加產量}
+    \begin{enumerate}
+      \item 順向多效蒸發器
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,4) -- (0,2) -- (2,1) -- (4,2) -- (4,4) -- cycle;
+          \draw[->, blue] (2,1) -- (2,0) -- (3,0);
+          \draw[->, blue] (3,0) -- (4.5,0) -- (4.5,1);
+          \draw[->, blue] (4.5,1) -- (4.5, 4.5)-- (6,4.5) -- (6,4);
+          \draw[->, blue] (-1, 4.5) -- (1,4.5) -- (1,4);
+          \draw[->, red] (3,4) -- (3,5) -- (4,5);
+          \draw[red, ->] (4,5) -- (4.75,5) -- (4.75, 4.7) arc (90:-90:0.2) -- (4.75,2.2) -- (5,2.2);
+          \node[anchor=south, red] at (4,5) {$V_1$};
+          \node[anchor=north, red] at (4,5) {$T_1$};
+          \node[blue,anchor=south] at (3,0) {$L_1,T_1$};
+          \node[blue,anchor=north] at (3,0) {$x_1$(小)};
+          \draw[->, red] (-1,2.2) -- (0,2.2) node[midway, above] {$T_{S1}$};
+          \node[anchor=north, red] at (-0.5, 2.2) {$H_{S1}$};
+          \node[red, anchor=east] at (-1,2.2) {$S$};
+          \draw[red] (0,2.2) -- (0.3,2.2);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=5pt, amplitude=3pt}, red] (0.3,2.2) -- (3.7,2.2);
+          \draw[red] (3.7,2.2) -- (4,2.2);
+          \draw[->, blue] (4,2.2) -- (4.25,2.2) -- (4.25,1);
+          \draw[blue, decorate, decoration=snake] (0,3) -- (4,3);
+          \node at (2,3.5) {$P_1,T_1$};
+          \node[anchor=east, blue] at (-1,4.5) {$F$};
+          \def\xShift{5}
+          \draw (\xShift,4) -- (\xShift,2) -- (\xShift+2,1) -- (\xShift+4,2) -- (\xShift+4,4) -- cycle;
+          \draw[->, blue] (\xShift+2,1) -- (\xShift+2,0) -- (\xShift+3,0);
+          \draw[->, blue] (\xShift+3,0) -- (\xShift+4.5,0) -- (\xShift+4.5,1);
+          \draw[->, blue] (\xShift+4.5,1) -- (\xShift+4.5, 4.5)-- (\xShift+6,4.5) -- (\xShift+6,4);
+          \draw[->, red] (\xShift+3,4) -- (\xShift+3,5) -- (\xShift+4,5);
+          \draw[red, ->] (\xShift+4,5) -- (\xShift+4.75,5) -- (\xShift+4.75, 4.7) arc (90:-90:0.2) -- (\xShift+4.75,2.2) -- (\xShift+5,2.2);
+          \node[anchor=south, red] at (\xShift+4,5) {$V_2$};
+          \node[anchor=north, red] at (\xShift+4,5) {$T_2$};
+          \node[blue,anchor=south] at (\xShift+3,0) {$L_2,T_2$};
+          \node[blue,anchor=north] at (\xShift+3,0) {$x_2$(中)};
+          \draw[red] (\xShift+0,2.2) -- (\xShift+0.3,2.2);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=5pt, amplitude=3pt}, red] (\xShift+0.3,2.2) -- (\xShift+3.7,2.2);
+          \draw[red] (\xShift+3.7,2.2) -- (\xShift+4,2.2);
+          \draw[->, blue] (\xShift+4,2.2) -- (\xShift+4.25,2.2) -- (\xShift+4.25,1);
+          \draw[blue, decorate, decoration=snake] (\xShift,3) -- (\xShift+4,3);
+          \node at (\xShift+2,3.5) {$P_2,T_2$};
+          \draw[->, teal] (\xShift+2,4) -- (\xShift+2,6) node[above] {減壓};
+          \def\xShift{10}
+          \draw (\xShift,4) -- (\xShift,2) -- (\xShift+2,1) -- (\xShift+4,2) -- (\xShift+4,4) -- cycle;
+          \draw[->, blue] (\xShift+2,1) -- (\xShift+2,0) -- (\xShift+4,0);
+          \draw[->, red] (\xShift+3,4) -- (\xShift+3,5) -- (\xShift+5,5);
+          \node[anchor=west, red] at (\xShift+5,5) {$V_3$};
+          \node[anchor=north, red] at (\xShift+4,5) {$T_3$};
+          \node[blue,anchor=south] at (\xShift+3,0) {$L_3,T_3$};
+          \node[blue,anchor=north] at (\xShift+3,0) {$x_3$(大)};
+          \draw[red] (\xShift+0,2.2) -- (\xShift+0.3,2.2);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=5pt, amplitude=3pt}, red] (\xShift+0.3,2.2) -- (\xShift+3.7,2.2);
+          \draw[red] (\xShift+3.7,2.2) -- (\xShift+4,2.2);
+          \draw[->, blue] (\xShift+4,2.2) -- (\xShift+4.25,2.2) -- (\xShift+4.25,1);
+          \draw[blue, decorate, decoration=snake] (\xShift,3) -- (\xShift+4,3);
+          \node at (\xShift+2,3.5) {$P_3,T_3$};
+          \draw[->, teal] (\xShift+2,4) -- (\xShift+2,6) node[above] {減壓};
+        \end{tikzpicture}
+        \caption{順向多效蒸發器示意圖}
+      \end{figure}
+      \item 逆向多效蒸發器
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,4) -- (0,2) -- (2,1) -- (4,2) -- (4,4) -- cycle;
+          \draw[->, red] (-1,2.2) -- (0,2.2) node[midway, above] {$T_{S1}$};
+          \node[anchor=north, red] at (-0.5, 2.2) {$H_{S1}$};
+          \node[red, anchor=east] at (-1,2.2) {$S$};
+          \draw[red] (0,2.2) -- (0.3,2.2);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=5pt, amplitude=3pt}, red] (0.3,2.2) -- (3.7,2.2);
+          \draw[red] (3.7,2.2) -- (4,2.2);
+          \draw[->, blue] (4,2.2) -- (4.25,2.2) -- (4.25,1);
+          \draw[blue, decorate, decoration=snake] (0,3) -- (4,3);
+          \node at (2,3.5) {$P_1,T_1$};
+          \draw[->, blue] (2,1) -- (2,0) -- (0,0);
+          \node[blue, anchor=east] at (0,0) {$x_1$(大)};
+          \node[blue, anchor=south] at (1,0) {$L_1,T_1$};
+          \draw[->, red] (1,4) -- (1,5) -- (2,5);
+          \node[anchor=south, red] at (2,5) {$V_1, T_1$};
+          \draw[->, red] (2,5) -- (4.75,5) -- (4.75, 2.2) -- (5,2.2);
+          \draw[<-, blue] (3,4) -- (3,4.5) -- (4.5, 4.5) -- (4.5,0) -- (6,0); 
+          \def\xShift{5}
+          \draw (\xShift,4) -- (\xShift,2) -- (\xShift+2,1) -- (\xShift+4,2) -- (\xShift+4,4) -- cycle;
+          \draw[red] (\xShift+0,2.2) -- (\xShift+0.3,2.2);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=5pt, amplitude=3pt}, red] (\xShift+0.3,2.2) -- (\xShift+3.7,2.2);
+          \draw[red] (\xShift+3.7,2.2) -- (\xShift+4,2.2);
+          \draw[->, blue] (\xShift+4,2.2) -- (\xShift+4.25,2.2) -- (\xShift+4.25,1);
+          \draw[blue, decorate, decoration=snake] (\xShift,3) -- (\xShift+4,3);
+          \node at (\xShift+2,3.5) {$P_2,T_2$};
+          \draw[->, blue] (\xShift+2,1) -- (\xShift+2,0) -- (\xShift+1,0);
+          \node[blue, anchor=north] at (\xShift+1,0) {$x_2$(中)};
+          \node[blue, anchor=south] at (\xShift+1,0) {$L_2,T_2$};
+          \draw[->, red] (\xShift+1,4) -- (\xShift+1,5) -- (\xShift+2,5);
+          \node[anchor=south, red] at (\xShift+2,5) {$V_2, T_2$};
+          \draw[->, red] (\xShift+2,5) -- (\xShift+4.75,5) -- (\xShift+4.75, 2.2) -- (\xShift+5,2.2);
+          \draw[<-, blue] (\xShift+3,4) -- (\xShift+3,4.5) -- (\xShift+4.5, 4.5) -- (\xShift+4.5,0) -- (\xShift+6, 0);
+          \draw[teal, ->] (\xShift+0.5,4) -- (\xShift+0.5,6) node[above] {減壓};
+          \def\xShift{10}
+          \draw (\xShift,4) -- (\xShift,2) -- (\xShift+2,1) -- (\xShift+4,2) -- (\xShift+4,4) -- cycle;
+          \draw[red] (\xShift+0,2.2) -- (\xShift+0.3,2.2);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=5pt, amplitude=3pt}, red] (\xShift+0.3,2.2) -- (\xShift+3.7,2.2);
+          \draw[red] (\xShift+3.7,2.2) -- (\xShift+4,2.2);
+          \draw[->, blue] (\xShift+4,2.2) -- (\xShift+4.25,2.2) -- (\xShift+4.25,1);
+          \draw[blue, decorate, decoration=snake] (\xShift,3) -- (\xShift+4,3);
+          \node at (\xShift+2,3.5) {$P_3,T_3$};
+          \draw[->, blue] (\xShift+2,1) -- (\xShift+2,0) -- (\xShift+1,0);
+          \node[blue, anchor=north] at (\xShift+1,0) {$x_3$(小)};
+          \node[blue, anchor=south] at (\xShift+1,0) {$L_3,T_3$};
+          \draw[->, red] (\xShift+1,4) -- (\xShift+1,5) -- (\xShift+2,5);
+          \node[anchor=west, red] at (\xShift+2,5) {$V_3$};
+          \node[anchor=south, red] at (\xShift+1.5,5) {$T_3$};
+          \draw[<-, blue] (\xShift+3,4) -- (\xShift+3,4.5) -- (\xShift+5, 4.5);
+          \node[anchor=west, blue] at (\xShift+5,4.5) {$F$};
+          \draw[teal, ->] (\xShift+0.5,4) -- (\xShift+0.5,6) node[above] {減壓};
+        \end{tikzpicture}
+        \caption{逆向多效蒸發器示意圖}
+      \end{figure}
+      和單向蒸發器的比較
+      \renewcommand{\arraystretch}{1.5}
+      \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+          \hline   & 單效 & 多效順向 & 多效逆向 \\\hline
+          操作成本(水蒸氣使用量) &  相同($S$) & 相同($S$) & 相同($S$) \\\hline
+          蒸發總量 & 少($V_1$) & 多($V_1+V_2+V_3$) & 多($V_1+V_2+V_3$)\\\hline
+          經濟效益($\eta$) & 小($\frac{V_1}{S}$) & 大($\frac{V_1+V_2+V_3}{S}$) & 大($\frac{V_1+V_2+V_3}{S}$)\\\hline
+          設備成本 & 少 & 多 & 多\\\hline
+          操作性  & 易 & 難 & 難\\\hline
+          物料損失 & 少 & 多 & 多\\\hline
+          最終濃度 & 小($x_L$) & 大($x_3>x_2>x_L$) & 大($x_1>x_2>x_L$)\\\hline
+          溫度 & $T_1$ & $T_1>T_2>\cdots>T_n$ & $T_1>T_2>\cdots>T_n$\\\hline
+          壓力 & $P_1$ & $P_1>P_2>\cdots>P_n$ & $P_1>P_2>\cdots>P_n$ \\\hline
+        \end{tabular}
+        \caption{單效與多效蒸發器比較}
+      \end{table}
+      可以看到在很多面向上，多效的順向與逆向蒸發器都一致\\
+      但事實上$V_1$、$V_2$、$V_3$等等並不相同，而也因為效率又同時會受溫度與壓力影響\\
+      故兩者之間無法比較
+    \end{enumerate}
+  \end{enumerate}
 \end{itemize}
 \end{CJK*}
 \end{document}

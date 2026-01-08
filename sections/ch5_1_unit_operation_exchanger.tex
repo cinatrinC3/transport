@@ -24,7 +24,24 @@
     \item $\varepsilon-\text{NTU}$ Mehod\\
     Effectiveness - Number of Transfer Units(NTU) Method\\
     只需知道$(T_{H,i},T_{C,i})$，也就是兩流體進入交換器的溫度\\
-    配合\fbox{實驗或經驗圖表}找到效率(Effectiveness, $\varepsilon$)，即可求得
+    配合\fbox{實驗或經驗圖表}找到效率(Effectiveness, $\varepsilon$)，即可求得\\
+    $\varepsilon$的定義:
+    \begin{equation}
+      \varepsilon = \frac{Q_{\text{actual}}}{Q(A\to\infty)} = \frac{\text{熱交換器的真實熱傳速率}}{\text{具有無限大熱傳面積的熱傳速率}}
+    \end{equation}
+    $\varepsilon$會是$f(\text{NTU},\frac{C_\text{min}}{C_\text{max}})$的函數
+    \begin{equation}
+      \boxed{Q = \varepsilon \cdot C_{\text{min}}\left(T_{H,i}-T_{C,i}\right)}
+    \end{equation}
+    定義NTU:
+    \begin{equation}
+      \boxed{\text{NTU}=\frac{UA}{C_\text{min}}}
+    \end{equation}
+    其中$C = \dot m C_p$為物流總比熱
+    \begin{equation}
+      C_H = \dot m_H C_{p,H},\quad C_C = \dot m_C C_{p,C}
+    \end{equation}
+    而$C_\text{min}, C_\text{max}$分別是兩流體中較小與較大的熱容量率
   \end{enumerate}
   \item 依照結構可分為:
   \begin{enumerate}
@@ -66,6 +83,13 @@
         \end{tikzpicture}
         \caption{Counterflow heat exchanger示意圖}
       \end{figure}
+      \begin{equation}
+        \text{LMTD} = \frac{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}
+        -\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}}
+        {\ln\left(\frac{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}
+        {\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}}\right)}
+         = \frac{\left(T_{H,i}-T_{C,o}\right) - \left(T_{H,o}-T_{C,i}\right)}{\ln\left(\frac{T_{H,i}-T_{C,o}}{T_{H,o}-T_{C,i}}\right)}
+      \end{equation}
       \item Co-current flow heat exchanger(同向流熱交換器)
       \begin{figure}[H]
         \centering
@@ -100,83 +124,436 @@
         \end{tikzpicture}
         \caption{Co-current flow heat exchanger示意圖}
       \end{figure}
+      \begin{equation}
+        \text{LMTD} = \frac{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}
+        -\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}}
+        {\ln\left(\frac{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}
+        {\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}}\right)}
+         = \frac{\left(T_{H,i}-T_{C,i}\right) - \left(T_{H,o}-T_{C,o}\right)}{\ln\left(\frac{T_{H,i}-T_{C,i}}{T_{H,o}-T_{C,o}}\right)}
+      \end{equation}
     \end{enumerate}
+    Total heat transfer rate:
+    \begin{align}
+      Q &= \dot m_H C_{p,H}\left(T_{H,i}-T_{H,o}\right),\quad\text{熱物流放熱量}\\
+      &= \dot m_C C_{p,C}\left(T_{C,o}-T_{C,i}\right),\quad\text{冷物流吸熱量}\\
+      &= \boxed{U\cdot A \cdot \text{LMTD}},\quad\text{熱交換器設計方程式}
+    \end{align}
+    而流向只影響$T_{H,o},T_{C,o},T_{H,i},T_{C,i}$的加減關係，是用相同式子\\
+    其中$U$是整體熱傳係數(overall heat transfer coefficient)，可以用熱阻來表示
     \begin{equation}
-      q = \dot m_H C_{p,H}\left(T_{H,i}-T_{H,o}\right) = \dot m_C C_{p,C}\left(T_{C,o}-T_{C,i}\right)
+      q = UA \Delta T = \frac{\Delta T}{\sum R} \implies U = \frac{1}{A \sum R}
     \end{equation}
-    而流向只影響$T_{H,o},T_{C,o},T_{H,i},T_{C,i}$的加減關係，適用相同式子
-    \item 殼管式熱交換器 Shell-and-tube heat exchanger\\
-    會使用(X-Y Shell and Tube Heat Exchanger)的方式來表示\\
-    其中$X$代表Shell的數量，$Y$代表Tube的數量
+    \begin{figure}[H]
+      \centering
+      \begin{circuitikz}[american]
+        \draw (0,0) to [R, l^=$R_{c,c}$, o-o, a=$q_{c,c}$] (0,2);
+        \draw (0,2) to [R, l^=$R_{k}$, o-o, a=$q_{k}$] (0,4);
+        \draw (0,4) to [R, l^=$R_{c,H}$, o-o, a=$q_{c,H}$] (0,6);
+        \draw[->] (1.2,6) -- (1.2,0) node[below] {\large $\bm{q}$};
+      \end{circuitikz}
+      \caption{熱交換器熱阻示意圖}
+    \end{figure}
+    由上到下分別是熱物流的對流熱阻$R_{c,H}$、管壁的熱傳導熱阻$R_k$、冷物流的對流熱阻$R_{c,c}$\\
+    $A$是熱交換器的總熱傳面積(heat transfer area)\\
+    因此$U_i$(內管)可以表示為
+    \begin{align}
+      U_i &= \frac{1}{\left(
+        R_{c,H} + R_k + R_{c,c}
+      \right)A_i} \nonumber \\
+      &= \frac{1}{\left(
+        \frac{1}{h_H \pi D_i L} + \frac{\ln\left(\frac{D_o}{D_i}\right)}{2\pi k L} + \frac{1}{h_c \pi D_o L}
+      \right)\pi D_i L} \nonumber \\
+      &= \frac{1}{\frac{1}{h_H} + \frac{D_i \ln\left(\frac{D_o}{D_i}\right)}{2k} + \frac{D_i}{D_o h_c}}
+    \end{align}
+    P.S. 注意因為$h_H, h_C$都是在該液體外圈所測量的對流熱傳係數，所以要用對應的直徑\\
+    同理$U_o$(外管)可以表示為
+    \begin{align}
+      U_o &= \frac{1}{\left(
+        R_{c,H} + R_k + R_{c,c}
+      \right)A_o} \nonumber \\
+      &= \frac{1}{\left(
+        \frac{1}{h_H \pi D_i L} + \frac{\ln\left(\frac{D_o}{D_i}\right)}{2\pi k L} + \frac{1}{h_c \pi D_o L}
+      \right)\pi D_o L} \nonumber \\
+      &= \frac{1}{\frac{D_o}{D_i h_H} + \frac{D_o \ln\left(\frac{D_o}{D_i}\right)}{2k} + \frac{1}{h_c}}
+    \end{align}
+    P.S. 如果有題目說管之間有結垢(Fouling)，則需要將結垢的熱阻也加進去\\
+    但這時不能使用熱傳，而是使用對流熱阻，因為結垢的厚度無法準確測量\\
+    以LMTD的解題步驟如下:
+    \begin{enumerate}
+      \item 由$\mcirc{1},\mcirc{2}$的溫度關係，及一個已知出口溫度\\
+      以LMTD求出另一個$T_{C,o}$或$T_{H,o}$
+      \item 由LMTD，代入熱交換器設計方程式，求出$A,L,D,U$等信息
+    \end{enumerate}
+    P.S.下面是關於熱交換器設計方程的證明:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \fill[pattern=crosshatch dots] (0,0) rectangle (1,5);
+        \draw[dashed] (0,0) rectangle (1,5);
+        \node[anchor=south] at (0.5, 5) {C.V.};
+        \node[anchor=north] at (0.5, 0) {$dx$};
+        \draw[->, blue] (-1,1) -- (0,1);
+        \draw[->, blue] (1,1) -- (2,1);
+        \draw[->, red] (2,4) -- (1,4);
+        \draw[->, red] (0,4) -- (-1,4);
+        \node[anchor=east, blue] at (-1,1) {$T_C$};
+        \node[anchor=west, blue] at (2,1) {$T_C + dT_C$};
+        \node[anchor=west, red] at (2,4) {$T_H$};
+        \node[anchor=east, red] at (-1,4) {$T_H + dT_H$};
+        \draw[ultra thick, <-, red] (0.5,1.5) -- (0.5,3.5) node[midway, right] {\large $\bm{dq}$};
+      \end{tikzpicture}
+      \caption{熱交換器微分單元示意圖}
+    \end{figure}
+    定義我們的熱傳裝置，會根據溫差和熱傳面積，來將高溫流體的熱量傳給低溫流體\\
+    故有:
     \begin{equation}
-      q = \dot m_H C_{p,H}\left(T_{H,i}-T_{H,o}\right) = \dot m_C C_{p,C}\left(T_{C,o}-T_{C,i}\right)
+      dq \equiv U\cdot dA \cdot \Delta T
     \end{equation}
-    一樣的式子，但這裡熱傳的常數是被乘上一個修正因子Correction Factor(F)後的\\
-    而$F$則會根據不同的Shell-and-tube heat exchanger有不同的(F-Y)關係圖\\
-    關係圖上也會因為不同的$\frac{T_{H,i}-T_{H,o}}{T_{C,i}-T_{C,o}}$數值而有不同的線
-  \end{enumerate}
-  \item 解題方式有兩種:\\
-  差別在於有沒有經驗或實驗數據來求解熱交換器的效率
-  \begin{enumerate}
-    \item Log Mean Temperature Difference(LMTD) Method\\
-    ($T_{H,i},T_{H,o},T_{C,i},T_{C,o}$)的四個參數中，\fbox{要知道其中3個}才能使用
-    舉例來說\\
-    Double pipe heat exchanger，且為Counterflow heat exchanger，則:
+    並假設\fbox{熱傳係數$U$為常數}\\
+    則又由於能量守恆，熱物流失去的熱量等於冷物流吸收的熱量
     \begin{equation}
-      \Delta T_1 = T_{H,i}-T_{C,o},\quad \Delta T_2 = T_{H,o}-T_{C,i}
+      dq = -\dot m_H C_{p,H} dT_H = \dot m_C C_{p,C} dT_C
     \end{equation}
-    Double pipe heat exchanger，且為Co-current flow heat exchanger，則:
+    分別代入設計方程:
     \begin{equation}
-      \Delta T_1 = T_{H,i}-T_{C,i},\quad \Delta T_2 = T_{H,o}-T_{C,o}
+      dq = -\dot m_H C_{p,H} dT_H = U dA (T_H - T_C)
     \end{equation}
-    而只要對Double pipe heat exchanger，都適用:
+    或
     \begin{equation}
-      q = U\cdot A\cdot \text{LMTD}
+      dq = \dot m_C C_{p,C} dT_C = U dA (T_H - T_C)
     \end{equation}
-    而對Shell-and-tube heat exchanger:
+    令$T_H - T_C = \Delta T$，則任一式皆可整理為:
     \begin{equation}
-      q = F_G\cdot UA \text{LMTD}
+      \frac{dq}{\Delta T} = U dA
     \end{equation}
-    有一種特殊情況是，當$\Delta T_1 = \Delta T_2$時，這時$\text{LMTD}$會變成$\frac{0}{0}$的未定義狀態\\
+    接著將$dA$積分，得到整體熱交換器的關係式:
+    \begin{align}
+      \int_{0}^{A} U dA = U A &= \frac{\int_0^Q dq}
+      {\int_{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}^{\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}} } \nonumber \\
+      &= \frac{Q}{\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}} - \Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}
+    \end{align}
+    由於假設了$U$為常數，$dA$為定值，故巨觀與微觀的比值應該相同:
+    \begin{equation}
+      \frac{dq}{\Delta T} = \frac{Q}{\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}} - \Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}
+    \end{equation}
+    再將$dq = U dA \Delta T$代入:
+    \begin{equation}
+      \frac{U dA \Delta T}{\Delta T} = \frac{Q}{\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}} - \Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}
+    \end{equation}
+    分離變數後
+    \begin{equation}
+    \frac{U\left(\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}} - \Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}\right)}{Q} dA 
+    = \frac{d\Delta T}{\Delta T}
+    \end{equation}
+    積分後得到:
+    \begin{equation}
+      \int_0^A \frac{U\left(\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}} - \Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}\right)}{Q} dA 
+      = \int_{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}^{\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}} \frac{d\Delta T}{\Delta T}
+    \end{equation}
+    最終得到:
+    \begin{equation}
+      U A = \frac{Q}{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}} - \Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}} \ln\left(\frac{\Delta T_{\mcirc{\raisebox{-0.5pt}{1}}}}{\Delta T_{\mcirc{\raisebox{-0.5pt}{2}}}}\right)
+    \end{equation}
+    故:
+    \begin{equation}
+      Q = U A \cdot \text{LMTD}
+    \end{equation}
+    P.S. Counter current flow 有機會遇到一個特殊情況\\
+    當$\Delta T_{\mcirc{1}} = \Delta T_{\mcirc{2}}$時(同向的進溫差一定大於出溫差)\\
+    這時$\text{LMTD}$會變成$\frac{0}{0}$的未定義狀態
+    \begin{equation}
+      \text{LMTD} = \frac{\Delta T_{\mcirc{1}}-\Delta T_{\mcirc{2}}}
+      {\ln\left(\frac{\Delta T_{\mcirc{1}}}{\Delta T_{\mcirc{2}}}\right)} = \frac{0}{0}
+    \end{equation}
     這時要使用L'Hopital's Rule
     \begin{equation}
-      \text{LMTD} = \frac{\Delta T_1-\Delta T_2}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)} = 
-      \Delta T_2 \cdot \frac{\frac{\Delta T_1}{\Delta T_2}-1}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)}
+      \text{LMTD} = \frac{\Delta T_{\mcirc{1}}-\Delta T_{\mcirc{2}}}
+      {\ln\left(\frac{\Delta T_{\mcirc{1}}}{\Delta T_{\mcirc{2}}}\right)} = 
+      \Delta T_{\mcirc{2}} \cdot \frac{\frac{\Delta T_{\mcirc{1}}}{\Delta T_{\mcirc{2}}}-1}{\ln\left(\frac{\Delta T_{\mcirc{1}}}{\Delta T_{\mcirc{2}}}\right)}
     \end{equation}
-    令$\frac{\Delta T_1}{\Delta T_2} = x$，則根據L'Hopital's Rule:
+    令$\boxed{\frac{\Delta T_{\mcirc{1}}}{\Delta T_{\mcirc{2}}} = x}$，則根據L'Hopital's Rule:
     \begin{equation}
-      \lim_{x\rightarrow 1}\left(\Delta T_2\cdot\frac{x-1}{\ln x} \right) =  \Delta T_2 x = \Delta \frac{T_1}{T_2} = \Delta T_1
+      \lim_{x\rightarrow 1}\left(\Delta T_{\mcirc{2}}\cdot\frac{x-1}{\ln x} \right) =  \Delta T_{\mcirc{2}} x = 
+      \Delta T_{\mcirc{2}} \cdot \frac{T_{\mcirc{1}}}{T_{\mcirc{2}}} = \Delta T_{\mcirc{1}}
     \end{equation}
-    故此時$\Delta T_1 = \Delta T_2$
-    \item $\varepsilon-\text{NTU}$ Mehod\\
-    Effectiveness - Number of Transfer Units(NTU) Method\\
-    只需知道$(T_{H,i},T_{C,i})$，也就是兩流體進入交換器的溫度\\
-    配合\fbox{實驗或經驗圖表}找到效率(Effectiveness, $\varepsilon$)，即可求得\\
-    $\varepsilon$的定義:
+    故此時$\text{LMTD} = \Delta T_{\mcirc{1}} = \Delta T_{\mcirc{2}}$
     \begin{equation}
-      \varepsilon = \frac{\text{熱交換器的真實熱傳速率}}{\text{具有無限大熱傳面積的熱傳速率}}
+      Q = \dot m C_p (T_{H,i}-T_{H,o}) = \dot m C_p (T_{C,o}-T_{C,i}) = U A \Delta T_{\mcirc{1}} = U A \Delta T_{\mcirc{2}} \label{eq:lmtd_evaporator_lhospital}
     \end{equation}
-    $\varepsilon$會是$f(\text{NTU},\frac{C_\text{min}}{C_\text{max}})$的函數\\
+    當缺乏出口溫度資訊時，則必須使用$\varepsilon-\text{NTU}$ Method來求解\\
+    將原先LMTD的設計方程，改為Effectiveness的形式:
+    \begin{equation}
+      Q = UA \cdot \text{LMTD} \implies Q = \varepsilon \cdot C_{\text{min}} (T_{H,i}-T_{C,i})
+    \end{equation}
+    這樣當跟任前面兩個式子聯立時，就可以求得未知的出口溫度
+    \begin{equation}
+      Q = \dot m_H C_{p,H} (T_{H,i}-T_{H,o}),\quad Q = \dot m_C C_{p,C} (T_{C,o}-T_{C,i})
+    \end{equation}
+    $\varepsilon$-NTU Method的推導\\
+    由於出口溫度都不知道，但我們從上面那些溫度圖中\\
+    可以發現就是兩條斜率互相交錯的直線\\
+    至於斜率的大小會跟物流的總比熱有關(加權質量)
+    \begin{equation}
+      C_H = \dot m_H C_{p,H},\quad C_C = \dot m_C C_{p,C}
+    \end{equation}
+    而斜率比較大的那條線，代表總比熱比較小的流體\\
+    而那條線在面積無限長時，利用Counter current\\
+    勢必會因為更大的斜率，與另一條線相交於該流體的最高溫度
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+       \draw(0,0) rectangle (4,2);
+       \draw[->, red] (0,2) -- (4,1);
+       \draw[->, blue] (4,0) -- (0,2);
+       \node[anchor=south] at (2,2) {$C_H>C_C$};
+       \node[anchor=north] at (2,-0.5) {$Q(A\to\infty)=C_C(\underbrace{T_{c,o}}_{=T_{H,i}}- T_{c,i})$};
+        \node[anchor=west] at (4, 0) {$T_{C,i}$}; 
+        \node[anchor=east] at (0, 2) {$T_{H,i}=T_{C,o}$};
+        \node[anchor=west] at (4, 1) {$T_{H,o}$};
+       \def\xShift{8}
+      \draw(\xShift+0,0) rectangle (\xShift+4,2);
+      \draw[->, red] (\xShift+0,2) -- (\xShift+4,0);
+      \draw[->, blue] (\xShift+4,0) -- (\xShift+0,1);
+      \node[anchor=south] at (\xShift+2,2) {$C_H<C_C$};
+      \node[anchor=north] at (\xShift+2,-0.5) {$Q(A\to\infty)=C_H(T_{H,i}-\underbrace{T_{H,o}}_{=T_{c,i}})$};
+      \node[anchor=east] at (\xShift, 1) {$T_{C,o}$};
+      \node[anchor=west] at (\xShift+4, 0) {$T_{H,o}=T_{C,i}$};
+      \node[anchor=east] at (\xShift, 2) {$T_{H,i}$};
+      \end{tikzpicture}
+      \caption{Effectiveness示意圖}
+    \end{figure}
+    因此可以歸納出，在具有最大熱傳面積的熱交換器中，熱交換速率為:
+    \begin{equation}
+      Q(A\to\infty) = C_{\text{min}} (T_{H,i}-T_{C,i})
+    \end{equation}
+    而Effectiveness的定義為\\
+    實際熱交換速率與最大熱交換速率的比值
+    \begin{equation}
+      \varepsilon = \frac{Q_{\text{actual}}}{Q(A\to\infty)} = \frac{Q}{C_{\text{min}} (T_{H,i}-T_{C,i})}
+    \end{equation}
+    故可得出熱交換速率的公式:
+    \begin{equation}
+      \boxed{Q = \varepsilon \cdot C_{\text{min}} (T_{H,i}-T_{C,i})}
+    \end{equation}
+    跟原先的LMTD比較，可看出一個無因次的描述，也就是NTU\\
     定義NTU:
     \begin{equation}
-      \text{NTU}=\frac{UA}{C_\text{min}}
+      \frac{UA}{C_{\text{min}}} = \text{NTU}
     \end{equation}
-    故在$A=\infty$時，會有最大的
+    利用NTU與$\varepsilon$的關係圖表，上面會有每一條$\frac{C_{\text{min}}}{C_{\text{max}}}$的曲線\\
+    即可直接由NTU與$\frac{C_{\text{min}}}{C_{\text{max}}}$求出$\varepsilon$\\
+    再由熱交換速率公式，聯立其他兩個熱交換速率公式，即可求出未知的出口溫度
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \begin{axis}[
+          axis lines = left,
+          xlabel = {NTU},
+          ylabel = {$\varepsilon$ (Effectiveness)},
+          ymin=0, ymax=1.1, % Increased slightly for labels
+          xmin=0, xmax=5,
+          domain=0:5,
+          samples=100,
+          legend pos=south east,
+          legend style={font=\footnotesize},
+          width=10cm, height=8cm,
+          grid=major,
+          grid style={dashed, gray!30}
+        ]
+        \addplot [thick, blue] {1 - exp(-x)};
+        \addlegendentry{$C_r = 0$}
+        \addplot [thick, teal] {(1 - exp(-x*(1-0.25))) / (1 - 0.25*exp(-x*(1-0.25)))};
+        \addlegendentry{$C_r = 0.25$}
+        \addplot [thick, green!70!black] {(1 - exp(-x*(1-0.50))) / (1 - 0.50*exp(-x*(1-0.50)))};
+        \addlegendentry{$C_r = 0.50$}
+        \addplot [thick, orange] {(1 - exp(-x*(1-0.75))) / (1 - 0.75*exp(-x*(1-0.75)))};
+        \addlegendentry{$C_r = 0.75$}
+        \addplot [thick, red] {x / (1 + x)};
+        \addlegendentry{$C_r = 1.0$}
+        \node[anchor=south west] at (axis cs: 0.5, 0.9) {$\frac{C_{min}}{C_{max}}$};
+        \end{axis}
+      \end{tikzpicture}
+      \caption{NTU vs Effectiveness圖表 (Counter-Flow)}
+    \end{figure}
+    為什麼會有$\frac{C_{\text{min}}}{C_{\text{max}}}=0$呢?\\
+    這代表熱物流或冷物流其中有一方會進行相變化(如冷凝或蒸發)\\
+    因為相變化時，溫度不會改變，所以比熱會趨近無限大\\
+    導致$\frac{C_{\text{min}}}{C_{\text{max}}}\to 0$
+    此時的Effectiveness公式會變成:
     \begin{equation}
-      q(A=\infty) = C_{\text{min}}\left(T_{H,i}-T_{C,i}\right) 
+      \varepsilon = 1 - e^{-\text{NTU}}
     \end{equation}
-    其中$C_\text{min}$是兩個介質中的Minimum heat capacity\\
-    也就是:
-    \begin{equation}
-      \begin{cases}
-         C_H > C_C \Rightarrow C_H=C_\text{max},~C_C=C_\text{min} \\
-         C_C > C_H \Rightarrow C_C=C_\text{max},~C_H=C_\text{min}
-      \end{cases}
-    \end{equation}
-    得到:
-    \begin{equation}
-      q_{\text{act}}= \varepsilon\cdot C_{\text{min}}\left(T_{H,i}-T_{C,i}\right)
-    \end{equation}
+    \item 殼管式熱交換器，Shell-and-tube heat exchanger\\
+    會使用(X-Y Shell and Tube Heat Exchanger)的方式來表示\\
+    中文念作$X$殼$Y$管式熱交換器\\
+    其中$X$代表Shell的數量，$Y$代表Tube的數量\\
+    通常\fbox{熱物流會流經殼側(Shell side)}\\
+    \fbox{冷物流會流經管側(Tube side)}\\
+    可以想成冷卻水會在管中被循環，來冷卻殼側的熱流體
+    \begin{itemize}
+      \item 1-1-shell-and-tube heat exchanger ($\risingdotseq$ 套管式)
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw[->,blue] (-1, 1) -- (0,1);
+          \draw[->,blue] (6,1) -- (7,1);
+          \draw[->,red] (1,3) -- (1,2);
+          \draw[->,red] (5,0) -- (5,-1);
+          \node[anchor=east,blue] at (-1,1) {$T_{c,i}$};
+          \node[anchor=west,blue] at (7,1) {$T_{c,o}$};
+          \node[anchor=south,red] at (1,3) {$T_{h,i}$};
+          \node[anchor=north,red] at (5,-1) {$T_{h,o}$};
+          \draw (0,0.75) rectangle (6,1.25);
+          \shade[left color=blue!30, right color=blue!5] (0,0.75) rectangle (6,1.25);
+          \shade[left color=red!50, right color=red!5] (0,1.25) rectangle (6,2);
+          \shade[left color=red!50, right color=red!5] (0,0) rectangle (6,0.75);
+          \draw[->] (0,1) -- (6,1);
+          \draw (0,0) rectangle (6,2);
+        \end{tikzpicture}
+        \caption{1-1-shell-and-tube heat exchanger示意圖}
+      \end{figure}
+      P.S. 也可以反裝，可以看出跟套管式熱交換器沒什麼差別
+      \newpage
+      \item 1-2-shell-and-tube heat exchanger
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,5) -- (0,0) -- (6,0) -- (6,5);
+          \draw[red, ->] (0,4) -- (6,2.5);
+          \draw[blue,->] (0,0.5) -- (5,2);
+          \draw[blue,->] (5,2) -- (0,3.5);
+          \draw[dashed, red] (0,2.5) -- (6,2.5);
+          \draw[dashed, blue] (0,3.5) -- (6,3.5);
+          \node[anchor=east, red] at (0,4) {$T_{H,i}$};
+          \node[anchor=west, red] at (6,2.5) {$T_{H,o}$};
+          \node[anchor=east, blue] at (0,0.5) {$T_{C,i}$};
+          \node[anchor=east, blue] at (0,3.5) {$T_{C,o}$};
+          \def\yShift{6}
+          \draw[->,blue] (-1, 3+\yShift) -- (0,3+\yShift);
+          \draw[->,blue] (0,1+\yShift) -- (-1,1+\yShift);
+          \draw[->,red] (1,5+\yShift) -- (1,4+\yShift);
+          \draw[->,red] (5,0+\yShift) -- (5,-1+\yShift);
+          \node[anchor=east,blue] at (-1,3+\yShift) {$T_{c,i}$};
+          \node[anchor=east,blue] at (-1,1+\yShift) {$T_{c,o}$};
+          \node[anchor=south,red] at (1,5+\yShift) {$T_{h,i}$};
+          \node[anchor=north,red] at (5,-1+\yShift) {$T_{h,o}$};
+          \shade[left color=red!50, right color=red!5] (0,0+\yShift) rectangle (6,4+\yShift);
+          \fill[white] (0,0.75+\yShift) -- (4,0.75+\yShift) arc(-90:90:1.25) -- (0,3.25+\yShift) -- (0,2.75+\yShift) 
+           -- (4, 2.75+\yShift) arc(90:-90:0.75) -- (0,1.25+\yShift) -- cycle;
+          \shade[left color=blue!40, right color=blue!25] (0,2.75+\yShift) rectangle (4,3.25+\yShift);
+          \shade[top color=blue!25, bottom color=blue!20] (4,0.75+\yShift) arc(-90:90:1.25) -- (4,2.75+\yShift) arc(90:-90:0.75) -- cycle;
+          \shade[left color=blue!5, right color=blue!20] (0,0.75+\yShift) rectangle (4, 1.25+\yShift);
+          \draw (0,0.75+\yShift) -- (4,0.75+\yShift) arc(-90:90:1.25) -- (0,3.25+\yShift) -- (0,2.75+\yShift) 
+           -- (4, 2.75+\yShift) arc(90:-90:0.75) -- (0,1.25+\yShift) -- cycle;
+          \draw (0,0+\yShift) rectangle (6,4+\yShift);
+          \draw[<-] (0,1+\yShift) -- (2,1+\yShift);
+          \draw[<-] (2,1+\yShift) -- (4,1+\yShift);
+          \draw[<-] (4,1+\yShift) arc(-90:90:1);
+          \draw[<-] (4,3+\yShift) -- (2,3+\yShift);
+          \draw[<-] (2,3+\yShift) -- (0,3+\yShift);
+        \end{tikzpicture}
+        \caption{1-2-shell-and-tube heat exchanger示意圖}
+      \end{figure}
+      \newpage
+      因為冷物流出口是在低側，也就是偏向熱物流出口處，所以$T_{C,o}$不可能超過$T_{H,o}$\\
+      但如果反著接冷物流，則是有機會超過的
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,5) -- (0,0) -- (6,0) -- (6,5);
+          \draw[red, ->] (0,4) -- (6,2.5);
+          \draw[blue,->] (0,0.5) -- (5,2);
+          \draw[blue,->] (5,2) -- (0,3.5);
+          \draw[dashed, red] (0,2.5) -- (6,2.5);
+          \draw[dashed, blue] (0,3.5) -- (6,3.5);
+          \node[anchor=east, red] at (0,4) {$T_{H,i}$};
+          \node[anchor=west, red] at (6,2.5) {$T_{H,o}$};
+          \node[anchor=east, blue] at (0,0.5) {$T_{C,i}$};
+          \node[anchor=east, blue] at (0,3.5) {$T_{C,o}$};
+          \def\yShift{6}
+          \draw[<-,blue] (-1, 3+\yShift) -- (0,3+\yShift);
+          \draw[<-,blue] (0,1+\yShift) -- (-1,1+\yShift);
+          \draw[->,red] (1,5+\yShift) -- (1,4+\yShift);
+          \draw[->,red] (5,0+\yShift) -- (5,-1+\yShift);
+          \node[anchor=east,blue] at (-1,3+\yShift) {$T_{c,i}$};
+          \node[anchor=east,blue] at (-1,1+\yShift) {$T_{c,o}$};
+          \node[anchor=south,red] at (1,5+\yShift) {$T_{h,i}$};
+          \node[anchor=north,red] at (5,-1+\yShift) {$T_{h,o}$};
+          \shade[left color=red!50, right color=red!5] (0,0+\yShift) rectangle (6,4+\yShift);
+          \fill[white] (0,0.75+\yShift) -- (4,0.75+\yShift) arc(-90:90:1.25) -- (0,3.25+\yShift) -- (0,2.75+\yShift) 
+           -- (4, 2.75+\yShift) arc(90:-90:0.75) -- (0,1.25+\yShift) -- cycle;
+          \shade[left color=blue!40, right color=blue!25] (0,2.75+\yShift) rectangle (4,3.25+\yShift);
+          \shade[top color=blue!25, bottom color=blue!20] (4,0.75+\yShift) arc(-90:90:1.25) -- (4,2.75+\yShift) arc(90:-90:0.75) -- cycle;
+          \shade[left color=blue!5, right color=blue!20] (0,0.75+\yShift) rectangle (4, 1.25+\yShift);
+          \draw (0,0.75+\yShift) -- (4,0.75+\yShift) arc(-90:90:1.25) -- (0,3.25+\yShift) -- (0,2.75+\yShift) 
+           -- (4, 2.75+\yShift) arc(90:-90:0.75) -- (0,1.25+\yShift) -- cycle;
+          \draw (0,0+\yShift) rectangle (6,4+\yShift);
+          \draw[->] (0,1+\yShift) -- (2,1+\yShift);
+          \draw[->] (2,1+\yShift) -- (4,1+\yShift);
+          \draw[->] (4,1+\yShift) arc(-90:90:1);
+          \draw[->] (4,3+\yShift) -- (2,3+\yShift);
+          \draw[->] (2,3+\yShift) -- (0,3+\yShift);
+        \end{tikzpicture}
+        \caption{反接冷物流的1-2-shell-and-tube heat exchanger示意圖}
+      \end{figure}
+      此時$T_{C,o}$就有可能超過$T_{H,o}$
+      \newpage
+      \item 2-4-shell-and-tube heat exchanger
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,0) rectangle (5,3);
+          \draw (0,4) rectangle (5,7);
+          \draw[red, ->] (1,8) -- (1,7);
+          \draw[red, ->] (4,4) -- (4,3);
+          \draw[red, ->] (1,0) -- (1,-1);
+          \draw[blue, ->] (-1,6) -- (0,6);
+          \draw[blue, ->] (0,6) -- (2,6);
+          \draw[blue, ->] (2,6) -- (4,6);
+          \draw[blue, ->] (4,6) arc(90:-90:0.5);
+          \draw[blue, ->] (4,5) -- (2,5);
+          \draw[blue, ->] (2,5) -- (0,5);
+          \draw[blue, ->] (0,5) -- (-0.5, 5) -- (-0.5, 2) -- (0,2);
+          \draw[blue, ->] (0,2) -- (2,2);
+          \draw[blue, ->] (2,2) -- (4,2);
+          \draw[blue, ->] (4,2) arc(90:-90:0.5);
+          \draw[blue, ->] (4,1) -- (2,1);
+          \draw[blue, ->] (2,1) -- (0,1);
+          \draw[blue, ->] (0,1) -- (-1,1);
+          \node[anchor=south, red] at (1,8) {$T_{H,i}$};
+          \node[anchor=north, red] at (1,-1) {$T_{H,o}$};
+          \node[anchor=east, blue] at (-1,6) {$T_{C,i}$};
+          \node[anchor=east, blue] at (-1,1) {$T_{C,o}$};
+          \def\xShift{7}
+          \draw (0+\xShift,8) -- (0+\xShift,0) -- (6+\xShift,0) -- (6+\xShift,8);
+          \draw[blue, ->] (0+\xShift,0.5) -- (5+\xShift,1.5);
+          \draw[blue, ->] (5+\xShift,1.5) -- (0+\xShift,2.5);
+          \draw[blue, ->] (0+\xShift,2.5) -- (5+\xShift,3.5);
+          \draw[blue, ->] (5+\xShift,3.5) -- (0+\xShift,4.5);
+          \draw[red, ->] (0+\xShift,7.5) -- (6+\xShift,6.2);
+          \draw[red, ->] (6+\xShift,6.2) -- (0+\xShift,4.8);
+          \node[anchor=east, red] at (0+\xShift,7.5) {$T_{H,i}$};
+          \node[anchor=south east, red] at (0+\xShift,4.8) {$T_{H,o}$};
+          \node[anchor=north east, blue] at (0+\xShift,0.5) {$T_{C,i}$};
+          \node[anchor=east, blue] at (0+\xShift,4.5) {$T_{C,o}$};
+          \draw[dashed, blue] (0+\xShift,4.5) -- (6+\xShift,4.5);
+          \draw[dashed, red] (0+\xShift,4.8) -- (6+\xShift,4.8);
+        \end{tikzpicture}
+        \caption{2-4-shell-and-tube heat exchanger示意圖}
+      \end{figure}
+      同樣，如果熱流最低溫和冷流最低溫在同一側，則冷流出口不可能超過熱流出口溫度\\
+      而如果反接冷流，則有可能超過\\
+      殼管式的LMTD計算方式與前面相同，只是要注意怎麼斷定\mcirc{1}和\mcirc{2}的位置\\
+      技巧是以水平面將熱交換器隔開來看\\
+      而1-1就當成是套管來看待即可\\
+      另外在設計方程式上，會多一項$F_G$，稱為LMTD修正因子(LMTD correction factor)\\
+      因為殼管式熱交換器通常不會是單純的並流或逆流，而是複雜的流動方式
+      \begin{equation}
+        Q = U A \cdot \text{LMTD} \cdot F_G
+      \end{equation}
+      其中$F_G$(Convection factor)的值通常需要查表取得，範圍在$0 < F_G \leq 1$之間\\
+      P.S. 1-1殼管式熱交換器的$F_G = 1$，因為它等同於套管式熱交換器
+    \end{itemize}
   \end{enumerate}
 \end{itemize}
 \end{CJK*}

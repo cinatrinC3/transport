@@ -1,0 +1,1937 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{蒸餾器 Distillation}
+對比蒸發器，蒸餾器用於分離兩個都會揮發但揮發性不同的成分\\
+藉由加熱使混合物之各成分因蒸氣壓的不同而分離\\
+例如: 乙醇與水的分離\\
+設計時會考慮熱力學性質的平衡線\\
+以及蒸餾器的操作線
+\begin{itemize}
+  \item 根據\fbox{會不會有回流}，分成
+  \begin{itemize}
+    \item 簡單蒸餾 Simple Distillation :\\
+    液體受熱所產生的蒸汽直接排出\\
+    不再冷凝，回流，或與其他蒸氣進行液汽接觸\\
+    而根據蒸餾時液氣是否已經達到平衡，分成兩種
+    \begin{enumerate}
+      \item 閃蒸、驟沸蒸餾 Flash distillation\\
+      進料經加熱後，進入閃蒸槽，將槽內壓力降低，則液體部分汽化蒸發而達氣液平衡
+      \item 微分蒸餾 Differential distillation\\
+      液體(L)經加熱會產生蒸氣(V)，經冷凝而成為塔頂產物，不再回流至器內。\\
+      殘留液的量(L)及組成($x_A$)\\
+      與塔頂產物的量(V)及組成($y_A$)皆會隨時間改變(unsteadt state)\\
+      長時間來看，L,V為未平衡關係，不可視為平衡操作\\
+      但短時間來看，L,V仍為平衡關係，故$y_A,x_A$還是可以看平衡線
+    \end{enumerate}
+    \item 精餾 Rectification:\\
+    具有冷凝、回流裝置，同樣根據是否達到液氣平衡，分成兩種
+    \begin{enumerate}
+      \item 批式蒸餾 Batch Distillation\\
+      未達到Steady State，與微分蒸餾相似\\
+      但不同的是，塔頂產物會被冷凝，並回流至塔內，使得塔內液體組成隨時間改變\\
+      計算上會與微分蒸餾相同
+      \item 連續蒸餾 Continuous Distillation\\
+      達到Steady State，塔內液體組成不隨時間改變\\
+      效果最好，量又大，四台當中最常用
+    \end{enumerate}
+  \end{itemize}
+  \item 依照蒸餾的物質性質，又可分為:
+  \begin{itemize}
+    \item 共沸蒸餾 Azeotrope Distillation
+    \item 萃取蒸餾 Extraction Distillation
+    \item 水蒸氣蒸餾 Steam Distillation\\
+    用於食品
+  \end{itemize}
+  \item 解題時可將蒸餾塔拆分為三個物流、三個操作線、兩個影響因素
+  \begin{itemize}
+    \item 物流:
+    \begin{itemize}
+      \item 進料($F$)，Feed
+      \item 塔頂產物($D$)，Distillate
+      \item 塔底產物($W$)，Bottoms
+    \end{itemize}
+    \item 操作線 Operating Line:
+    \begin{itemize}
+      \item q-line，Feed Section Operating Line
+      \item 增濃段，Enriching Section Operating Line
+      \item 氣提段(回收段)，Stripping(Recovery) Section Operating Line
+    \end{itemize}
+    \item 影響因素:
+    \begin{itemize}
+      \item 溫度\\
+      若塔溫提高，則分離效果較差，$x_D$下降，$x_W$上升\\
+      若回流比提高或再沸器功率降低，塔溫會下降，分離效果較好
+      \item 壓力\\
+      若壓力上升，則分離效果較差，$x_D$下降，$x_W$上升
+    \end{itemize}
+  \end{itemize}
+  \item 重要名詞
+  \begin{itemize}
+    \item 相對揮發度 Relative volatility，$\alpha_{AB}$\\
+    定義:
+    \begin{equation}
+      \boxed{\alpha_{AB}\equiv{\frac{K_A}{K_B}}=\frac{\frac{y_A}{x_A}}{\frac{y_B}{x_B}} = \frac{y_A\left(1-x_A\right)}{x_A\left(1-y_A\right)}}
+      \label{eq:relative_volatility}
+    \end{equation}
+    P.S. 所以$\alpha_{AB}\neq \alpha_{BA}$，兩者為倒數關係
+    \begin{equation}
+      \alpha_{BA} = \frac{1}{\alpha_{AB}}
+    \end{equation}
+    目的有二:
+    \begin{enumerate}
+      \item 定性:\\
+      由$\alpha_{AB}$是否大於1，可判斷$A$與$B$的揮發性差異\\
+      P.S. 若為雙成分系統，若一成分$K_A>1$，則另一成分$K_B<1$
+      \begin{equation}
+        \frac{y_1}{x_1}>1 \Rightarrow y_1 > x_1 \Rightarrow -y_1 < -x_1 \Rightarrow 
+        1-y_1< 1-x_1 \Rightarrow y_2 < x_2 \Rightarrow \frac{y_2}{x_2} < 1
+        \Rightarrow K_2 < 1 \nonumber
+      \end{equation}
+      \item 定量:\\
+      由$\alpha_{AB}$的數值，可做出平衡線，進而計算蒸餾器的設計
+    \end{enumerate}
+    \item 平衡線 Equilibrium line
+    由(\ref{eq:relative_volatility})式:
+    \begin{equation}
+      \alpha_{AB} = \frac{y_A\left(1-x_A\right)}{x_A\left(1-y_A\right)} \implies
+      \boxed{y_A = \frac{\alpha_{AB}x_A}{1+\left(\alpha_{AB}-1\right)x_A}} \label{eq:relative_volatility_xy}
+    \end{equation}
+    若作圖$y_A,x_A$，則能繪製出平衡線
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (5,5);
+        \draw (0,0) -- (5,5);
+        \draw[->] (-0.5, 0) -- (-0.5, 1) node[above] {$y_A$};
+        \draw[->] (0, -0.5) -- (1, -0.5) node[right] {$x_A$};
+        \node[anchor=north] at (0,0) {0};
+        \node[anchor=east] at (0,0) {0};
+        \node[anchor=north] at (5,0) {1};
+        \node[anchor=east] at (0,5) {1};
+        \node[anchor=north west] at (2.5,2.5) {$45^\circ$線($y_A=x_A$)};
+        \draw[blue] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+        \path[name path=a] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+        \path[name path=b] (2,0) -- (2,5);
+        \path[name intersections={of=a and b, by=P}];
+        \node[anchor=south east, blue] at (P) {$\alpha_{AB}>1$};
+        \node[anchor=north] at (2.5,0) {$x_A$};
+        \node[anchor=east] at (0,2.5) {$y_A$};
+      \end{tikzpicture}
+      \caption{平衡線與相對揮發度的關係圖}
+      \label{fig:distillation_equilibrium_line}
+    \end{figure}
+    平衡線可判斷分離$A$,$B$的難易程度\\
+    若$\alpha_{AB}>1$，$A$易揮發\\
+    若$\alpha_{AB}<1$，$B$易揮發\\
+    若$\alpha_{AB}=1$，$A$,$B$達共沸點(Azeotrope point)\\
+    而\fbox{$\alpha_{AB}$越偏離1，則$A$,$B$越易分離}
+    \item 操作線 Operating Line\\
+      該單元操作的\fbox{質量平衡式}
+  \end{itemize}
+  \item 閃蒸 Flash Distillation
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (0,0) -- (2.5,0) node[midway, below] {$F(l)$};
+      \node[anchor=east] at (0,0) {$F,x_F$};
+      \node[anchor=south] at(1.25,0) {過冷液體};
+      \draw(3,0) circle (0.5);
+      \draw[->] (2.24, -0.73) -- (2.91,0.11) -- (3.09,-0.11) -- (3.76, 0.73);
+      \node[anchor=north] at (3, -1) {加熱};
+      \draw[->] (3.5,0) -- (6,0) node[midway, below] {$(l/v)$};
+      \draw(6,0) -- (6,2) arc(180:0:1 and 0.5) -- (8,-2) arc(0:-180:1 and 0.5) -- cycle;
+      \draw[decorate, decoration=snake, blue] (6,0) --(8,0);
+      \draw[->] (7, -2.5) -- (7,-3) -- (9, -3)node[right] {$L, x_A$};
+      \node[anchor=north] at (8,-3) {塔底產物};
+      \node[anchor=north] at (8,-3.6) {餾餘物(Waste)};
+      \draw[->] (7,2.5) -- (7,3) -- (9,3) node[right] {$V, y_A$};
+      \node[anchor=south] at (8,3) {塔頂產物};
+      \node[anchor=south] at (8,3.6) {蒸餾物(Distillate)};
+      \draw[->] (9.3, 1) -- +(-2,-1);
+      \node[anchor=south west] at (9.3,1) {減壓};
+      \node[anchor=west] at (6,1) {V};
+      \node[anchor=west] at (6,-1) {L};
+    \end{tikzpicture}
+    \caption{閃蒸示意圖}
+  \end{figure}
+  \begin{itemize}
+  \item 解題:\\
+    假設要分離的輕物質是$A$，則可以預期:
+    \begin{equation}
+      y_A > x_F > x_A
+    \end{equation}
+    通常題目會是已知$F,x_F$，求出$x_A,y_A$\\
+    因為閃蒸槽內部已達Steady State，故
+    \begin{enumerate}
+      \item $x_A,y_A$，達到平衡，會落在平衡線上(\ref{eq:relative_volatility_xy})式
+      \begin{equation}
+        y_A = \frac{\alpha_{AB}x_A}{1+\left(\alpha_{AB}-1\right)x_A}
+      \end{equation}
+      \item 因為$x_A,y_A$為本操作單元的出料，故會落在操作線上
+      \begin{equation}
+        \boxed{y_A = \frac{f-1}{f}x_A + \frac{x_F}{f}, \quad f=\frac{F}{V}}
+      \end{equation}
+      P.S. 可見後續推導，但背起來也可以
+      \item 所以如果就是求操作線和平衡線的交點\\
+        沒圖，就是解聯立方程式
+    \end{enumerate}
+  \item 推導操作線:
+    \begin{itemize}
+      \item 整體質量平衡:
+      \begin{equation}
+        F = L+V
+      \end{equation}
+      \item 輕成分的質量平衡:
+      \begin{equation}
+        F\cdot x_F = L\cdot x_A +V\cdot y_A
+      \end{equation}
+      \item 以$L=F-V$代入:
+      \begin{align}
+        Fx_F &= (F-V)x_A + V y_A \nonumber\\
+        F(x_F - x_A) &= V(y_A - x_A)  \label{eq:flash_distillation_balance}
+      \end{align}
+      定義
+      \begin{equation}
+        f = \frac{V}{F}, \text{使進料被汽化的比例}
+      \end{equation}
+      將(\ref{eq:flash_distillation_balance})同除以$F$，得到:
+      \begin{align}
+        (x_F - x_A) &= f(y_A - x_A) \nonumber\\
+        x_F - x_A &= fy_A - f x_A \nonumber\\
+        fy_A &= x_F + (f-1)x_A \nonumber\\
+        \implies \quad y_A &= \frac{f-1}{f}x_A + \frac{x_F}{f}
+      \end{align}
+    \end{itemize}
+  \item 繪製操作線:
+  \begin{equation}
+    y_A = \frac{f-1}{f}x_A + \frac{x_F}{f}
+  \end{equation}
+  包含了三個已知條件，任選兩個即可繪製操作線
+  \begin{align}
+    \text{斜率}:\quad &m = \frac{f-1}{f} \dots \mcirc{1}\\
+    \text{y截距}:\quad &b = \frac{x_F}{f} \dots \mcirc{2}\\
+    x_A=x_F\text{時}:\quad &y_A =\left(\frac{f-1}{f}+\frac{1}{f}\right)x_F = x_F \dots \mcirc{3}
+  \end{align}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (5,5);
+      \draw (0,0) -- (5,5);
+      \draw[->] (-0.5, 0) -- (-0.5, 1) node[above] {$y_A$};
+      \draw[->] (0, -0.5) -- (1, -0.5) node[right] {$x_A$};
+      \node[anchor=north] at (0,0) {0};
+      \node[anchor=east] at (0,0) {0};
+      \node[anchor=north] at (5,0) {1};
+      \node[anchor=east] at (0,5) {1};
+      \draw[blue] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+      \path[name path=a] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+      \path[name path=b] (2,2) -- (0,4);
+      \path[name path=c] (2.5,0) -- (2.5,5);
+      \path[name intersections={of=a and b, by=P}];
+      \path[name intersections={of=a and c, by=G}];
+      \draw[dashed, red] (2,0) -- (2,2);
+      \draw[dashed, red] (0,2) -- (2,2);
+      \node[anchor=north] at (2,0) {$x_F$};
+      \node[anchor=east] at (0,2) {$x_F$};
+      \node[anchor=west] at (2,2) {\mcirc{3}: $(x_F,x_F)$};
+      \node[anchor=east] at (0,4) {\mcirc{2}: $\frac{x_F}{f}$};
+      \draw[red] (0,4) -- (2,2);
+      \draw[red] (2,2) -- (4,0);
+      \fill[red] (2,2) circle (2pt);
+      \fill[red] (P) circle (2pt);
+      \node[anchor=south west, red] at (4,0) {O.L.};
+      \node[anchor=south] at (1,5.5) {\mcirc{1}: $m= \frac{f-1}{f}$};
+      \draw[->] (1,5.5) -- (0.5,3.5);
+      \node[anchor=south east, blue] at (G) {E.L.};
+      \node[anchor=east] at (P) {$(x_A,y_A)$};
+    \end{tikzpicture}
+    \caption{操作線與平衡線交點示意圖}
+  \end{figure}
+  \item $f$的相關性質:
+  \begin{itemize}
+    \item 進料幾乎沒有汽化，$V\to 0$，$f\to 0$\\
+    操作線斜率$m=\frac{f-1}{f}\to -1$，y截距$b\to \infty$\\
+    這代表操作線是個垂直線，所以直接從$x_F$往上畫去交平衡線\\
+    相當於是\fbox{Bubble Point}
+    \item 進料完全汽化，$V=F$，$f=1$\\
+    操作線斜率$m=\frac{f-1}{f}\to 0$，y截距$b=x_F$\\
+    這代表操作線是個水平線，所以直接從$x_F$往右畫去交平衡線\\
+    相當於是\fbox{Dew Point}
+    \item 進料恰好一半汽化，$V=\frac{F}{2}$
+    \begin{equation}
+      f = \frac{V}{F} = \frac{F/2}{F} = \frac{1}{2}
+    \end{equation}
+    操作線斜率
+    \begin{equation}
+      m = \frac{f-1}{f} = \frac{\frac{1}{2}-1}{\frac{1}{2}} = -1
+    \end{equation}
+    y截距
+    \begin{equation}
+      b = \frac{x_F}{f} = \frac{x_F}{1/2} = 2x_F
+    \end{equation}
+    這代表操作線\fbox{斜率為$-1$，y截距為$2x_F$}
+  \end{itemize}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (5,5);
+      \draw[dashed] (0,5) -- (0,7);
+      \draw[->] (-0.5, 0) -- (-0.5, 1) node[above] {$y_A$};
+      \draw[->] (0, -0.5) -- (1, -0.5) node[right] {$x_A$};
+      \draw (0,0) -- (5,5);
+      \node[anchor=north] at (0,0) {0};
+      \node[anchor=east] at (0,0) {0};
+      \node[anchor=north] at (5,0) {1};
+      \node[anchor=east] at (0,5) {1};
+      \draw[black] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+      \path[name path=a] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+      \def\xF{3}
+      \draw[dashed] (0,\xF) -- (\xF, \xF) -- (\xF,0);
+      \draw[red] (\xF,\xF) -- (\xF,5) node[midway, right] {全液};
+      \draw[blue] (0,\xF) -- (\xF,\xF) node[midway, above] {全汽};
+      \draw[teal] (0,2*\xF) -- (\xF,\xF) node[midway, above right] {半汽};
+      \node[anchor=north] at (\xF,0) {$x_F$};
+      \node[anchor=east] at (0,\xF) {$x_F$};
+      \node[anchor=east] at (0,2*\xF) {$2x_F$};
+    \end{tikzpicture}
+    \caption{閃蒸槽f值不同的操作線示意圖}
+  \end{figure}
+  \end{itemize}
+  \item Differential Distillation 微分蒸餾\\
+  (同樣適用於批次蒸餾(Batch Distillation))\\
+  稱為微分蒸餾是因為不同時刻蒸出的成分組成不同\\
+  也是一般在有機實驗中常用的蒸餾方法
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (100:2) arc (100:440:2);
+      \draw (100:2) -- +(0,2) -- +(-0.5,2.5) -- +(-0.5,4) -- (0,6);
+      \draw (80:2) -- +(0,2) -- +(0.5,2.5) -- +(0.5,3) coordinate (A);
+      \draw (A) ++(0,0.5) -- ++(0,0.5) -- (0,6);
+      \draw (A) -- +(7,-3.5);
+      \draw (A) ++(0,0.5) -- ++(7,-3.5) arc(90:0:0.5) coordinate (B);
+      \draw (B) -- +(0,-0.5) -- +(-0.5,-0.5) -- +(-0.5,0);
+      \draw (B) ++(1,0) -- +(0, -3) -- +(-2.5,-3) -- +(-2.5,0);
+      \draw (A) ++(1,0) -- ++(0.4,0.8) -- ++(5,-2.5) -- ++(-0.4,-0.8);
+      \draw (A) ++(0.8,-0.4) -- ++(-0.4,-0.8) -- ++(5,-2.5) -- ++(0.4,0.8);
+      \fill[pattern=north west lines, pattern color=red] 
+        (0:2) arc (0:-180:2) -- (-2.5,0) arc (-180:0:2.5) -- cycle;
+      \draw[red] (-2,0) -- (-2.5,0) arc(-180:0:2.5) -- (2,0);
+      \fill[pattern=dots, pattern color=blue] 
+        (340:2) arc(340:200:2) --cycle; 
+      \draw[dashed, blue] (340:2) -- (200:2);
+      \draw[decorate, decoration=snake, blue] (340:2) ++(-0.5,0) -- +(0,1.2) coordinate (C);
+      \draw[->, blue] (C) -- +(0,0.3) node[above] {A};
+      \draw[decorate, decoration=snake, blue] (200:2) ++(0.5,0) -- +(0,1.2) coordinate (D);
+      \draw[->, blue] (D) -- +(0,0.3) node[above] {A};
+      \fill[pattern=crosshatch dots, pattern color=blue] (B) ++(1,-2.5) -- +(0, -0.5) -- +(-2.5,-0.5) -- +(-2.5,0);
+      \draw[dashed, blue] (B) ++(1,-2.5) -- +(-2.5,0);
+      \draw[->, blue] (0,1.8) -- (0,5);
+      \draw[->, blue] (A) ++(0,0.25) -- +(6,-3);
+      \node[anchor=south] at (0,-0.68) {$y_A(t),V(t)$};
+      \node[anchor=north] at (0,-0.68) {$L(t),x_A(t)$};
+      \def\xShift{-4.3}
+      \def\yShift{2}
+      \draw (\xShift+0, \yShift+0)  rectangle (\xShift+1.5, \yShift+5);
+      \draw [decorate, decoration={snake, amplitude=7pt, segment length=23pt, pre length=10, post length=10}] 
+      (\xShift+0.4,\yShift+5) -- (\xShift+0.4,\yShift+0);
+      \draw [decorate, decoration={snake, amplitude=7pt, segment length=23pt,pre length=10, post length=10, mirror}] 
+      (\xShift+1.1,\yShift+5) -- (\xShift+1.1,\yShift+0);
+      \draw (\xShift+0.4,\yShift+5) -- +(0,0.5);
+      \draw (\xShift+1.1,\yShift+5) -- +(0,0.5);
+      \draw (\xShift+0.4,\yShift+0) -- +(0,-0.5);
+      \draw (\xShift+1.1,\yShift+0) -- +(0,-0.5);
+      \draw[dashed] (80:2) -- +(0.5,0) -- +(0.5,2) coordinate (E);
+      \draw[dashed] (100:2) -- +(-0.5,0) -- +(-0.5,2) coordinate (F);
+      \draw[->] (F) ++(-0.5,-1) -- +(-1,0);
+      \draw[dashed] (E) -- (F);
+      \draw[dashed] (80:2) -- (100:2);
+      \node[anchor=north] at (\xShift+0.75, \yShift-1) {\small 批次改成回流管};
+      \node[anchor=south] at (0,0) {$A+B$};
+    \end{tikzpicture}
+    \caption{微分蒸餾、批次蒸餾示意圖}
+  \end{figure}
+  因為以整體來看，微分蒸餾及批次蒸餾有相同的性質，故會有相同的操作方程式\\
+  假設有一具有共$L$ mole，內含$x_A$，的液體，在定功率的加熱下，蒸餾出$V$ mole 的東西，內含$y_A$\\
+  $t=0$時，只有$L$以及在$L$裡的$x_A$，令為$L_1$，$x_{A_1}$\\
+  $t=t$時，液體剩下$L-dL$，$X_A-dX_A$，令為$L_2$，$x_{A_1}$\\
+  定性上來說，由於$y_A$與$x_A$為正相關，故初始的氣體濃度$y_{A_1}$會較高\\
+  隨著時間過去，液體中$x_A$下降，故氣體中$y_A$也會下降\\
+  操作方程的想法，來自在每個短時間區間$dt$內，液體與氣體皆達到平衡關係\\
+  推出操作方程式如下
+  \begin{itemize}
+    \item 列出$t=0$及$t=t$時的物質組成
+    \begin{itemize}
+      \item $t=0$時\\
+        液相: $L$ mol，$x_A$\\
+        氣相: 0mol，沒有成分
+      \item $t=t$時\\
+        液相: $L-dL$ mol，$x_A-dx_A$\\
+        氣相: $V$，$y_A$
+    \end{itemize}
+    \item $t=0$及$t=t$的兩個時間物質平衡:
+    \begin{equation}
+      L+0 = (L-dL) + V \implies dL = V
+    \end{equation}
+    很合理，減少的液體量等於蒸出的氣體量
+    \item 寫出輕成分$A$的物質平衡($V$用$dL$代入):
+    \begin{align}
+      Lx_A + 0 &= (L-dL)(x_A - dx_A) + V y_A \nonumber\\
+      Lx_A &= Lx_A -x_AdL -Ldx_A +dLdx_A + y_AdL \nonumber\\
+      0 &= -x_AdL -Ldx_A +\cancel{dLdx_A} + y_AdL \nonumber\\
+      0 &= (y_A - x_A)dL - L dx_A \nonumber\\
+      \frac{dL}{L} &= \frac{dx_A}{y_A - x_A}
+    \end{align}
+    \item 積分兩邊，得到Rayleigh Equation
+    \begin{equation}
+      \int_{L_1}^{L_2} \frac{dL}{L} = \int_{x_{A_1}}^{x_{A_2}} \frac{dx_A}{y_A - x_A}
+    \end{equation}
+    \item 兩邊積分後:
+    \begin{equation}
+      \boxed{\ln \frac{L_2}{L_1} = \int_{x_{A_1}}^{x_{A_2}} \frac{dx_A}{\underbrace{y_A}_{f(x_A)} - x_A}}
+    \end{equation}
+    此為Rayleigh Equation\\
+    而$y_A=f(x_A)$就是平衡線方程式(\ref{eq:relative_volatility_xy})式
+    \begin{equation}
+      y_A = \frac{\alpha_{AB}x_A}{1+\left(\alpha_{AB}-1\right)x_A}
+    \end{equation}
+    \item 題型:
+    \begin{itemize}
+      \item 已知$L_1,x_{A1},x_{A2}$，求$L_2$\\
+      將平衡方程式代入Rayleigh Equation，積分後解出$L_2$
+      \begin{equation}
+        \ln \frac{L_2}{L_1} = \int_{x_{A_1}}^{x_{A_2}} \frac{dx_A}{\frac{\alpha_{AB}x_A}{1+\left(\alpha_{AB}-1\right)x_A} - x_A}
+      \end{equation}
+      求解:
+      \begin{align}
+        \ln \frac{L_2}{L_1} &= \int_{x_{A_1}}^{x_{A_2}} \frac{1-x_A+\alpha_{AB}x_A}{
+          \left(\alpha_{AB}x_A-x_A\right) + \left(x_A^2-\alpha_{AB}x_A^2\right)
+        } dx_A \nonumber\\
+        &= \int_{x_{A_1}}^{x_{A_2}} \frac{1-x_A+\alpha_{AB}x_A}{
+          x_A\left(\alpha_{AB}-1\right)-x_A^2\left(\alpha_{AB} - 1\right)
+        } dx_A \nonumber\\
+        &= \frac{1}{\alpha_{AB}-1} \int_{x_{A_1}}^{x_{A_2}} \frac{1-x_A+\alpha_{AB}x_A}{
+          x_A\left(1 - x_A\right)
+        } dx_A \nonumber\\
+        &= \frac{1}{\alpha_{AB}-1} \int_{x_{A_1}}^{x_{A_2}} \left(
+          \int_{x_{A1}^{x_{A2}}} \frac{1}{x_A} dx_A+ \int_{x_{A1}^{x_{A2}}} \frac{\alpha_{AB}}{1-x_A} dx_A
+        \right)  \nonumber\\
+        &= \boxed{\frac{1}{\alpha_{AB}-1} \left[
+          \ln \frac{x_{A2}}{x_{A1}} - \alpha_{AB}\cdot \ln \frac{1-x_{A2}}{1-x_{A1}}
+        \right]} \label{eq:rayleigh_equation_algebraic}
+      \end{align}
+      此為，Rayleigh Equation的代數形式\\
+      或是將Rayleigh Equation的積分式，利用Simpson's Rule或其他數值積分方法計算
+      \begin{equation}
+        \int_{x_{A_1}}^{x_{A_2}} \frac{dx_A}{y_A - x_A} = \ln \frac{L_2}{L_1}
+      \end{equation}
+      可以$x_A$為橫軸，$\frac{1}{y_A - x_A}$為縱軸，作圖後積分\\
+      P.S. Simpson's Rule 就是只要代頭尾跟中間三個數值，便可得到不錯的近似值
+      \begin{equation}
+        \int_{x_0}^{x_4} f(x) dx \approx \frac{b-a}{12} \left[
+          f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + f(x_4)
+        \right]
+      \end{equation}
+      \item 已知$L_1,L_2,x_{A1}$，求$x_{A2}$\\
+      只能使用Try-and-Error的方法，求解Rayleigh Equation(\ref{eq:rayleigh_equation_algebraic})式
+    \end{itemize}
+  \end{itemize}
+  \item Continuous Distillation 連續蒸餾塔\\
+  只要不要有固體，效率最好的蒸餾方法\\
+  透過多個理論板(theoretical plate)的設計，讓每個板子都達到平衡關係\\
+  進料是氣體還是液體或混合都可以
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,8) arc(180:0:1 and 0.5) -- (2,0) arc(0:-180:1 and 0.5) -- cycle;
+      \draw [->] (-2,4) -- (0,4);
+      \draw [->] (1,8.5) -- (1,9) -- (3,9);
+      \draw (3.5,9) circle (0.5);
+      \draw [->] (2.8,8.3) -- (4.2,9.7);
+      \draw [->] (4,9) -- (5,9);
+      \draw [->] (5,9) -- (7,9);
+      \node[anchor=south] at (5,9) {$\boxed{R}$};
+      \draw [->] (5,9) -- (5,8) -- (2,8);
+      \draw [->] (1,-0.5) -- (1,-1.5) -- (3,-1.5);
+      \draw (3.5, -1.5) circle (0.5);
+      \fill[pattern=crosshatch dots, pattern color=blue] (4,-1.5) arc(0:-180:0.5) --  cycle;
+      \fill[pattern=dots, pattern color=red] (3,-1.5) arc(180:0:0.5) -- cycle;
+      \draw[dashed, blue] (3,-1.5) -- (4,-1.5);
+      \draw (3.2, -2.3) -- (3.2, -1.7);
+      \draw[decorate, decoration={coil, aspect=0.3, segment length=2pt, amplitude=3pt}] (3.2, -1.7) -- (3.8, -1.7);
+      \draw (3.8, -2.3) -- (3.8, -1.7);
+      \draw [->] (3.5, -1) -- (3.5, 0) -- (2,0);
+      \draw [->] (4,-1.5) -- (7,-1.5); 
+      \draw [blue, ->] (4, -1.7) -- (7,-1.7);
+      \node [anchor=west, blue] at (7,-1.7) {W,$x_W$};
+      \node [anchor=east] at (-2,4) {F};
+      \node [anchor=north] at (3.5,-2.3) {Reboiler};
+      \node [anchor=south] at (3.5,9.7) {\small Total Condenser};
+      \draw (0,1) -- (2,1);
+      \draw (0,3) -- (2,3);
+      \draw (0,5) -- (2,5);
+      \draw (0,7) -- (2,7);
+      \draw [red, ->] (-2,4.2) -- (-1, 4.2);
+      \draw [red, ->] (-1,4.2) -- (0.2, 4.2) arc(270:360:0.2) -- (0.4,5);
+      \draw [red, ->] (0.4,5) -- (0.4,7);
+      \draw [red, ->] (0.4,7) -- (0.4,8) arc(180:110:0.6 and 0.3) -- +(0,1) coordinate (A);
+      \node [anchor=north west, red] at (0.4,7) {$V_2$};
+      \node [anchor=south, red] at (A) {$V_1$};
+      \draw [blue, ->] (4,8.8) -- (4.6,8.8) arc(90:0:0.2) -- (4.8,8.25);
+      \draw [blue, ->] (4.8,8.25) -- (4.8,8) arc(0:-90:0.2) -- (3, 7.8);
+      \draw [blue, ->] (4,8.8) -- (7,8.8);
+      \node [anchor=west, blue] at (7,8.8) {D,$x_D$};
+      \node [anchor=west, blue] at (5,7.8) {L};
+      \draw [blue, ->] (3,7.8) -- (2,7.8) arc (90:180:0.2) -- (1.8,7.4) arc(0:-90:0.2) -- (1, 7.2);
+      \draw [blue, ->] (1,7.2) -- (0.4,7.2) arc(90:180:0.2) -- (0.2,6);
+      \draw [blue, ->] (0.2,6) -- (0.2,5.4) arc(180:270:0.2) -- (1,5.2);
+      \draw [blue, ->] (1,5.2) -- (1.6,5.2) arc(90:0:0.2) -- (1.8,4);
+      \draw [blue, ->] (1.8,4) -- (1.8,3.4) arc(0:-90:0.2) -- (1,3.2);
+      \draw [blue, ->] (1,3.2) -- (0.4,3.2) arc(90:180:0.2) -- (0.2,2);
+      \draw [blue, ->] (0.2,2) -- (0.2,1.4) arc(180:270:0.2) -- (1,1.2);
+      \draw [blue, ->] (1,1.2) -- (1.6,1.2) arc(90:0:0.2) -- (1.8,0) arc(0:-80:0.6 and 0.3) -- +(0,-1);
+      \draw [red,->] (3.5,0.2) -- (1,0.2);
+      \draw [red,->] (1,0.2) -- (0.6,0.2) arc(270:180:0.2) -- (0.4,1);
+      \draw [red,->] (0.4,1) -- (0.4,3);
+      \draw [red,->] (0.4,3) -- (0.4,5);
+      \draw [blue,->] (-2,3.8) -- (-1,3.8);
+      \draw [blue,->] (-1,3.8) -- (0,3.8) arc(90:0:0.2) -- (0.2,3);
+      \draw [dashed, teal] (-0.3,4.7) rectangle (6,9.8);
+      \draw [dashed, teal] (-0.3,3.3) rectangle (6,-2.1);
+      \node [anchor=north east, teal] at (6,3.3) {氣堤段};
+      \node [anchor=south east, teal] at (6,4.7) {增濃段};
+      \draw [dashed, teal] (-0.3,3.5) rectangle (6,4.5);
+      \node [anchor=east, teal] at (6, 4) {進料段};
+      \node [anchor=west] at (2,7) {第一板};
+      \node [anchor=west] at (2,5) {第二板};
+      \node [anchor=west] at (2,3) {第三板};
+      \node [anchor=west] at (2,1) {第四板};
+      \node [anchor=south west] at (4,-1) {$\boxed{Q_R}$};
+    \end{tikzpicture}
+    \caption{連續蒸餾塔示意圖}
+  \end{figure}
+  \begin{itemize}
+    \item 機制介紹:\\
+      進料$F$，含$x_F$\\
+      進入塔後，產生塔頂產物及塔底產物\\
+      塔頂產物經過全冷凝器後，完全轉為液體，含$x_D$\\
+      會有一部分回流，為$L$，含$x_D$，另一部分為$D$，同樣含$x_D$，有著回流比$R$
+      \begin{equation}
+        R = \frac{L}{D}
+      \end{equation}
+      塔底產物經過重沸器後，部分轉為氣體，回流入塔，液體部分為$W$，含$x_W$\\
+      上方Enriching Section有n個板\\
+      也就是具有共計n個理論板在高於進料端
+      下方Stripping Section有m個板\\
+      也就是具有共計m個理論板在低於進料端\\
+      板子的計數方式，皆由\fbox{最頂端}的板開始計數
+    \item 操作變因:
+    \begin{enumerate}
+      \item 回流比$R$
+      \item 重沸器功率$Q_R$
+    \end{enumerate}
+    \item 應變變因:
+    \begin{enumerate}
+      \item 溫度
+      \item 壓力
+      \item 產物組成
+      \item 產物流量
+      \item 熱傳裝置負荷(Loading)
+    \end{enumerate}
+    \item 定性關係:
+    \begin{itemize}
+      \item 回流比$R$越大(同組成的平衡下，飽和蒸汽的溫度比飽和液體高)\\
+      塔溫$\downarrow$，分離效果越好$x_D\uparrow, x_W\downarrow$\\
+      而因為回流比越大，回流量$L\uparrow$\\
+      總液體流量上升，氣體流量$V \downarrow$\\
+      但因為產物從氣體端取出，故產物流量$D \downarrow$\\
+      因為液體變多氣體變少，重沸器裝置負荷$\uparrow$，冷凝器負荷$\downarrow$
+      \item 重沸器功率$Q_R$越大\\
+      塔溫$\uparrow$，分離效果越差$x_D\downarrow, x_W\uparrow$\\
+      因為重沸器功率越大，氣體流量$V\uparrow$\\
+      總氣體流量上升，液體流量$L \downarrow$\\
+      但因為產物從氣體端取出，故產物流量$D \uparrow$\\
+      因為氣體變多液體變少，重沸器裝置負荷$\downarrow$，冷凝器負荷$\uparrow$
+      \item 低壓更有利於分離
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,5)--(0,0)--(5,0) -- (5,5);
+          \draw[blue] (0,1)--(5,4);
+          \draw[red] (0,1).. controls (2,1) and (5,3) .. (5,4);
+          \node[anchor=south] at (0,5) {$P$};
+          \node[anchor=north] at (0,0) {0};
+          \node[anchor=north] at (5,0) {1};
+          \node[anchor=north] at (2.5,5) {定溫下};
+          \path[name path=a1] (0,1).. controls (2,1) and (5,3) .. (5,4);
+          \path[name path=a2] (0,1)--(5,4);
+          \path[name path=b] (0,1.5) -- (5,1.5);
+          \path[name path=c] (0,3) -- (5,3);
+          \path[name intersections={of=a1 and b, by=I1}];
+          \path[name intersections={of=a1 and c, by=I2}];
+          \path[name intersections={of=a2 and b, by=J1}];
+          \path[name intersections={of=a2 and c, by=J2}];
+          \draw[dashed] (0,0|-I1) -- (I1);
+          \draw[dashed] (0,0|-I2) -- (I2);
+          \draw[dashed] (0,0|-J1) -- (J1);
+          \draw[dashed] (0,0|-J2) -- (J2);
+          \draw[dashed] (I1 |- 0,0 ) -- (I1);
+          \draw[dashed] (I2 |- 0,0 ) -- (I2);
+          \draw[dashed] (J1 |- 0,0 ) -- (J1);
+          \draw[dashed] (J2 |- 0,0 ) -- (J2);
+          \node[anchor=east] at (0,0|-I1) {低壓};
+          \node[anchor=east] at (0,0|-I2) {高壓};
+          \node[anchor=north] at (I1 |- 0,0) {$y_{\text{低}}$};
+          \node[anchor=north] at (J1 |- 0,0) {$x_{\text{低}}$};
+          \node[anchor=north] at (I2 |- 0,0) {$y_{\text{高}}$};
+          \node[anchor=north] at (J2 |- 0,0) {$x_{\text{高}}$};
+        \end{tikzpicture}
+        \caption{壓力與相對揮發度關係示意圖}
+      \end{figure}
+      可以看出不同壓下的相對揮發度:
+      \begin{equation}
+        \alpha_{\text{低}} = \frac{y_{\text{低}}/(1-y_{\text{低}})}{x_{\text{低}}/(1-x_{\text{低}})} >
+        \alpha_{\text{高}} = \frac{y_{\text{高}}/(1-y_{\text{高}})}{x_{\text{高}}/(1-x_{\text{高}})}
+      \end{equation}
+    \end{itemize}
+    \item 解題技術:
+    \begin{itemize}
+      \item 求$D$及$W$:\\
+      利用整體質量平衡及輕成分質量平衡，解出$D$及$W$\\
+      整體的
+      \begin{equation}
+        F = D + W
+      \end{equation}
+      輕成分的
+      \begin{equation}
+        F\cdot x_F = D\cdot x_D + W\cdot x_W
+      \end{equation}
+      聯立解出$D$及$W$
+      \begin{equation}
+        D = \frac{F(x_F - x_W)}{x_D - x_W}, \quad
+        W = \frac{F(x_D - x_F)}{x_D - x_W}
+      \end{equation}
+      \item 求理論板數，或進料板位置:\\
+      McCabe-Thiele Method，要假設
+      \begin{enumerate}
+        \item \fbox{恆莫爾溢流(Constant molar overflow)}\\
+          也就是假設每塊板子的液體流量皆相同為$L$，氣體流量皆相同為$V$\\
+          此假設才能使\fbox{每一段操作線，斜率$\frac{L}{V}$皆相同}，故能連成一整條
+        \item 二成分汽化熱約相等\\
+          畢竟連續式蒸餾是為了分離非常相似的物質，故此假設還算合理\\
+          這是為了讓能量平衡式不會因為不同板子的濃度不同而有不同的總汽化熱
+        \item 假設理想溶液，忽略混合物\\
+        為了使能量平衡式能簡化為傳遞及潛熱吸收
+      \end{enumerate}
+      繪製，Enrich/Stripping/q-line三條操作線，與一條平衡線，交錯 畫出各板組成
+      \item 求冷凝器的${\dot m}_{\text{冷凝水}}$及重沸器${\dot m}_{\text{蒸氣}}$:\\
+      利用能量平衡式加總可以求出
+    \end{itemize}
+    \item Enriching Section的操作線:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \begin{scope}
+          \clip (-3, 4.7) rectangle (10, 10.5);
+          \draw (0,8) arc(180:0:1 and 0.5) -- (2,0) arc(0:-180:1 and 0.5) -- cycle;
+          \draw [->] (-2,4) -- (0,4);
+          \draw [->] (1,8.5) -- (1,9) -- (3,9);
+          \draw (3.5,9) circle (0.5);
+          \draw [->] (2.8,8.3) -- (4.2,9.7);
+          \draw [->] (4,9) -- (5,9);
+          \draw [->] (5,9) -- (7,9);
+          \node[anchor=south] at (5,9) {$\boxed{R}$};
+          \draw [->] (5,9) -- (5,8) -- (2,8);
+          \draw [->] (1,-0.5) -- (1,-1.5) -- (3,-1.5);
+          \draw (3.5, -1.5) circle (0.5);
+          \fill[pattern=crosshatch dots, pattern color=blue] (4,-1.5) arc(0:-180:0.5) --  cycle;
+          \fill[pattern=dots, pattern color=red] (3,-1.5) arc(180:0:0.5) -- cycle;
+          \draw[dashed, blue] (3,-1.5) -- (4,-1.5);
+          \draw (3.2, -2.3) -- (3.2, -1.7);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=2pt, amplitude=3pt}] (3.2, -1.7) -- (3.8, -1.7);
+          \draw (3.8, -2.3) -- (3.8, -1.7);
+          \draw [->] (3.5, -1) -- (3.5, 0) -- (2,0);
+          \draw [->] (4,-1.5) -- (7,-1.5); 
+          \draw [blue, ->] (4, -1.7) -- (7,-1.7);
+          \node [anchor=west, blue] at (7,-1.7) {W,$x_W$};
+          \node [anchor=east] at (-2,4) {F};
+          \node [anchor=north] at (3.5,-2.3) {Reboiler};
+          \node [anchor=south] at (3.5,9.7) {\small Total Condenser};
+          \draw (0,1) -- (2,1);
+          \draw (0,3) -- (2,3);
+          \draw (0,5) -- (2,5);
+          \draw (0,7) -- (2,7);
+          \draw [red, ->] (-2,4.2) -- (-1, 4.2);
+          \draw [red, ->] (-1,4.2) -- (0.2, 4.2) arc(270:360:0.2) -- (0.4,5);
+          \draw [red, ->] (0.4,5) -- (0.4,7);
+          \draw [red, ->] (0.4,7) -- (0.4,8) arc(180:110:0.6 and 0.3) -- +(0,1);
+          \draw [blue, ->] (4,8.8) -- (4.6,8.8) arc(90:0:0.2) -- (4.8,8.25);
+          \draw [blue, ->] (4.8,8.25) -- (4.8,8) arc(0:-90:0.2) -- (3, 7.8);
+          \draw [blue, ->] (4,8.8) -- (7,8.8);
+          \node [anchor=west, blue] at (7,8.8) {D,$x_D$};
+          \node [anchor=west, blue] at (5,7.8) {L};
+          \draw [blue, ->] (3,7.8) -- (2,7.8) arc (90:180:0.2) -- (1.8,7.4) arc(0:-90:0.2) -- (1, 7.2);
+          \draw [blue, ->] (1,7.2) -- (0.4,7.2) arc(90:180:0.2) -- (0.2,6);
+          \draw [blue, ->] (0.2,6) -- (0.2,5.4) arc(180:270:0.2) -- (1,5.2);
+          \draw [blue, ->] (1,5.2) -- (1.6,5.2) arc(90:0:0.2) -- (1.8,4);
+          \draw [blue, ->] (1.8,4) -- (1.8,3.4) arc(0:-90:0.2) -- (1,3.2);
+          \draw [blue, ->] (1,3.2) -- (0.4,3.2) arc(90:180:0.2) -- (0.2,2);
+          \draw [blue, ->] (0.2,2) -- (0.2,1.4) arc(180:270:0.2) -- (1,1.2);
+          \draw [blue, ->] (1,1.2) -- (1.6,1.2) arc(90:0:0.2) -- (1.8,0) arc(0:-80:0.6 and 0.3) -- +(0,-1);
+          \draw [red,->] (3.5,0.2) -- (1,0.2);
+          \draw [red,->] (1,0.2) -- (0.6,0.2) arc(270:180:0.2) -- (0.4,1);
+          \draw [red,->] (0.4,1) -- (0.4,3);
+          \draw [red,->] (0.4,3) -- (0.4,5);
+          \draw [blue,->] (-2,3.8) -- (-1,3.8);
+          \draw [blue,->] (-1,3.8) -- (0,3.8) arc(90:0:0.2) -- (0.2,3);
+          \draw [dashed, teal] (-0.3,5.7) rectangle (6,9.8);
+          \draw [dashed, teal] (-0.3,7.5) -- (6,7.5);
+          \draw [dashed, teal] (-0.3,3.3) rectangle (6,-2.1);
+          \draw [dashed, teal] (-0.3,3.5) rectangle (6,4.5);
+          \node [anchor=east, teal] at (6, 4) {進料段};
+          \node [anchor=west] at (2,7) {第一板};
+          \node [anchor=west] at (2,5) {第二板};
+          \node [anchor=west] at (2,3) {第三板};
+          \node [anchor=west] at (2,1) {第四板};
+          \node [anchor=south west] at (4,-1) {$\boxed{Q_R}$};
+          \node [anchor=north west, red] at (0.4,7) {$V_2$};
+          \node [anchor=south, red] at (A) {$V_1$};
+        \end{scope}
+      \end{tikzpicture}
+      \caption{Enriching Section操作線示意圖}
+    \end{figure}
+    假設每板上的液氣都達平衡，板子上的$x,y$能由平衡線求出\\
+    而兩板之間的$x,y$則由操作線求出\\
+    注意物流的下標是指從哪一板而來\\
+    若以在任何板子上方的東西當作一個整體，則可以看出每個整體都滿足
+    \begin{equation}
+      V_{n+1} = L_n + D
+    \end{equation}
+    來自我這塊板子$n+1$給予的蒸汽\\
+    會等同於流出的液體$D$加上從上方流回來的液體$L_n$\\
+    (McCabe-Thiele 假設之一，全部都是$L$)\\
+    代入回流比的定義$R=\frac{L_n}{D}$，\fbox{同除$L_n$}，可得到
+    \begin{equation}
+      \frac{V_{n+1}}{L_n} = 1 + \frac{D}{L_n} = 1 + \frac{1}{R} = \frac{R+1}{R}
+    \end{equation}
+    改寫為
+    \begin{equation}
+      \boxed{\frac{L_n}{V_{n+1}} = \frac{R}{R+1}}
+    \end{equation}
+    此為第一種操作線
+    代入回流比的定義$R=\frac{L_n}{D}$，\fbox{改同除$V_{n+1}$}，可得到
+    \begin{align}
+      1 &= \frac{L_n}{V_{n+1}} + \frac{D}{V_{n+1}}\nonumber\\
+      \frac{D}{V_{n+1}} &= 1 - \frac{L_n}{V_{n+1}} \nonumber\\
+      &= 1- \frac{R}{R+1} \nonumber\\
+      &= \frac{1}{R+1}
+    \end{align}
+    此為第二種操作線
+    \begin{equation}
+      \boxed{\frac{D}{V_{n+1}} = \frac{1}{R+1}}
+    \end{equation}
+    寫出輕成分質量平衡:
+    \begin{equation}
+      V_{n+1} \cdot y_{n+1} = L_n \cdot x_n + D \cdot x_D
+    \end{equation}
+    改成$y(x)$的形式:
+    \begin{equation}
+      y_{n+1} = \boxed{\frac{L_n}{V_{n+1}}} x_n + \boxed{\frac{D}{V_{n+1}}} x_D
+    \end{equation}
+    赫然發現，剛剛前兩條操作線的結果，正好是此式中的兩個係數\\
+    代入後得到Enriching Section的操作線:
+    \begin{equation}
+      \boxed{y_{n+1} = \frac{R}{R+1}x_n + \frac{1}{R+1}x_D} \label{eq:enriching_section_operation_line}
+    \end{equation}
+    同樣此式隱含了三個條件，任選兩個即可確認此一操作線
+    \begin{itemize}
+      \item 斜率為$\frac{R}{R+1}$
+      \item y截距為$\frac{1}{R+1}x_D$
+      \item 當$x_n= x_D$時
+      \begin{equation}
+        y_{n+1} = \frac{R}{R+1}x_D + \frac{1}{R+1}x_D = x_D, \quad (x_D, x_D)
+      \end{equation}
+    \end{itemize}
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick, scale=1.6]
+        \draw (0,0) rectangle (5,5);
+        \draw (0,0) -- (5,5);
+        \node[anchor=north] at (0,0) {$0$};
+        \node[anchor=north] at (5,0) {$1$};
+        \node[anchor=east] at (0,5) {$1$};
+        \node[anchor=east] at (0,0) {$0$};
+        \draw[red] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+        \def\xD{4.6}
+        \def\R{3}
+        \fill[blue] (\xD,\xD) circle (1.5pt);
+        \node[anchor=north, blue] at (\xD,0) {$x_D$};
+        \node[anchor=east, blue] at (0,\xD) {$x_D={\color{red}{y_1}}$};
+        \draw [blue] (\xD, \xD) -- (0, \xD/\R);
+        \node[anchor=east, blue] at (0,\xD/\R) {$\frac{1}{R+1}x_D$};
+        \path[name path=a] (\xD, \xD) -- (0, \xD/\R);
+        \path[name path=b] (1,0) -- (1,5);
+        \path[name path=c] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+        \path[name path=d] (0,\xD) -- (\xD,\xD);
+        \path[name intersections={of=a and b, by=I}];
+        \path[name intersections={of=c and d, by=J}];
+        \path[name path=e] (J|-0,0) -- (J);
+        \path[name intersections={of=a and e, by=K}];
+        \fill[teal] (J) circle (1.5pt);
+        \node[anchor=west, blue] at (I) {$y_{n+1}(x_n)$};
+        \draw[->, teal] (J) -- (K) coordinate (L);
+        \fill[teal] (L) circle (1.5pt);
+        \path[name path=f] (L) -- (0,0|-L);
+        \path[name intersections={of=c and f, by=M}];
+        \draw[red, dashed] (0,0|-L) -- (M);
+        \fill[teal] (M) circle (1.5pt);
+        \draw[->, teal] (L) -- (M) coordinate (N);
+        \node[anchor=east, red] at (0,0|-L) {$y_2$};
+        \draw[dashed, blue] (L|-0,0) -- (L);
+        \node[blue, anchor=north] at (L|-0,0) {$x_1$};
+        \path[name path=g] (N) -- (N|-0,0);
+        \path[name intersections={of=a and g, by=O}];
+        \draw[blue, dashed] (N|-0,0) -- (O);
+        \fill[teal] (O) circle (1.5pt);
+        \draw[->,teal] (N) -- (O) coordinate (P);
+        \path[name path=h] (P) -- (0,0|-P);
+        \path[name intersections={of=c and h, by=Q}];
+        \draw[red, dashed] (0,0|-P) -- (Q);
+        \fill[teal] (Q) circle (1.5pt);
+        \draw[->, teal] (P) -- (Q) coordinate (R);
+        \node[anchor=east, red] at (0,0|-P) {$y_3$};
+        \draw[dashed, blue] (P|-0,0) -- (P);
+        \path[name path=i] (R) -- (R|-0,0);
+        \path[name intersections={of=a and i, by=S}];
+        \draw[blue, dashed] (\xD,\xD) -- (\xD,0);
+        \draw[red,dashed] (0,\xD) -- (J);
+        \draw[blue, dashed] (R|-0,0) -- (S);
+        \draw[->, teal] (R) -- (S) coordinate (T);
+        \path[name path=j] (T) -- (0,0|-T);
+        \path[name intersections={of=c and j, by=U}];
+        \draw[red, dashed] (0,0|-T) -- (U);
+        \fill[teal] (U) circle (1.5pt);
+        \draw[->, teal] (T) -- (U) coordinate (V);
+        \node[blue,anchor=east, red] at (0,0|-T) {$y_4$};
+        \node[blue,anchor=north] at (P|-0,0) {$x_2$};
+        \node[blue,anchor=north] at (T|-0,0) {$x_3$};
+        \fill[teal] (T) circle (1.5pt);
+        \node[anchor=south] at (J) {板1};
+        \node[anchor=south] at (N) {板2};
+        \node[anchor=south] at (R) {板3};
+        \node[anchor=south] at (V) {板4};
+      \end{tikzpicture}
+      \caption{Enriching Section操作線與平衡線示意圖}
+    \end{figure}
+    \item Stripping Section的操作線:\\
+    類似Enriching Section的推導
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \begin{scope}
+          \clip (-3, -3) rectangle (9.5, 4);
+          \draw (0,8) arc(180:0:1 and 0.5) -- (2,0) arc(0:-180:1 and 0.5) -- cycle;
+          \draw [->] (-2,4) -- (0,4);
+          \draw [->] (1,8.5) -- (1,9) -- (3,9);
+          \draw (3.5,9) circle (0.5);
+          \draw [->] (2.8,8.3) -- (4.2,9.7);
+          \draw [->] (4,9) -- (5,9);
+          \draw [->] (5,9) -- (7,9);
+          \node[anchor=south] at (5,9) {$\boxed{R}$};
+          \draw [->] (5,9) -- (5,8) -- (2,8);
+          \draw [->] (1,-0.5) -- (1,-1.5) -- (3,-1.5);
+          \draw (3.5, -1.5) circle (0.5);
+          \fill[pattern=crosshatch dots, pattern color=blue] (4,-1.5) arc(0:-180:0.5) --  cycle;
+          \fill[pattern=dots, pattern color=red] (3,-1.5) arc(180:0:0.5) -- cycle;
+          \draw[dashed, blue] (3,-1.5) -- (4,-1.5);
+          \draw (3.2, -2.3) -- (3.2, -1.7);
+          \draw[decorate, decoration={coil, aspect=0.3, segment length=2pt, amplitude=3pt}] (3.2, -1.7) -- (3.8, -1.7);
+          \draw (3.8, -2.3) -- (3.8, -1.7);
+          \draw [->] (3.5, -1) -- (3.5, 0) -- (2,0);
+          \draw [->] (4,-1.5) -- (7,-1.5); 
+          \draw [blue, ->] (4, -1.7) -- (7,-1.7);
+          \node [anchor=west, blue] at (7,-1.7) {W,$x_W$};
+          \node [anchor=east] at (-2,4) {F};
+          \node [anchor=north] at (3.5,-2.3) {Reboiler};
+          \node [anchor=south] at (3.5,9.7) {\small Total Condenser};
+          \draw (0,1) -- (2,1);
+          \draw (0,3) -- (2,3);
+          \draw (0,5) -- (2,5);
+          \draw (0,7) -- (2,7);
+          \draw [red, ->] (-2,4.2) -- (-1, 4.2);
+          \draw [red, ->] (-1,4.2) -- (0.2, 4.2) arc(270:360:0.2) -- (0.4,5);
+          \draw [red, ->] (0.4,5) -- (0.4,7);
+          \draw [red, ->] (0.4,7) -- (0.4,8) arc(180:110:0.6 and 0.3) -- +(0,1);
+          \draw [blue, ->] (4,8.8) -- (4.6,8.8) arc(90:0:0.2) -- (4.8,8.25);
+          \draw [blue, ->] (4.8,8.25) -- (4.8,8) arc(0:-90:0.2) -- (3, 7.8);
+          \draw [blue, ->] (4,8.8) -- (7,8.8);
+          \node [anchor=west, blue] at (7,8.8) {D,$x_D$};
+          \node [anchor=west, blue] at (5,7.8) {L};
+          \draw [blue, ->] (3,7.8) -- (2,7.8) arc (90:180:0.2) -- (1.8,7.4) arc(0:-90:0.2) -- (1, 7.2);
+          \draw [blue, ->] (1,7.2) -- (0.4,7.2) arc(90:180:0.2) -- (0.2,6);
+          \draw [blue, ->] (0.2,6) -- (0.2,5.4) arc(180:270:0.2) -- (1,5.2);
+          \draw [blue, ->] (1,5.2) -- (1.6,5.2) arc(90:0:0.2) -- (1.8,4);
+          \draw [blue, ->] (1.8,4) -- (1.8,3.4) arc(0:-90:0.2) -- (1,3.2);
+          \draw [blue, ->] (1,3.2) -- (0.4,3.2) arc(90:180:0.2) -- (0.2,2);
+          \draw [blue, ->] (0.2,2) -- (0.2,1.4) arc(180:270:0.2) -- (1,1.2);
+          \draw [blue, ->] (1,1.2) -- (1.6,1.2) arc(90:0:0.2) -- (1.8,0) arc(0:-80:0.6 and 0.3) -- +(0,-1) coordinate (BO);
+          \draw [red,->] (3.5,0.2) -- (1,0.2);
+          \draw [red,->] (1,0.2) -- (0.6,0.2) arc(270:180:0.2) -- (0.4,1);
+          \draw [red,->] (0.4,1) -- (0.4,3);
+          \draw [red,->] (0.4,3) -- (0.4,5);
+          \draw [blue,->] (-2,3.8) -- (-1,3.8);
+          \draw [blue,->] (-1,3.8) -- (0,3.8) arc(90:0:0.2) -- (0.2,3);
+          \draw [dashed, teal] (-1,3.5) rectangle (6,-2.1);
+          \draw [dashed, teal] (-1,3.5) rectangle (6,5.5);
+          \draw [dashed, teal] (-1,2) -- (6,2);
+          \node [anchor=west] at (2,7) {第一板};
+          \node [anchor=west] at (2,5) {第二板};
+          \node [anchor=west] at (2,3) {第三板};
+          \node [anchor=west] at (2,1) {第四板};
+          \node [anchor=south west] at (4,-1) {$\boxed{Q_R}$};
+          \node [anchor=north west, red] at (0.4,7) {$V_2$};
+          \node [anchor=south, red] at (A) {$V_1$};
+          \node [anchor=north west, red] at (0.4,1) {$V_5$};
+          \node [anchor=north west, red] at (0.4,3) {$V_4$};
+          \node [anchor=south east, blue] at (0,1) {$L_3$};
+          \node[anchor=south east, blue] at (0,3) {$L_2$};
+          \node[anchor=south east, blue] at (0,5) {$L_1$};
+          \node[anchor=west] at (BO) {$L_4$};
+        \end{scope}
+      \end{tikzpicture}
+      \caption{Stripping Section操作線示意圖}
+    \end{figure}
+    P.S. Reboiler因為達成液氣平衡也可以看成一個板\\
+    (相反的，Total Condenser不能算一個板，因為它是全冷凝)\\
+    除非是部分冷凝器，則上方也可以算一個板
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) -- (0,3) arc(180:0:1 and 0.5) -- (2,0);
+        \draw [->] (1,3.5) -- (1,4) -- (3,4);
+        \draw (3,5) arc(180:0:0.5 and 0.25) -- (4,3) arc(0:-180:0.5 and 0.25) -- cycle;
+        \draw [->] (3.5,2.75) -- (3.5, 2);
+        \draw [->] (3.5,2) -- (2,2);
+        \draw (0,1.5) -- (2,1.5);
+        \draw [->] (3.5,2) -- (5,2);
+        \node [anchor=west, blue] at (5,2) {D,$x_D$};
+        \node [anchor=south, blue] at (2.75, 2) {$L$};
+        \node [anchor=north] at (3.5, 2) {$\boxed{R}$};
+        \draw [decorate, decoration=snake, blue] (3,4) -- (4,4);
+        \node [red] at (3.5,4.5) {$V$};
+        \node [blue] at (3.5,3.5) {$L$};
+      \end{tikzpicture}
+      \caption{部分冷凝器示意圖}
+    \end{figure}
+    假設每板上的液氣都達平衡，板子上的$x,y$能由平衡線求出\\
+    而兩板之間的$x,y$則由操作線求出\\
+    注意物流的下標是指從哪一板而來\\
+    若以在任何板子下面的東西當作一個整體，則可以看出每個整體都滿足
+    \begin{equation}
+      L_m = V_{m+1} + W
+    \end{equation}
+    輕成分質量平衡:
+    \begin{equation}
+      L_m \cdot x_m = V_{m+1} \cdot y_{m+1} + W \cdot x_W
+    \end{equation}
+    改成$y(x)$的形式:
+    \begin{equation}
+      y_{m+1} = \frac{L_m}{V_{m+1}} x_m - \frac{W}{V_{m+1}} x_W
+    \end{equation}
+    代入前兩條操作線的結果，正好是此式中的兩個係數\\
+    代入後得到Stripping Section的操作線:
+    \begin{equation}
+      \boxed{y_{m+1} = \frac{L_m}{V_{m+1}} x_m - \frac{W}{V_{m+1}} x_W} \label{eq:stripping_section_operation_line}
+    \end{equation}
+    同樣此式隱含了三個條件，但只有第三個目前已知\\
+    其餘兩個須等q-line或Enriching Section操作線求出後才能確認此一操作線
+    \begin{itemize}
+      \item 斜率為$\frac{L_m}{V_{m+1}}$
+      \item y截距為$-\frac{W}{V_{m+1}} x_W$
+      \item 當$x_m= x_W$時
+      \begin{equation}
+        y_{m+1} = \frac{L_m}{V_{m+1}} x_W - \frac{W}{V_{m+1}} x_W = x_W, \quad (x_W, x_W)
+      \end{equation}
+    \end{itemize}
+    \item 進料端的操作線(q-line):
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (4,4);
+        \draw[->] (-2,2) -- (0,2);
+        \draw[->] (1,4) -- (1,5);
+        \draw[->] (3,4) -- (3,3);
+        \draw[->] (1,0) -- (1,1);
+        \draw[->] (3,0) -- (3,-1);
+        \draw (0,4) -- (0,4.5);
+        \draw[dashed] (0,4.5) -- (0,5);
+        \draw (4,0) -- (4,-0.5);
+        \draw[dashed] (4,-0.5) -- (4,-1);
+        \draw (4,4) -- (4,4.5);
+        \draw[dashed] (4,4.5) -- (4,5);
+        \draw (0,0) -- (0,-0.5);
+        \draw[dashed] (0,-0.5) -- (0,-1);
+        \node[anchor=east] at (-2,2) {$F,x_F$};
+        \node[anchor=south] at (1,5) {$V_n,y_n$};
+        \node[anchor=north] at (3,3) {$L_n,x_n$};
+        \node[anchor=south] at (1,1) {$V_{m},y_{m}$};
+        \node[anchor=north] at (3,-1) {$L_{m},x_{m}$};
+        \draw[red, ->] (-2,2.2) -- (-1,2.2);
+        \draw [red, ->] (-1,2.2) -- (0.5,2.2) arc(270:360:0.5) -- (1,3);
+        \draw [red, ->] (1,3) -- (1,4);
+        \draw[blue, ->] (-2,1.8) -- (-1,1.8);
+        \draw [blue, ->] (-1,1.8) -- (2,1.8);
+        \draw[blue, ->] (2,1.8) -- (2.5,1.8) arc(90:0:0.5) -- (3,0);
+        \node[anchor=south,red] at (-1, 2.2) {$(1-q)F$};
+        \node[anchor=north,blue] at (-1, 1.8) {$qF$};
+      \end{tikzpicture}
+      \caption{進料段物流示意圖(液氣共存)}
+    \end{figure}
+    定義$q$是使進料成為飽和蒸汽所需能量，除上汽化熱後的比例
+    \begin{equation}
+      q = \frac{\text{進料所需能量}}{\text{汽化熱}} = \frac{\text{進料中液體比例}}{\text{總進料}} = \frac{H_V-H_F}{H_V - H_L}
+    \end{equation}
+    $H_V$是飽和蒸汽焓，$H_L$是飽和液體焓，$H_F$是進料焓\\
+    若進料為液氣共存時，$q$為液體所佔比例\\
+    證明:\\
+    由於進料段的整體能量平衡式為
+    \begin{equation}
+      H_F = H_L\cdot x_L + H_V \cdot x_V
+    \end{equation}
+    代入$q$的定義式，得到
+    \begin{align}
+      q &= \frac{H_V - (H_L\cdot x_L + H_V \cdot x_V)}{H_V - H_L} \nonumber\\
+      &= \frac{H_V - H_L\cdot x_L - H_V \cdot x_V}{H_V - H_L} \nonumber\\
+      &= \frac{H_V(1-x_V) - H_L\cdot x_L}{H_V - H_L} \nonumber\\
+      &= \frac{H_V\cdot x_L - H_L\cdot x_L}{H_V - H_L} \quad (1-x_V = x_L) \nonumber\\
+      &= x_L \cdot \frac{H_V - H_L}{H_V - H_L} \nonumber\\
+      &= x_L
+    \end{align}
+    故$q$即為液體比例\\
+    \fbox{定義進料板}:\\
+    進料板是Enriching Section的最後一板，與Stripping Section的第一板之間的板子\\
+    而也因為進料板就是一個板，所以Enriching Section的Control Volume 會設在板子中\\
+    Stripping Section的Control Volume也會設在板子中\\
+    故進料板上方的物流為$V_n,y_n$，下方的物流為$L_m,x_m$\\
+    (之前Stripping Section會是$L_{m},V_{m+1}$，Enriching Section會是$V_{n+1},L_n$，會故意差一板)\\
+    Enriching Section的質量平衡:
+    \begin{equation}
+      V_n = L_n + D \implies V_n y_n = L_n x_n + D x_D
+    \end{equation}
+    Stripping Section的質量平衡:
+    \begin{equation}
+      L_m = V_m + W \implies V_m y_m = L_m x_m - W x_W
+    \end{equation}
+    v而因為$x_n,y_n$及$x_m,y_m$皆為\fbox{進料板}所提供\\
+    我們想要找到一個兩條方程的聯立解$(x,y)$\\
+    使得$x_n = x_m = x$及$y_n = y_m = y$\\
+    聯立後得到:
+    \begin{align}
+      V_n y &= L_n x + D x_D \\
+      V_m y &= L_m x - W x_W
+    \end{align}
+    兩式相減，得到:
+    \begin{equation}
+      y(V_m - V_n) = x(L_m - L_n) - (D x_D + W x_W)
+    \end{equation}
+    氣相的質量平衡:
+    \begin{equation}
+      V_m + (1-q)F = V_n \implies V_m - V_n = - (1-q)F
+    \end{equation}
+    液相的質量平衡:
+    \begin{equation}
+      L_n + qF = L_m \implies L_m - L_n = qF
+    \end{equation}
+    整體的質量平衡:
+    \begin{equation}
+      Fx_F = D x_D + W x_W
+    \end{equation}
+    代入後得到q-line的操作線:
+    \begin{align}
+      & (q-1)Fy = qFx - Fx_F \nonumber\\
+      \implies & (q-1)y = qx - x_F \nonumber\\
+      \implies & \boxed{y = \frac{q}{q-1}x - \frac{1}{q-1}x_F}
+    \end{align}
+    同樣此式隱含了三個條件，任選兩個即可確認此一操作線
+    \begin{itemize}
+      \item 斜率為$\frac{q}{q-1}$
+      \item y截距為$-\frac{1}{q-1}x_F$
+      \item 當$x= x_F$時
+      \begin{equation}
+        y = \frac{q}{q-1}x_F - \frac{1}{q-1}x_F = x_F, \quad (x_F, x_F)
+      \end{equation}
+    \end{itemize}
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \begin{scope}
+          \clip (-1, -1) rectangle (6,6);
+          \draw (0,0) rectangle (5,5);
+          \draw (0,0) -- (5,5);
+          \node[anchor=north] at (0,0) {$0$};
+          \node[anchor=north] at (5,0) {$1$};
+          \node[anchor=east] at (0,5) {$1$};
+          \node[anchor=east] at (0,0) {$0$};
+          \draw[red] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+          \def\xF{2.8}
+          \def\q{0.4}
+          \fill[blue] (\xF,\xF) circle (2pt);
+          \draw[dashed] (\xF,0) -- (\xF,\xF) -- (0,\xF);
+          \draw [blue, ->] (\xF,\xF) -- (0, {- 1/(\q-1)*\xF});
+          \node[anchor=east, blue] at (0, {- 1/(\q-1)*\xF}) {$-\frac{1}{q-1}x_F$};
+          \node[anchor=north, blue] at (\xF,0) {$x_F$};
+        \end{scope}
+      \end{tikzpicture}
+      \caption{q-line操作線與平衡線示意圖}
+    \end{figure}
+    P.S. 雖然q-line是以液氣共存所推導，但仍可用於過冷液體或過熱蒸汽的進料情況\\
+    連證明內容也不改變，原因是因為我們是使用\fbox{能量平衡}來推導，而非質量平衡
+    \item 過冷液體時的q-line:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (4,4);
+        \draw[->] (-2,2) -- (0,2);
+        \draw[->] (1,4) -- (1,5);
+        \draw[->] (3,4) -- (3,3);
+        \draw[->, red] (1,0) -- (1,1);
+        \draw[->, blue] (1,0.4) --(1.5,1) arc(135:0:{sqrt(0.4941)}) -- (2.7,0);
+        \draw[->] (3,0) -- (3,-1);
+        \node[anchor=north] at (3, -1) {$L_{n+1},x_{n+1}$};
+        \draw (0,4) -- (0,4.5);
+        \draw[dashed] (0,4.5) -- (0,5);
+        \draw (4,0) -- (4,-0.5);
+        \draw[dashed] (4,-0.5) -- (4,-1);
+        \draw (4,4) -- (4,4.5);
+        \draw[dashed] (4,4.5) -- (4,5);
+        \draw (0,0) -- (0,-0.5);
+        \draw[dashed] (0,-0.5) -- (0,-1);
+        \node[anchor=east] at (-2,2) {$F,x_F$};
+        \node[anchor=north, blue] at (-1,1.8) {$qF$};
+        \node[anchor=south] at (1,5) {$V_{n},y_{n}$};
+        \node[anchor=north] at (3,3) {$L_{n},x_{n}$};
+        \draw[blue, ->] (-2,1.8) -- (-1,1.8);
+        \draw [blue, ->] (-1,1.8) -- (2,1.8);
+        \draw[blue, ->] (2,1.8) -- (2.8,1.8) arc(90:0:0.5) -- (3.3,0);
+        \node[anchor=south east,blue] at (2.7,0) {$\xi V_{n+1}$};
+        \node[anchor=south, red] at (1,1.1) {$ (1-\xi) V_{n+1}$};
+      \end{tikzpicture}
+      \caption{進料段物流示意圖(過冷液體)}
+    \end{figure}
+    能量平衡:
+    \begin{equation}
+      H_F + H_{V_{n+1}} = H_{L_{n+1}} + H_{V_n}
+    \end{equation}
+    所以$q$為:
+    \begin{equation}
+      q = \frac{H_V - H_F}{H_V - H_L} > 1
+    \end{equation}
+    整體質量平衡:
+    \begin{equation}
+      F + V_{n+1}  + L_{n} = V_{n} + L_{n+1}
+    \end{equation}
+    代入$q$的定義，
+    液相質量平衡:
+    \begin{equation}
+      L_{n+1} = L + F + \xi V_{n+1}  = L_n + qF
+    \end{equation}
+    氣相質量平衡:
+    \begin{equation}
+      V_n = (1-\xi) V_{n+1} = V_{n+1} + (1-q)F
+    \end{equation}
+    計算$q$值，可以分兩階段計算
+    \begin{equation}
+      T_{F,(l)} \xrightarrow{\text{加熱}} T_{sat,(l)} \xrightarrow{\text{汽化}} T_{sat,(g)}
+    \end{equation}
+    因此:
+    \begin{align}
+      q &\equiv \frac{H_V-H_F}{H_V-H_L} \nonumber\\
+      &= \frac{\overbrace{(H_V-H_L)}^{\text{汽化熱}} +
+      \overbrace{(H_L -H_F)}^{\text{狀態熱}}}{H_V-H_L} \nonumber\\
+      &= \frac{(H_V-H_L)+\int_{T_{F,(l)}}^{T_{sat,(l)}} C_{p,l} dT}{H_V-H_L} \nonumber\\
+      &= 1 + \frac{C_{p,l} \overbrace{(T_{sat,(l)} - T_{F,(l)})}^{>0}}{H_V-H_L} >1 
+    \end{align}
+    P.S. $q$的範圍會界在$(1, \infty)$之間\\
+    代表斜率:
+    \begin{equation}
+      1 (45^\circ\text{線}) < \frac{q}{q-1} < \infty (\text{垂直線})
+    \end{equation}
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (5,5);
+        \draw (0,0) -- (5,5);
+        \node[anchor=north] at (0,0) {$0$};
+        \node[anchor=north] at (5,0) {$1$};
+        \node[anchor=east] at (0,5) {$1$};
+        \node[anchor=east] at (0,0) {$0$};
+        \draw[red] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+        \def\xF{2.8}
+        \def\q{1.4}
+        \fill[blue] (\xF,\xF) circle (2pt);
+        \draw[dashed] (\xF,0) -- (\xF,\xF) -- (0,\xF);
+        \path[name path=qline, overlay] (0, {- 1/(\q-1)*\xF}) -- (\xF,\xF) -- +(2, { 1/(\q-1)*2});
+        \path[name path=b] (0,0) -- (5,0);
+        \path[name path=t] (0,5) -- (5,5);
+        \path[name intersections={of=qline and b, by=Q}];
+        \path[name intersections={of=qline and t, by=T}];
+        \draw[blue, dashed] (Q) -- (\xF,\xF);
+        \draw[blue, ->] (\xF,\xF) -- (T);
+        \node[anchor=north, blue] at (\xF,0) {$x_F$};
+      \end{tikzpicture}
+      \caption{過冷液體時的q-line操作線與平衡線示意圖}
+    \end{figure}
+    \item 相似的，當進料為飽和液體時:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (4,4);
+        \draw[->] (-2,2) -- (0,2);
+        \draw[->] (1,4) -- (1,5);
+        \draw[->] (3,4) -- (3,3);
+        \draw[->] (1,0) -- (1,1);
+        \draw[->] (3,0) -- (3,-1);
+        \node[anchor=north] at (3, -1) {$L_{n+1},x_{n+1}$};
+        \draw (0,4) -- (0,4.5);
+        \draw[dashed] (0,4.5) -- (0,5);
+        \draw (4,0) -- (4,-0.5);
+        \draw[dashed] (4,-0.5) -- (4,-1);
+        \draw (4,4) -- (4,4.5);
+        \draw[dashed] (4,4.5) -- (4,5);
+        \draw (0,0) -- (0,-0.5);
+        \draw[dashed] (0,-0.5) -- (0,-1);
+        \node[anchor=east] at (-2,2) {$F,x_F$};
+        \node[anchor=south] at (1,5) {$V_{n},y_{n}$};
+        \node[anchor=north] at (3,3) {$L_{n},x_{n}$};
+        \draw[blue, ->] (-2,1.8) -- (-1,1.8);
+        \draw [blue, ->] (-1,1.8) -- (2,1.8);
+        \draw[blue, ->] (2,1.8) -- (2.8,1.8) arc(90:0:0.5) -- (3.3,0);
+        \node[anchor=south] at (1,1.1) {$V_{n+1}$};
+        \node[anchor=north, blue] at (-1,1.8) {$qF$};
+      \end{tikzpicture}
+      \caption{進料段物流示意圖(飽和液體)}
+    \end{figure}
+    能量平衡:
+    \begin{equation}
+      H_F + H_{V_{n+1}} = H_{L_{n+1}} + H_{V_n}
+    \end{equation}
+    所以$q$為:
+    \begin{equation}
+      q = \frac{H_V - H_F}{H_V - H_L} = 1
+    \end{equation}
+    整體質量平衡:
+    \begin{equation}
+      F + V_{n+1}  + L_{n} = V_{n} + L_{n+1}
+    \end{equation}
+    代入$q$的定義，
+    液相質量平衡:
+    \begin{equation}
+      L_{n+1} = L + F = L_n + qF
+    \end{equation}
+    氣相質量平衡:
+    \begin{equation}
+      V_n = V_{n+1} = V_{n+1} + (1-q)F
+    \end{equation}
+    計算$q$值:
+    \begin{align}
+      q &\equiv \frac{H_V-H_F}{H_V-H_L} \nonumber\\
+      &= \frac{\overbrace{(H_V-H_L)}^{\text{汽化熱}} +
+      \overbrace{(H_L -H_F)}^{0}}{H_V-H_L} \nonumber\\
+      &= \frac{(H_V-H_L)+0}{H_V-H_L} \nonumber\\
+      &= 1
+    \end{align}
+    代表斜率:
+    \begin{equation}
+      \frac{q}{q-1} = \infty (\text{垂直線})
+    \end{equation}
+    \item 同理，飽和蒸汽進料與過熱蒸汽進料時的q-line:
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (4,4);
+        \draw[->] (-2,2) -- (0,2);
+        \draw[->] (1,4) -- (1,5);
+        \draw[->] (3,4) -- (3,3);
+        \draw[->] (1,0) -- (1,1);
+        \draw[->] (3,0) -- (3,-1);
+        \draw (0,4) -- (0,4.5);
+        \draw[dashed] (0,4.5) -- (0,5);
+        \draw (4,0) -- (4,-0.5);
+        \draw[dashed] (4,-0.5) -- (4,-1);
+        \draw (4,4) -- (4,4.5);
+        \draw[dashed] (4,4.5) -- (4,5);
+        \draw (0,0) -- (0,-0.5);
+        \draw[dashed] (0,-0.5) -- (0,-1);
+        \node[anchor=east] at (-2,2) {$F,x_F$};
+        \node[anchor=south] at (1,5) {$V_n,y_n$};
+        \node[anchor=north] at (3,3) {$L_n,x_n$};
+        \node[anchor=south] at (1,1) {$V_{n+1},y_{n+1}$};
+        \node[anchor=north] at (3,-1) {$L_{n+1},x_{n+1}$};
+        \draw[red, ->] (-2,2.2) -- (-1,2.2);
+        \draw [red, ->] (-1,2.2) -- (0.5,2.2) arc(270:360:0.5) -- (1,3);
+        \draw [red, ->] (1,3) -- (1,4);
+        \node[anchor=south,red] at (-1, 2.2) {$(1-q)F$};
+        \def\xShift{8.5}
+        \draw (0+\xShift,0) rectangle (4+\xShift,4);
+        \draw[->] (-2+\xShift,2) -- (0+\xShift,2);
+        \draw[->] (1+\xShift,4) -- (1+\xShift,5);
+        \draw[->] (3+\xShift,4) -- (3+\xShift,3);
+        \draw[->] (1+\xShift,0) -- (1+\xShift,1);
+        \draw[->] (3+\xShift,0) -- (3+\xShift,-1);
+        \draw (0+\xShift,4) -- (0+\xShift,4.5);
+        \draw[dashed] (0+\xShift,4.5) -- (0+\xShift,5);
+        \draw (4+\xShift,0) -- (4+\xShift,-0.5);
+        \draw[dashed] (4+\xShift,-0.5) -- (4+\xShift,-1);
+        \draw (4+\xShift,4) -- (4+\xShift,4.5);
+        \draw[dashed] (4+\xShift,4.5) -- (4+\xShift,5);
+        \draw (0+\xShift,0) -- (0+\xShift,-0.5);
+        \draw[dashed] (0+\xShift,-0.5) -- (0+\xShift,-1);
+        \node[anchor=east] at (-2+\xShift,2) {$F,x_F$};
+        \node[anchor=south] at (1+\xShift,5) {$V_n,y_n$};
+        \draw[red, ->] (3+\xShift,3.6) -- (2.5+\xShift,3) arc(-45:-180:{sqrt(0.4941)}) 
+        -- (1.3+\xShift,4);
+        \draw[red, ->] (-2+\xShift,2+.2) -- (-1+\xShift,2.2);
+        \draw [red, ->] (-1+\xShift,2.2) -- (0.2+\xShift,2.2) arc(270:360:0.5) -- (0.7+\xShift,3);
+        \draw [red, ->] (0.7+\xShift,3) -- (0.7+\xShift,4);
+        \node[anchor=south,red] at (-1+\xShift, 2.2) {$(1-q)F$};
+        \node[anchor=north, blue] at (3+\xShift,3) {$(1-\xi)L_n$};
+        \node[anchor=north west,red] at (1.3+\xShift,4) {$\xi L_n$};
+        \node[anchor=south] at (1+\xShift,1) {$V_{n+1},y_{n+1}$};
+        \node[anchor=north] at (3+\xShift,-1) {$L_{n+1},x_{n+1}$};
+      \end{tikzpicture}
+      \caption{飽和蒸汽與過熱蒸汽時的進料段物流示意圖}
+    \end{figure}
+    能量平衡:
+    \begin{equation}
+      H_F + H_{V_{n+1}} = H_{L_{n+1}} + H_{V_n}
+    \end{equation}
+    所以$q$為:
+    \begin{equation}
+      q = \frac{H_V - H_F}{H_V - H_L} < 1
+    \end{equation}
+    整體質量平衡:
+    \begin{equation}
+      F + V_{n+1}  + L_{n} = V_{n} + L_{n+1}
+    \end{equation}
+    代入$q$的定義，
+    液相質量平衡:
+    \begin{equation}
+      L_{n+1} = L + \xi L_n = L_n + qF
+    \end{equation}
+    氣相質量平衡:
+    \begin{equation}
+      V_n = (1-\xi) L_n + V_{n+1} = V_{n+1} + (1-q)F
+    \end{equation}
+    計算$q$值:
+    \begin{align}
+      q &\equiv \frac{H_V-H_F}{H_V-H_L} \nonumber\\
+      &= \frac{\int_{T_{F,(g)}}^{T_{sat,(g)}} C_{p,g} dT}{H_V-H_L} \nonumber\\
+      &= \frac{C_{p,g} \overbrace{(T_{sat,(g)} - T_{F,(g)})}^{<0}}{H_V-H_L} <0
+    \end{align}
+    代表斜率:
+    \begin{equation}
+      0 (\text{水平線}) < \frac{q}{q-1} < 1 (\text{45}^\circ\text{線})
+    \end{equation}
+    故整理q-line的斜率特質:
+    \begin{itemize}
+      \item 若進料是過冷液體，$q>1$，斜率$>1$
+      \item 若進料是飽和液體，$q=1$，垂直線
+      \item 若進料是氣液共存，$0<q<1$，斜率$<0$
+      \item 若進料是飽和蒸汽，$q=0$，水平線
+      \item 若進料是過熱蒸汽，$q<0$，斜率介於$(0,1)$之間
+    \end{itemize}
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (5,5);
+        \draw[ultra thick] (0,0) -- (5,5);
+        \node[anchor=north] at (0,0) {$0$};
+        \node[anchor=north] at (5,0) {$1$};
+        \node[anchor=east] at (0,5) {$1$};
+        \node[anchor=east] at (0,0) {$0$};
+        \draw[ultra thick](0,0) .. controls (0,2) and (3,5) .. (5,5);
+        \def\xF{2.8}
+        \fill (\xF,\xF) circle (3pt);
+        \draw[dashed] (\xF,0) -- (\xF,\xF);
+        \path[name path=a, overlay] (\xF-10,\xF-15) -- (\xF,\xF) -- (\xF+10,\xF+15);
+        \path[name path=b, overlay] (\xF-10,\xF+15) -- (\xF,\xF) -- (\xF+10,\xF-15);
+        \path[name path=c, overlay] (\xF-10,\xF-5) -- (\xF,\xF) -- (\xF+10,\xF+5);
+        \path[name path=bot, overlay] (0,0) -- (5,0);
+        \path[name path=top, overlay] (0,5) -- (5,5);
+        \path[name path=left, overlay] (0,0) -- (0,5);
+        \path[name path=right, overlay] (5,0) -- (5,5);
+        \path[name intersections={of=a and top, by=AA}];
+        \path[name intersections={of=a and bot, by=AB}];
+        \path[name intersections={of=b and top, by=BA}];
+        \path[name intersections={of=b and bot, by=BB}];
+        \path[name intersections={of=c and left, by=CA}];
+        \path[name intersections={of=c and right, by=CB}];
+        \draw[->, blue] (\xF, \xF) -- (AA);
+        \draw[dashed, blue] (AB) -- (\xF, \xF);
+        \draw[dashed] (\xF, \xF) -- (\xF, 5);
+        \draw[dashed, teal] (\xF, \xF) -- (BB);
+        \draw[->, teal] (\xF, \xF) -- (BA);
+        \draw[dashed] (\xF, \xF) -- (5, \xF);
+        \draw[dashed, red] (\xF, \xF) -- (CB);
+        \draw[->, red] (\xF, \xF) -- (CA);
+        \draw[dashed] (\xF, \xF) -- (0, \xF);
+        \node[anchor=north] at (\xF,0) {$x_F$};
+        \draw[->, ultra thick, blue] (4,4) arc(45:90:1.7) coordinate (posA);
+        \draw[->, ultra thick, teal] (posA) arc(90:180:1.7) coordinate (posB);
+        \draw[->, ultra thick, red] (posB) arc(180:225:1.7);
+        \node[anchor=south west, blue] at (AA) {\small 過冷液體,$s>1$};
+        \node[anchor=south east, teal] at (BA) {\small 液氣共存, $s<0$};
+        \node[anchor=north east, red] at (CA) {\small 過熱蒸汽, $0<s<1$};
+      \end{tikzpicture}
+      \caption{各種進料狀態下的q-line操作線與平衡線示意圖}
+    \end{figure}
+    \item McCabe-Thiele繪圖法則:\\
+    利用操作線與平衡線的交互作用，來決定所需板數及進料板位置
+    \begin{itemize}
+      \item 已知條件:
+      \begin{itemize}
+        \item 進料成分$x_F$
+        \item 底部成分$x_W$
+        \item 頂部成分$x_D$
+        \item 回流比$R$
+      \end{itemize}
+      \item 需求:
+      \begin{itemize}
+        \item 所需板數
+        \item 進料板位置
+      \end{itemize}
+      \item 步驟:
+      \begin{enumerate}
+        \item 繪製平衡線\\
+        可由$T-x-y$圖取得，或由已知的$\alpha_{AB}$，利用(\ref{eq:relative_volatility_xy})計算:
+        \begin{equation}
+          \alpha_{AB} \implies y_A = \frac{\alpha_{AB} x_A}{1+(\alpha_{AB}-1)x_A}
+        \end{equation}
+        \item 繪製Enriching Section操作線\\
+        由題目所給予的預期出料純度$x_D$，點出$(x_D,x_D)$\\
+        並利用回流比$R$，繪製操作線(\ref{eq:enriching_section_operation_line}):
+        \begin{equation}
+          y = \frac{R}{R+1}x + \frac{1}{R+1}x_D
+        \end{equation}
+        其中斜率為$\frac{R}{R+1}$，y截距為$\frac{1}{R+1}x_D$
+        \item 計算$q$值，繪製q-line操作線\\
+        由題目所給予的進料成分$x_F$及進料物流大小，計算$q$值\\
+        並點出$(x_F,x_F)$，繪製q-line操作線:
+        \begin{equation}
+          y = \frac{q}{q-1}x - \frac{1}{q-1}x_F
+        \end{equation}
+        其中斜率為$\frac{q}{q-1}$，y截距為$-\frac{1}{q-1}x_F$
+        \item 找到Q-line與Enriching Section操作線的交點，作為進料板位置\\
+        並截斷Enriching Section操作線
+        \item 繪製Stripping Section操作線\\
+        點出預期出料側的殘留量$(x_W,x_W)$(會與Reboiler功率有關)\\
+        並利用(\ref{eq:stripping_section_operation_line})
+        \begin{equation}
+          y_m = \frac{L_{m}}{V_{m+1}}x - \frac{W}{V_{m+1}}x_W
+        \end{equation}
+        直接連接上步驟的交點，即為Stripping Section操作線
+        \item 由頂部成分$x_D$開始，向右繪製至平衡線，然後向下繪製至Enriching Section操作線
+        \item 重複上述步驟，直到到達底部成分$x_W$
+        \item 計算所需板數(可以是再沸器+板數，或是只有板數)
+        \item 進料板位置為\fbox{該整數板的$x$水平線來自Enriching Section}\\
+        且\fbox{該整數板的$y$垂直線來自Stripping Section}\\
+        這是根據進料板當時的定義，進料板以上是Enriching Section，以下是Stripping Section
+      \end{enumerate}
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw[ultra thick] (0,0) rectangle (14,14);
+          \draw[ultra thick] (0,0) -- (14,14);
+          \draw[ultra thick] (0,0) .. controls (0,5) and (8,14) .. (14,14);
+          \def\xD{13}
+          \def\xW{1}
+          \def\xF{6}
+          \def\R{3}
+          \def\q{0.7}
+          %diag line
+          \path[name path=diag, overlay] (0,0) -- (14,14);
+          % Equilibrium line
+          \path[name path=equilibrium, overlay] (0,0) .. controls (0,5) and (8,14) .. (14,14);
+          % Enriching Section operation line
+          \path[name path=enriching, overlay] (0, {(\R/(\R+1))*0 + (1/(\R+1))*\xD}) -- (\xD, \xD);        
+          % q-line
+          \path[name path=qline, overlay] (0, {-1/(\q-1)*\xF}) -- (\xF, \xF) -- +(6, {1/(\q-1)*6});
+          \path[name intersections={of=enriching and qline, by=Q}];
+          % Stripping Section operation line
+          \path[name path=stripping, overlay] (\xW, \xW) -- (Q) -- ($ (\xW, \xW)!6!(Q) $);
+          %border
+          \path[name path=bot, overlay] (0,0) -- (14,0);
+          \path[name path=top, overlay] (0,14) -- (14,14);
+          \path[name path=left, overlay] (0,0) -- (0,14);
+          \path[name path=right, overlay] (14,0) -- (14,14);
+          % intersections
+          \path[name intersections={of=enriching and left,by=boundE}];
+          \path[name intersections={of=stripping and top,by=boundS}];
+          \path[name intersections={of=qline and top, by=QT}];
+          % Drawing
+          \draw[ultra thick, blue] (\xW,\xW) -- (Q);
+          \draw[ultra thick, red] (Q) -- (\xD,\xD);
+          \draw[ultra thick, teal] (\xF, \xF) -- (Q);
+          \draw[ultra thick,dashed, blue] (boundS) -- (\xW,\xW);
+          \draw[ultra thick,dashed, red] (\xD,\xD) -- (boundE);
+          \draw[ultra thick,dashed, teal] (QT) -- (\xF,\xF);
+          %label and step
+          \node[anchor=north] at (0,0) {$0$};
+          \node[anchor=north] at (14,0) {$1$};
+          \node[anchor=east] at (0,14) {$1$};
+          \node[anchor=east] at (0,0) {$0$};
+          \draw[dashed,red] (\xD,0) -- (\xD,\xD) -- (0,\xD);
+          \node[anchor=north, red] at (\xD,0) {$x_D$};
+          \node[anchor=east, red] at (0,\xD) {$x_D=\color{orange}y_1$};
+          \draw[dashed,blue] (\xW,0) -- (\xW,\xW) -- (0,\xW);
+          \node[anchor=north, blue] at (\xW,0) {$x_W$};
+          \node[anchor=east, blue] at (0,\xW) {$x_W$};
+          \draw[dashed,teal] (\xF,0) -- (\xF,\xF) -- (0,\xF);
+          \node[anchor=north, teal] at (\xF,0) {$x_F$};
+          \node[anchor=east, teal] at (0,\xF) {$x_F$};
+          \fill[red] (\xD,\xD) circle (3pt);
+          \fill[blue] (\xW,\xW) circle (3pt);
+          \fill[teal] (\xF,\xF) circle (3pt);
+          % stepping
+          \path[name path=horstepA, overlay] (\xD, \xD) -- (0, \xD);
+          \path[name intersections={of=horstepA and equilibrium, by=pointEqA}];
+          \draw[orange, ultra thick, ->] (\xD, \xD) -- (pointEqA);
+          \node[anchor=south east] at (pointEqA) {\textbf{板1}};
+          \path[name path=verstepA, overlay] (pointEqA) -- (pointEqA |- 0,0);
+          \path[name intersections={of=verstepA and enriching, by=pointOpA}];
+          \draw[orange, ultra thick, ->] (pointEqA) -- (pointOpA);
+          \draw[dashed, orange] (pointOpA) -- (pointOpA |- 0,0);
+          \node[anchor=north, orange] at (pointOpA |- 0,0) {$x_1$};
+          %step 2
+          \path[name path=horstepB, overlay] (pointOpA) -- (0, 0|- pointOpA);
+          \path[name intersections={of=horstepB and equilibrium, by=pointEqB}];
+          \draw[orange, ultra thick, ->] (pointOpA) -- (pointEqB);
+          \node[anchor=south east] at (pointEqB) {\textbf{板2}};
+          \draw[dashed, orange] (pointEqB) -- (0, 0|- pointEqB);
+          \node[anchor=east, orange] at (0, 0|- pointEqB) {$y_2$};
+          \path[name path=verstepB, overlay] (pointEqB) -- (pointEqB |- 0,0);
+          \path[name intersections={of=verstepB and enriching, by=pointOpB}];
+          \draw[orange, ultra thick, ->] (pointEqB) -- (pointOpB);
+          \draw[dashed, orange] (pointOpB) -- (pointOpB |- 0,0);
+          \node[anchor=north, orange] at (pointOpB |- 0,0) {$x_2$};
+          %step 3
+          \path[name path=horstepC, overlay] (pointOpB) -- (0, 0|- pointOpB);
+          \path[name intersections={of=horstepC and equilibrium, by=pointEqC}];
+          \draw[orange, ultra thick, ->] (pointOpB) -- (pointEqC);
+          \node[anchor=south east] at (pointEqC) {\textbf{板3}};
+          \draw[dashed, orange] (pointEqC) -- (0, 0|- pointEqC);
+          \node[anchor=east, orange] at (0, 0|- pointEqC) {$y_3$};
+          \path[name path=verstepC, overlay] (pointEqC) -- (pointEqC |- 0,0);
+          \path[name intersections={of=verstepC and stripping, by=pointOpC}];
+          \draw[orange, ultra thick, ->] (pointEqC) -- (pointOpC);
+          \draw[dashed, orange] (pointOpC) -- (pointOpC |- 0,0);
+          \node[anchor=north, orange] at (pointOpC |- 0,0) {$x_3$};
+          %step 4
+          \path[name path=horstepD, overlay] (pointOpC) -- (0, 0|- pointOpC);
+          \path[name intersections={of=horstepD and equilibrium, by=pointEqD}];
+          \draw[orange, ultra thick, ->] (pointOpC) -- (pointEqD);
+          \node[anchor=south east] at (pointEqD) {\textbf{板4}};
+          \draw[dashed, orange] (pointEqD) -- (0, 0|- pointEqD);
+          \node[anchor=east, orange] at (0, 0|- pointEqD) {$y_4$};
+          \path[name path=verstepD, overlay] (pointEqD) -- (pointEqD |- 0,0);
+          \path[name intersections={of=verstepD and stripping, by=pointOpD}];
+          \draw[orange, ultra thick, ->] (pointEqD) -- (pointOpD);
+          \draw[dashed, orange] (pointOpD) -- (pointOpD |- 0,0);
+          \node[anchor=north, orange] at (pointOpD |- 0,0) {$x_4$};
+          %step 5
+          \path[name path=horstepE, overlay] (pointOpD) -- (0, 0|- pointOpD);
+          \path[name intersections={of=horstepE and equilibrium, by=pointEqE}];
+          \draw[orange, ultra thick, ->] (pointOpD) -- (pointEqE);
+          \node[anchor=south east] at (pointEqE) {\textbf{板5}};
+          \draw[dashed, orange] (pointEqE) -- (0, 0|- pointEqE);
+          \node[anchor=east, orange] at (0, 0|- pointEqE) {$y_5$};
+          \path[name path=verstepE, overlay] (pointEqE) -- (pointEqE |- 0,0);
+          \path[name intersections={of=verstepE and diag, by=pointOpE}];
+          \draw[orange, ultra thick, ->] (pointEqE) -- (pointOpE);
+          \draw[dashed, orange] (pointOpE) -- (pointOpE |- 0,0);
+          \node[anchor=north, orange] at (pointOpE |- 0,0) {$x_5$};
+        \end{tikzpicture}
+        \caption{McCabe-Thiele繪圖法則示意圖}
+      \end{figure}
+      根據上圖可回答出:
+      \begin{itemize}
+        \item 理論板數約為4.8板(使用小數後1位近似$x_W$左右兩邊的板號)\\
+        可為\fbox{4.8板}或\fbox{再沸器+3.8板}或\fbox{再沸器+部分冷凝器+2.8板}
+        \item 進料板為第三板\\
+        因為第三板的$x_3$來自Enriching Section操作線，而$y_3$來自Stripping Section操作線\\
+        \fbox{注意事項}:
+        \item 每次繪製時，先向右至平衡線，再向下至操作線
+        \item 進料板位置可能不在整數板數上
+        \item 如果題目畫的線，並不符合規則，由該線按照進料板定義
+        \begin{enumerate}
+          \item 進料板以上的操作線，一定是Enriching Section操作線
+          \item 進料板以下的操作線，一定是Stripping Section操作線
+        \end{enumerate}
+        所得到的進料板，稱為\fbox{實際進料板}\\
+        而再以上步驟所求的進料板，稱為\fbox{最佳進料板}
+      \end{itemize}
+      \item $N_{\text{min}}$，最少理論板數:\\
+      當回流比$R\to\infty$時，可以用$x_D=1$來作圖計算最少理論板數$N_{\text{min}}$\\
+      因為此時Enriching Section的斜率是1，故和$q$line的交點也會在$(x_F,x_F)$\\
+      並導致Stripping Section操作線通過$(x_F,x_F)$\\
+      也就是說全部塌縮回到45度線上\\
+      因此只需要從$x_D=1$開始，沿著45度線，直到$x_W$即可計算出$N_{\text{min}}$\\
+      或是使用Fenske equation計算:
+      \begin{equation}
+        \boxed{
+          N_{\text{min}} = \frac{\log\left[\frac{x_D}{1-x_D}\cdot\frac{1-x_W}{x_W}\right]}{\log(\alpha_{AB})}
+        }
+      \end{equation}
+      證明:\\
+      假設各板的相對揮發度相同為$\alpha_{AB}$\\
+      P.S.如果不相同可以用\fbox{幾何平均數}取得平均每板間的揮發度\\
+      寫出平衡線的代數式(\ref{eq:relative_volatility_xy}):
+      \begin{equation}
+        \alpha_{AB} = \frac{K_A}{K_B} = \frac{y_A/x_A}{y_B/x_B} = \frac{y_A}{y_B}\frac{x_B}{x_A}
+        = \frac{y_A}{1-y_A}\frac{1-x_A}{x_A}
+      \end{equation}
+      整理後:
+      \begin{equation}
+        \frac{y_A}{1-y_A} = \alpha_{AB}\frac{x_A}{1-x_A}
+      \end{equation}
+      但因為$y$和$x$來自不同板(可以看上圖板1的$x$會是板2的$y$)，所以改寫為:
+      \begin{equation}
+        \frac{y_{n+1}}{1-y_{n+1}} = \alpha_{AB}\frac{x_n}{1-x_n}
+      \end{equation}
+      由於當回流比$R\to\infty$時，操作線為45度線，即$y_{n+1}=x_n$\\
+      代入上式:
+      \begin{equation}
+        \frac{x_n}{1-x_n} = \alpha_{AB}\frac{x_{n+1}}{1-x_{n+1}}
+      \end{equation}
+      當$n=0$時:
+      \begin{equation}
+        \frac{x_D}{1-x_D} = \alpha_{AB}\frac{x_{1}}{1-x_{1}}
+      \end{equation}
+      當$n=1$時:
+      \begin{equation}
+        \frac{x_{1}}{1-x_{1}} = \alpha_{AB}\frac{x_{2}}{1-x_{2}}
+      \end{equation}
+      以此類推，直到$n=N_{\text{min}}-1$時
+      \begin{equation}
+        \frac{x_{N_{\text{min}}-1}}{1-x_{N_{\text{min}}-1}} = \alpha_{AB}\frac{x_{W}}{1-x_{W}}
+      \end{equation}
+      將上述所有式子相乘，得到:
+      \begin{equation}
+        \frac{x_D}{1-x_D} = \alpha_{AB}^{N_{\text{min}}} \frac{x_N}{1-x_N}
+      \end{equation}
+      整理後即得到Fenske equation\\
+      但由於$x_N$是未知的，故理論板數可以加上Reboiler\\
+      因為Reboiler的出料是已知的$x_W$\\
+      代入上式
+      \begin{equation}
+        \frac{x_D}{1-x_D} = \alpha_{AB}^{N_{\text{min}}} \frac{x_W}{1-x_W}
+      \end{equation}
+      取對數:
+      \begin{align}
+        \log\left(
+          \frac{x_D}{1-x_D}
+        \right) &= N_{\text{min}}\log(\alpha_{AB}) + \log\left(
+          \frac{x_W}{1-x_W}
+        \right) \nonumber\\
+        \implies N_{\text{min}} &= \frac{\log\left[\frac{x_D}{1-x_D}\cdot\frac{1-x_W}{x_W}\right]}{\log(\alpha_{AB})}
+      \end{align}
+      \item 最小回流比$R_{\text{min}}$:\\
+      當回流比越小時，Enriching Section操作線的斜率越小
+      \begin{equation}
+        \frac{R}{R+1}= 1 - \frac{1}{R+1}
+      \end{equation}
+      也代表Enriching Section的操作線會往平衡線方向移動\\
+      壓縮了可以來回跳的範圍，理論板數會在靠近$q$line的地方增加\\
+      而能夠實現的最小回流比$R_{\text{min}}$\\
+      就是Enriching Section操作線與$q$line相交於平衡線上時
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,0) rectangle (5,5);
+          \draw (0,0) -- (5,5);
+          \draw (0,0) .. controls (0,2) and (3,5) .. (5,5);
+          \def\xD{4.5}
+          \def\xW{0.5}
+          \def\xF{2}
+          \def\q{0.8}
+          %diag line
+          \path[name path=diag, overlay] (0,0) -- (5,5);
+          \path[name path=qline, overlay] (0, {-1/(\q-1)*\xF}) -- (\xF, \xF) -- +(6, {1/(\q-1)*6});
+          \path[name path=equilibrium, overlay] (0,0) .. controls (0,2) and (3,5) .. (5,5);
+          \path[name intersections={of=qline and equilibrium, by=Q}];
+          \draw[ultra thick, red] (\xD, \xD) -- (Q);
+          \draw[ultra thick, blue] (Q) -- (\xW,\xW);
+          \draw[ultra thick, teal] (\xF, \xF) -- (Q);
+          \fill[black] (Q) circle (2pt);
+          \node[anchor=south east] at (Q) {Pitch point};
+        \end{tikzpicture}
+        \caption{最小回流比時的操作線示意圖}
+      \end{figure}
+      此時在靠近q-line處，理論板數會趨近無限大\\
+      而圖中，Enriching Section/Stripping Section/Q-line/平衡線的四線交點\\
+      稱為\fbox{Pitch point}\\
+      而$R_{\text{min}}$的數學表示，可由qline與平衡線的交點求出後($x',y'$)\\
+      代入Enriching Section操作線
+      \begin{equation}
+        \frac{R_{\text{min}}}{R_{\text{min}}+1}x' + \frac{1}{R_{\text{min}}+1}x_D = y'
+      \end{equation}
+      整理後:
+      \begin{equation}
+        R_{\text{min}} = \frac{x_D - y'}{y' - x'}
+      \end{equation}
+      \item 莫非效率值( Murphree tray efficiency ) $\eta_{M}$:\\
+      當塔內的液體與氣體沒有足夠時間接觸時，板上的液氣不會達到平衡狀態\\
+      因此要修正\fbox{平衡線}
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick, scale=0.7]
+          \begin{scope}
+            \clip (3,3) rectangle (11,13.5);
+            \draw (0,0) .. controls (0,5) and (8,14) .. (14,14);
+            \draw (0,0) -- (14,14);
+            \draw (0,0) rectangle (14,14);
+            \path[name path=vertA] (7,7) -- (7,14);
+            \path[name path=eqA, overlay] (0,0) .. controls (0,5) and (8,14) .. (14,14);
+            \path[name intersections={of=vertA and eqA, by=A}];
+            \draw (7,7) -- (A); 
+            \node[anchor=south east] at (A) {\small $(x_n,y_n^\ast)$};
+            \node[anchor=north west] at (7,7) {\small $(x_n,y_{n+1})$};
+            \node[anchor=east] at (7,9.3) {\small $(x_n,y_n)$};
+            \fill (7,7) circle (2pt);
+            \fill (A) circle (2pt);
+            \fill (7,9.3) circle (2pt);
+            \draw [<->] (7,7) arc(270:90:0.4 and 1.15);
+            \draw[<->] let \p1 = ($(A) - (0,7)$) in (7,7) arc (270:450: {0.25*\y1} and {0.5*\y1});
+          \end{scope}
+        \end{tikzpicture}
+        \caption{莫非效率值示意圖}
+      \end{figure}
+      \begin{equation}
+        \eta_{M} = \frac{y_{n+1} - y_n}{y_n^\ast - y_n}
+        = \frac{\text{實際每板提升的輕成分摩爾分率}}{\text{理論每板可提升的輕成分摩爾分率}}
+      \end{equation}
+      \item Overall efficiency (總效率) $\eta_{O}$:\\
+      定義為:
+      \begin{equation}
+        \eta_{O} = \frac{N_{\text{min}}}{N_{\text{實際}}} =\frac{\text{最少理論板數}}{\text{實際所需板數}}
+      \end{equation}
+    \end{itemize}
+    \item Optiumum Reflux Ratio，最適回流比($R_o$):\\
+    總成本最小時的回流比稱為最佳回流比$R_o$
+    \begin{equation}
+      \text{蒸餾總成本} = \text{操作成本} + \text{設備成本}
+    \end{equation}
+    \begin{itemize}
+      \item 操作成本線，包含加熱和冷卻，而加熱的成本大於冷卻成本\\
+      當回流比上升時，塔溫下降，液體變多，再沸器負荷上升，所需蒸氣量增加\\
+      \fbox{回流比與加熱成本成正比}
+      \item 設備成本線，包含板數(塔高)、塔截面積\\
+      當分離效果比較差時，會增加板數來提高分離效果，因此\\
+      \fbox{當回流比低時，塔高為主要成本}\\
+      而當塔內液體過多時，會造成蒸汽無法順利上升\\
+      導致壓力上升，分離效果變差甚至爆炸，而解決辦法就是增加塔截面積，因此\\
+      \fbox{當回流比高時，塔截面積為主要成本}
+    \end{itemize}
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[->] (0,0) -- (6,0) node[anchor=west] {回流比 $R$};
+        \draw[->] (0,0) -- (0,6) node[anchor=south] {成本};
+        \draw[red] (0.42,0.18) .. controls (1.99,0.52) and (4.6, 2.08) .. (5.67, 3.66) 
+        node[anchor=south west] {操作成本};
+        \draw[blue] (0.42,2.89) .. controls (1.99,0.46) and (4.6, 0.46) .. (5.67, 1.99) 
+        node[anchor=south west] {設備成本};
+        \draw[teal] (0.42,3.07) .. controls (1.99, 0.98) and (4.6, 2.54) .. (5.67, 5.65)
+        node[anchor=south west] {總成本};
+        \draw[dashed, teal] (2.13,2.116) -- (2.13,0) node[anchor=north] {$R_o$};
+        \draw[dashed] (1.42,0) -- (1.42,6);
+        \node[anchor=north] at (1.42,0) {$R_{\text{min}}$};
+      \end{tikzpicture}
+      \caption{最適回流比示意圖}
+    \end{figure}
+    P.S. 一般來說，最佳回流比約為最小回流比的1.05到1.3倍
+    \begin{equation}
+      R_o \approx (1.05 \sim 1.3) R_{\text{min}}
+    \end{equation}
+  \end{itemize}
+  \item Stripping-column Distillation 的設計:\\
+  其實就是只有下半段的連續蒸餾，只有Stripping Section，沒有Enriching Section\\
+  整體質量平衡
+  \begin{equation}
+    F = W + V_D
+  \end{equation}
+  輕成分的質量平衡
+  \begin{equation}
+    F\cdot x_F = W\cdot x_W + V_D\cdot y_D
+  \end{equation}
+  操作線
+  \begin{equation}
+    y_{m+1}= \frac{L_m}{V_{m+1}}x_m - \frac{W}{V_{m+1}}x_W
+  \end{equation}
+  q-line:
+  \begin{equation}
+    y = \frac{1}{q-1}x - \frac{x_F}{q-1}
+  \end{equation}
+  \item Distillation with direct stream injection:\\
+  連續蒸餾，但不使用Reboiler改為直接通入蒸氣$S$的純水($y_S=0$，蒸氣不含輕成分)\\
+  質量平衡，及輕成分質量平衡
+  \begin{equation}
+    F + S = D + W,\quad  F\cdot x_F = D\cdot x_D + W\cdot x_W
+  \end{equation}
+  \item 共沸蒸餾(Azeotropic Distillation):\\
+  當兩種成分的沸點非常接近時，會形成共沸混合物\\
+  此時無法利用一般蒸餾方法分離，必須使用共沸蒸餾\\
+  共沸蒸餾是利用第三成分(如添加劑)來改變混合物的相對揮發度，達到分離的目的\\
+  但因為\fbox{第三成分}成本通常也不低，所以會再多蓋一個蒸餾塔來回收第三成分
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw(0,4) arc(180:0:1 and 0.5) -- (2,0) arc(0:-180:1 and 0.5) -- cycle;
+      \draw[->] (-2,2) -- (0,2);
+      \draw[->] (1,4.5) -- (1,5) -- (3,5);
+      \draw (3.5, 5) circle (0.5);
+      \draw[->] (4,5) -- (6,5);
+      \draw[->] (5,5) -- (5,4) -- (2,4);
+      \draw[->] (1,-0.5) -- (1,-1) -- (3,-1);
+      \draw (3.5,-1) circle (0.5);
+      \draw[->] (3.5, -0.5) -- (3.5,0) -- (2,0);
+      \draw[->] (4,-1) -- (6,-1);
+      \draw[->] (6,5) -- (7,5) -- (7,2) -- (8,2);
+      \draw (3.2, -1.8) -- (3.2, -1.2);
+      \draw[decorate, decoration={coil, aspect=0.3, segment length=2pt, amplitude=3pt}] (3.2, -1.2) -- (3.8, -1.2);
+      \draw (3.8, -1.8) -- (3.8, -1.2);
+      \draw[->] (2.8, 4.3) -- (4.2, 5.7);
+      \draw (0,0.5) -- (2,0.5);
+      \draw (0,1.5) -- (2,1.5);
+      \draw (0,2.5) -- (2,2.5);
+      \draw (0,3.5) -- (2,3.5);
+      \node[anchor=north] at (-1,2) {$A+W$};
+      \node[anchor=south east] at (-1,2) {$B$};
+      \node[anchor=south] at (6,5) {$W+B$};
+      \node[anchor=west] at (6,-1) {$A$};
+      \def\xShift{8}
+      \draw (\xShift,4) arc(180:0:1 and 0.5) -- (\xShift+2,0) arc(0:-180:1 and 0.5) -- cycle;
+      \draw[->] (\xShift+1,4.5) -- (\xShift+1,5) -- (\xShift+3,5);
+      \draw (\xShift+3.5, 5) circle (0.5);
+      \draw[->] (\xShift+4,5) -- (\xShift+6,5) -- (\xShift+6,6);
+      \draw[->] (\xShift+6,6) -- (\xShift+6,7) -- (-1,7) -- (-1,2);
+      \draw[->] (\xShift+5,5) -- (\xShift+5,4) -- (\xShift+2,4);
+      \draw[->] (\xShift+1,-0.5) -- (\xShift+1,-1) -- (\xShift+3,-1);
+      \draw (\xShift+3.5,-1) circle (0.5);
+      \draw[->] (\xShift+3.5, -0.5) -- (\xShift+3.5,0) -- (\xShift+2,0);
+      \draw[->] (\xShift+4,-1) -- (\xShift+6,-1);
+      \draw (3.2+\xShift, -1.8) -- (3.2+\xShift, -1.2);
+      \draw[decorate, decoration={coil, aspect=0.3, segment length=2pt, amplitude=3pt}] (3.2+\xShift, -1.2) -- (3.8+\xShift, -1.2);
+      \draw (3.8+\xShift, -1.8) -- (3.8+\xShift, -1.2);
+      \draw[->] (2.8+\xShift, 4.3) -- (4.2+\xShift, 5.7);
+      \draw (0+\xShift,0.5) -- (2+\xShift,0.5);
+      \draw (0+\xShift,1.5) -- (2+\xShift,1.5);
+      \draw (0+\xShift,2.5) -- (2+\xShift,2.5);
+      \draw (0+\xShift,3.5) -- (2+\xShift,3.5);
+      \node[anchor=west] at (6+\xShift,-1) {$W$};
+      \node[anchor=south east] at (6+\xShift,5) {$B$};
+    \end{tikzpicture}
+    \caption{共沸蒸餾示意圖}
+  \end{figure}
+  而共沸蒸餾塔的設計曲線和一般蒸餾塔相同，只是需求點$x_D$不可以超過共沸點
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \begin{scope}
+        \clip (-1,-1) rectangle (6,6);
+        \draw (0,0) rectangle (5,5);
+        \draw (0,0) -- (5,5);
+        \draw (0,0) .. controls (3,8) and (5,1) .. (5,5);
+        \def\xD{3.5}
+        \def\xW{0.5}
+        \def\xF{2}
+        \def\q{0.8}
+        \def\R{1.5}
+        %diag line
+        \path[name path=diag, overlay] (0,0) -- (5,5);
+        \path[name path=qline, overlay] (0, {-1/(\q-1)*\xF}) -- (\xF, \xF) -- +(6, {1/(\q-1)*6});
+        \path[name path=equilibrium, overlay] (0,0) .. controls (3,8) and (5,1) .. (5,5);
+        \path[name path=enriching, overlay] (0, {(\R/(\R+1))*0 + (1/(\R+1))*\xD}) -- (\xD,\xD) -- +(6, {(\R/(\R+1))*6 - (1/(\R+1))*\xD});
+        \path[name path=stripping, overlay] (0, {(\R/(\R+1))*\xW - (1/(\R+1))*0}) -- (\xW,\xW) -- +(6, {(\R/(\R+1))*6 + (1/(\R+1))*0});
+        \path[name intersections={of=qline and equilibrium, by=Q}];
+        \path[name intersections={of=enriching and qline, by=E}];
+        %Drawing
+        \draw[ultra thick, red] (\xD, \xD) -- (E);
+        \draw[ultra thick, teal] (\xF, \xF) -- (E);
+        \draw[ultra thick, blue] (E) -- (\xW,\xW);
+        \draw[ultra thick, dashed, teal] (E) -- (Q);
+        \fill[black] (E) circle (2pt);
+        \draw[dashed, red] (\xD,0) -- (\xD,\xD);
+        \draw[dashed, blue] (\xW,0) -- (\xW,\xW);
+        \draw[dashed, teal] (\xF,0) -- (\xF,\xF);
+        \node[anchor=north, red] at (\xD,0) {$x_D$};
+        \node[anchor=north, blue] at (\xW,0) {$x_W$};
+        \node[anchor=north, teal] at (\xF,0) {$x_F$};
+        \node[anchor=north] at (0,0) {0};
+        \node[anchor=north] at (5,0) {1};
+        \node[anchor=east] at (0,0) {0};
+        \node[anchor=east] at (0,5) {1};
+      \end{scope}
+    \end{tikzpicture}
+    \caption{共沸蒸餾操作線示意圖}
+  \end{figure}
+  \item 萃取蒸餾(Extraction Distillation):\\
+  和共沸蒸餾差別在於，共沸蒸餾是加入第三者形成新的共沸物(輕成分)\\
+  而萃取蒸餾是加入第三者，來產生新的重成分(抑制另一成分揮發)\\
+  常見的案例是分離環己烷和苯，因為兩者沸點接近(80.1 vs 80.7$^\circ C$)\\
+  透過加入酚，使苯的相對揮發度下降，達到分離的目的
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw(0,4) arc(180:0:1 and 0.5) -- (2,0) arc(0:-180:1 and 0.5) -- cycle;
+      \draw[->] (-2,2) -- (0,2);
+      \draw[->] (1,4.5) -- (1,5) -- (3,5);
+      \draw (3.5, 5) circle (0.5);
+      \draw[->] (4,5) -- (6,5);
+      \draw[->] (5,5) -- (5,4) -- (2,4);
+      \draw[->] (1,-0.5) -- (1,-1) -- (3,-1);
+      \draw (3.5,-1) circle (0.5);
+      \draw[->] (3.5, -0.5) -- (3.5,0) -- (2,0);
+      \draw[->] (4,-1) -- (6,-1);
+      \draw (3.2, -1.8) -- (3.2, -1.2);
+      \draw[decorate, decoration={coil, aspect=0.3, segment length=2pt, amplitude=3pt}] (3.2, -1.2) -- (3.8, -1.2);
+      \draw (3.8, -1.8) -- (3.8, -1.2);
+      \draw[->] (2.8, 4.3) -- (4.2, 5.7);
+      \draw (0,0.5) -- (2,0.5);
+      \draw (0,1.5) -- (2,1.5);
+      \draw (0,2.5) -- (2,2.5);
+      \draw (0,3.5) -- (2,3.5);
+      \node[anchor=north east] at (-1,2) {$P$};
+      \node[anchor=south] at (-1,2) {$B+C$};
+      \node[anchor=west] at (6,5) {$C$};
+      \node[anchor=south] at (6,-1) {$B+P$};
+      \draw[->] (6,-1) -- (7,-1) -- (7,2) -- (8,2);
+      \def\xShift{8}
+      \draw (\xShift,4) arc(180:0:1 and 0.5) -- (\xShift+2,0) arc(0:-180:1 and 0.5) -- cycle;
+      \draw[->] (\xShift+1,4.5) -- (\xShift+1,5) -- (\xShift+3,5);
+      \draw (\xShift+3.5, 5) circle (0.5);
+      \draw[->] (\xShift+4,5) -- (\xShift+6,5);
+      \draw[->] (\xShift+5,5) -- (\xShift+5,4) -- (\xShift+2,4);
+      \draw[->] (\xShift+1,-0.5) -- (\xShift+1,-1) -- (\xShift+3,-1);
+      \draw (\xShift+3.5,-1) circle (0.5);
+      \draw[->] (\xShift+3.5, -0.5) -- (\xShift+3.5,0) -- (\xShift+2,0);
+      \draw[->] (\xShift+4,-1) -- (\xShift+6,-1) -- (\xShift+6,-2);
+      \draw[->] (\xShift+6,-2) -- (\xShift+6,-2.5) -- (-1,-2.5) -- (-1,2);
+      \draw (3.2+\xShift, -1.8) -- (3.2+\xShift, -1.2);
+      \draw[decorate, decoration={coil, aspect=0.3, segment length=2pt, amplitude=3pt}] 
+        (3.2+\xShift, -1.2) -- (3.8+\xShift, -1.2);
+      \draw (3.8+\xShift, -1.8) -- (3.8+\xShift, -1.2);
+      \draw[->] (2.8+\xShift, 4.3) -- (4.2+\xShift, 5.7);
+      \draw (0+\xShift,0.5) -- (2+\xShift,0.5);
+      \draw (0+\xShift,1.5) -- (2+\xShift,1.5);
+      \draw (0+\xShift,2.5) -- (2+\xShift,2.5);
+      \draw (0+\xShift,3.5) -- (2+\xShift,3.5);
+      \node[anchor=west] at (6+\xShift,-2) {$P$};
+      \node[anchor=west] at (6+\xShift,5) {$B$};
+  \end{tikzpicture}
+  \caption{萃取蒸餾示意圖}
+  \end{figure}
+\end{itemize}
+\end{CJK*}
+\end{document}
