@@ -1,6 +1,761 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 \begin{CJK*}{UTF8}{bkai}
-  \subsection{萃取和浸出，Extraction and Leaching}
+\subsection{萃取和浸出，Extraction and Leaching}
+  萃取: $L(A)\rightarrow :L'(A)$\\
+  如水相的尼古丁到有機相的尼古丁\\
+  油相的抗生素到水相的抗生素
+  瀝濾(浸出): $S(A)\rightarrow :L(A)$\\
+  如固相的咖啡到液相的咖啡\\
+  和吸收與氣提不同的事，不能假設溶劑Inert，以及欲分離物在兩相中皆稀薄\\
+  因此影響操作的變因變成了三個以上\\
+  A相、B相，以及欲分離物A
+  \begin{itemize}
+    \item 萃取方式分類:
+    \begin{itemize}
+      \item 簡單單級萃取: 兩相接觸一次\\
+      如實驗室的分液漏斗，工業中不特別討論
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (1.8,0) ..controls (1,1) and (0,4) .. (1.6,4) coordinate[midway] (A);
+          \draw (1.8,0) -- (1.8, -2.5);
+          \draw (2.2,0) -- (2.2,- 2);
+          \draw (1.8,-2.5) -- (2.2,-2);
+          \draw (2.2,0) ..controls (3,1) and (4,4) .. (2.4,4) coordinate[midway] (B);
+          \draw (1.6,4) -- (1.6,4.5);
+          \draw (2.4,4) -- (2.4,4.5);
+          \fill[white] (1,-0.8) rectangle (3,-1.2);
+          \draw (1.8,-0.8) -- (1, -0.8) -- (1,-1.2) -- (2.7,-1.2) -- (2.7, -1.8)
+          -- (3,-1.8) -- (3, -0.2) -- (2.7, -0.2) -- (2.7, -0.8) -- cycle;
+          \draw (A) -- (B);
+          \path[name path=a] (2,0) -- (2,4);
+          \path[name path=b] (A) -- (B);
+          \path[name intersections={of=a and b, by=I}];
+          \path(2,0) -- (I) coordinate[midway] (C);
+          \path[name path=d] (0, 0|-C) -- (4, 0|-C);
+          \path[name path=e] (1.8,0) ..controls (1,1) and (0,4) .. (1.6,4);
+          \path[name path=f] (2.2,0) ..controls (3,1) and (4,4) .. (2.4,4);
+          \path[name intersections={of=d and e, by=J}];
+          \path[name intersections={of=d and f, by=K}];
+          \draw[decorate, decoration={snake, segment length=4, amplitude=1}, blue] (J) -- (K);
+          \draw[->] (C) ++(0,-0.5) -- +(0,1) node[above] {$A$};
+          \node[anchor=north east,blue] at (J) {$L$};
+          \node[anchor=south west] at (J) {$L'$};
+        \end{tikzpicture}
+        \caption{簡單單級萃取示意圖}
+      \end{figure}
+      \item 連續單級萃取: 兩相以定流率引入，同時又以定流率引出
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,2) arc (180:0:1 and 0.5) -- (2,0) arc (0:-180:1 and 0.5) -- cycle;
+          \draw [decorate, decoration={snake, segment length=4, amplitude=1}, blue] (0,1) --(2,1);
+          \node at (1,0.5) {$B$};
+          \node at (1,1.5) {$C$};
+          \draw[->] (0.5,0.5) -- (0.5,1.5) node[above] {$A$};
+          \draw[->] (-2,0.5) -- (0,0.5) node[midway, above] {$A+B$};
+          \node[anchor=east] at (-2,0.5) {Feed};
+          \draw[->] (4,1.5) -- (2,1.5) node[midway, above] {$C$};
+          \node[anchor=west] at (4,1.5) {Solvent};
+          \draw(1,2.5) -- (1,3);
+          \draw[->] (1,3) -- (4,3) node[midway, above] {$A+B\downarrow+C\uparrow$};
+          \node[anchor=north] at (2,3) {Extract};
+          \node[anchor=west] at (4,3) {$V, y_i$};
+          \draw (1,-0.5) -- (1,-1);
+          \draw[->] (1,-1) -- (4,-1) node[midway, below] {$A+B\uparrow+C\downarrow$};
+          \node[anchor=south] at (2,-1) {Raffinate};
+          \node[anchor=west] at (4,-1) {$L, x_i$};
+        \end{tikzpicture}
+        \caption{連續單級萃取示意圖}
+      \end{figure}
+    \end{itemize}
+    \item 萃取座標軸\\
+    因為包含三個變數，但是自由度是3而不是2\\
+    所以會以正三角形或等腰直角三角形來表示
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw[ultra thick] (0,0) -- (10,0) -- (60:10) -- cycle;
+        \node[above=12pt,blue] at (60:10) {A(溶質)};
+        \node[left=12pt, red] at (0,0) {C(新溶劑)};
+        \node[right=12pt, teal] at (10,0) {B(原溶劑)};
+        \node[anchor=east,blue] at (60:10) {1};
+        \node[anchor=east,blue] at (60:8) {0.8};
+        \node[anchor=east,blue] at (60:6) {0.6};
+        \node[anchor=east,blue] at (60:4) {0.4};
+        \node[anchor=east,blue] at (60:2) {0.2};
+        \node[anchor=south east, blue] at (0,0) {0};
+        \node[left=20pt, blue] at (60:5) {$x_A,y_A$};
+        \node[anchor=north, red] at (0,0) {1};
+        \node[anchor=north, red] at (2,0) {0.8};
+        \node[anchor=north, red] at (4,0) {0.6};
+        \node[anchor=north, red] at (6,0) {0.4};
+        \node[anchor=north, red] at (8,0) {0.2};
+        \node[anchor=north, red] at (10,0) {0};
+        \node[below=20pt, red] at (5,0) {$x_C,y_C$};
+        \path[name path=a] (10,0) -- (60:10) coordinate[midway] (E);
+        \path[name path=ha, overlay] (60:8) -- +(10,0);
+        \path[name path=hb, overlay] (60:6) -- +(10,0);
+        \path[name path=hc, overlay] (60:4) -- +(10,0);
+        \path[name path=hd, overlay] (60:2) -- +(10,0);
+        \path[name intersections={of=a and ha, by=A}];
+        \path[name intersections={of=a and hb, by=B}];
+        \path[name intersections={of=a and hc, by=C}];
+        \path[name intersections={of=a and hd, by=D}];
+        \draw[dashed, blue] (60:8) -- (A);
+        \draw[dashed, blue] (60:6) -- (B);
+        \draw[dashed, blue] (60:4) -- (C);
+        \draw[dashed, blue] (60:2) -- (D);
+        \node[teal,anchor=west] at (60:10) {0};
+        \node[teal,anchor=south west] at (A) {0.2};
+        \node[teal,anchor=south west] at (B) {0.4};
+        \node[teal,anchor=south west] at (C) {0.6};
+        \node[teal,anchor=south west] at (D) {0.8};
+        \node[teal,anchor=south west] at (10,0) {0.8};
+        \node[teal,right=20pt] at (E) {$x_B,y_B$};
+        \draw[red, dashed] (2,0) -- (60:2);
+        \draw[red, dashed] (4,0) -- (60:4);
+        \draw[red, dashed] (6,0) -- (60:6);
+        \draw[red, dashed] (8,0) -- (60:8);
+        \draw[teal, dashed] (2,0) -- (A);
+        \draw[teal, dashed] (4,0) -- (B);
+        \draw[teal, dashed] (6,0) -- (C);
+        \draw[teal, dashed] (8,0) -- (D);
+        \draw[ultra thick, dashed] (0.9, 0) .. controls (3,7.58) and (7.75,4) .. (7.93, 0); 
+        \fill (4.474,4.4418) circle (2pt);
+        \node[anchor=south] at (4.474,4.4418) {P};
+        \node at (0,3) {離C近，離B遠};
+        \node at (0,2.5) {萃取物平衡線};
+        \node at (10.5,3) {離B近，離C遠};
+        \node at (10.5,2.5) {萃餘物平衡線};
+        \path[name path=elcurve] (0.9, 0) .. controls (3,7.58) and (7.75,4) .. (7.93, 0);
+        \def\yShift{0.8}
+        \path[name path=tieA] (0, \yShift) -- (5,\yShift+0.25);
+        \path[name path=tiea] (5, \yShift+0.25) -- (10, \yShift+0.5);
+        \path[name intersections={of=elcurve and tieA, by=tieApt}];
+        \path[name intersections={of=elcurve and tiea, by=tieapt}];
+        \draw[loosely dotted] (tieApt) -- (tieapt);
+        \def\yShift{1.6}
+        \path[name path=tieB] (0, \yShift) -- (5,\yShift+0.25);
+        \path[name path=tieb] (5, \yShift+0.25) -- (10, \yShift+0.5);
+        \path[name intersections={of=elcurve and tieB, by=tieBpt}];
+        \path[name intersections={of=elcurve and tieb, by=tiebpt}];
+        \draw[loosely dotted] (tieBpt) -- (tiebpt);
+        \def\yShift{2.4}
+        \path[name path=tieC] (0, \yShift) -- (5,\yShift+0.25);
+        \path[name path=tiec] (5, \yShift+0.25) -- (10, \yShift+0.5);
+        \path[name intersections={of=elcurve and tieC, by=tieCpt}];
+        \path[name intersections={of=elcurve and tiec, by=tiecpt}];
+        \draw[loosely dotted] (tieCpt) -- (tiecpt);
+        \def\yShift{3.2}
+        \path[name path=tieD] (0, \yShift) -- (5,\yShift+0.25);
+        \path[name path=tied] (5, \yShift+0.25) -- (10, \yShift+0.5);
+        \path[name intersections={of=elcurve and tieD, by=tieDpt}];
+        \path[name intersections={of=elcurve and tied, by=tiedpt}];
+        \draw[loosely dotted] (tieDpt) -- (tiedpt);
+        \def\yShift{0}
+        \path[name path=tieE] (0, \yShift) -- (5,\yShift+0.25);
+        \path[name path=tiee] (5, \yShift+0.25) -- (10, \yShift+0.5);
+        \path[name intersections={of=elcurve and tieE, by=tieEpt}];
+        \path[name intersections={of=elcurve and tiee, by=tieept}];
+        \draw[loosely dotted] (tieEpt) -- (tieept);
+        \def\yShift{4}
+        \path[name path=tieF] (0, \yShift) -- (5,\yShift+0.25);
+        \path[name path=tief] (5, \yShift+0.25) -- (10, \yShift+0.5);
+        \path[name intersections={of=elcurve and tieF, by=tieFpt}];
+        \path[name intersections={of=elcurve and tief, by=tiefpt}];
+        \draw[loosely dotted] (tieFpt) -- (tiefpt);
+        \def\yShift{1.3}
+        \path[name path=tieG] (0, \yShift) -- (5,\yShift+0.25);
+        \path[name path=tieg] (5, \yShift+0.25) -- (10, \yShift+0.5);
+        \path[name intersections={of=elcurve and tieG, by=tieGpt}];
+        \path[name intersections={of=elcurve and tieg, by=tiegpt}];
+        \draw[loosely dotted, ultra thick, orange] (tieGpt) -- (tiegpt) coordinate[midway] (tieMid);
+        \fill[orange] (tieGpt) circle (2pt);
+        \fill[orange] (tiegpt) circle (2pt);
+        \fill[orange] (tieMid) circle (2pt);
+        \node[anchor=north, orange] at (tieMid) {$M$};
+        \node[anchor=east, orange] at (tieGpt) {$a$};
+        \node[anchor=west, orange] at (tiegpt) {$b$};
+      \end{tikzpicture}
+      \caption{萃取座標正三角形示意圖}
+    \end{figure}
+    而等腰直角三角形，通常會把萃取物放在上方頂點
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) -- (5,0) -- (0,5) -- cycle;
+        \draw[red, dashed] (1,0) -- (1,4);
+        \draw[red, dashed] (2,0) -- (2,3);
+        \draw[red, dashed] (3,0) -- (3,2);
+        \draw[red, dashed] (4,0) -- (4,1);
+        \draw[blue, dashed] (0,1) -- (4,1);
+        \draw[blue, dashed] (0,2) -- (3,2);
+        \draw[blue, dashed] (0,3) -- (2,3);
+        \draw[blue, dashed] (0,4) -- (1,4);
+        \node[anchor=north, red] at (2.5,0) {$x_A,y_A$};
+        \node[anchor=east, blue] at (0,2.5) {$x_C,y_C$};
+        \node[anchor=north east] at (0,0) {B(原溶劑)};
+        \node[anchor=west, red] at (5,0) {A(新溶劑)};
+        \node[anchor=south, blue] at (0,5) {C(萃取物)};
+        \draw[dashed] (0,0.5) .. controls (4, 0.45) and (2.16, 2.75) .. (0, 4.2);
+      \end{tikzpicture}
+      \caption{萃取座標等腰直角三角形示意圖}
+    \end{figure}
+    \item 萃取操作線
+    \begin{itemize}
+      \item 萃取物平衡線與萃餘物平衡線的交點為Plait Point\\
+      此兩條平衡線以上為單相區，以下為雙相區
+      \item 萃取操作區會在兩平衡線下方
+      \item 在操作區中任一點會經過一條Tie line，能找到對應的萃取組成及萃餘組成
+      \item 而Tie line的物理意義則是將一個已知組成的待萃取物$x_A,y_A$\\
+      分別投影到要操作他所需要的\fbox{萃取a($y_A,y_B,y_C$)}及\fbox{萃餘b($x_A,x_B,x_C$)}上
+      \item 若Pilot Point偏向左邊，Tie Line斜率為正，得到的$x_A>y_A$\\
+      代表$A$親萃餘相，而疏萃取相
+      \item 若Pilot Point偏向右邊，Tie Line斜率為負，得到的$x_A<y_A$\\
+      代表$A$親萃取相，而疏萃餘相
+      \item 直角坐標中，萃取平衡線會在左上方，萃餘平衡線會在右下方
+      \item 直角坐標中，先得到$x_A,x_C$後，在求出$1-x_A-x_C=x_B$\\
+      同理，先得到$y_A,y_B$後，在求出$1-y_A-y_B=y_C$
+    \end{itemize}
+    \item Tie Line的畫法\\
+    等腰直角的相圖不會提供Tie Line，需要自行繪製\\
+    因為Tie Line 的歪斜程度會與分離的操作線$x_A,y_A$有關
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) -- (5,0) -- (0,5) -- cycle;
+        \node[anchor=north, red] at (2.5,0) {$x_A,y_A$};
+        \node[anchor=east, blue] at (0,2.5) {$x_C,y_C$};
+        \node[anchor=north east] at (0,0) {B(原溶劑)};
+        \node[anchor=west, red] at (5,0) {A(新溶劑)};
+        \node[anchor=south, blue] at (0,5) {C(萃取物)};
+        \draw[dashed] (0,0.5) .. controls (4, 0.45) and (2.16, 2.75) .. (0, 4.2);
+        \fill (2.36,1.49) circle (2pt);
+        \node[anchor=west] at (2.36,1.49) {P}; 
+        \def\hAx{1}
+        \def\hAy{2.5}
+        \fill (\hAx,\hAy) circle (2pt);
+        \node[anchor=south west] at (\hAx,\hAy) {$h$};
+        \node[anchor=west] at (1,0.4) {萃餘平衡線($x_A,x_C$)};
+        \node[anchor=south west] at (1,3.5) {萃取平衡線($y_A,y_C$)};
+        \def\yShift{-7}
+        \draw [->] (0,0+\yShift) -- (5.5,0+\yShift) node[right] {$x_A$};
+        \draw [->] (0,0+\yShift) -- (0,5.5+\yShift) node[above] {$y_A$};
+        \draw (0,0+\yShift) -- (5,5+\yShift);
+        \draw[dashed] (5,0+\yShift) -- (5,5+\yShift) -- (0,5+\yShift);
+        \node[anchor=north] at (5,0+\yShift) {1.0};
+        \node[anchor=east] at (0,5+\yShift) {1.0};
+        \node[anchor=north east] at (0,0+\yShift) {0.0};
+        \node[anchor=south west] at (5,5+\yShift) {45度輔助線};
+        \draw[blue] (0,\yShift) .. controls (2,1+\yShift) and (3,1.724+\yShift) .. 
+          (3,3+\yShift) node[midway, anchor=north west] {A平衡線($x_A,y_A$)};
+        \path[name path=a] (\hAx,\yShift) -- (\hAx,\hAy);
+        \path[name path=curveA] (0,0.5) .. controls (4, 0.45) and (2.16, 2.75) .. (0, 4.2);
+        \path[name path=curveB] (0,\yShift) .. controls (2,1+\yShift) and (3,1.724+\yShift) .. (3,3+\yShift);
+        \path[name intersections={of=a and curveA, by=Ia}];
+        \path[name intersections={of=a and curveB, by=Ib}];
+        \draw[dashed,blue, ->] (\hAx,\hAy) -- (Ib);
+        \fill[blue] (Ia) circle (2pt);
+        \fill[blue] (Ib) circle (2pt);
+        \draw[->, dotted] (Ib) -- (0,0|-Ib);
+        \path[name path=horizontal] (Ib) -- (0,0|-Ib);
+        \path[name path=diagonal] (0,0+\yShift) -- (5,5+\yShift);
+        \path[name intersections={of=horizontal and diagonal, by=Ic}];
+        \fill[red] (Ic) circle (2pt);
+        \path[name path=vertical,overlay] (Ic|-0,\hAy) -- +(0,10);
+        \path[name intersections={of=vertical and curveA, by=Id}];
+        \fill[red] (Id) circle (2pt);
+        \draw[dotted] (Id) -- (Ia); 
+        \draw[red,dashed,->] (Ic) -- (Id);
+      \end{tikzpicture}
+      \caption{萃取相圖Tie Line畫法示意圖}
+    \end{figure}
+    從一個操作實驗中，獲得兩相分別的欲萃取物濃度($x_A,x_C$)\\
+    可以將($x_A,x_C$)點投影到萃餘平衡線上，得到點$h$\\
+    從點$h$畫一條垂直線到A的平衡線上，得到交點($x_A,y_A$)\\
+    從交點畫一條水平線到45度輔助線上，得到其等價的$x_A=y_A$\\
+    從該點畫一條垂直線到萃取平衡線上，得到($y_A,y_C$)\\
+    連接($x_A,x_C$)及($y_A,y_C$)兩點，即為所求的Tie Line
+  \item 單級連續萃取的每個假想階段:
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (4,2);
+      \node at (2,1) {Stage $n$};
+      \draw[->] (-2,1.5) -- (0,1.5);
+      \draw[->] (-2,0.5) -- (0,0.5);
+      \node[anchor=east] at (-2,1.5) {$V_{n-1}$};
+      \node[anchor=east] at (-2,0.5) {$L_{n-1}$};
+      \draw[->] (4,1.5) -- (6,1.5);
+      \draw[->] (4,0.5) -- (6,0.5);
+      \node[anchor=west] at (6,1.5) {$V_{n}$};
+      \node[anchor=west] at (6,0.5) {$L_{n}$};
+    \end{tikzpicture}
+    \caption{單級連續萃取中的假想階段示意圖}
+  \end{figure}
+  假定每個階段皆達到平衡，則每個階段皆可視為一個單級連續萃取\\
+  因此每個階段皆有一個Tie Line\\
+  可以由Lever-arm rule得到:
+  \fbox{進口端L，進口端V，階段$n$中的M點共線}\\
+  \fbox{出口端L，出口端V，階段$n$中的M點共線}
+  而$M$點即為該階段的操作點，可以看成支點\\
+  將操作階段想成兩個階段，第一個階段為$L+V\rightarrow M$\\
+  第二個階段為$M\rightarrow L+V$
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (1.6,2);
+      \draw (2.4,0) rectangle (4,2);
+      \draw[->] (1.6,1) -- (2.4,1) node[midway, above] {$M$};
+      \draw[->] (-2,1.5) -- (0,1.5);
+      \draw[->] (-2,0.5) -- (0,0.5);
+      \node[anchor=east] at (-2,1.5) {$V_{n-1}$};
+      \node[anchor=east] at (-2,0.5) {$L_{n-1}$};
+      \draw[->] (4,1.5) -- (6,1.5);
+      \draw[->] (4,0.5) -- (6,0.5);
+      \node[anchor=west] at (6,1.5) {$V_{n}$};
+      \node[anchor=west] at (6,0.5) {$L_{n}$};
+    \end{tikzpicture}
+    \caption{單級連續萃取中的假想階段分解示意圖}
+  \end{figure}
+  而根據質量守恆:
+  \begin{align}
+    \text{流量}:\quad &L_{n-1}+V_{n-1}=M\\
+    \text{組成A}:\quad &L_{n-1}x_{A,n-1}+V_{n-1}y_{A,n-1}=Mx_{A,M}\\
+    \text{組成C}:\quad &L_{n-1}x_{C,n-1}+V_{n-1}y_{C,n-1}=Mx_{C,M}
+  \end{align}
+  一二式合併後，得到組成$A$的操作線方程式:
+  \begin{align}
+    &L_{n-1}x_{A,n-1}+V_{n-1}y_{A,n-1}=(L_{n-1}+V_{n-1})x_{A,M} \nonumber\\
+    \implies&L_{n-1}(x_{A,n-1}-x_{A,M})=V_{n-1}(x_{A,M}-y_{A,n-1}) \nonumber\\
+    \implies&\frac{L_{n-1}}{V_{n-1}}=\frac{x_{A,M}-y_{A,n-1}}{x_{A,n-1}-x_{A,M}}
+  \end{align}
+  同理可得組成$C$的操作線方程式:
+  \begin{align}
+    &L_{n-1}x_{C,n-1}+V_{n-1}y_{C,n-1}=(L_{n-1}+V_{n-1})x_{C,M} \nonumber\\
+    \implies&L_{n-1}(x_{C,n-1}-x_{C,M})=V_{n-1}(x_{C,M}-y_{C,n-1}) \nonumber\\
+    \implies&\frac{L_{n-1}}{V_{n-1}}=\frac{x_{C,M}-y_{C,n-1}}{x_{C,n-1}-x_{C,M}}
+  \end{align}
+  而兩式的$\frac{L_{n-1}}{V_{n-1}}$相等，因此可得:
+  \begin{align}
+    &\frac{x_{A,M}-y_{A,n-1}}{x_{A,n-1}-x_{A,M}}=\frac{x_{C,M}-y_{C,n-1}}{x_{C,n-1}-x_{C,M}} \nonumber\\
+    \implies&
+    \frac{x_{C,n-1}-x_{C,M}}{x_{A,n-1}-x_{A,M}}=
+    \frac{x_{C,M}-y_{C,n-1}}{x_{A,M}-y_{A,n-1}}
+  \end{align}
+  左邊就是點$(x_{A,n-1},x_{C,n-1})$與點$(x_{A,M},x_{C,M})$的斜率\\
+  右邊就是點$(y_{A,n-1},y_{C,n-1})$與點$(x_{A,M},x_{C,M})$的斜率\\
+  因此可以得到多級連續萃取的操作線:
+  \fbox{進口端L，進口端V，階段$n$中的M點三點共線}\\
+  而出口端L，出口端V，階段$n$中的M點三點共線，則是相同的道理
+  \item 多級(很多個槽)連續萃取總操作線\\
+  多級萃取同樣也可以分成逆流式與並流式兩種\\
+  逆流式(Counter current)是$L$與$V$流向平行但方向相反\\
+  可以視為一整個單級連續萃取
+  並流式(Cross current)是$L$與$V$流向垂直交叉\\
+  只能視為多個單級連續萃取的組合
+  \begin{itemize}
+    \item Single stage extraction:
+    \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (4,2);
+      \fill[pattern=north west lines, pattern color=blue] (0,0) rectangle (4,1);
+      \draw[dashed, blue] (0,1) -- (4,1);
+      \draw[<-] (-2,1.5) -- (0,1.5);
+      \draw[->] (-2,0.5) -- (0,0.5);
+      \node[anchor=east] at (-2,1.5) {Extract, $V_n$};
+      \node[anchor=east] at (-2,0.5) {Feed, $L_{n-1}$};
+      \draw[<-] (4,1.5) -- (6,1.5);
+      \draw[->] (4,0.5) -- (6,0.5);
+      \node[anchor=west] at (6,1.5) {Solvent, $V_{n+1}$};
+      \node[anchor=west] at (6,0.5) {Raffinate, $L_{n}$};
+    \end{tikzpicture}
+    \caption{單級連續萃取示意圖}
+  \end{figure}
+    通常題目會是給予進料流量與組成($L_{n-1},x_{A,n-1},x_{C,n-1}$)\\
+    透過相圖與操作線，可以求得\\
+    萃取物($V_n,y_{A,n},y_{C,n}$)及萃餘物($L_n,x_{A,n},x_{C,n}$)的組成\\
+    而已知的式子有三個
+    \begin{enumerate}
+      \item 直線$\overline{L_{n-1}V_{n+1}M}$
+      \item 直線$\overline{L_{n}V_{n}M}$
+      \item $L_nV_n$達到平衡，因此有一條平衡的Tie Line
+    \end{enumerate}
+    但最後一條需要先得到$M$點，才能畫出Tie Line\\
+    因此先由前兩條獲得$M$點，再畫出Tie Line即可求得$L_n,V_n$的組成\\
+    而第一條，就是將左側進料的$L_{n-1}$與右側進料的$V_{n+1}$在相圖上連線\\
+    而第二條，則透過Lever-arm rule以數學方式獲得$M$
+    \begin{align}
+      x_{A,M} &= \frac{L_{n-1}x_{A,n-1}+V_{n+1}y_{A,n+1}}{L_{n-1}+V_{n+1}}\\
+      x_{C,M} &= \frac{L_{n-1}x_{C,n-1}+V_{n+1}y_{C,n+1}}{L_{n-1}+V_{n+1}}
+    \end{align}
+    再從$M$點依照上述Tie Line的畫法，選擇不同的$x_A$值\\
+    以Try-and-Error的方式，找到Tie Line剛好與第一條的直線相交於$M$點\\
+    而那條Tie Line 的延伸線，與等腰直角三角形的邊界相交的兩點\\
+    即為送至下一階段的$L_n,V_n$組成
+    \item Multi stage extraction:\\
+    將剛剛Tie Line所得到交於操作邊界的，代表$L_{n}$及$V_{n+1}$的點連線\\
+    作為下一個階段的第一條線，再重複上述步驟即可\\
+    而多級萃取最後會包絡三角形，再之後就無法找到$M$點\\
+    因此另一個做法是，我們假設他為一個巨大的單級連續萃取\\
+    而從質量守恆:
+    \begin{equation}
+      L_{n-1}+V_{n+1} = L_n + V_n
+    \end{equation}
+    可以定義出一個最大的$\Delta$值:
+    \begin{equation}
+      \Delta = (L_{n-1}-V_n) = (L_n - V_{n+1})
+    \end{equation}
+    代表最大的流量差異\\
+    而A成分的質量守恆:
+    \begin{equation}
+      L_{n-1}x_{A,n-1}+V_{n+1}y_{A,n+1} = L_nx_{A,n}+V_ny_{A,n}
+    \end{equation}
+    可改寫成:
+    \begin{equation}
+      (L_{n-1}x_{A,n-1}-V_ny_{A,n}) = (L_nx_{A,n}-V_{n+1}y_{A,n+1}) = \Delta x_{A,\Delta}
+    \end{equation}
+    其中$x_{A,\Delta}$為A成分的平均組成\\
+    同理C成分的質量守恆:
+    \begin{equation}
+      (L_{n-1}x_{C,n-1}-V_ny_{C,n}) = (L_nx_{C,n}-V_{n+1}y_{C,n+1}) = \Delta x_{C,\Delta}
+    \end{equation}
+    其中$x_{C,\Delta}$為C成分的平均組成\\
+    將A組成與總質量守恆式合併，得到:
+    \begin{equation}
+      \frac{y_{A,n}-x_{A,\Delta}}{x_{A,n-1}-x_{A,\Delta}}=\frac{L_{n-1}}{V_n}
+    \end{equation}
+    步驟與剛剛推導$M$的Lever-arm rule相同\\
+    同理組成$C$的操作線方程式:
+    \begin{equation}
+      \frac{y_{C,n}-x_{C,\Delta}}{x_{C,n-1}-x_{C,\Delta}}=\frac{L_{n-1}}{V_n}
+    \end{equation}
+    而兩式的$\frac{L_{n-1}}{V_n}$相等，因此可得:
+    \begin{equation}
+      \frac{x_{C,n-1}-x_{C,\Delta}}{x_{A,n-1}-x_{A,\Delta}}=
+      \frac{y_{C,n}-x_{C,\Delta}}{y_{A,n}-x_{A,\Delta}}
+    \end{equation}
+    左邊就是點$(x_{A,n-1},x_{C,n-1})$與點$(x_{A,\Delta},x_{C,\Delta})$的斜率\\
+    右邊就是點$(y_{A,n},y_{C,n})$與點$(x_{A,\Delta},x_{C,\Delta})$的斜率\\
+    因此可以得到多級連續萃取的總操作線:
+    \fbox{進口端L，進口端V，平均組成M點三點共線}\\
+    而出口端L，出口端V，平均組成M點三點共線，則是相同的道理
+  \end{itemize}
+  \item 多成分系統的萃取
+  \begin{itemize}
+    \item 輕成分組成(Light key component): 塔頂產物中量最多者(A)
+    \item 重成分組成(Heavy key component): 塔底產物中量最多者(M)
+  \end{itemize}
+  \item Counter-current multi-stage extraction with immiscible solvents\\
+  完全不互溶的溶劑系統，可以視為兩個二元系統的組合\\
+  題目可以視為某種氣提或吸收的操作，只是平衡線不是亨利定律或拉烏爾定律\\
+  而是萃取平衡線
+  \end{itemize}
+\subsection{Leaching 瀝濾}
+$S(A)\to L(A)$
+\begin{itemize}
+  \item 瀝濾(Leaching)操作簡介\\
+  最簡單的瀝濾有三個成分：Solute(A)，Solid(B)，Solvent(C)
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (2,0) -- (4,1) -- (4,3) -- (0,3) -- (0,1) -- cycle;
+      \draw[->] (2,3) -- (2,3.5) -- (4, 3.5) node[right] {overflow，上層液，A+C};
+      \draw[->] (-2,2) -- (0,2);
+      \node[anchor=east] at (-2,2) {feed，進料，A+B};
+      \draw[->] (2,0) -- (2,-0.5) -- (4,-0.5) node[right] {underflow，下層液，混濁液(Slurry)，A+B+C};
+      \draw[->] (6,2.5) -- (4,2.5);
+      \node[anchor=west] at (6,2.5) {solvent，溶劑，C};
+    \end{tikzpicture}
+    \caption{瀝濾示意圖}
+  \end{figure}
+  \begin{itemize}
+    \item 上層液
+    \begin{align}
+      \text{組成(x)}:\quad & x_A + x_C = 1 \\
+      \text{流量(V)}:\quad & V
+    \end{align}
+    \item 下層液
+    \begin{align}
+      \text{組成(y)}:\quad & y_A + y_C = 1 \\
+      \text{固體}:\quad & B\text{Only，不算入組成} \\
+      \text{流量(L)}:\quad & L\text{Only，計算澄清液流量} \\
+      \text{N-value}:\quad & N = \frac{\text{固體質量}}{\text{液體質量}} = \frac{B}{A+C}
+    \end{align}
+    \item 平衡\\
+    通常大部分溶質對溶劑的溶解率無限$\implies y_A=0$\\
+    但在達到熱力學平衡之前，會有質傳平衡(溶解平衡)來達到最終不質傳\\
+    故代表$y_A = x_A$\\
+    也就是說Leaching的平衡是質傳平衡，而Leaching的操作線方程式為:
+    \begin{equation}
+      y_A = x_A
+    \end{equation}
+    \item 四種操作線的比較
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,0) rectangle (5,5);
+        \draw[dashed] (0,0) -- (5,5);
+        \draw[blue] (0,0) .. controls (0,1) and (4,5) .. (5,5);
+        \node[anchor=north] at (2.5, 0) {$x_A$};
+        \node[anchor=east] at (0, 2.5) {$y_A$};
+        \node[anchor=south] at (2.5, 5) {蒸餾操作線};
+        \def\xShift{7}
+        \draw (\xShift,0) rectangle (5+\xShift,5);
+        \draw[dashed] (\xShift,0) -- (5+\xShift,5);
+        \draw[blue] (\xShift,0) .. controls (\xShift,1) and (4+\xShift,5) .. (5+\xShift,5);
+        \node[anchor=north] at (2.5+\xShift, 0) {$x_A$};
+        \node[anchor=east] at (\xShift, 2.5) {$y_A$};
+        \node[anchor=south] at (2.5+\xShift, 5) {吸收操作線};
+        \draw[dashed] (-0.3, -0.3) rectangle (2,2);
+        \def\xShift{0}
+        \def\yShift{-7}
+        \draw (\xShift,\yShift) rectangle (5+\xShift,5+\yShift);
+        \draw[dashed] (\xShift,\yShift) -- (5+\xShift,5+\yShift);
+        \draw[blue] (0+\xShift,\yShift) .. controls (2+\xShift,1+\yShift) and (3+\xShift,1.724+\yShift) .. (3+\xShift,3+\yShift);
+        \node[anchor=north] at (2.5+\xShift, 0+\yShift) {$x_A$};
+        \node[anchor=east] at (0+\xShift, 2.5+\yShift) {$y_A$};
+        \node[anchor=south] at (2.5+\xShift, 5+\yShift) {萃取操作線};
+        \def\xShift{7}
+        \draw (\xShift,\yShift) rectangle (5+\xShift,5+\yShift);
+        \draw[blue] (\xShift,\yShift) -- (5+\xShift,5+\yShift);
+        \node[anchor=north] at (2.5+\xShift, 0+\yShift) {$x_A$};
+        \node[anchor=east] at (\xShift, 2.5+\yShift) {$y_A$};
+        \node[anchor=south] at (2.5+\xShift, 5+\yShift) {瀝濾操作線};
+      \end{tikzpicture}
+      \caption{四種操作線比較示意圖}
+    \end{figure}
+    \item 相圖\\
+    有三個平衡線:
+    \begin{enumerate}
+      \item 上層液平衡線($x_A,y_A$)
+      \begin{equation}
+        (x_A, N) = (x_A, 0) \implies \text{橫軸}
+      \end{equation}
+      \item 下層液平衡線($x_A,y_A$)
+      \begin{equation}
+        (y_A, N) = N\neq = 0 \implies \text{題目提供}
+      \end{equation}
+      \item A物質平衡線($x_A,y_A$)\\
+      如果達到質傳平衡，則為直線$y_A=x_A$\\
+      如果未達到質傳平衡，則為曲線
+      \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+          \draw (0,0) rectangle (5,5);
+          \node[anchor=north] at (2.5, 0) {$x_A, y_A$};
+          \node[anchor=north] at (5,0) {1.0};
+          \node[anchor=north] at (0,0) {0};
+          \node[anchor=east] at (0, 2.5) {$N$};
+          \node[anchor=east] at (0,0) {0};
+          \draw[ultra thick, red, dashed] (0,0) -- (5,0);
+          \node[anchor=south, red] at (2.5, 0) {上層液平衡線($x_A,0$)};
+          \draw[ultra thick, blue, dashed] (0,3) ..controls (2,3) and (5,2.5) .. 
+            (5,2) node[midway, above right=2pt] {下層液平衡線($y_A,N$)};
+          \def\yShift{-7}
+          \draw (0,\yShift) rectangle (5,5+\yShift);
+          \draw[dashed] (0,\yShift) -- (5,5+\yShift);
+          \draw[teal, ultra thick, dashed] (0,\yShift) .. controls (0,1+\yShift) and (4,5+\yShift) .. (5,5+\yShift);
+          \node[teal, anchor=east] at (0,3+\yShift) {未達質傳平衡時平衡線($y_A>x_A$)};
+          \def\tieA{2}
+          \path[name path=hora] (0,\yShift+\tieA) -- (5,\yShift+\tieA);
+          \path[name path=diagona] (0,\yShift) -- (5,5+\yShift);
+          \path[name path=curvea] (0,\yShift) .. controls (0,1+\yShift) and (4,5+\yShift) .. (5,5+\yShift);
+          \path[name intersections={of=hora and diagona, by=Ia}];
+          \path[name intersections={of=hora and curvea, by=Ib}];
+          \draw[dashed, teal] (Ia) -- (Ib);
+          \path[name path=verticleA, overlay] (Ia) -- +(0,20);
+          \path[name path=verticleB, overlay] (Ib) -- +(0,20);
+          \path[name path=overflow] (0,0) -- (5,0);
+          \path[name path=underflow] (0,3) ..controls (2,3) and (5,2.5) .. (5,2);
+          \path[name intersections={of=verticleA and underflow, by=Ic}];
+          \path[name intersections={of=verticleB and overflow, by=Id}];
+          \draw[dashed, red] (Ia) -- (Ic);
+          \draw[dashed, blue] (Ib) -- (Id);
+          \draw[ultra thick, teal] (Ic) -- (Id);
+          \fill (Ia) circle (2pt);
+          \fill (Ib) circle (2pt);
+          \node[anchor=west] at (Ia) {$y_A$};
+          \node[anchor=east] at (Ib) {$x_A$};
+        \end{tikzpicture}
+        \caption{瀝濾A物質平衡線示意圖}
+      \end{figure}
+      而當達到質傳平衡時，則上方的Tie line為垂直線\\
+      故當發現Leaching達到質傳平衡時，只需畫上圖即可
+    \end{enumerate}
+  \end{itemize}
+  \item Single-stage leaching(單級瀝濾)
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (4,2);
+      \fill[pattern=north west lines, pattern color=blue] (0,0) rectangle (4,1);
+      \draw[dashed, blue] (0,1) -- (4,1);
+      \draw[<-] (-2,1.5) -- (0,1.5) node[midway, above] {$V_{n}$};
+      \draw[->] (-2,0.5) -- (0,0.5) node[midway, below] {$L_{n-1}$};
+      \node[anchor=north] at (-1,1.5) {$x_{A,n}, 0$};
+      \node[anchor=south] at (-1,0.5) {$y_{A,n}, N_{n-1}$};
+      \node[anchor=east] at (-2,1.5) {overflow，上層液，A+C};
+      \node[anchor=east] at (-2,0.5) {feed，進料，A+B};
+      \draw[<-] (4,1.5) -- (6,1.5) node[midway, above] {$V_{n+1}$};
+      \draw[->] (4,0.5) -- (6,0.5) node[midway, below] {$L_{n}$};
+      \node at (2,1.5) {Stage $n$};
+      \node[anchor=south] at (5,0.5) {$y_{A,n}, N_n$};
+      \node[anchor=north] at (5,1.5) {$x_{A,n}, 0$};
+      \node[anchor=west] at (6,1.5) {solvent，溶劑，C};
+      \node[anchor=west] at (6,0.5) {underflow，A+B+C};
+    \end{tikzpicture}
+    \caption{單級瀝濾示意圖}
+  \end{figure}
+  已知，進料流量與組成($L_{n-1},y_{A,n},N_{n-1}$)\\
+  透過相圖與操作線，可以求得出料流量與組成($V_n,x_{A,n}$)及($L_n,y_{A,n},N_n$)\\
+  而與萃取類似，可以透過操作線與質量守恆式求得$M$點\\
+  已知三件事:
+  \begin{enumerate}
+    \item 直線$\overline{L_{n-1}V_{n+1}M}$
+    \item 直線$\overline{L_{n}V_{n}M}$
+    \item $L_nV_n$達到平衡，因此有一條平衡的Tie Line，且為垂直線
+  \end{enumerate}
+  由前兩條獲得$M$點，再畫出Tie Line即可求得$L_n,V_n$的組成\\
+  而點$M$的求法需要三個條件中任取兩個:
+  \begin{enumerate}
+    \item 直線$L_{n-1}V_{n+1}M$
+    \item $x_{A,M}$
+    \item $N_M$
+  \end{enumerate}
+  至於$x_{A,M}$或$N_M$，可以透過質量守恆式求得:
+  \begin{align}
+    \text{流量}:\quad &L_{n-1}+V_{n+1}=M \\
+    \text{組成A}:\quad &L_{n-1}y_{A,n}+V_{n+1}x_{A,n}=My_{A,M} \\
+    \text{組成B}:\quad &L_{n-1}N_{n-1}=MN_M
+  \end{align}
+  一二式合併後，得到組成$A$的操作線方程式:
+  \begin{equation}
+    L_{n-1}y_{A,n} = A
+  \end{equation}
+  一三式合併後，得到組成$B$的操作線方程式:
+  \begin{equation}
+    L_{n-1}N_{n-1} = B
+  \end{equation}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (5,5);
+      \node[anchor=north] at (2.5, 0) {$x_A, y_A$};
+      \node[anchor=north] at (5,0) {1.0};
+      \node[anchor=north] at (0,0) {0};
+      \node[anchor=east] at (0, 2.5) {$N$};
+      \node[anchor=east] at (0,0) {0};
+      \draw[ultra thick, red,  dashed] (0,0) -- (5,0);
+      \draw[blue, dashed] (0,3) ..controls (2,3) and (5,2.5) .. (5,2);
+      \def\dotl{3.5}
+      \fill (5, \dotl) circle (2pt);
+      \node[anchor=west] at (5, \dotl) {$L_{n-1}$};
+      \fill (0,0) circle (2pt);
+      \node[left=5pt] at (0,0) {$V_{n+1}$};
+      \def\Mx{2.2}
+      \path[name path=lineLV] (0,0) -- (5,\dotl);
+      \path[name path=verticleM] (\Mx,0) -- (\Mx,5);
+      \path[name path=underflow] (0,3) ..controls (2,3) and (5,2.5) .. (5,2);
+      \path[name intersections={of=lineLV and verticleM, by=M}];
+      \path[name intersections={of=verticleM and underflow, by=N}];
+      \draw[teal] (0,0) -- (5,\dotl);
+      \draw[dashed, teal] (\Mx,0) -- (M) -- (0,0|-M);
+      \fill[teal] (M) circle (2pt);
+      \node[anchor=west] at (M) {$M$};
+      \node[anchor=south east] at (\Mx,0) {$V_n$};
+      \node[anchor=east] at (0,0|-M) {$N_M$};
+      \fill[blue] (N) circle (2pt);
+      \draw[->, dashed, teal] (M) -- (N);
+      \node[anchor=south] at (N) {$L_n(y_{A,n},N_n)$};
+    \end{tikzpicture}
+    \caption{單級瀝濾中的相圖求解示意圖}
+  \end{figure}
+  先由已知求出點$L_{n-1},V_{n+1}$\\
+  利用式子求出$M$點的$x_{A,M}$或$N_M$\\
+  從$M$點畫垂直線至操作邊界，得到$L_n,V_n$的組成\\
+  交Overflow邊界的點為$V_n$組成\\
+  交Underflow邊界的點為$L_n$組成
+  \item Counter current multi-stage leaching(多級逆流瀝濾)\\
+  與多級萃取類似，可以透過操作線與質量守恆式求得平均組成$M$點\\
+  並且找到理論階段數，以作圖法作到無法作出$M$點為止\\
+  而包絡的三角形可以由以下方式繪圖取得
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) rectangle (5,5);
+      \node[anchor=north] at (2.5, 0) {$x_A, y_A$};
+      \node[anchor=north] at (5,0) {1.0};
+      \node[anchor=north] at (0,0) {0};
+      \node[anchor=east] at (0, 2.5) {$N$};
+      \node[anchor=east] at (0,0) {0};
+      \draw[ultra thick, red, dashed] (0,0) -- (5,0);
+      \draw[blue, dashed] (0,3) ..controls (2,3) and (5,2.5) .. (5,2);
+      \def\dotl{3.5}
+      \fill (5, \dotl) circle (2pt);
+      \node[anchor=west] at (5, \dotl) {$L_0$};
+      \fill (0,0) circle (2pt);
+      \node[left=5pt] at (0,0) {$V_{N+1}$};
+      \def\Mnx{1.6}
+      \def\Mx{2.3}
+      \path[name path=lineLV] (0,0) -- (5,\dotl);
+      \path[name path=verticleM] (\Mx,0) -- (\Mx,5);
+      \path[name path=verticleN] (\Mnx,0) -- (\Mnx,5);
+      \path[name path=underflow] (0,3) ..controls (2,3) and (5,2.5) .. (5,2);
+      \path[name intersections={of=lineLV and verticleM, by=M}];
+      \path[name intersections={of=lineLV and verticleN, by=Mn}];
+      \path[name intersections={of=verticleM and underflow, by=N}];
+      \draw[teal] (0,0) -- (5,\dotl);
+      \draw[dashed, teal] (\Mnx,0) -- (Mn) -- (0,0|-Mn);
+      \fill (M) circle (2pt);
+      \node[anchor=south] at (M) {$M_1$};
+      \draw[->] (M) -- (\Mx, 0);
+      \fill[teal] (Mn) circle (2pt);
+      \node[anchor=east] at (Mn) {$M_N$};
+      \node[anchor=south east] at (\Mx,0) {$V_1$};
+      \node[anchor=east] at (0,0|-Mn) {$N_M$};
+      \path[name path=lineB, overlay] (\Mx,0) -- ($(\Mx, 0)!10!(Mn)$);
+      \path[name intersections={of=lineB and underflow, by=P}];
+      \draw[->, ultra thick, orange] (\Mx, 0) -- (P);
+      \fill[blue] (P) circle (2pt);
+      \node[anchor=south] at (P) {$L_N$};
+      \path[name path=lineA, overlay] (P) -- ($(P)!10!(0,0)$);
+      \path[name path=lineB, overlay] (5,\dotl) -- ($(5,\dotl)!10!(\Mx,0)$);
+      \path[name intersections={of=lineA and lineB, by=Q}];
+      \draw[->, ultra thick, orange] (P) -- (Q);
+      \draw[->, ultra thick, orange] (5,\dotl) -- (Q);
+      \fill[blue] (Q) circle (2pt);
+      \node[anchor=north] at (Q) {$\Delta$};
+      \draw[dashed, ->] (M) -- (N);
+      \path[name path=lineC, overlay] (N) -- (Q);
+      \path[name intersections={of=lineC and lineLV, by=R}];
+      \fill (R) circle (2pt);
+      \node[anchor=south] at (R) {$M_2$};
+      \fill[blue] (N) circle (2pt);
+      \node[anchor=south] at (N) {$L_1$};
+      \draw[dashed, ->] (N) -- (Q);
+    \end{tikzpicture}
+    \caption{多級逆流瀝濾中的相圖Delta求法示意圖}
+  \end{figure}
+  步驟如下:
+  \begin{enumerate}
+    \item 由已知，求出點$V_{N+1}, L_0, L_N, y_{A,N}$
+    \item 求出點$M_1$與$M_N$
+    \item 連結$L_N$與$M$，交Overflow於點$V_1$
+    \item 由後半段質量平衡式
+    \begin{equation}
+      M = L_N + V_{1}, \quad MX_{A,M} = L_N y_{A,N} + V_{1} x_{A,1}
+    \end{equation}
+    求出流量$L_N$與流量$V_1$
+    \item 連結$V_1$與$L_0$，以及$L_N$與$V_{N+1}$，交於點$\Delta$
+    \item 由點$V_1$作垂直線交Underflow於點$L_1$
+    \item 由點$L_1$連線$\Delta$，交$L_0V_{N+1}$於點$M_2$
+    \item 由點$M_2$作垂直線交Underflow於點$L_2$
+    \item 重複上述步驟，直到無法再畫出$M$點為止
+  \end{enumerate}
+\end{itemize}
 \end{CJK*}
 \end{document}

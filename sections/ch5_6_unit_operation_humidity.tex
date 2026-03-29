@@ -1,0 +1,555 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{涼水與調濕，Humidity}
+\begin{itemize}
+  \item 濕度定義 Humidity: $H$
+  \begin{equation}
+    H \equiv \frac{\text{水蒸氣質量}}{\text{乾空氣質量}} 
+  \end{equation}
+  但由於氣體質量不易取得，故有改寫之形式\\
+  假設氣體為理想氣體，則:
+  \begin{equation}
+    PV = RT = \frac{m}{M}RT
+  \end{equation}
+  而因為混合的氣體有相同的總體積與相同的溫度故
+  \begin{equation}
+    m\propto MP \implies \frac{m_{\text{water}}}{m_{\text{air}}} = 
+    \frac{M_{\text{water}}P_{\text{water}}}{M_{\text{air}}P_{\text{air}}} = 
+    \frac{18}{29}\frac{P_A}{P_T-P_{A}}
+  \end{equation}
+  其中$P_A$為水蒸氣的分壓，$P_T$為總壓力
+  \item 飽和溼度 Saturated Humidity:$H_S$\\
+  該溫度下的最大濕度
+  \begin{equation}
+    H_S = \frac{18}{29}\frac{P_{As}}{P_T-P_{As}}
+  \end{equation}
+  其中$P_{As}$為該溫度下水蒸氣的飽和壓力
+  \item 百分濕度 Percent Humidity: $H_P$
+  \begin{equation}
+    H_P = \frac{H}{H_S}\times 100\%
+  \end{equation}
+  故下雨時的溼度為100\%
+  \item 相對濕度 Relative Humidity: $H_R$
+  \begin{equation}
+    H_R = \frac{P_{A}}{P_{As}}\times 100\%
+  \end{equation}
+  P.S. 而同樣的一坨空氣，如果用百分濕度的算法計算會小於用相對濕度的算法計算
+  \begin{equation}
+    H_R \geq H_P
+  \end{equation}
+  而只有當100\%或0\%時兩者才相等
+  \begin{equation}
+    H_P = H_R\left(
+    \frac{P_T - P_{As}}{P_T - P_{A}}
+    \right)
+  \end{equation}
+  \item 露點 Dew Point
+  \begin{itemize}
+    \item 露點現象，空氣會再玻璃/物體表面上凝結出小水滴
+    \item 露點實驗\\
+    先將玻璃表面溫度放置在被測空氣中，此時沒有水滴出現($P_A<P_{As}$)\\
+    開始降低玻璃表面溫度，直到有水滴出現($P_A=P_{As}$)\\
+    此時的玻璃表面溫度即為露點溫度$T_{dew}$
+    \begin{equation}
+      \frac{d\ln P^{\text{sat}}}{dT} = \frac{\Delta H_{\text{vap}}}{RT^2}
+    \end{equation}
+    故露點實驗是一個恆壓、恆濕，降溫的過程\\
+    在濕度表中\fbox{是一條水平線}
+  \end{itemize}
+  \item 乾球溫度 Dry-bulb Temperature: $T_{db}$\\
+  就是當時空氣的溫度，或者說一般溫度計所測得的溫度
+  \item 比熱 Humid Heat: $C_S$\\
+  含水分空氣的比熱\\
+  由於含水分的空氣式混合物，可以用線性組合來相加\\
+  設乾空氣成分為B，水蒸氣成分為A\\
+  而該空氣的比熱約為$1.005 kJ/kg\cdot K$，水蒸氣的比熱約為$1.88 kJ/kg\cdot K$\\
+  故
+  \begin{equation}
+    C_S = 1.005 m_B + 1.88 m_A
+  \end{equation}
+  而由濕度的定義$H = \frac{m_A}{m_B}$，可得
+  \begin{equation}
+    C_S = 1.005 + 1.88 H \quad (kJ/kg\cdot K)
+  \end{equation}
+  \item 潮濕體積 Humid Volume: $V_{H}$\\
+  含水份空氣的體積
+  \begin{equation}
+    V_H = 22.41\times \frac{T(K)}{273.15} \times \left(\frac{1}{29}+\frac{H}{18}\right) \quad (m^3/kg\text{ 乾空氣})
+  \end{equation}
+  其中22.41為標準狀態下1 mol理想氣體的體積\\
+  標準狀態是1大氣壓下，0度C，1 mol理想氣體的體積\\
+  公式的由來來自$V\propto Tn$\\
+  而
+  \begin{equation}
+    n = n_A + n_B = \frac{m_A}{M_A} + \frac{m_B}{M_B} = \frac{m_B}{29} + \frac{m_A}{18} =
+    \frac{1}{29} + \frac{H}{18}
+  \end{equation}
+  故
+  \begin{equation}
+    \frac{V_H}{22.41} = \frac{T}{273.15}\left(\frac{1}{29}+\frac{H}{18}\right)
+  \end{equation}
+  \item 空氣焓 Total Enthalpy: $H_y$
+  \begin{equation}
+    H_y = C_S(T-T_0) + \lambda_0 H = 1.005(T-T_0) +  \lambda_0 H,\quad kJ/kg\text{ 乾空氣}
+  \end{equation}
+  其中$C_S(T-T_0)$代表狀態變化，而$\lambda_0 H$代表水蒸氣的汽化\\
+  因為含水分空氣的升溫過程，會包含狀態變化以及水蒸氣的汽化兩個部分\\
+  而先定義了參考狀態，為純乾空氣
+  \begin{equation}
+    T = T_0, H=0, H_y = 0
+  \end{equation}
+  假設經過了添加水氣的過程，則所求的焓變化為
+  \begin{equation}
+    \Delta H_y = H_y
+  \end{equation}
+  由於每一小段的變化，都為狀態變化與水蒸氣汽化的組合
+  \begin{equation}
+    dH_y = m_BC_SdT + m_A\lambda_0
+  \end{equation}
+  再由濕度的定義，假設$m_B=1$，可得
+  \begin{equation}
+    dH_y = C_SdT + \lambda_0 dH
+  \end{equation}
+  積分後可得
+  \begin{equation}
+    H_y = \int_{T_0}^{T} C_S dT + \int_{0}^{H} \lambda_0 dH = C_S(T-T_0) + \lambda_0 H
+  \end{equation}
+  \item Lewis relation\\
+  增濕或除濕是一種質傳過程，而熱傳為次要過程\\
+  而Lewis由實驗發現
+  \begin{equation}
+    \boxed{\frac{h}{k_y} = C_S\cdot 29}
+  \end{equation}
+  其中$h$為熱傳係數，$k_y$為質傳係數，而29為乾空氣的分子量
+  \item 濕空氣圖 Psychrometric Chart\\
+  由四條線組成的圖表($T,H,H_P$,總熱飽和線)\\
+  而絕熱飽和線並沒有定量，必須先由$T,H,H_P$中任兩點\\
+  決定出圖上的點，再以內差法繪製該點的絕熱飽和線
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw (0,0) -- (15,0);
+      \draw (15,0) -- (15,10);
+      \draw[blue] plot [smooth] coordinates {
+       (0,0.5) (0.11, 0.56) (0.27, 0.59) (0.55, 0.64) (0.73, 0.67) (0.90, 0.71) (1.08, 0.76) (1.25, 0.80) (1.43, 0.85) (1.61, 0.90) (1.79, 0.95) (1.96, 1.00) (2.13, 1.05) (2.34, 1.11) (2.58, 1.23) (2.76, 1.31) (2.93, 1.38) (3.13, 1.47) (3.29, 1.56) (3.49, 1.67) (3.67, 1.75) (3.84, 1.85) (4.02, 1.96) (4.19, 2.06) (4.37, 2.18) (4.64, 2.38) (4.84, 2.51) (5.03, 2.66) (5.20, 2.78) (5.38, 2.92) (5.55, 3.08) (5.73, 3.26) (5.95, 3.46) (6.12, 3.63) (6.41, 3.91) (6.57, 4.07) (6.73, 4.27) (6.87, 4.45) (7.02, 4.62) (7.16, 4.81) (7.30, 4.99) (7.44, 5.18) (7.56, 5.33) (7.77, 5.64) (7.83, 5.76) (7.99, 6.03) (8.33, 6.58) (8.43, 6.76) (8.55, 6.96) (8.65, 7.16) (8.75, 7.34) (8.85, 7.53) (8.95, 7.73) (9.04, 7.92) (9.14, 8.11) (9.22, 8.30) (9.31, 8.51) (9.40, 8.73) (9.48, 8.93) (9.56, 9.12) (9.65, 9.34) (9.72, 9.48) (9.84, 9.82) (9.88, 9.97) 
+        (10,10)
+       };
+      \path[name path=satline] plot [smooth] coordinates {
+       (0,0.5) (0.11, 0.56) (0.27, 0.59) (0.55, 0.64) (0.73, 0.67) (0.90, 0.71) (1.08, 0.76) (1.25, 0.80) (1.43, 0.85) (1.61, 0.90) (1.79, 0.95) (1.96, 1.00) (2.13, 1.05) (2.34, 1.11) (2.58, 1.23) (2.76, 1.31) (2.93, 1.38) (3.13, 1.47) (3.29, 1.56) (3.49, 1.67) (3.67, 1.75) (3.84, 1.85) (4.02, 1.96) (4.19, 2.06) (4.37, 2.18) (4.64, 2.38) (4.84, 2.51) (5.03, 2.66) (5.20, 2.78) (5.38, 2.92) (5.55, 3.08) (5.73, 3.26) (5.95, 3.46) (6.12, 3.63) (6.41, 3.91) (6.57, 4.07) (6.73, 4.27) (6.87, 4.45) (7.02, 4.62) (7.16, 4.81) (7.30, 4.99) (7.44, 5.18) (7.56, 5.33) (7.77, 5.64) (7.83, 5.76) (7.99, 6.03) (8.33, 6.58) (8.43, 6.76) (8.55, 6.96) (8.65, 7.16) (8.75, 7.34) (8.85, 7.53) (8.95, 7.73) (9.04, 7.92) (9.14, 8.11) (9.22, 8.30) (9.31, 8.51) (9.40, 8.73) (9.48, 8.93) (9.56, 9.12) (9.65, 9.34) (9.72, 9.48) (9.84, 9.82) (9.88, 9.97) 
+      (10, 10) (15,10)
+       };
+      \draw[blue] plot [smooth] coordinates {
+        (0,0.28) (0.04, 0.29) (0.28, 0.30) (0.45, 0.32) (0.63, 0.33) (0.81, 0.35) (0.98, 0.37) (1.16, 0.41) (1.34, 0.42) (1.51, 0.44) (1.69, 0.48) (1.87, 0.51) (2.05, 0.53) (2.22, 0.56) (2.40, 0.60) (2.58, 0.65) (2.75, 0.68) (2.93, 0.71) (3.11, 0.76) (3.28, 0.80) (3.46, 0.85) (3.64, 0.89) (3.82, 0.93) (3.99, 0.98) (4.17, 1.04) (4.35, 1.10) (4.52, 1.15) (4.70, 1.21) (4.88, 1.27) (5.05, 1.34) (5.23, 1.41) (5.41, 1.49) (5.59, 1.55) (5.76, 1.62) (5.94, 1.70) (6.12, 1.80) (6.29, 1.89) (6.47, 1.98) (6.65, 2.07) (6.82, 2.17) (6.99, 2.27) (7.18, 2.40) (7.36, 2.48) (7.53, 2.61) (7.71, 2.74) (7.89, 2.86) (8.06, 2.99) (8.24, 3.11) (8.42, 3.28) (8.59, 3.44) (8.77, 3.57) (8.95, 3.75) (9.13, 3.91) (9.28, 4.07) (9.46, 4.27) (9.63, 4.46) (9.79, 4.61) (9.94, 4.80) (10.10, 4.98) (10.25, 5.19) (10.39, 5.36) (10.53, 5.57) (10.66, 5.75) (10.78, 5.94) (10.91, 6.10) (11.05, 6.33) (11.17, 6.53) (11.28, 6.71) (11.46, 7.02) (11.36, 6.83) (11.58, 7.24) (11.74, 7.53) (11.68, 7.38) (11.83, 7.66) (11.92, 7.85) (12.01, 8.04) (12.11, 8.23) (12.21, 8.42) (12.30, 8.63) (12.47, 8.99) (12.39, 8.81) (12.56, 9.17) (12.63, 9.35) (12.73, 9.57) (12.83, 9.79) (12.91, 9.94)
+        (12.92,10) 
+      };
+      \node[blue, anchor=south] at (12.92,10) {50\%};
+      \draw (10,10) -- (15,10);
+      \def\gap{1.15384615385}
+      \foreach \i in {0,1,...,12}{
+        \path[name path=line, overlay] (\i*\gap,0) -- (\i*\gap, 11);
+        \path [name intersections={of=line and satline, by=A}];
+        \draw[dashed] (\i*\gap,0) -- (A);
+      }
+      \node[anchor=north] at (0,0) {-10};
+      \node[anchor=north] at (\gap, 0) {-5};
+      \node[anchor=north] at (2*\gap, 0) {0};
+      \node[anchor=north] at (3*\gap, 0) {5};
+      \node[anchor=north] at (4*\gap, 0) {10};
+      \node[anchor=north] at (5*\gap, 0) {15};
+      \node[anchor=north] at (6*\gap, 0) {20};
+      \node[anchor=north] at (7*\gap, 0) {25};
+      \node[anchor=north] at (8*\gap, 0) {30};
+      \node[anchor=north] at (9*\gap, 0) {35};
+      \node[anchor=north] at (10*\gap, 0) {40};
+      \node[anchor=north] at (11*\gap, 0) {45};
+      \node[anchor=north] at (12*\gap, 0) {50};
+      \node[anchor=north] at (15,0) {55};
+      \foreach \i in {1.5565,3.07,4.5374,6.05,7.5624,9.03}
+      {
+        \path[name path=line2, overlay] (0,\i) -- (16,\i);
+        \path [name intersections={of=line2 and satline, by=B}];
+        \draw[dashed] (15,\i) -- (B);
+      }
+      \node[anchor=west] at (15,0) {0};
+      \node[anchor=west] at (15,1.5565) {5};
+      \node[anchor=west] at (15,3.07) {10};
+      \node[anchor=west] at (15,4.5374) {15};
+      \node[anchor=west] at (15,6.05) {20};
+      \node[anchor=west] at (15,7.5624) {25};
+      \node[anchor=west] at (15,9.03) {30};
+      \node[anchor=north] at (7.5, -0.5) {乾球溫度 Dry-bulb Temperature ($^\circ C$)};
+      \node[rotate=90, anchor=south] at (16.5,5) {濕度 Humidity (g水蒸氣/kg乾空氣)};
+      \node[anchor=south, blue] at (10,10) {100\%};
+      \draw[red, dashed] (2.78,0) -- (1.018, 0.8516) node[anchor=south east] {-5};
+      \draw[red, dashed] (4.53,0) -- (2.19,1.25) node[anchor=south east] {0};
+      \draw[red, dashed] (6.51,0) -- (3.33,1.75) node[anchor=south east] {5};
+      \draw[red, dashed] (8.92,0) -- (4.55,2.42) node[anchor=south east] {10};
+      \draw[red, dashed] (11.77,0) -- (5.64,3.3) node[anchor=south east] {15};
+      \draw[red, dashed] (15,0.12) -- (6.75,4.55) node[anchor=south east] {20};
+      \draw[red, dashed] (15,2.29) -- (7.83,6.21) node[anchor=south east] {25};
+      \draw[red, dashed] (15,5) -- (9.05,8.37) node[anchor=south east] {30};
+      \draw[red, dashed] (15,8.4) -- (12.2,10.04) node[anchor=south east] {35};
+      \node[anchor=south, blue] at (12.5, 10.5) {相對濕度($H_R$)曲線};
+      \node[anchor=north west, red] at (3.8, 6.74) {絕熱飽和溫度};
+    \end{tikzpicture}
+    \caption{濕空氣圖 Psychrometric Chart}
+  \end{figure}
+  \item 絕熱飽和溫度(Adiabatic Saturation Temperature): $T_{s}$\\
+  為絕熱飽和裝置的出口溫度\\
+  為一個增濕、降溫的過程\\
+  裝置圖如下
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \fill[pattern=north east lines, pattern color=red] (-0.3,-0.3) rectangle (2.3,4.3);
+      \fill[white] (0,0) rectangle (2,4);
+      \draw (0,0) rectangle (2,4);
+      \fill[pattern=north east lines, pattern color=blue] (0,0) rectangle (2,1);
+      \draw [->, blue] (1,0) -- (1, -0.5) -- (-0.5, -0.5);
+      \draw[->, blue] (-0.5,-0.5) -- (-1, -0.5) -- (-1,2);
+      \draw[->, blue] (-1.0,2) -- (-1,4.5) -- (-0.5,4.5);
+      \draw[->, blue] (-0.5,4.5) -- (1,4.5) -- (1,4);
+      \draw[->] (-3,3) -- (0,3);
+      \node[anchor=east] at (-3,3) {乾空氣};
+      \node[anchor=south] at (-2,3) {$T_1,H_1$};
+      \draw[loosely dotted, blue] (1,4) -- (0.4, 1);
+      \draw[loosely dotted, blue] (1,4) -- (0.8, 1);
+      \draw[loosely dotted, blue] (1,4) -- (1.2, 1);
+      \draw[loosely dotted, blue] (1,4) -- (1.6, 1);
+      \draw[->] (2,3) -- (5,3);
+      \node[anchor=west] at (5,3) {濕空氣};
+      \node[anchor=south] at (4,3) {$T_S,H_P=100\%$};
+    \end{tikzpicture}
+    \caption{絕熱飽和裝置}
+  \end{figure}
+  而濕度圖中的紅色軌跡線，則是由
+  \begin{equation}
+    \frac{H-H_S}{T-T_S} = \frac{-C_S}{\lambda_w} = -\frac{1.005 + 1.88 H}{\lambda_w}
+  \end{equation}
+  而$\frac{-C_S}{\lambda_w}$即為該線的斜率\\
+  此式由熱力學第一定律開放系統而來\\
+  當平衡時:
+  \begin{equation}
+    \Delta H_y = 0 = H_{y1} - H_{y2}
+  \end{equation}
+  故:
+  \begin{equation}
+    C_S(T-T_0) + \lambda_w H = C_S(T_S - T_0) + \lambda_w H_S
+  \end{equation}
+  整理後可得
+  \begin{equation}
+    C_S(T-T_S) = \lambda_w (H_S - H)  = -\lambda_w (H - H_S)
+  \end{equation}
+  故可得上述公式\\
+  而從圖中，則是由輸入的乾空氣點，尋內差的紅線找到$100\%$濕度的交點\\
+  該點對應的$x$軸溫度即為絕熱飽和溫度$T_S$\\
+  $y$軸的濕度即為飽和濕度$H_S$\\
+  不過須注意的是，這裡的$C_S$並不是常數，而是$1.005 + 1.88 H$\\
+  因此實際上他應該不是直線，而是曲線\\
+  但由於濕度變化不大，故可近似為直線
+  \item 濕球溫度 Wet-bulb Temperature: $T_{w}$\\
+  為一個增濕、降溫的過程\\
+  與絕熱飽和溫度相似，但過程中有熱量的損失\\
+  濕球溫度的定義為\\
+  將一個濕布包覆在溫度計的球部，並使其與空氣充分接觸\\
+  與絕對飽和溫度不同的是，濕球溫度的出口空氣，濕度不一定為100\%\\
+  而是依接觸時間長短而定\\
+  因此
+  \begin{equation}
+    T_w \geq T_S
+  \end{equation}
+  而其方程式為
+  \begin{equation}
+    \frac{H - H_w}{T - T_w} = \frac{\frac{-h}{k_y\cdot M_B}}{\lambda_w}
+  \end{equation}
+  其中$k_y$為質傳係數，$M_B$為乾空氣的分子量29\\
+  $h$為熱傳係數\\
+  而濕球溫度的定義則沒有會變動的$C_S$項，故該線一定為直線\\
+  推導:
+  \begin{enumerate}
+    \item 空氣中的溼度增加(水吸熱變成水蒸氣)\\
+    造成空氣濕度增加原因為質傳
+    \item 水成為水蒸氣需要吸收氣化熱，此吸熱由空氣提供\\
+    造成空氣溫度降低原因為熱傳
+    \item 由能量守恆，空氣放熱量等於水吸熱量
+    \begin{equation}
+      |q_c|= \dot m \cdot \lambda_w = N_A M_A A \lambda_w
+    \end{equation}
+    而$q_C$由冷卻定律可得
+    \begin{equation}
+      hA(T - T_w) = k_y(y_w - y)AM_B\lambda_w
+    \end{equation}
+    整理後可得
+    \begin{equation}
+      h(T - T_w) = k_y(y_w - y)M_B\lambda_w \label{eq:wet_bulb_temp}
+    \end{equation}
+    又水蒸氣的莫爾分率
+    \begin{equation}
+      y = \frac{n_A}{n_A+n_B} = \frac{m_A/M_A}{m_A/M_A + m_B/M_B} = 
+      \frac{\frac{H}{M_A}}{\frac{H}{M_A} + \frac{1}{M_B}}
+    \end{equation}
+    當$H\ll 1$時
+    \begin{equation}
+      y \approx \frac{H}{M_A} \cdot M_B = \frac{M_B}{M_A}H
+    \end{equation}
+    故代回(\ref{eq:wet_bulb_temp})中可得
+    \begin{equation}
+      h(T-T_w) = k_y \frac{M_B}{M_A}(H_w -H) M_A\lambda_w = -k_y M_B \lambda_w (H - H_w)
+    \end{equation}
+    整理後可得
+    \begin{equation}
+      \boxed{\frac{H - H_w}{T - T_w} = \frac{\frac{-h}{k_y\cdot M_B}}{\lambda_w}}
+    \end{equation}
+    為Wet-bulb Temperature line或Psychrometric Wet-bulb line\\
+    P.S. 當Pr=1, Sc=1時，絕熱飽和取線會與濕球溫度線重合
+  \end{enumerate}
+\end{itemize}
+\subsection{乾燥，Drying}
+會分成乾燥外面的水，或是孔洞裡的水
+\begin{itemize}
+  \item 含水率(Moisture):
+  \begin{equation}
+    X = \frac{\text{水質量}}{\text{乾物質質量}} = \frac{m_A}{m_B}
+  \end{equation}
+  而有三種常見的含水率定義
+  \begin{enumerate}
+    \item 總含水率(Total Moisture Content)
+    \begin{equation}
+      X_t = \frac{\text{總水分質量}}{\text{乾物質質量}} = \frac{m_t-m_s}{m_s} = f(t)
+    \end{equation}
+    $m_t$會是一個時間的函數
+    \item 平衡含水率(Equilibrium Moisture Content)
+    \begin{equation}
+      X^\ast = \frac{\text{平衡水分質量}}{\text{乾物質質量}} = \frac{m_{t,e} - m_s}{m_s}
+    \end{equation}
+    當空氣濕度固定時，值會是一個定值\\
+    也可以想成$m_{t,e}$就是當時氣體的空氣濕度\\
+    因為再怎麼乾，只會跟空氣濕度一樣乾
+    \item 去除含水率(Free Moisture Content)
+    \begin{equation}
+      X_F = \frac{\text{可去除水分質量}}{\text{乾物質質量}} = X_t - X^\ast = \frac{m_t - m_{t,e}}{m_s}
+    \end{equation}
+  \end{enumerate}
+  \item 乾燥速率(Drying Rate)\\
+  單位時間內，單位面積，去除的水分質量
+  \begin{equation}
+    R \equiv -\frac{m_s}{A}\frac{dX}{dt} \quad (kg/m^2 s)
+  \end{equation}
+  \item 乾燥曲線(Drying Curve)
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (0,0) -- (6,0) node[anchor=north] {$t$};
+      \draw[->] (0,0) -- (0,5) node[anchor=east] {$X$};
+      \draw[blue, ->] (0,4) .. controls (3,0.5) and (4,0.5) .. (5,0.5);
+      \draw[dashed] (0,0.4) -- (6,0.4);
+      \node[anchor=east] at (0,0.4) {$X^\ast$};
+      \node[anchor=west] at (0,4) {初始含水率 $X_0$};
+    \end{tikzpicture}
+    \caption{乾燥曲線 Drying Curve}
+  \end{figure}
+  乾燥曲線上的斜率即為$-\frac{m_S}{A}$
+  \item 乾燥\fbox{速率}曲線圖($R$ vs. $X$)\\
+  將上面的曲線的斜率繪製成圖，會觀察到有不同的階段
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+      \draw[->] (0,0) -- (12,0) node[anchor=north] {$X$};
+      \draw[->] (0,0) -- (0,6) node[anchor=east] {$R$};
+      \draw[dashed] (2, 0) -- (2,6);
+      \draw[dashed] (4,0) -- (4,6);
+      \draw[dashed] (7,0) -- (7,6);
+      \draw[red, ->] (10,4) .. controls (9.7,4.5) and (8.5, 5) .. (7,5);
+      \draw[blue, dashed, ->] (10,6) .. controls (9.7, 5.5) and (8.5, 5) .. (7,5);
+      \draw[red, ->] (7,5) -- (4,5);
+      \draw[red, ->] (4,5) -- (2,2);
+      \draw[red, ->] (2,2) .. controls (1.5,1) and (1,0) .. (0,0);
+      \node[anchor=south west] at (10,6) {$A'$};
+      \node[anchor=north west] at (10,4) {$A$};
+      \node[anchor=south east] at (7,5) {$B$};
+      \node[anchor=south east] at (4,5) {$C$};
+      \node[anchor=south east] at (2,2) {$D$};
+      \node[anchor=south] at (8.5,6) {$I$};
+      \node[anchor=south] at (8.5,6.5) {起始期};
+      \node[anchor=south] at (5.5,6) {$II$};
+      \node[anchor=south] at (5.5,6.5) {恆速期};
+      \node[anchor=north] at (4,0) {臨界含水率 $X_C$};
+      \node[anchor=south] at (3,6) {$III$};
+      \node[anchor=south] at (3,6.5) {第一減速期};
+      \node[anchor=south] at (1,6) {$IV$};
+      \node[anchor=south] at (1,6.5) {第二減速期};
+    \end{tikzpicture}
+    \caption{乾燥速率曲線 Drying Rate Curve}
+  \end{figure}
+  \begin{itemize}
+    \item 起始期(Initial Period): $A$點到$B$點\\
+    物料被烤箱調整溫度，屬於熱對流\\
+    而由於此期間不長，通常會忽略不計\\
+    而若$A\to B$過程中，乾燥速率會增加，則代表屬於熱風乾燥\\
+    反之$A'\to B$過程中，若乾燥速率會減少，則代表屬於冷風乾燥
+    \item 恆速期(Constant Rate Period): $B$點到$C$點\\
+    仍屬於乾燥的前期，此階段水分很多，能夠在物料表面會產生連續水膜\\
+    而物料內部孔隙的水分，不會受到影響\\
+    空氣提供熱量，使水膜\fbox{先揮發}，\fbox{再質傳}\\
+    此詞不受物料孔洞大小、孔隙度影響、只受乾燥器內空氣溫度、濕度影響\\
+    而因為空氣溫度及濕度固定，因此乾燥速率也固定\\
+    又稱為\fbox{濕球階段}，物料表面溫度等於\fbox{濕球溫度}\\
+    而此階段的乾燥速率稱為$\boxed{R_C}$
+    \item 減速期(Falling Rate Period): $C$點到$E$點\\
+    經過$C$點後，$R$開始下降，稱為減速期\\
+    減速期又分成兩種
+    \begin{itemize}
+      \item 第一減速期(The 1st falling-rate period): $C\to D$段，為直線\\
+      本階段的物料表面已出現乾燥，所以開始乾燥物料內部水分\\
+      物料內部水分非常多，使孔洞充滿水分\\
+      可由\fbox{毛細現象(Capillary)}，將水分\fbox{由內部運送到表面}，再進行揮發、質傳\\
+      本階段\fbox{為直線}
+      \item 第二減速期(The 2nd falling-rate period):$D\to E$段，為曲線\\
+      本階段的物料內部水分已經不多，內部孔洞中出現空氣而無法連續\\
+      故毛細作用失去作用，水分只能靠\fbox{擴散作用(diffusion)}將水份運送至表面\\
+      乾燥效率仍會下降，但下降速率變慢\\
+      而此時的物料表面已經達到\fbox{平衡乾燥}\\
+      且溫度為\fbox{乾球溫度}\\
+      本階段的特色是會是一條\fbox{向上凹的曲線}
+    \end{itemize}
+    \item 臨界點(Critical Point): $C$點\\
+    恆速期與減速期的分界點\\
+    而此點的含水率稱為臨界含水率$X_C$
+  \end{itemize}
+  \item 乾燥時間(Drying Time)
+  \begin{itemize}
+    \item 總乾燥時間(Total Drying Time)\\
+    各階段乾燥時間之和
+    \item 起始期時間\\
+    時間很短，通常會忽略不計
+    \item 恆速期時間\\
+    \fbox{若$R_C$(臨界點乾燥速率)已知}，則
+    \begin{equation}
+      R = R_C = \int dt = -\frac{m_s}{A}\frac{1}{R_C}\int dX
+    \end{equation}
+    故恆速期時間為
+    \begin{equation}
+      \boxed{t_C = \frac{m_s}{A R_C}(X_0 - X_C)} \label{eq:constant_drying_time}
+    \end{equation}
+    \fbox{若題目沒有給$R_C$}，則需要由自行求出
+    \begin{equation}
+      R_C = \frac{\text{去除水分 (g)}}{s\cdot m^2}
+    \end{equation}
+    而又因為
+    \begin{equation}
+      R_C = N_A\underbrace{M_A}^{18} \label{eq:drying_rate}
+    \end{equation}
+    其中$N_A$定義為單位面積、單位時間\\
+    通過乾燥表面的水蒸氣莫爾流量(mol/m$^2$s)
+    \begin{equation}
+      N_A = k_y (y_s - y_\infty)
+    \end{equation}
+    能量平衡式\\
+    空氣提供熱(熱對流)，水份吸熱而形成$H_2O(v)$(汽化熱)
+    \begin{equation}
+      |q_c|  = \dot m \cdot \lambda_W =  N_A A M_A \lambda_w
+    \end{equation}
+    故
+    \begin{align}
+      hA(T-T_w) &= N_A A M_A \lambda_w \\
+      \Rightarrow N_AM_A = \frac{h}{\lambda_w}(T - T_w)
+    \end{align}
+    故代回(\ref{eq:drying_rate})中可得
+    \begin{equation}
+      \boxed{R_C = \frac{h}{\lambda_w}(T - T_w)} 
+    \end{equation}
+    故代回(\ref{eq:constant_drying_time})中可得
+    \begin{equation}
+      \boxed{t_C = \frac{m_s \lambda_w}{A h (T - T_w)}(X_0 - X_C)}
+    \end{equation}
+    為恆速期乾燥時間\\
+    雖不需要提供$R_C$，但溫度已知\bigskip\\
+    若題目沒有提供$R_C$，但\fbox{溫度}已知，則需要由$N_A$反推
+    \begin{equation}
+      N_A = \text{對流質傳} = k_y\Delta y_A = k_y (y_W -y)
+    \end{equation}
+    因為
+    \begin{equation}
+      y = \frac{n_A}{n_A + n_B}  = \frac{m_A/M_A}{m_A/M_A + m_B/M_B}
+    \end{equation}
+    而由濕度$H$的定義可得
+    \begin{equation}
+      y = \frac{\frac{H}{M_A}}{\frac{H}{M_A} + \frac{1}{M_B}} 
+    \end{equation}
+    而當$H\ll 1$時
+    \begin{equation}
+      \frac{H}{M_A} + \frac{1}{M_B} \implies 
+      \frac{H}{M_A} \ll \frac{1}{M_B}
+    \end{equation}
+    代入$y$中可得
+    \begin{equation}
+      y \approx \frac{M}{M_A} \cdot H 
+    \end{equation}
+    代入(\ref{eq:drying_rate})中可得
+    \begin{equation}
+      N_A = k_y \frac{M_B}{M_A}(H_W - H)
+    \end{equation}
+    \item 若題目沒有提供$R_C$，但\fbox{溫度}已知，則需要由$N_A$反推
+    \begin{equation}
+      T_w = T - \frac{N_A \lambda_w}{h}
+    \end{equation}
+    而
+    \begin{align}
+      R_C = N_A M_A &= k_y \frac{M_B}{M_A}(H_W - H) M_A \nonumber \\
+      &= \boxed{k_y M_B (H_W - H)}
+    \end{align}
+    代入(\ref{eq:constant_drying_time})中可得
+    \begin{equation}
+      \boxed{t = \frac{m_s}{A k_y M_B}\cdot \frac{X_0 - X_C}{H_W - H}}
+    \end{equation}
+    \item 第一減速期時間\\
+    因為是一直線，故先假設\fbox{$R = aX + b$}\\
+    則$dR = adx$
+    \begin{equation}
+      t = \frac{m_s}{aA} \ln \frac{R_1}{R_2} \label{eq:first_falling_drying_time}
+    \end{equation}
+    其中斜率$a$可由
+    \begin{equation}
+      a = \frac{R_C - R_D}{X_C - X_D}
+    \end{equation}
+    代回(\ref{eq:first_falling_drying_time})中可得
+    \begin{equation}
+      \boxed{t = \frac{m_s}{A} \cdot \frac{X_C - X_D}{R_C - R_D} \ln \frac{R_C}{R_D}}
+    \end{equation}
+    \item 整個減速期時間\\
+    因為第二減速期計算困難，所以先計算整個減速期時間(第一減速+第二減速)\\
+    令
+    \begin{equation}
+      R = ax + 0
+    \end{equation}
+    則
+    \begin{equation}
+      dR = a dX
+    \end{equation}
+    故代入$R$可得:
+    \begin{equation}
+      R = -\frac{m_s}{A} \frac{dR}{dt}
+    \end{equation}
+    積分後獲得整個減速期時間
+    \begin{equation}
+      t = \frac{m_s}{aA} \ln \frac{R_C}{R_E}
+    \end{equation}
+    而斜率$a$可由
+    \begin{equation}
+      a = \frac{R_C - 0}{X_C - 0} = \frac{R_C}{X_C}
+    \end{equation}
+    代回可得
+    \begin{equation}
+      \boxed{t = \frac{m_s}{A} \cdot \frac{X_C}{R_C}\ln\left(
+        \frac{X_1}{X_2}
+      \right)}
+    \end{equation}
+    另外
+    \begin{equation}
+      R = aX \implies R \propto X' \implies \frac{R_1}{R_2} = \frac{X_1}{X_2}
+    \end{equation}
+  \end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}

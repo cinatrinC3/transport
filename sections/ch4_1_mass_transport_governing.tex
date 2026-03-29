@@ -1,153 +1,9 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 \begin{CJK*}{UTF8}{bkai}
-\subsection{質量傳輸概論}
-質量傳輸就是有各種物質，在空間與時間下的分布與變化\\
-假設空間中有一個控制體積，則在這個控制體積內，各個物質的
-\begin{enumerate}
-  \item Density, $\rho_i(\vec{\bm r}, t)$
-  \item Velocity, $\vec{\bm u}_i(\vec{\bm r}, t)$
-  \item Mass Flux, $\vec{\bm n}_i (\vec{\bm r}, t)$
-  \item Rate of Production, $r_i(\vec{\bm r}, t)$
-\end{enumerate}
-會發生變化，其中注意密度、生成速率是純量，對各方向皆相同\\
-而速度、質量通量則是向量，會隨方向改變\\
-質量通量，又可以再拆分為分子擴散造成，以及對流造成\\
-所謂對流，就是跟著整陀流體一起移動，以流體力學所造成的質量通量\\
-而分子擴散，則是在這個流場中，物質因為濃度差異，額外產生的質量通量\\
-因此質量通量，可以表示為
-\begin{equation}
-  \vec{\bm n}_i = \rho_i \vec{\bm u} + \vec{\bm j}_i \label{eq:mass_flux_decomposition}
-\end{equation}
-其中$\vec{\bm j}_i$即為分子擴散所造成的質量通量\\
-\fbox{Molecular diffusion by mass gradient}\\
-針對所有分密度相加，可以改為平均密度
-\begin{equation}
-  \sum_i \rho_i = \rho
-\end{equation}
-針對所有物質的擴散加總，會得到一個淨流入與淨流出的速度，定義為體積平均流速\\
-\fbox{Volume Average Velocity}
-\begin{equation}
-  \sum_i \rho_i \vec{\bm u} = \rho \vec{\bm u} \implies \boxed{\vec{\bm u} = \frac{\sum_i \rho_i \vec{\bm u}}{\rho}}
-\end{equation}
-換句話說，各物質的擴散$\vec{\bm j}_i$，則是根據這個平均流速為基準額外增加或減少的質量通量\\
-也因此根據此定義:
-\begin{align}
-  \vec{\bm j}_i &= \vec{\bm n}_i - \rho_i \vec{\bm u} \nonumber\\
-  &= \rho_i (\vec{\bm u}_i - \vec{\bm u})\nonumber\\
-  \sum_i \vec{\bm j}_i &= \sum_i \rho_i (\vec{\bm u}_i - \vec{\bm u})\nonumber\\
-  &= \sum_i \rho_i \vec{\bm u}_i - \vec{\bm u} \sum_i \rho_i \nonumber\\
-  &= \rho \vec{\bm u} - \rho \vec{\bm u} = 0
-\end{align}
-必然成立:
-\begin{equation}
-  \boxed{\sum_i \vec{\bm j}_i = 0}
-\end{equation}
-另外根據質量守恆，反應通量$r_i$，會滿足
-\begin{equation}
-  \boxed{\sum_i r_i=0}
-\end{equation}
-而將質量除上各物質的分子量$M_i$，即可獲得Molar Flux，會以大寫表示\\
-對比(\ref{eq:mass_flux_decomposition})，Molar Flux可表示為
-\begin{align}
-  &\frac{n_i}{M_i} = \frac{\rho_i \vec{\bm u}}{M_i} + \frac{\vec{\bm j}_i}{M_i} \nonumber\\
-  &\boxed{\vec{\bm N}_i = C_i \vec{\bm u} + \vec{\bm J}_i} \label{eq:molar_flux_decomposition}
-\end{align}
-由$\frac{\rho_i \vec{\bm u}}{M_i}$，定義出了$C_i$
-\begin{equation}
-  \frac{\rho_i}{M_i} = C_i \label{eq:species_molar_concentration}
-\end{equation}
-稱為\fbox{Species Molar Concentration}\\
-$J_i$則稱為\fbox{Molar Diffusion Flux}\\
-$N_i$則稱為\fbox{Species Molar Flux}\\
-同理，對$r_i$除上$M_i$，即可獲得Molar Rate of Production，表示為
-\begin{equation}
-  R_i = \frac{r_i}{M_i} \label{eq:molar_rate_of_production}
-\end{equation}
-當然，畢竟就是反應莫爾數，因此加總會跟總反應的係數合有關
-\begin{equation}
-  \sum_i R_i \neq 0 (\text{Depends on Stoichiometry})
-\end{equation}
-不過$N_i$在定義上會因為$\sum_i \vec{\bm j}_i= 0$，而定義為
-\begin{equation}
-  \vec{\bm N}_i = C_i \vec{\bm u}_i \label{eq:species_molar_flux_alternate}
-\end{equation}
-而各物質基於此定義產生的額外流速，才會是$J_i$\\
-可是如果用大寫的Molar Flux來看:
-\begin{align}
-  \vec{\bm N}_i &= C_i \vec{\bm u} + \vec{\bm J}_i \nonumber\\
-  &= C_i \vec{\bm u}_i \nonumber\\
-  \implies \vec{\bm J}_i &= C_i (\vec{\bm u}_i - \vec{\bm u})
-\end{align}
-由於
-\begin{equation}
-  \vec{\bm u} = \frac{\sum_i \rho_i \vec{\bm u}}{\sum_i \rho_i}
-\end{equation}
-因此:
-\begin{align}
-  \sum_i \vec{\bm J}_i &= \sum_i C_i (\vec{\bm u}_i - \vec{\bm u}) \nonumber\\
-  &= \sum_i C_i \vec{\bm u}_i - \vec{\bm u} \sum_i C_i \nonumber\\
-  &= \sum_i C_i \vec{\bm u}_i - \vec{\bm u} C \neq 0
-\end{align}
-也因為這件事\\
-我們希望可以不需要寫成:$\sum_i C_i \vec{\bm u}_i$，這樣就需要2倍物質種類的資訊量\\
-所以額外定義了\fbox{Molar Average Velocity}
-\begin{equation}
-  C \vec{\bm u}^\ast = \sum_i C_i \vec{\bm u}_i \implies \vec{\bm u}^\ast = \frac{\sum_i C_i \vec{\bm u}_i}{C} 
-  \label{eq:molar_average_velocity}
-\end{equation}
-而這時:
-\begin{equation}
-  \boxed{\vec{\bm N}_i = C_i \vec{\bm u}^\ast + \vec{\bm J}_i^\ast} \label{eq:molar_flux_decomposition_volume_average}
-\end{equation}
-這使得
-\begin{align}
-  \vec{\bm J}_i^\ast &= C_i \vec{\bm u}_i - C_i \vec{\bm u}^\ast \nonumber\\
-  &= C_i (\vec{\bm u}_i - \vec{\bm u}^\ast) \nonumber\\
-  \implies &\sum_i \vec{\bm J}_i^\ast = 0
-\end{align}
-將動量傳輸、能量傳輸、質量傳輸的通量做比較
-\begin{align}
-  \text{Momentum Flux: }& \overline{\overline {\bm \Phi}} = \underbrace{\quad\rho \vec{\bm u}\vec{\bm u}\quad}_{\text{慣性力}} 
-  + \underbrace{\quad\quad\overline{\overline{\bm \pi}}\quad\quad}_{\text{周遭流體作用力}} \nonumber\\
-  \text{Energy Flux: }& \overline{\bm e}  = \underbrace{\quad\rho\hat E \vec{\bm u} \quad}_{\text{對流}}
-  + \underbrace{\quad\vec{\bm_q}\quad}_{\text{熱傳導}} 
-  + \underbrace{\quad\quad\overline{\overline{\bm \pi}}\cdot \vec{\bm u}\quad\quad}_{\text{分子運動做功}} \nonumber\\
-  \text{Mass Flux: }& n_i = \underbrace{\quad\rho_i \vec{\bm u}\quad}_{\text{對流}}
-  + \underbrace{\quad\vec{\bm j}_i\quad}_{\text{分子擴散}} \label{eq:transport_flux_comparison}
-\end{align}
+\subsection{質量傳輸定理推導}
 \begin{itemize}
-  \item Governing Equation:\\
-  擴散分成兩種:
-  \begin{enumerate}
-    \item molecular diffusion:\\
-    當介質\fbox{不流動}時，因物質濃度差異，而產生分子擴散\\
-    固體的介質會慢於液體，液體又慢於氣體\\
-    若是固體則通常適用Fick's Law\\
-    用於二元系統 (後面會有詳細推導)
-    \begin{equation}
-      J_{Az} = -D_{AB}\frac{dC_a}{dz}
-    \end{equation}
-    e.g.
-    \begin{itemize}
-      \item $H_2$於$\text{Pd}_{s}$中擴散
-      \item 尿素於洋菜中擴散
-      \item 氦氣在玻璃中擴散
-      \item 有機物於薄膜中擴散
-    \end{itemize}
-    若是液體或氣體則用Fick's First Law\\
-    用於二元系統 (後面會有詳細推導)
-    \begin{equation}
-      N_{Az} = J_{Az}+ x_A(N_{Az}+N_{Bz}) = -C D_{AB} \frac{dx_A}{dz} + x_A (N_{Az}+N_{Bz})
-    \end{equation}
-    而不管是什麼狀態，都可以使用經驗式
-    \begin{equation}
-      N_A = k_c\Delta C_A = k_y \Delta y_A = k_x \Delta x_A
-    \end{equation}
-    \item Mass convection:\\
-    當介質\fbox{流動}時，物質會跟著介質一起流動，而產生質量傳送\\
-    會類似於熱傳導中的對流
-  \end{enumerate}
+\item Governing Equation:
   \begin{itemize}
     \item 對一個物質的質量守恆:
     \begin{equation}
@@ -178,23 +34,26 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
       \frac{\partial C_i}{\partial t} + \nabla \cdot \vec{\bm N}_i - R_i = 0 \label{eq:molar_mass_conservation}
     \end{equation}
     $\vec{\bm N}_i=C_i\vec{\bm u}$\\
-    P.S. 上面討論過了$\sum_i R_i \neq 0$，會跟反應的化學計量有關
-    \item Fick's Law前身，如何得到$J_i, j_i$:\\
-    \fbox{Maxwell-Stefan Diffusion Equation}\\
-    假設了\fbox{物質$i$是受到所有非$i$的物質$j$的受力而移動}\\
-    而其他非$i$的物質$j$施給$i$的力，與$i$因為這個受力而施予其他$j$的力相等\\
-    (牛頓第三運動定律)\\
-    並認為作用力的大小，與單位時間內的碰撞頻率有關\\
-    而碰撞頻率，又跟兩物質的速度差成正比
+    P.S. $\sum_i R_i \neq 0$，會跟反應的化學計量有關
+  \end{itemize}
+  \item \fbox{Maxwell-Stefan Diffusion Equation}，Fick's Law前身，如何得到$J_i, j_i$:
+  \begin{itemize}
+    \item 想法:\\
+    \fbox{物質$i$是受到所有非$i$的物質$j$的受力而移動}\\
+    那些$j$施給$i$的力，會與$i$因為這個力施予其他$j$的力相等\\
+    (牛頓第三運動定律，我被這些人擠=我擠這些人)
     \begin{equation}
       \vec{\bm \varphi}_i^j= k_{ij} \left(\vec{\bm u_j - \vec{\bm u_i} }\right)
     \end{equation}
     $\varphi_i^j$為$j$對$i$的單位體積下的作用力，$k_{ij}$為Friction Coefficient\\
     而$\vec{\bm u_j - \vec{\bm u_i} }$，則為兩物質的相對速度\\
-    且$k_{ij}=k_{ji}$\\
-    而Stefan-Maxwell又檢設$\boxed{k_{ij}\propto C_i C_j}$\\
-    而其比例常數取決於物質特性、溫度、以及整體濃度\\
-    將物質特性部分寫作$\mathbcal{D}_{ij}$ 有著\fbox{單位 $\frac{m^2}{s}$}
+    且$k_{ij}=k_{ji}$
+    \item Friction Coefficient $k_{ij}$的物理意義:\\
+    作用力的大小，與單位時間內的碰撞頻率有關\\
+    而碰撞頻率，又跟兩物質的速度差成正比\\
+    而Stefan-Maxwell假設$\boxed{k_{ij}\propto C_i C_j}$\\
+    其比例常數取決於物質特性、溫度、以及整體濃度\\
+    將物質特性部分寫作$\mathbcal{D}_{ij}$，有著\fbox{單位 $\frac{m^2}{s}$}
     \begin{equation}
       k_{ij} = \frac{C_iC_j RT}{C \mathbcal{D}_{ij}},\quad C=\sum_i C_i
     \end{equation}
@@ -216,8 +75,8 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     即可得到\fbox{Force / m$^3$}\\
     而因為Driving Force是物質感受周遭，而想要對外做功\\
     Drag Force則是周遭物質對物質$i$施加的阻力\\
-    故兩者應該大小相等，方向相反\\
-    故寫出Maxwell-Stefan Diffusion Equation:
+    故兩者應該大小相等，方向相反
+    \item Maxwell-Stefan Diffusion Equation:
     \begin{equation}
       \boxed{C_i \nabla \mu_i = \sum_{j\neq i}k_{ij}\left(
         \vec{\bm u_j - \vec{\bm u_i} }
@@ -230,14 +89,15 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
       }
     \end{equation}
     在\fbox{等溫、等壓}下，後面那項$\sum_i n_i d\mu_i = 0$\\
-    而這也剛好是Maxwell-Stefan Diffusion Equation加總後左側的結果\\
+    這也剛好是Maxwell-Stefan Diffusion Equation加總後左側的結果\\
     故
     \begin{equation}
       \sum_i C_i \nabla \mu_i = 0 \implies \sum_i \sum_{j\neq i}\frac{C_i C_j RT}{C \mathbcal{D}_{ij}} \left(
         \vec{\bm u_j - \vec{\bm u_i} }
       \right) = 0
     \end{equation}
-    另外根據定義$\vec{\bm N}_i = C_i \vec{\bm u}_i$
+    \item 對每個物質$i$，可以寫成以$\vec{\bm N}_i$的形式\\
+    根據定義$\vec{\bm N}_i = C_i \vec{\bm u}_i$
     \begin{equation}
       \vec{\bm u}_i = \frac{\vec{\bm N}_i}{C_i}
     \end{equation}
@@ -264,7 +124,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
       \boxed{C_i \nabla \mu_i = \sum_{j\neq i} \frac{ RT}{\mathbcal{D}_{ij}}
       \left(x_i \vec{\bm N}_j - x_j \vec{\bm N}_i\right)} \label{eq:maxwell_stefan_diffusion_final}
     \end{equation}
-    \item 假設理想氣體
+    \item 理想氣體下的Maxwell-Stefan Diffusion Equation:
     \begin{equation}
       \mu_i = \mu_i^\circ + RT \ln (x_i P)
     \end{equation}
@@ -305,7 +165,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
       \right) \nonumber\\
       &= x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
     \end{align}
-    \item 二元系統、理想氣體，定溫定壓\\
+    \item 二元系統、理想氣體，定溫定壓下的Stefan-Maxwell Diffusion Equation\\
     物質為A,B，以A來看
     \begin{align}
       C_A \nabla \mu_A &= \frac{RT}{\mathbcal{D}_{AB}} (x_A \vec{\bm N}_B - x_B \vec{\bm N}_A) \nonumber\\
@@ -314,7 +174,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
         x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
       \right)
     \end{align}
-    \item 二元系統，非理想流體，非定溫定壓\\
+    \item 二元系統，非理想流體，非定溫定壓的Stefan-Maxwell Diffusion Equation\\
     物質為A,B，以A來看\\
     化學能的關係式為(\ref{eq:chemical_potential_non_ideal})
     \begin{equation}
@@ -356,7 +216,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
         x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
       \right)
     \end{equation}
-    \item 寫成以\fbox{$\vec{\bm N}_A$}的形式，會換成Fick's Law
+    \item 移項，用\fbox{$\vec{\bm N}_A$}來表示，會得到\fbox{Fick's Law}
     \begin{align}
       C_A\mathbcal{D}_{AB}\left(
         \frac{\partial (\ln a_A)}{\partial x_A}
@@ -371,19 +231,26 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
         \frac{\partial (\ln a_A)}{\partial \ln(x_A)}
       \right)_{T,P} \nabla x_A
     \end{align}
-    定義Fickian Diffusivity為
+    定義\fbox{Fickian Diffusivity}為
     \begin{equation}
-      D_{AB} = \mathbcal{D}_{AB} \left(
+      \boxed{D_{AB} = \mathbcal{D}_{AB} \left(
         \frac{\partial (\ln a_A)}{\partial \ln(x_A)}
-      \right)_{T,P}
+      \right)_{T,P}}
     \end{equation}
     \fbox{$\mathbcal{D}_{AB}$ 比起 $D_{AB}$ 跟濃度更無關}\\
     最後得到Fick's 1st Law的形式
     \begin{equation}
       \boxed{\vec{\bm N}_A = x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - C D_{AB} \nabla x_A} \label{eq:ficks_law_general}
     \end{equation}
-    而，中間那項可以代入莫耳平均速度的定義(\ref{eq:molar_average_velocity})\\
-    讓$\sum N_i = \vec{\bm u}^\ast \sum C_i$，可以直接加成濃度
+  \end{itemize}
+  \item 從Fick's 1st Law (\ref{eq:ficks_law_general})推出的其他形式:
+  \begin{itemize}
+    \item 用莫耳平均速度$\vec{\bm u}^\ast$來表示\\
+    (大寫可加成，$J_i$會消掉)
+    \begin{equation}
+      \sum N_i = \vec{\bm u}^\ast \sum C_i
+    \end{equation}
+    將$x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right)$代入莫耳平均速度的定義(\ref{eq:molar_flux_decomposition_volume_average})\
     \begin{equation}
       x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) = x_A\left(
         C_A \vec{\bm u}_A + C_B \vec{\bm u}_B
@@ -391,11 +258,11 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     \end{equation}
     代回(\ref{eq:ficks_law_general})
     \begin{equation}
-     \boxed{ \vec{\bm N}_A = C_A \vec{\bm u}^\ast - \underbrace{C D_{AB} \nabla x_A}_{\vec{\bm J}_A^\ast}}
+     \boxed{ \vec{\bm N}_A = C_A \vec{\bm u}^\ast - \underbrace{C D_{AB} \nabla x_A}_{\vec{\bm J}_A}}
     \end{equation}
-    而回到最一開始的Governing Equation(\ref{eq:molar_flux_decomposition_volume_average})\\
-    第一項就是對流項，而第二項就是分子擴散項
-    \item 如果用小寫的來表示
+    回到最一開始的Governing Equation(\ref{eq:molar_flux_decomposition_volume_average})\\
+    \fbox{第一項就是對流項，第二項是分子擴散項}
+    \item 如果用質量分率來表示Fick's Law:\\
     \begin{equation}
       \vec{\bm  n}_A = \rho_A \vec{\bm u}^\ast + \vec{\bm j}_A
     \end{equation}
@@ -415,7 +282,11 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     \begin{equation}
       \vec{\bm u} = \frac{\left(\rho_A \vec{\bm u}_A + \rho_B \vec{\bm u}_B\right)}{\rho_A + \rho_B}
     \end{equation}
-    定義$\omega_i = \frac{\rho_i}{\sum_j \rho_j}$為物質i的質量分率\\
+    定義
+    \begin{equation}
+      \omega_i = \frac{\rho_i}{\sum_j \rho_j}
+    \end{equation}
+    為物質$i$的質量分率\\
     則
     \begin{equation}
       \vec{\bm u} = \omega_A \vec{\bm u}_A + \omega_B \vec{\bm u}_B
@@ -436,7 +307,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     \end{align}
     而相似的，大寫的分子擴散
     \begin{align}
-      \vec{\bm J}_A^\ast &= C_A \left(\vec{\bm u}_A - \vec{\bm u}^\ast\right) \nonumber\\
+      \vec{\bm J}_A &= C_A \left(\vec{\bm u}_A - \vec{\bm u}^\ast\right) \nonumber\\
       &= C_A \left(\vec{\bm u}_A - x_A \vec{\bm u}_A - x_B \vec{\bm u}_B\right) \nonumber\\
       &= C_A \left(
         (1-x_A) \vec{\bm u}_A - x_B \vec{\bm u}_B
@@ -450,7 +321,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     \end{align}
     因此兩者之間具有以下比例關係
     \begin{equation}
-      \boxed{\frac{\vec{\bm j}_A}{\vec{\bm J}_A^\ast} = \frac{\rho_A \omega_B}{C_A x_B} = \frac{M_A \omega_B}{x_B}
+      \boxed{\frac{\vec{\bm j}_A}{\vec{\bm J}_A} = \frac{\rho_A \omega_B}{C_A x_B} = \frac{M_A \omega_B}{x_B}
       } \label{eq:molar_to_mass_diffusion_flux}
     \end{equation}
     另外$x$和$\omega$之間的關係為
@@ -491,12 +362,12 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
   \end{equation}
   於是Fick's Law可以寫成以質量分率表示
   \begin{align}
-    \vec{\bm J}_A^\ast &= - C D_{AB} \nabla x_A \nonumber\\
+    \vec{\bm J}_A &= - C D_{AB} \nabla x_A \nonumber\\
     &= - C D_{AB} \cdot \frac{\overline{M}^2}{M_A M_B} \nabla \omega_A 
   \end{align}
   由(\ref{eq:molar_to_mass_diffusion_flux})，可得
   \begin{equation}
-    \vec{\bm j}_A = \frac{M_A \omega_B}{x_B} \vec{\bm J}_A^\ast
+    \vec{\bm j}_A = \frac{M_A \omega_B}{x_B} \vec{\bm J}_A
   \end{equation}
   代入:
   \begin{align}
@@ -595,17 +466,69 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
   \begin{equation}
     \frac{DC_A}{Dt} = D_{AB}\nabla^2 C_A
   \end{equation}
-  \item 對於無流體流動$\vec {\bm u}=0$，且沒有反應
+  \item \fbox{Transient Diffusion}對於無流體流動$\vec {\bm u}=0$，且沒有反應
   \begin{equation}
     \frac{\partial C_A}{\partial t} = D_{AB}\nabla^2 C_A
   \end{equation}
   此為Fick's Second Law
+  \item Transient Diffusion in a slab，表面濃度固定，擴散係數固定
+  \begin{equation}
+    \frac{C_s-\overline{C}}{C_s - C_0} = \frac{8}{\pi^2}\left[
+      e^{-a_1\text{Fo}_m} + \frac{1}{9}e^{-9a_1\text{Fo}_m} + \frac{1}{25}e^{-25a_1\text{Fo}_m} + \cdots
+    \right]
+  \end{equation}
+  其中$s$是one-half slab的厚度，$a_1=(\pi/2)^2$是一個幾何/特徵相關的常數\\
+  $C_0$是初始濃度，$\overline{C}$是Slab內的平均濃度，$C_s$是Slab表面的濃度\\
+  $\text{Fo}_m = \frac{D_{AB} t}{s^2}$為質傳的Fourier Number
   \item 若為穩態，且無流體流動$\vec {\bm u}=0$，且沒有反應:
   \begin{equation}
     \nabla^2 C_A = 0
   \end{equation}
   此為Laplace Equation
-  \item 對比熱量輸送的經驗式$h$，因為氣體或液體的質傳行為複雜\\
+\end{itemize}
+\item Fick's Law的推導
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+    \draw (0,0) -- (0,3);
+    \draw[<->] (-1.5, 1.5) -- (0, 1.5) node[midway, above] {$l_d$};
+    \draw[<->] (0, 1.5) -- (1.5, 1.5) node[midway, above] {$l_d$};
+    \draw[dashed] (-1.5, 0) -- (-1.5, 3);
+    \draw[dashed] (1.5, 0) -- (1.5, 3);
+    \node[anchor=south] at (-0.75, 3) {$n'$};
+    \node[anchor=south] at (0.75, 3) {$n$};
+    \draw[dashed, ->] (-2.2, 0.5) -- (-0.7, 0.5) node[right] {x};
+    \draw[dashed, ->] (-0.5, 1) -- (1,1) node[right] {o};
+  \end{tikzpicture}
+  \caption{Fick's Law的推導示意圖}
+\end{figure}
+假設有一薄膜，左邊單位面積有$n'$個分子，右邊單位面積有$n$個分子\\
+形成一個濃度梯度$\frac{dn}{dx}$，造成每秒鐘有$\kappa$個分子跳來跳去\\
+在$x$方向上(擴散方向)，平均跳動$l_d$的距離\\
+而能夠穿越的就只有膜兩側$l_d$距離內的分子
+\begin{align}
+  J_x &= \kappa n - \kappa n' = \kappa (n- n')  \\
+  n' &= n + \frac{dn}{dx} l_d ,\quad \text{能跳過去的}\\
+  \implies J_x &= -\kappa l_d \frac{dn}{dx} 
+\end{align}
+將單位面積的分子數$n$換成濃度$C$，則
+\begin{equation}
+  C = \frac{n}{l_d}
+\end{equation}
+因此
+\begin{equation}
+  J_x = -\kappa l_d^2 \frac{dC}{dx} \label{eq:ficks_law_derivation}
+\end{equation}
+若定義\fbox{Fickian Diffusivity}為
+\begin{equation}
+  D = \kappa l_d^2
+\end{equation}
+則就得到了Fick's Law的形式
+\begin{equation}
+  \boxed{J_x = -D \frac{dC}{dx}}
+\end{equation}
+\item 經驗式\\
+  對比熱量輸送的經驗式$h$，因為氣體或液體的質傳行為複雜\\
   因此在分子擴散外的，質傳對流有以下Governing Equation，及經驗式
   \begin{itemize}
     \item 微觀下多分子的能量平衡式:\\
@@ -683,43 +606,42 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     \item 而對比熱對流會用Nusselt Number或Stanton Number (Heat) 來求出$h$\\
       質傳會用Sherwood Number或Stanton Number (Mass)來求出$k_c,k_y,k_p$
   \end{itemize}
-  \item 小結，解題分類:
-  \begin{itemize}
-    \item 多為二元系統，一維、穩態\\
-    不是就乖乖搞Maxwell-Stefan Diffusion(\ref{eq:maxwell_stefan_diffusion})
+\item 小結，解題分類:
+\begin{itemize}
+  \item 多為二元系統，一維、穩態\\
+  不是就乖乖搞Maxwell-Stefan Diffusion(\ref{eq:maxwell_stefan_diffusion})
+  \begin{equation}
+    C_A \nabla \mu_A = \frac{RT}{\mathbcal{D}_{AB}} \left(
+      x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
+    \right)
+  \end{equation}
+  \item 若為固體，則可以使用Fick's Law
+  \begin{equation}
+    \vec{\bm J}_A = - D_{AB} \nabla C_A
+  \end{equation}
+  \item 若為流體，則分子擴散+質傳對流，可分為以下幾種情形\\
+  可以說是簡單的質傳問題
+  \begin{enumerate}
+    \item 沒有反應，且一個物質靜止(Stagnant)
     \begin{equation}
-      C_A \nabla \mu_A = \frac{RT}{\mathbcal{D}_{AB}} \left(
-        x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - \vec{\bm N}_A
-      \right)
+      \vec{\bm N}_B = 0 \implies \vec{\bm N}_A = - C D_{AB} \nabla x_A
     \end{equation}
-    \item 若為固體，則可以使用Fick's Law
+    \item 沒有反應，A和B是等莫耳交換流(由一方驅動，另一方填補)
     \begin{equation}
-      \vec{\bm J}_A = - D_{AB} \nabla C_A
+      \vec{\bm N}_A = -\vec{\bm N}_B \implies \vec{\bm N}_A = \frac{-C D_{AB}}{1-2x_A} \nabla x_A
     \end{equation}
-    \item 若為流體，則分子擴散+質傳對流，可分為以下幾種情形\\
-    可以說是簡單的質傳問題
-    \begin{enumerate}
-      \item 沒有反應，且一個物質靜止(Stagnant)
-      \begin{equation}
-        \vec{\bm N}_B = 0 \implies \vec{\bm N}_A = - C D_{AB} \nabla x_A
-      \end{equation}
-      \item 沒有反應，A和B是等莫耳交換流(由一方驅動，另一方填補)
-      \begin{equation}
-        \vec{\bm N}_A = -\vec{\bm N}_B \implies \vec{\bm N}_A = \frac{-C D_{AB}}{1-2x_A} \nabla x_A
-      \end{equation}
-      \item 沒有反應，A和B其中一方非常稀薄(Dilute Solution)
-      \begin{equation}
-        x_A \to 0 \quad \text{or}\quad x_B \to 0 \implies \vec{\bm N}_A = - C D_{AB} \nabla x_A
-      \end{equation}
-      \item 沒有反應\\
-      使用Fick's First Law的完整形式
-      \begin{equation}
-        \vec{\bm N}_A = x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - C D_{AB} \nabla x_A
-      \end{equation}
-      \item 有反應，但反應是非勻相反應(Heterogeneous Reaction)
-      \item 有反應，且反應是勻相反應(Homogeneous Reaction)
-      \item 有反應，但是是孔洞觸媒的反應
-    \end{enumerate}
+    \item 沒有反應，A和B其中一方非常稀薄(Dilute Solution)
+    \begin{equation}
+      x_A \to 0 \quad \text{or}\quad x_B \to 0 \implies \vec{\bm N}_A = - C D_{AB} \nabla x_A
+    \end{equation}
+    \item 沒有反應\\
+    使用Fick's First Law的完整形式
+    \begin{equation}
+      \vec{\bm N}_A = x_A \left(\vec{\bm N}_A + \vec{\bm N}_B\right) - C D_{AB} \nabla x_A
+    \end{equation}
+    \item 有反應，但反應是非勻相反應(Heterogeneous Reaction)
+    \item 有反應，且反應是勻相反應(Homogeneous Reaction)
+    \item 有反應，但是是孔洞觸媒的反應\\
     以上這幾種的解題，又分成短時間與長時間的質傳問題\\
     兩者都算是穩態，但長時間則變成假的穩態(Quasi-Steady State)\\
     和必須要用非穩態算的不同，簡單的質傳問題\\
@@ -734,158 +656,7 @@ $N_i$則稱為\fbox{Species Molar Flux}\\
     \begin{equation}
       \frac{\partial C_A}{\partial t} = D_{AB} \frac{\partial^2 C_A}{\partial x^2}
     \end{equation}
-  \end{itemize}
-\end{itemize}
-\item 擴散係數的影響因子(依照重要程度排序)
-\begin{enumerate}
-  \item 介質(分子間距離):\\
-  氣體的擴散係數最大，液體次之，固體最小\\
-  因為氣體分子間距較大，分子運動較自由，擴散較快\\
-  反之固體分子間距較小，分子運動受限，擴散較慢
-  \item 溫度: 溫度越高，分子熱運動越劇烈，擴散係數越大
-  \begin{equation}
-    D_{AB} \propto \sqrt{T} \quad \text{(氣體)}
-  \end{equation}
-  \item 分子量(分子移動速率):
-  \begin{equation}
-    v \propto \sqrt{\frac{T}{M}} \implies D_{AB} \propto \frac{1}{\sqrt{M}}
-  \end{equation}
-  \item 壓力(分子數量):\\
-   壓力越高，分子間距越小，擴散係數越小
-\end{enumerate}
-故分子的擴散可以根據平均自由徑$\lambda$分成兩種\\
-平均自由徑$\lambda$是指分子兩次碰撞之間的平均距離
-\begin{enumerate}
-  \item Molecular Diffusion(分子擴散):\\
-  當$\lambda$遠小於系統的特徵長度$d$時，分子擴散佔主導地位\\
-  此時分子間頻繁碰撞，擴散行為可用Fick's Law描述
-  \item Knudsen Diffusion(克努森擴散):\\
-  當例如在孔洞中，$\lambda$遠大於系統的特徵長度$d$時，克努森擴散佔主導地位\\
-  那碰撞就不在跟其他分子，而是跟孔洞壁面碰撞\\
-  此時擴散行為可用Knudsen擴散方程式描述
-  \begin{equation}
-    D_{K} = \frac{2}{3} r_p \sqrt{\frac{8RT}{\pi M}}
-  \end{equation}
-  其中$r_p$是孔洞半徑
-\end{enumerate}
-\item 質傳的四大定律(經驗式):
-\begin{itemize}
-  \item Film Theory(薄膜定律)
-    \begin{equation}
-      k_c \propto D_{AB}
-    \end{equation}
-  \item Penetration Theory(穿透定律)
-    \begin{equation}
-      k_c \propto \sqrt{D_{AB}}
-    \end{equation}
-  \item Boundary Layer Theory(邊界層定律)
-    \begin{equation}
-      k_c \propto D_{AB}^{\frac{2}{3}}
-    \end{equation}
-  \item Two Films Theory(雙薄膜定律)
-    \begin{equation}
-      \frac{1}{K_y} = \frac{1}{k_{y}} + \frac{m'}{k_x}
-    \end{equation}
-    或
-    \begin{equation}
-      \frac{1}{K_x} = \frac{1}{k_x} + \frac{1}{ky\cdot m''}
-    \end{equation}
-\end{itemize}
-\item 無因次群:
-\begin{itemize}
-  \item Schmidt Number:
-  \begin{equation}
-    \text{Sc} = \frac{\nu}{D_{AB}} = \frac{\mu}{\rho D_{AB}} = \frac{\text{Momentum Diffusivity}}{\text{Mass Diffusivity}}
-  \end{equation}
-  這裡也同熱對流有:
-  \begin{equation}
-    \text{Sc} = \left(\frac{\delta}{\delta_m}\right)^3 = \left(\frac{\text{Mass Boundary Layer}}{\text{Momentum Boundary Layer}}\right)^3
-  \end{equation}
-  的關係，但注意$\delta_m$是質量邊界層厚度，而不是熱對流的熱邊界層厚度
-  \item Lewis Number:
-  \begin{equation}
-    \text{Le} = \frac{\alpha}{D_{AB}} = \frac{k}{\rho C_p D_{AB}} = \frac{\text{Thermal Diffusivity}}{\text{Mass Diffusivity}}
-  \end{equation}
-  \item Prandtl Number:
-  \begin{equation}
-    \text{Pr} = \frac{\nu}{\alpha} = \frac{C_p\mu}{k} = \frac{\text{Momentum Diffusivity}}{\text{Thermal Diffusivity}}
-  \end{equation}
-  \item Sherwood Number:\\
-  對比熱對流，就是那邊的Nusselt Number，徑向的動量傳輸和質量傳輸比
-  \begin{equation}
-    \text{Sh} = \frac{k_cL}{D_{AB}} = \frac{\text{Mass Convection Rate}}{\text{Molecular Diffusion Rate}}
-  \end{equation}
-  若系統為圓柱或球:
-  \begin{equation}
-    \text{Sh} = \frac{k_cD}{D_{AB}}
-  \end{equation}
-  \item Peclet Number:\\
-  在軸向上的質量傳輸比
-  \begin{equation}
-    \text{Pe}_M =\text{Re}\cdot\text{Sc} = \frac{\rho u D}{\mu} = \frac{\text{Mass Convection Rate}}{\text{Molecular Diffusion Rate}}
-  \end{equation}
-  質量跟著液體流動方向傳遞\\
-  若$\text{Pe}_M$很大，代表軸向上的質量傳導可以被忽略
-  \item Stanton Number:
-  \begin{equation}
-    \text{St}_M = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}} = \frac{k_c}{\nu}
-  \end{equation}
-\end{itemize}
-\item 一些質量傳輸的經驗式:
-\begin{itemize}
-  \item 流體流過平板:
-  \begin{equation}
-    \text{Sh} = 0.664\text{Re}^{\frac{1}{2}}\text{Sc}^{\frac{1}{3}}
-  \end{equation}
-  \item 層流流過長直圓管，其壁面濃度均一(泡茶包)
-  \begin{equation}
-    \text{Sh} = 3.66 + f(\text{Re},\text{Sc},\frac{L}{D})
-  \end{equation}
-  \item 層流流過長直圓管，給予均勻質量通量(過濾器)
-  \begin{equation}
-    \text{Sh} = \frac{48}{11} + f(\text{Re},\text{Sc},\frac{L}{D})
-  \end{equation}
-  \item Plug Flow，流過長直圓管，給予均勻質量通量
-  \begin{equation}
-    \text{Sh} = 8 + f(\text{Re},\text{Sc},\frac{L}{D})
-  \end{equation}
-  \item 流過球面的流(泡澡球):
-  \begin{equation}
-    \text{Sh} = 2 + f(\text{Re},\text{Sc})
-  \end{equation}
-  \item Reynolds Analogy:(適用於$\text{Sc}=1$)
-  \begin{equation}
-    \frac{k_c}{u_\infty} = \text{St}_M = \frac{C_f}{2} = \frac{\text{Sh}}{\text{Re}\cdot\text{Sc}}
-  \end{equation}
-  P.S. 回顧熱對流那邊，如果Pr也等於1，則有Complete Reynolds Analogy:
-  \begin{equation}
-    St_H = St_M = \frac{C_f}{2} = \frac{\text{Nu}}{\text{Re}\cdot\text{Pr}}
-  \end{equation}
-  也就是說當Sc=Pr=1時，熱質傳行為相同
-  \begin{equation}
-    \text{Sc} = \text{Pr} = 1 \implies St_H = St_M = \frac{C_f}{2}
-  \end{equation}
-  \item Colburn Analogy:(適用於$0.6<\text{Sc}<2500$)\\
-   (P.S. 熱對流那邊是$0.5<\text{Pr}<50$)\\
-   可以說是Modified Reynolds Analogy
-  \begin{equation}
-    j_D = \text{St}_M\cdot \text{Sc}^{\frac{2}{3}} = \frac{C_f}{2}
-  \end{equation}
-  $j_D$是Colburn $j$ factor for mass transfer\\
-  所以有Complete Colburn Analogy:
-  \begin{equation}
-    j_H =  j_D = \frac{C_f}{2},\quad 0.6<\text{Sc}<2500,\quad 0.5<\text{Pr}<50
-  \end{equation}
-  \item Prandtl Analogy:(適用於忽略Drag)
-  \begin{equation}
-    \text{St}_M = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}}\left(\text{Sc}-1\right)} = \frac{k_c}{u_\infty}
-  \end{equation}
-  \item Von Karman Analogy:(適用於忽略Drag)
-  \begin{equation}
-    \text{St}_M = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}\left\{
-      \text{Sc}-1+\ln\left[1+\frac{5}{6}\left(\text{Sc}-1\right)\right]
-    \right\}}} = \frac{k_c}{u_\infty}
-  \end{equation}
+  \end{enumerate}
 \end{itemize}
 \end{itemize}
 \end{CJK*}

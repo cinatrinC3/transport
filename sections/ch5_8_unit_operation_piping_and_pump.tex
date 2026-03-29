@@ -1,0 +1,528 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+\begin{CJK*}{UTF8}{bkai}
+\subsection{管路、泵浦、流量計，Piping, Pump, and Flow Meter}
+\begin{itemize}
+  \item 管路基本參數介紹
+  \begin{itemize}
+    \item 摩擦因子(都是無因次群)
+    \begin{itemize}
+      \item Fanning friction factor $f_F$
+      \begin{equation}
+        f_F = \frac{\tau_s}{\frac{1}{2}\rho <v>^2}
+      \end{equation}
+      物理意義
+      \begin{equation}
+        f_F \equiv \frac{\text{Viscous force}}{\text{Inertial force}}
+      \end{equation}
+      可以注意到和雷諾數相反，故
+      \begin{equation}
+        f_F \propto \frac{1}{\text{Re}}
+      \end{equation}
+      \item Darcy friction factor $f_D$
+      \begin{equation}
+        f_D = 4f_F
+      \end{equation}
+      \item Moody friction factor $f_M$
+      \begin{equation}
+        f_M = f_D = 4f_F
+      \end{equation}
+    \end{itemize}
+    當Laminar flow時，范寧摩擦因子只受雷諾數影響
+    \begin{equation}
+      \begin{cases}
+        f_F = \frac{16}{\text{Re}} & \text{(管內流動)} \\
+        f_F = \frac{8}{\text{Re}} & \text{(平板間流動)}
+      \end{cases}
+    \end{equation}
+    當Turbulent flow時，摩擦因子受雷諾數與相對粗糙度影響\\
+    而相對粗糙度(Relative Roughness)定義為
+    \begin{equation}
+      \frac{\kappa}{D} = \frac{\text{Absolute Roughness}}{\text{Pipe Diameter}}
+    \end{equation}
+    同樣為無因次群\\
+    定義可看成平均凸起高度\\
+    當管徑越大，相對粗糙度越小，可以想成通過的等密度流線數量越多\\
+    至於為什麼laminar flow不受相對粗糙度影響，可以想成流體的慣性力太小\\
+    流體會能以繞過去的方式流動，不會被凸起物影響\\
+    反之，turbulent flow慣性力大，會以撞擊方式撞凸起物產生渦流，影響整體流動\\
+    而$\kappa \propto f_F,\quad f_T \propto \frac{1}{D}, \quad f_F \propto \frac{\kappa}{D}$\\
+    而圖中最下面一條線，代表完全平滑(Hydrallically Smooth)的管路
+  \end{itemize}
+  \item 紊流的速度分布
+  \begin{equation}
+    \boxed{
+      \frac{<v>}{v_{max}} = \left(
+        1 - \frac{r}{R}
+      \right)^{\frac{1}{n}}}
+  \end{equation}
+  其中$<v>$為瞬間平均速度(Time Smooth Velocity)\\
+  $v_{max}$為中心軸最大速度\\
+  P.S. 如果是Laminar flow，則
+  \begin{equation}
+    \frac{<v>}{v_{max}} = \frac{1}{2}
+  \end{equation}
+  而Turbulent flow中，$n$值會隨雷諾數改變
+  \begin{equation}
+    \begin{cases}
+      \text{Re} = 4000\sim 10^4 & n \approx 6 \\
+      \text{Re} = 10^4\sim 10^5 & n \approx 7 \\
+      \text{Re} = 10^5\sim 10^6 & n \approx 8 \\
+      \text{Re} = 10^6\sim 10^7 & n \approx 9
+    \end{cases}
+  \end{equation}
+  其中在$10^4 < \text{Re} < 10^5$時，$n=7$為常用值\\
+  有$1/7$ law:
+  \begin{equation}
+    \frac{<v>}{v_{max}} = \left(
+      1 - \frac{r}{R}
+    \right)^{\frac{1}{7}}
+  \end{equation}
+  但記得只有在Hydrallically Smooth的管路中才適用
+  \item Laminar flow 與 Turbulent flow
+  \begin{itemize}
+    \item 邊界層理論
+    \begin{equation}
+      \begin{cases}
+        \text{Re}_{t,x} < 2\times 10^{5} & \text{Laminar flow} \\
+        \text{Re}_{t,x} > 3\times 10^{6} & \text{Turbulent flow} 
+      \end{cases}
+    \end{equation}
+    \item  管內(包含非圓管)流動
+      \begin{equation}
+        \begin{cases}
+          \text{Re} < 2100 & \text{Laminar flow} \\
+          \text{Re} > 4000 & \text{Turbulent flow}
+        \end{cases}
+      \end{equation}
+    \item $\boxed{\text{Re} < 2100}$\\
+    在此區域中，摩擦因子與雷諾數成反比
+    \begin{equation}
+      f_F = \frac{16}{\text{Re}}
+    \end{equation}
+    \fbox{與相對粗糙度無關，由黏性力主導}\\
+    此之前斜率為-1，截距為$\log 16$
+    \item $\boxed{\text{Re} > 4000}$\\
+    在此區域中，摩擦因子與雷諾數無關
+  \end{itemize}
+  \item 摩擦損失
+  \begin{itemize}
+    \item 摩擦損失能量: Friction loss
+    \begin{equation}
+      h_f \quad[=] \quad \left(
+        \frac{J}{kg}
+      \right)  = \left(
+        \frac{m^2}{s^2}
+      \right)
+    \end{equation}
+    來自能量平衡方程式
+    \item 摩擦損失高度: Friction head，($h_L,~[=]~(m)$)\\
+    將摩擦損失能量當成位能，所換算出的高度
+    \begin{equation}
+      m\frac{g}{g_c}h \implies \boxed{h_f = \frac{g}{g_c} h_L}
+    \end{equation}
+    \item 摩擦損失壓力: Pressure loss，($\Delta P_f,~[=]~(Pa)$)\\
+    將摩擦損失能量當成壓力能，所換算出的壓力\\
+    壓力能就是流動能$H=U+PV$中的$PV$部分
+    \begin{equation}
+      PV = \underbrace{\frac{\text{壓力能}}{m}}_{h_f} \implies \boxed{h_f = \frac{\Delta P_f V}{m} = \frac{\Delta P_f}{\rho}}
+    \end{equation}
+    \item 摩擦損失速度: Velocity loss，($v_f,~[=]~(m/s)$)\\
+    將摩擦損失能量當成動能，所換算出的速度
+    \begin{equation}
+      \frac{1}{2g_c}mv^2 \implies \boxed{h_f = \frac{v_f^2}{2g_c}}
+    \end{equation}
+  \end{itemize}
+  \item 求出摩擦損失能量:\\
+  總摩擦損失能量來自，\fbox{管線摩擦損失能量}+\fbox{管件摩擦損失能量}\\
+  Total friction loss = Pipe friction loss + Fitting friction loss\\
+  Total drag = skin drag + form drag
+  \begin{align}
+    \text{圓管} h_{f,\text{pipe}} &= 4 f_F\frac{L}{D}\frac{<v>^2}{2g_c} \\
+    \text{非圓管} h_{f,\text{pipe}} &= 4f_F \frac{L}{D_e} \frac{<v>^2}{2g_c},\quad D_e = \frac{4A}{P} \\
+    \text{管件} h_{f,\text{fitting}} &= 4f_F \frac{L_e}{D} \frac{<v>^2}{2g_c}, \quad L_e = \text{相當長度}
+  \end{align}
+  P.S. 管件的相當直徑，是將管件\fbox{摩擦損失能量}以\\
+  \fbox{相同摩擦損失能量}及\fbox{相同管徑}的直管來表示\\
+  P.S. 圓管的推導如下:
+  \begin{align}
+    f_F &= \frac{\tau_s}{\frac{1}{2}\rho <v>^2} \nonumber\\
+    \tau_s &= f_F \frac{1}{2}\rho <v>^2 \nonumber\\
+    h_f &= \frac{\text{摩擦損失能量}}{\text{流體質量}} = \frac{\text{摩擦力}\cdot \text{位移}}{\text{流體質量}} \nonumber\\
+    &= \frac{(\tau_s \cdot \pi DL)\cdot (L)}{m} \nonumber\\
+    &= \frac{\tau_s \pi DL^2}{\rho \pi R^2 L} \nonumber\\
+    &= \frac{4\tau_s L}{\rho D} \nonumber\\
+    &= \frac{4 f_F \frac{1}{2}\rho <v>^2 L}{\rho D} \nonumber\\
+    &= 4 f_F \frac{L}{D} \frac{<v>^2}{2g_c}
+  \end{align}
+  \item 用於管線的能量平衡方程式
+  \begin{itemize}
+    \item 機械能能量方程式(考慮摩擦能量損失)
+    \begin{equation}
+      \underbrace{w_s}_{\text{系統對外做軸功}} = \underbrace{\frac{1}{2g_c} \left(
+        v_1^2 - v_2^2
+      \right)}_{\text{動能減少}} + \underbrace{\frac{g}{g_c}(z_1 - z_2)}_{\text{位能減少}} + 
+      \underbrace{\frac{1}{\rho} (P_1 - P_2)}_{\text{壓力能減少}} - 
+      \underbrace{h_f}_{\text{摩擦損失能量}} \label{eq:mechanical_energy_balance_with_friction}
+    \end{equation}
+    單位:
+    \begin{equation}
+      [=]\quad \left(\frac{J}{kg}\right) = \left(
+        \frac{m^2}{s^2}
+      \right) = \left(
+        \frac{\text{lb}_f\cdot ft}{\text{lb}_m}
+      \right)
+    \end{equation}
+    來自熱力學第一定律，開放系統:\\
+    注意單位用J/kg
+    \begin{align}
+      &\Delta H + \frac{\Delta v^2}{2g_c} + \frac{g}{g_c}\Delta z = Q - W_s, \quad \Delta = \mcirc{2}-\mcirc{1} \\
+      \text{由}&H = U + \frac{PV}{m} \nonumber\\
+      \implies & \cancelto{T_2=T_1}{\Delta U } +
+      \Delta \left(\frac{PV}{m}\right) + \frac{\Delta v^2}{2g_c} + \frac{g}{g_c}\Delta z = 
+      \cancelto{\text{絕熱}}{Q} - W_s \nonumber\\
+      \implies & W_s = -\frac{\Delta v^2}{2g_c} - \frac{g}{g_c}\Delta z -
+       \Delta \left(\frac{PV}{m}\right) \nonumber\\
+       \implies & W_s = -\frac{\Delta v^2}{2g_c} - \frac{g}{g_c}\Delta z -
+       \Delta \left(\frac{P}{\rho}\right) \nonumber\\
+       \text{不可壓縮}\implies & \phantom{ W_s} = -\frac{\Delta v^2}{2g_c} - \frac{g}{g_c}\Delta z -
+        \frac{1}{\rho}\Delta P \nonumber\\
+      \implies & W_s = \frac{1}{2g_c} \left(
+        v_1^2 - v_2^2
+      \right) + \frac{g}{g_c}(z_1 - z_2) + 
+      \frac{1}{\rho} (P_1 - P_2)
+    \end{align}
+    而當考慮摩擦損失能量時，就在最後面再多扣一項$h_f$即可
+    \item 白努力方程式\\
+    將上式(\ref{eq:mechanical_energy_balance_with_friction})的作功$W_s$設為0
+    \begin{equation}
+      0 = \frac{1}{2g_c} \left(
+        v_1^2 - v_2^2
+      \right) + \frac{g}{g_c}(z_1 - z_2) + 
+      \frac{1}{\rho} (P_1 - P_2) - 
+      h_f
+    \end{equation}
+    \item Work to Power\\
+    由於機械裝置的能量以功率表示(J/s)，故需要作單位轉換
+    \begin{equation}
+      P\left(\frac{J}{s}\right) = W_s\left(
+        \frac{J}{kg}
+      \right)\cdot \dot m \left(
+        \frac{kg}{s}
+      \right)
+    \end{equation}
+    \item 當外界對系統作功，定義$W<0$
+    \item 當系統對外界作功，定義$W>0$，例如Turbine
+    \item Pump\\
+    當外界對系統作功，定義$W<0$
+    \begin{itemize}
+      \item HHP (Hydraulic Horse Power)，理論馬力，水力馬力
+      \begin{equation}
+        \text{HHP} = W_s \cdot \dot m
+      \end{equation}
+      \item BHP (Brake Horse Power)，實際馬力，制動馬力
+      \begin{equation}
+        \text{BHP} = \boxed{\frac{\text{HHP}}{\eta_{\text{pump}}}} = \frac{W_s \cdot \dot m}{\eta_{\text{pump}}}
+      \end{equation}
+      \end{itemize}
+    \item Compressor\\
+    當外界對系統作功，定義$W<0$
+    \begin{itemize}
+      \item HHP (Hydraulic Horse Power)，理論馬力，水力馬力
+      \begin{equation}
+        \text{HHP} = W_s \cdot \dot m
+      \end{equation}
+      \item BHP (Brake Horse Power)，實際馬力，制動馬力
+      \begin{equation}
+        \text{BHP} = \boxed{\frac{\text{HHP}}{\eta_{\text{compressor}}}} = \frac{W_s \cdot \dot m}{\eta_{\text{compressor}}}
+      \end{equation}
+    \end{itemize}
+    \item Turbine\\
+    當系統對外界作功，定義$W>0$
+    \begin{itemize}
+      \item HHP (Turbine Horse Power)，理論馬力，渦輪馬力
+      \begin{equation}
+        \text{HHP} = W_s \cdot \dot m
+      \end{equation}
+      \item BHP (Brake Horse Power)，實際馬力，制動馬力
+      \begin{equation}
+        \text{BHP} = \boxed{\text{HHP} \cdot \eta_{\text{turbine}}} = 
+        W_s \cdot \dot m \cdot \eta_{\text{turbine}}
+      \end{equation}
+    \end{itemize}
+  \end{itemize}
+  \item NPSH (Net Positive Suction Head)
+  \begin{itemize}
+    \item 局部壓力可能低於飽和壓力，產生氣泡\\
+    氣泡在葉片表面破掉，導致空蝕(Cavitation)
+    \item 為了避免空蝕，需確保泵浦壓力高於飽和壓力
+    \begin{equation}
+      P_{\text{suction}} > P_{\text{sat}}
+    \end{equation}
+    而泵浦吸入口壓力可由能量方程式求出
+    \begin{align}
+      P_{\text{suction}} &= \text{液面上方壓力} + \text{壓力} + \text{管線摩擦損失壓力} \nonumber\\
+      &=P_0 + \rho \frac{g}{g_c}h_{0} - \rho \frac{g}{g_c}\boxed{h_L}
+    \end{align}
+    其中$h_L$為吸入管線的摩擦損失高度
+    \begin{equation}
+      \Delta P_f = \rho \frac{g}{g_c} h_L
+    \end{equation}
+    而為了避免空蝕，需滿足
+    \begin{equation}
+      P_0 + \rho \frac{g}{g_c}h_{0} - \rho \frac{g}{g_c}h_L > P_{\text{sat}}
+    \end{equation}
+    移項後，同除$\rho \frac{g}{g_c}$，將壓力換成高度，定義NPSH
+    \item NPSH (Net Positive Suction Head)
+    \begin{equation}
+      \boxed{\text{NPSH} = \frac{P_0 - P_{\text{sat}}}{\rho \frac{g}{g_c}} + h_0 - h_L}
+    \end{equation}
+    通常大概在2$\sim$3m\\
+    而$h_L$則可由范寧摩擦因子求出
+    \begin{equation}
+      h_L = 4 f_F \frac{L}{D} \frac{<v>^2}{2g}
+    \end{equation}
+    P.S. 當槽內液面高於泵浦吸入口時，$\boxed{h_0}$為正值\\
+    反之，當槽內液面低於泵浦吸入口時，$\boxed{h_0}$為負值\\
+    這件事有點反直覺，要特別注意
+    \item $\text{NPSH}_A$ (Net Positive Suction Head Actual)\\
+    實際NPSH
+    \item $\text{NPSH}_R$ (Net Positive Suction Head Required)\\
+    泵浦廠商所提供的最小NPSH需求值
+    \item 為了避免空蝕，需滿足
+    \begin{equation}
+      \text{NPSH}_A > \text{NPSH}_R
+    \end{equation}
+    而不只是大於0即可
+  \end{itemize}
+  \item 流量計(Flow Meter)
+  \begin{itemize}
+    \item 流量計種類:
+    \begin{enumerate}
+      \item orifice flow meter (孔口流量計)
+      \item venturi flow meter (文丘里流量計)
+      \item nozzle flow meter (噴嘴流量計)
+      \item rotameter (浮子流量計)
+      \item pitot tube (皮托管)
+    \end{enumerate}
+    其中前四個皆為流量計，可測量$Q, \dot m, <v>$\\
+    \fbox{不可測量每個點的速度}，只能測量平均速度$<v>$\\
+    最後一個皮托管則是測量局部速度$v$的機器，而是流速計\\
+    但當把皮托管放在管路正中間時，因為此處速度為最大值$v_{max}$\\
+    可利用經驗公式將$v_{max}$換成$<v>$，進而使皮托管成為流量計\bigskip\\
+    另外前三種通常用於工廠等大型管路系統，且原理相同\\
+    皆為利用改變流過截面積的方式，又稱壓差流量計\\
+    造成動能產生變化，而根據能量守恆\\
+    壓力能會等量的下降，透過測量壓力差來求出流量\bigskip\\
+    而第四種，浮子流量計，則用於實驗室或醫院\\
+    又稱為面積流量計，透過當流量增加時，需要更多的面積來讓流體通過\\
+    使得浮子上升(環狀面積上升)，透過讀取浮子位置來求出流量\bigskip\\
+    最後一種皮托管的原理是，讓流體對充滿液體的皮托管產生衝撞\\
+    使得壓力上升，透過測量壓力來求出局部速度
+    \item 孔口流量計(Orifice Flow Meter)
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[>=Latex, line cap=round, line join=round, thick]
+        \draw (0,2) -- (6,2);
+        \draw (0,0) -- (2,0);
+        \draw (2,0) -- (2, -2) arc(180:270:0.2) -- (3.5, -2.2) arc(270:360:0.2) -- (3.7,0) -- (6,0);
+        \draw (2.2,0) -- (2.2, -1.8) arc(180:270:0.2) -- (3.3, -2) arc(270:360:0.2) -- (3.5,0);
+        \draw (2.2,0) -- (3.5,0);
+        \fill[pattern=north west lines] (3.1,0) rectangle (3.4,0.7);
+        \fill[pattern=north west lines] (3.1,2) rectangle (3.4,1.3);
+        \draw[red] (3.5, -0.5) -- (3.7, -0.5);
+        \draw[red] (2, -1.2) -- (2.2, -1.2);
+        \fill[pattern=north west lines, pattern color=red] 
+          (2,-1.2) -- (2, -2) arc(180:270:0.2) -- (3.5, -2.2) arc(270:360:0.2) 
+          -- (3.7, -0.5) -- (3.5, -0.5) -- (3.5, -1.8) arc(360:270:0.2) -- (2.4, -2) arc(270:180:0.2) 
+          -- (2.2,-1.2) -- cycle;
+      \end{tikzpicture}
+      \caption{孔口流量計示意圖}
+    \end{figure}
+    會產生漩渦，上方的為逆時針，下方的為順時針\\
+    而漩渦會造成能量損失，能量是所有壓差流量計中損耗最大的\\
+    $C_D \approx 0.61$\\
+    會和雷諾數有關，但當雷諾數超過10000後，大概就是0.61了
+    \begin{equation}
+      \text{Re}_{\text{orifice}} = \frac{\rho <v> D_0}{\mu}
+    \end{equation}
+    而如果作圖$C_D$與$\text{Re}_{\text{orifice}}$的關係時\\
+    會發現最高點會在0.95
+    \item 文丘里流量計(Venturi Flow Meter)\\
+    改採用流線收縮的方式，減少漩渦產生\\
+    是所有壓差流量計中，能量損失最小的$C_D \approx 0.98$
+    \item 噴嘴流量計(Nozzle Flow Meter)\\
+    只有噴嘴後會產生漩渦，能量損失介於孔口與文丘里之間\\
+    $C_D \approx 0.7\sim 0.9$
+    \item 壓差流量計的推導(白努力方程)
+    \begin{equation}
+      0 = \frac{1}{2g_c} \left(
+        v_1^2 - v_2^2
+      \right) + \frac{g}{g_c}(z_1 - z_2) + 
+      \frac{1}{\rho} (P_1 - P_2) - 
+      h_f
+    \end{equation}
+    但因為沒有人會做流量計的范寧摩擦因子，因此改將修正項擺到動能項
+    \begin{equation}
+      0 = \frac{1}{2g_c} \boxed{ \left(
+       \alpha_1 v_1^2 -\alpha_2 v_2^2
+      \right)} + \frac{g}{g_c}(z_1 - z_2) + 
+      \frac{1}{\rho} (P_1 - P_2)
+    \end{equation}
+    其中$\alpha$為動能修正因子(kinetic energy Velocity correction)，為經驗值\\
+    利用質量守恆，在不可壓縮的前提下:
+    \begin{equation}
+      \dot m_1 = \dot m_2 \implies \rho A_1 v_1 = \rho A_2 v_2 \implies v_1 = \frac{A_2}{A_1} v_2
+    \end{equation}
+    代入上式:
+    \begin{equation}
+      0 = \frac{1}{2g_c} \left(
+       \alpha_1 \left(
+        \frac{A_2}{A_1}
+       \right)^2 v_2^2 -\alpha_2 v_2^2
+      \right) + \frac{g}{g_c}(z_1 - z_2) + 
+      \frac{1}{\rho} (P_1 - P_2)
+    \end{equation}
+    假設為水平管路，$z_1=z_2$，整理後可得
+    \begin{align}
+      \frac{\alpha_2 v_2^2}{2g_c} \left[
+        \frac{\alpha_1}{\alpha_2} \left(
+          \frac{A_2}{A_1}\right)^2 - 1
+      \right] & =- \frac{1}{\rho} (P_1 - P_2) \nonumber\\
+      \implies v_2 & = \boxed{\sqrt{\frac{\frac{2g_c}{\rho}\left(
+        P_1 - P_2
+      \right)}{\alpha_2 \left[
+        1 - \frac{\alpha_1}{\alpha_2} \left(
+          \frac{A_2}{A_1}
+        \right)^2
+      \right]}}}
+    \end{align}
+    推出質量流率
+    \begin{align}
+      \dot m &= G = \rho Q_2 = \rho v_2 A_2 \nonumber\\
+      &= \boxed{\rho A_2 \sqrt{\frac{\frac{2g_c}{\rho}\left(
+        P_1 - P_2
+      \right)}{\alpha_2 \left[
+        1 - \frac{\alpha_1}{\alpha_2} \left(
+          \frac{A_2}{A_1}
+        \right)^2
+      \right]}}}
+    \end{align}
+    但因為$A_2$與流量計測量處存在誤差，因此引入\\
+    收縮係數$C_C$ (Coefficient of Contraction)
+    \begin{equation}
+      \frac{C_C} = \frac{A_2}{A_{2,\text{actual}}} \implies A_2 = C_C A_0
+    \end{equation}
+    最後流量計的質量流率為
+    \begin{equation}
+      \dot m = \boxed{\rho C_C A_0 \sqrt{\frac{\frac{2g_c}{\rho}\left(
+        P_1 - P_2
+      \right)}{\alpha_2 \left[
+        1 - \boxed{\frac{\alpha_1 C_C^2}{\alpha_2}} \left(
+          \frac{A_0}{A_1}
+        \right)^2
+      \right]}}}
+    \end{equation}
+    然後因為這樣經驗值太多了，因此以$C_D$來代替\\
+    稱為$C_D$ (Coefficient of Discharge)，去掉所有經驗值，把$C_C\to C_D$
+    \begin{equation}
+      \boxed{
+        \dot m = \rho C_D A_0 \sqrt{\frac{\frac{2g_c}{\rho}\left(
+          P_1 - P_2
+        \right)}{ \left[
+          1 - \left(
+            \frac{A_0}{A_1}
+          \right)^2
+        \right]}}}
+    \end{equation}
+    而題目有可能只給流量計的高度差，則必須將高度差換成壓力差
+    \begin{equation}
+      P_1 - P_2 = \left(
+        \rho^\ast - \rho 
+      \right)\frac{g}{g_c} \Delta h
+    \end{equation}
+    其中$\rho^\ast$為流量計內充填液體的密度\\
+    代入上式可得
+    \begin{equation}
+        \dot m = \rho C_D A_0 \sqrt{\frac{\boxed{ \left(
+          \frac{\rho^\ast - \rho}{\rho}
+        \right)}2 g \Delta h}{\rho \left[
+          1 - \left(
+            \frac{A_0}{A_1}
+          \right)^2
+        \right]}}
+    \end{equation}
+    還有流量計內的液體已經換算成流體的高度差，例如水柱高度差\\
+    那就直接代進去$h$即可
+    \begin{equation}
+        \dot m = \rho C_D A_0 \sqrt{\frac{ 2 g \boxed{h_o}}{\rho \left[
+          1 - \left(
+            \frac{A_0}{A_1}
+          \right)^2
+        \right]}}
+    \end{equation}
+    \item 浮子流量計(Rotameter)\\
+    透過讀取浮子位置來求出流量\\
+    浮子的面積:
+    \begin{enumerate}
+      \item $A_1$: 浮子所在位置的管截面積
+      \item $A_2$: 浮子所在位置，流體能流過的環狀截面積
+      \item $A_f$: 浮子本身的最大截面積
+      \begin{equation}
+        A_2 = A_1 - A_f
+      \end{equation}
+    \end{enumerate}
+    假設在忽略重力與摩擦力下，以白努力方程與質量平衡能得到
+    \begin{align}
+    & 0 = \frac{1}{2g_c} \left(v_1^2 - v_2^2\right) + \frac{1}{\rho} (P_1 - P_2) \nonumber\\
+    & \dot m_1 = \dot m_2 \implies \rho A_1 v_1 = \rho A_2 v_2 \implies v_1 = \frac{A_2}{A_1} v_2 \nonumber\\
+    \implies & 0 = \frac{1}{2g_c} \left(
+      \left(
+        \frac{A_2}{A_1}
+      \right)^2 v_2^2 - v_2^2
+    \right) + \frac{1}{\rho} (P_1 - P_2) \nonumber\\
+    \implies & v_2 = \sqrt{\frac{\frac{2g_c}{\rho} (P_1 - P_2)}{1 - \left(
+      \frac{A_2}{A_1}
+    \right)^2}} \nonumber\\
+    \implies & \dot m = \rho A_2 \sqrt{\frac{\frac{2g_c}{\rho} (P_1 - P_2)}{1 - \left(
+      \frac{A_2}{A_1}
+    \right)^2}}
+    \end{align}
+    考慮摩擦力時
+    \begin{equation}
+      \dot m = \rho \boxed{C_r} A_2 \sqrt{\frac{\frac{2g_c}{\rho} (P_1 - P_2)}{1 - \left(
+        \frac{A_2}{A_1}
+      \right)^2}}
+    \end{equation}
+    由於浮子兩端很接近，不易由壓力計計算壓差來得到$\Delta P$\\
+    考慮在Steady State下，浮子受力平衡，停留在某一位置不動\\
+    此時向下的力為重力(若有)，向上的力，則為\fbox{壓力}以及浮力\\
+    而注意這裡的壓力與沉降的阻力方向不同，而與拖曳力相同
+    \begin{equation}
+      F_p + F_b = F_g
+    \end{equation}
+    展開後:
+    \begin{equation}
+      \rho_f v_f \frac{g}{g_c}\cdot \frac{\rho}{\rho_f} + \Delta P A_f 
+      = \rho_f v_f \frac{g}{g_c}
+    \end{equation}
+    因此可以換算出壓差
+    \begin{equation}
+      \Delta P = \frac{\rho_f v_f \frac{g}{g_c} \left(
+        1 - \frac{\rho}{\rho_f}
+      \right)}{A_f} = \text{常數}
+    \end{equation}
+    因此\fbox{浮子流量計所造成的壓差為常數，與所在位置無關}\\
+    取代$P_1 - P_2$後可得
+    \begin{equation}
+      \boxed{
+        \dot m = \rho C_r A_2 \sqrt{\frac{2 v_f g\left(\rho_f - \rho\right)}{A_f\left(
+          1 - \left(
+            \frac{A_2}{A_1}
+          \right)^2
+        \right)}}}
+    \end{equation}
+  \end{itemize}
+\end{itemize}
+\end{CJK*}
+\end{document}
