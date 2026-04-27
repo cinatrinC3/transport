@@ -1,9 +1,10 @@
-\RequirePackage{etex}
 \documentclass[12pt,a4paper]{article}
 \usepackage[a4paper,left=1cm,right=1cm,top=2cm,bottom=2cm]{geometry}
-\usepackage{CJKutf8}
+\usepackage{xeCJK}
+\setCJKmainfont[AutoFakeBold=true]{DFKai-SB}
 \usepackage[colorlinks, linkcolor=blue]{hyperref}
 \usepackage{pgfplots}
+\usepackage{pgfplotstable}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{cancel}
@@ -11,10 +12,12 @@
 \usepackage{soul}
 \usepackage{chemarr}
 \usepackage{circuitikz}
+\usepackage{chemfig}
+\usepackage[version=4]{mhchem}
+\usepackage{microtype}
 \usepackage{ifthen}
 \usepackage{esint}
 \usepackage{textcomp}
-\usepackage{catchfilebetweentags}
 \usepackage{subfiles}
 \usepackage{tikz}
 \usetikzlibrary{patterns,patterns.meta,arrows.meta,intersections,calc,decorations.pathmorphing}
@@ -36,7 +39,6 @@
 \newcommand \dbar {{d\mkern-6mu\mathchar'26\mkern-3mu}}
 \newcommand*{\rttensor}[1]{\bar{\bar{#1}}}
 \makeatletter
-\newcommand{\rightbotmark}{\expandafter\@rightmark\botmark}
 \DeclareFontFamily{U}{tipa}{}
 \DeclareFontShape{U}{tipa}{m}{n}{<->tipa10}{}
 \newcommand{\arc@char}{{\usefont{U}{tipa}{m}{n}\symbol{62}}}%
@@ -71,7 +73,6 @@
 \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
 \renewcommand{\subsectionmark}[1]{\markright{\thesubsection\ \ #1}}
 \begin{document}
-\begin{CJK*}{UTF8}{bkai}
 \pagenumbering{roman}
 \pagestyle{plain}
 \maketitle
@@ -85,9 +86,9 @@
 \newpage
 \pagenumbering{arabic}
 \renewcommand{\headrule}{%
-  \hrule width\headwidth height 0.4pt % The standard horizontal line
-  \vspace{2pt}                        % Small gap between line and text
-  {\footnotesize \hfill \rightbotmark}   % \hfill pushes text to the right
+  \hrule width\headwidth height 0.4pt
+  \vspace{2pt}
+  {\footnotesize \hfill \rightmark}
 }
 \pagestyle{fancy}
 \rhead{單元操作-\leftmark}
@@ -95,6 +96,8 @@
 \section{各種數學工具}
 \subfile{sections/ch0_1_math_tools}
 \subfile{sections/ch0_2_coordinates}
+\section{微積分4}
+\subfile{sections/math1}
 \newpage
 \section{流體力學導論}
 \subfile{sections/ch1_fluid_intro}
@@ -136,5 +139,16 @@
 \subfile{sections/ch5_6_unit_operation_humidity}
 \subfile{sections/ch5_7_unit_operation_settling}
 \subfile{sections/ch5_8_unit_operation_piping_and_pump}
-\end{CJK*}
+\newpage
+\section{分離程序}
+\subfile{separation/ch1_1_diffusion_and_mass_transfer_intro}
+\subfile{separation/ch2_1_particle_characterization_intro}
+\subfile{separation/ch3_1_motion_of_particles_in_a_fluid_intro}
+\subfile{separation/ch4_1_sedimentation_intro}
+\subfile{separation/ch5_1_granular_beds_and_packed_columns_intro}
+\subfile{separation/ch6_1_liquid_filtration_intro}
+\subfile{separation/ch7_1_membrane_separation_intro}
+\subfile{separation/ch8_1_centrifugal_separation_intro}
+\subfile{separation/ch9_1_distillation_intro}
+\subfile{separation/ch10_1_absorption_of_gases_intro}
 \end{document}

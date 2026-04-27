@@ -1,6 +1,5 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
-\begin{CJK*}{UTF8}{bkai}
 \subsection{熱量傳輸概論}
 Same Analogy as Momentum Transport
 \begin{figure}[H]
@@ -149,22 +148,15 @@ Same Analogy as Momentum Transport
             \begin{table}[H]
               \centering
               \begin{tabular}{c|c|c}
-                變數 & local & average \\
-                \hline
-                Heat Transfer Coefficient, $h$  & $h_x \propto x^{-\frac{1}{2}}=\frac{a}{\sqrt{x}}$ 
-                & $\overline{h} = \frac{1}{L}\int_0^L h_x dx = 2\frac{a}{\sqrt{L}}$ \\
-                Fanning Friction Factor, $C_f$ & 
-                $C_{f,x} = \frac{\tau_{w,x}}{\frac{1}{2}\rho u_\infty^2}$ & 
-                $\overline{C_{f}} = \frac{1}{L}\int_0^L C_{f,x} dx$ \\
+                無因次數 & local & average \\
                 \hline
                 Reynolds Number & $\text{Re}_x = \frac{\rho u_\infty x}{\mu}$ & 
                   $\text{Re}_L = \frac{\rho u_\infty L}{\mu}$ \\
                 \hline
-                Nusselt Number & $\text{Nu}_x = \frac{h_x x}{k_f}=\frac{a\sqrt{x}}{k_f}$ & 
-                  $\overline{\text{Nu}_L} = \frac{\overline{h} L}{k_f} = 2\frac{a\sqrt{L}}{k_f}$ \\
-                $\frac{\overline{\text{Nu}_L}}{\text{Nu}_L} = 2$ & & \\
+                Nusselt Number & $\text{Nu}_x = \frac{h_x x}{k}$ & 
+                  $\overline{\text{Nu}_L} = \frac{h_L L}{k}$ 
               \end{tabular}
-              \caption{熱傳經驗式的局部與整體平均}
+              \caption{局部與整體平均無因次數}
             \end{table}
             \item 無因次數(Stanton Number, $\text{St}_H$)法
             \begin{equation}
@@ -214,8 +206,7 @@ Same Analogy as Momentum Transport
           因為靠近球體的空氣會被加熱，密度變小而上升\\
           進而帶走熱量，所以會有自然對流的現象發生\\
           或者說，當流體沒流流動時，會額外假想它外圍一圈的氣體在流動\\
-          因此定義Rayleigh Number (Ra)\\
-          來量化自然對流相較熱傳導的影響(類似Peclet Number)
+          因此定義Rayleigh Number (Ra)來量化自然對流相較熱傳導的影響(類似Peclet Number)
           \begin{equation}
             \text{Ra} = \text{Gr}\cdot \text{Pr} = \frac{L^3\rho^2g\beta\left(T_s-T_\infty\right)}{\mu^2}
             \cdot \frac{C_p \mu}{k} = \frac{\text{Buoyancy Force}}{\text{Thermal Diffusion}}
@@ -1035,57 +1026,35 @@ Same Analogy as Momentum Transport
     $f(\text{Re},\text{Pr},\frac{L}{D})$函數，題目會給\\
     $\text{St}_H$是$f(\text{Pr},C_f)$的函數，$C_f$是范寧摩擦因子
     \begin{itemize}
-      \item 流體流過平板: (見\ref{eq:graetz_nusselt_number_final})
+      \item 流體流過平板:
         \begin{equation}
-          \overline{\text{Nu}}_L = 0.664\text{Re}_L^{0.5}\text{Pr}^{1/3}
+          \text{Nu} = 0.664\text{Re}^{0.5}\text{Pr}^{1/3}
         \end{equation}
       \item 層流流過長直圓管，其壁面溫度均一(泡熱水)
         \begin{equation}
-          \overline{\text{Nu}}_L = 3.66 + f(\text{Re},\text{Pr},\frac{L}{D})
+          \text{Nu} = 3.66 + f(\text{Re},\text{Pr},\frac{L}{D})
         \end{equation}
-        見(\ref{eq:leveque_entry_length})，當$L\gg D,\quad \frac{L}{D}>40$\\
-        可忽略$f(\text{Re},\text{Pr},\frac{L}{D})$項
+      \item 層流流過長直圓管，給予均勻熱通量(過火)
         \begin{equation}
-          \overline{\text{Nu}}_L = 3.66
+          \text{Nu} = \frac{48}{11} + f(\text{Re},\text{Pr},\frac{L}{D})
         \end{equation}
-      \item 層流流過長直圓管，給予均勻熱通量(\fbox{火焰加熱煮水})
+      \item Plug Flow，流過長直圓管，給予均勻熱通量
         \begin{equation}
-          \overline{\text{Nu}}_L = \frac{48}{11} + f(\text{Re},\text{Pr},\frac{L}{D})
-        \end{equation}
-        同樣，當$L\gg D,\quad \frac{L}{D}>40$，可忽略$f(\text{Re},\text{Pr},\frac{L}{D})$項
-        \begin{equation}
-          \boxed{\overline{\text{Nu}}_L = \frac{48}{11} \approx 4.36}
-        \end{equation}
-      \item Plug Flow，流過長直圓管，給予均勻熱通量(\fbox{火焰加熱煮空氣})
-        \begin{equation}
-          \overline{\text{Nu}}_L = 8 + f(\text{Re},\text{Pr},\frac{L}{D})
-        \end{equation}
-        同樣，當$L\gg D,\quad \frac{L}{D}>40$，可忽略$f(\text{Re},\text{Pr},\frac{L}{D})$項
-        \begin{equation}
-          \boxed{\overline{\text{Nu}}_L = 8}
+          \text{Nu} = 8 + f(\text{Re},\text{Pr},\frac{L}{D})
         \end{equation}
       \item 流過球面的流:
         \begin{equation}
-          \overline{\text{Nu}}_L = 2 + f(\text{Re},\text{Pr})
+          \text{Nu} = 2 + f(\text{Re},\text{Pr})
         \end{equation}
-        同樣，當流體是\fbox{Creeping flow}，$\text{Re}\ll 1$，可忽略$f(\text{Re},\text{Pr})$項
+      \item Reynolds Analogy:(適用於$Pr=1$)
         \begin{equation}
-          \boxed{\overline{\text{Nu}}_L = 2}
+          \frac{h}{\rho C_p u_\infty} = \text{St}_H = \frac{C_f}{2}
         \end{equation}
-      \item Reynolds Analogy:(適用於$Pr=1$，No Form drag)\\
-        P.S. 也也是因為要No form drag所所以只能是直角坐標系
-        \begin{equation}
-          \frac{h}{\rho C_p u_\infty} = \boxed{\text{St}_H = \frac{C_f}{2}}
-        \end{equation}
-      \item Colburn Analogy:(適用於$0.5<\text{Pr}<50$，No Form drag)
+      \item Colburn Analogy:(適用於$0.5<\text{Pr}<50$)
         \begin{equation}
           j_H = \left(\frac{\text{Nu}}{\text{Re}\text{Pr}}\right)\cdot \text{Pr}^{\frac{2}{3}} = \frac{C_f}{2}
         \end{equation}
         $j_H$是Colburn $j$ factor
-        而且
-        \begin{equation}
-          \boxed{\text{St}_H = \frac{h}{\rho C_p u_\infty} = j_H \text{Pr}^{-\frac{2}{3}}}
-        \end{equation}
       \item Prandtl Analogy:(適用於忽略Drag)
         \begin{equation}
           \text{St}_H = \frac{\frac{C_f}{2}}{1+5\sqrt{\frac{C_f}{2}}\left(\text{Pr}-1\right)} = \frac{h}{\rho C_p u}
@@ -1098,5 +1067,4 @@ Same Analogy as Momentum Transport
         \end{equation}
   \end{itemize}
 \end{itemize}
-\end{CJK*}
 \end{document}

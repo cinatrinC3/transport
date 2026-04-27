@@ -1,0 +1,397 @@
+﻿\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,left=1cm,right=1cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{xeCJK}
+\setCJKmainfont[AutoFakeBold=true]{DFKai-SB}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{patterns,patterns.meta,arrows.meta,intersections,calc,decorations.pathmorphing}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{cancel}
+\usepackage{fancyhdr}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{soul}
+\pgfplotsset{compat=1.18}
+\setlength{\headheight}{15pt}
+\newcommand \dbar {{d\mkern-6mu\mathchar'26\mkern-3mu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\worksheetTitleBlock}{%
+  \begin{center}
+    \begin{minipage}{\textwidth}
+      {\bfseries
+      National Taiwan University - Calculus 4 for Class 01-09 (Year 114)\par}
+      \vspace{0.15cm}
+
+      {\bfseries
+      Worksheet： Parametric Surfaces\par}
+
+      \vspace{1.0cm}
+
+      {\bfseries
+      \makebox[0.4\linewidth][l]{Name: 唐麒鈞}%
+      \makebox[0.3\linewidth][l]{ID: B10504001}%
+      \makebox[0.3\linewidth][l]{Department: 化學工程學系}%
+      }
+
+      \vspace{0.35cm}
+      \hrule height 0.4pt
+    \end{minipage}
+  \end{center}
+}
+\begin{document}
+\worksheetTitleBlock
+\setlist[enumerate,1]{label=(\alph*)}
+\setlist[enumerate,2]{label=\roman*.} % Fallback for deeper lists
+
+% Custom problem list environment
+\newlist{problems}{enumerate}{1}
+\setlist[problems]{label={}, leftmargin=0pt, itemindent=0pt}
+
+% Modified \problem command to include underline, dash, and percentage
+\newcommand{\problem}[1]{%
+  \item \underline{\textbf{Excercise \arabic{problemsi} #1}}\par\vspace{0.2cm}
+}
+\vspace{0.3cm}
+\begin{problems}
+\problem{}
+Consider the surface $S$ that is part of the sphere $x^2+y^2+z^2 = 16$ that lies within the cylinder $x^2+y^2=4$ and above the $xy$-plane.
+\begin{enumerate}
+  \item Parameterize $S$ as a graph\\
+  Since $S$ lies on the sphere,
+  \begin{equation}
+    x^2 + y^2 +z^2 = 16 \implies z^2 = 16 - x^2 -y^2
+  \end{equation}
+   Because the surface is above the $xy$-plane, $z\geq0$, so
+  \begin{equation}
+    z = \sqrt{16 - x^2 - y^2}
+  \end{equation}
+  Let $x = u$, $y=v$.\\
+  The condition that the surface lies within the cylinder is
+  \begin{equation}
+    x^2 + y^2 \leq 4 \implies u^2 + v^2 \leq 4
+  \end{equation}
+  Therefore, the parametrization of $S$ is
+  \begin{equation}
+  \vec{\mathbf{r}}(u,v) = \left<u,v,\sqrt{16-u^2-v^2}\right>
+  \end{equation}
+  With domain $u^2 + v^2 \leq 4$
+  \item Parameterize $S$ in cylindrical coordinates
+  Let
+  \begin{equation}
+    x=r\cos\theta,~y=r\sin\theta
+  \end{equation}
+  Then:
+  \begin{equation}
+    z =\sqrt{16-x^2-y^2}=\sqrt{16-r^2}
+  \end{equation}
+  Cylinder $x^2+y^2=4 \implies 0\leq r\leq 2$\\
+  Full rotation $\implies 0\leq\theta\leq 2\pi$.\\
+  得到參數化方程:
+  \begin{equation}
+    \vec{\mathbf{r}}(r,\theta) = \left<
+      r\cos\theta, r\sin\theta, \sqrt{16 - r^2}
+    \right>
+  \end{equation}
+  With domain $0\leq r\leq2$ and $0\leq \theta \leq 2 \pi$.
+  \item Parameterize $S$ in spherical coordinates\\
+  Use spherical coordinates
+  \begin{equation}
+    x=\rho\sin\phi\cos\theta,
+    \qquad
+    y=\rho\sin\phi\sin\theta,
+    \qquad
+    z=\rho\cos\phi.
+    \label{eq:ex1-spherical}
+  \end{equation}
+  Since $S$ lies on the sphere $x^2+y^2+z^2=16$, the radius is fixed:
+  \begin{equation}
+    \rho=4
+  \end{equation}
+  Therefore \eqref{eq:ex1-spherical} will become
+  \begin{equation}
+    \begin{cases}
+      x &= 4 \sin\phi \cos\theta \\
+      y &= 4\sin\phi \sin\theta\\
+      z &= 4 \cos\phi
+    \end{cases}
+  \end{equation}
+  Domain of $\theta$, full rotation:
+  \begin{equation}
+    0 \leq \theta \leq 2\pi
+  \end{equation}
+  Domain of $\phi$:\\
+  use the cylinder condition
+  \begin{align}
+    &x^2 + y^2 \leq 4 \nonumber\\
+    \implies& (4\sin\phi\cos\theta)^2+(4\sin\phi\sin\theta)^2\leq 4\nonumber\\
+    \implies& 16\sin^2\phi\cos^2\theta+16\sin^2\phi\sin^2\theta \leq 4 \nonumber\\
+    \implies& 16\sin^2\phi\cancelto{1}{\left(
+      \cos^2\theta + \sin^2\theta
+    \right)} \leq 4  \nonumber\\
+    \implies& 16 \sin^2 \leq 4 \nonumber\\
+    \implies& \sin^2\phi \leq \frac{1}{4} \label{eq:ex1c1}
+  \end{align}
+  因為$S$在$xy$平面上方，故$0\leq\phi\leq \frac{\pi}{2}$，故此區間內$\sin\phi\geq0$\\
+  合併\eqref{eq:ex1c1}
+  \begin{align}
+    &0\leq \sin\phi \leq \frac{1}{2} \nonumber\\
+    \implies & 0 \leq \phi \leq \frac{\pi}{6}
+  \end{align}
+  最後參數化結果為:
+  \begin{equation}
+    \vec{\mathbf{r}}(\phi,\theta) = \left<
+      4\sin\phi\cos\theta, 4\sin\phi\sin\theta, 4\cos\phi
+    \right>
+  \end{equation}
+  With domain:
+  \begin{equation}
+    0\leq \phi \leq \frac{\pi}{6},~0\leq \theta\leq 2\pi
+  \end{equation}
+\end{enumerate}
+\problem{}
+Parameterize the following surfaces.
+\begin{enumerate}
+  \item The part of the sphere $x^2 + y^2 +z^2 =2z$ that lies inside the paraboloid $z=x^2+y^2$\\
+  Rewrite the sphere:
+  \begin{equation}
+    x^2+y^2+z^2=2z \implies
+    x^2+y^2+(z-1)^2=1
+  \end{equation}
+  因此這球有center $(0,0,1)$ 和 radius $1$.\\
+  Use cylindrical coordinates in the $xy$-plane:
+  \begin{equation}
+    \begin{cases}
+    x = r\cos \theta\\
+    y = r\sin\theta
+    \end{cases}\implies z = r^2
+  \end{equation}
+  代入球座標中
+  \begin{equation}
+    r^2+z^2=2z \implies
+    z^2-2z+r^2=0
+  \end{equation}
+  故 $z$
+  \begin{equation}
+    z=1\pm\sqrt{1-r^2}
+  \end{equation}
+  inside the paraboloid
+  \begin{equation}
+    r^2\leq z
+  \end{equation}
+  On the sphere, $r^2=2z-z^2$.\\
+  所以:
+  \begin{align}
+    r^2\leq z \implies&
+    2z-z^2\leq z \nonumber\\
+    \implies&
+    z-z^2\leq0 \nonumber\\
+    \implies&
+    z(z-1)\geq0
+  \end{align}
+  Since the sphere $0\leq z\leq2 \implies z=0 \text{ or } z\geq1$.\\
+  The point $z=0$ is only 球的底端\\
+  The two-dimensional part of the required surface is the 上半球\\
+  所以
+  \begin{equation}
+    z=1+\sqrt{1-r^2}
+  \end{equation}
+  最後得到
+  \begin{equation}
+    \vec{\mathbf{r}}(r,\theta) = \left<r\cos\theta,~r\sin\theta,~1+\sqrt{1-r^2}\right>,~0\leq r\leq1,~0\leq\theta\leq2\pi
+  \end{equation}
+  \item The part of the cone $z = \sqrt{3\left(x^2+y^2\right)}$ that lies below the plane $z=2+x$.\\
+  Use cylindrical coordinates:
+  \begin{equation}
+    x=r\cos\theta,~
+    y=r\sin\theta
+  \end{equation}
+  因為$r\geq0$，所以
+  \begin{equation}
+    z=\sqrt{3(x^2+y^2)}=\sqrt{3r^2}=\sqrt{3}\,r.
+  \end{equation}
+  所以圓錐可以參數化為
+  \begin{equation}
+    \vec{\mathbf{r}}(r,\theta) = \left<
+      r\cos\theta, r\sin\theta, \sqrt{3}r
+    \right>
+  \end{equation}
+  Because lies below $z = 2+x$
+  \begin{align}
+    z&\leq2+x \nonumber\\
+    \sqrt{3}r&\leq2+r\cos\theta \nonumber\\
+    (\sqrt{3}-\cos\theta)r&\leq2.
+  \end{align}
+  Since $\sqrt{3}-\cos\theta>0$ for all $\theta$, 所以可以同時除以$\sqrt{3}-\cos\theta$，得到
+  \begin{equation}
+    0 \leq r \leq \frac{2}{\sqrt{3}-\cos\theta}
+  \end{equation}
+  所以參數化後
+  \begin{equation}
+    \vec{\mathbf{r}} = \left<
+      r\cos\theta, r\sin\theta, \sqrt{3}r
+    \right>,~r\in\left[0,\frac{2}{\sqrt{3}-\cos\theta}\right],~\theta\in[0,2\pi]
+  \end{equation}
+\end{enumerate}
+\problem{}
+In this question, a surface is formed by a union of two spherical surfaces.
+\begin{enumerate}
+  \item The lower part $S_1$ of the surface is part of the sphere $x^2+y^2+z^2=1$ that lies below the plane $z=\frac{1}{2}$.\\
+  Find a parametrization of $S_1$.\\
+  $x^2+y^2+z^2=1$就是個單位球，使用球座標轉換:
+  \begin{equation}
+    x = \sin\phi\cos\theta,~
+    y = \sin\phi\sin\theta,~
+    z = \cos\phi
+  \end{equation}
+  Surface lies below the plane $z=\frac{1}{2}$:
+  \begin{equation}
+    z \leq \frac{1}{2} \implies \cos\phi \leq \frac{1}{2}
+  \end{equation}
+  因為$0\leq\phi\leq\pi$
+  \begin{equation}
+    \frac{\pi}{3}\leq\phi\leq\pi
+  \end{equation}
+  因此參數化方程為
+  \begin{equation}
+    \vec{\mathbf{r}}(\phi,\theta) = \left<
+      \sin\phi\cos\theta, \sin\phi\sin\theta, \cos\phi
+    \right>,~\frac{\pi}{3}\leq\phi\leq\pi,~0\leq\theta\leq2\pi
+  \end{equation}
+  \item The upper part $S_2$ of the surface is part of the sphere $x^2+y^2+(z-1)^2 = 1$ that lies above the plane $z=\frac{1}{2}$.\\
+  Find a parametrization of $S_2$.\\
+  球中心在$(0,0,1)$，半徑為$1$，使用球座標轉換但z軸平移1單位:
+  \begin{equation}
+    x = \sin\phi\cos\theta,~
+    y = \sin\phi\sin\theta,~
+    z = 1 + \cos\phi
+  \end{equation}
+  Surface lies above the plane $z=\frac{1}{2}$:
+  \begin{equation}
+    1 + \cos \phi \geq \frac{1}{2} \implies \cos\phi \geq -\frac{1}{2}
+  \end{equation}
+  因為$0\leq\phi\leq\pi$
+  \begin{equation}
+    0 \leq \phi \leq \frac{2\pi}{3}
+  \end{equation}
+  因此參數化方程為
+  \begin{equation}
+    \vec{\mathbf{r}}(\phi,\theta) = \left<
+      \sin\phi\cos\theta, \sin\phi\sin\theta, 1 + \cos\phi
+    \right>,~0\leq\phi\leq\frac{2\pi}{3},~0\leq\theta\leq2\pi
+  \end{equation}
+\end{enumerate}
+\problem{}
+The shell of a spacecraft is a union of two surfaces:
+\begin{itemize}
+  \item $S_1$ is part of $x^2+4y^2+4z^2 =4$ where $x\leq 0$.
+  \item $S_2$ is part of $x=4-4y^2-4z^2$ where $x\geq 0$.
+\end{itemize}
+\begin{enumerate}
+  \item Find a parametrization of $S_1$.\\
+  改寫方程:
+  \begin{equation}
+     \frac{x^2}{4}+y^2+z^2 = 1
+  \end{equation}
+  這是個有Semi-axis在$x$方向上是$2$，在$y$和$z$方向上都是$1$的橢球體
+  用橢球座標轉換:
+  \begin{equation}
+    x = 2\cos\phi,~
+    y = \sin\phi\cos\theta,~
+    z = \sin\phi\sin\theta
+  \end{equation}
+  因為$x\leq0$
+  \begin{equation}
+     2\cos\phi \leq 0\implies \cos\phi \leq 0
+  \end{equation}
+  所以
+  \begin{equation}
+    \frac{\pi}{2}\leq\phi\leq\pi
+  \end{equation}
+  因此參數化方程為
+  \begin{equation}
+    \vec{\mathbf{r}}(\phi,\theta) = \left<
+      2\cos\phi, \sin\phi\cos\theta, \sin\phi\sin\theta
+    \right>,~\frac{\pi}{2}\leq\phi\leq\pi,~0\leq\theta\leq2\pi
+  \end{equation}
+  \item Find a parametrization of $S_2$.\\
+  $S_2$已經是一個$x$方向上的graph了:
+  \begin{equation}
+    x=4-4y^2-4z^2
+  \end{equation}
+  用$yz$平面上的極座標轉換:
+  \begin{equation}
+    y=r\cos\theta,~z=r\sin\theta
+  \end{equation}
+  故
+  \begin{equation}
+    x=4-4r^2
+  \end{equation}
+  因為$x\geq0$，所以
+  \begin{equation}
+    4 - 4r^2 \geq 0 \implies r^2 \leq 1 \implies r\in[0,1]
+  \end{equation}
+  最後參數化方程為:
+  \begin{equation}
+    \vec{\mathbf{r}}(r,\theta) = \left<
+      4-4r^2, r\cos\theta, r\sin\theta
+    \right>
+  \end{equation}
+  With domain:
+  $r\in[0,1]$, $\theta \in [0,2\pi]$
+\end{enumerate}
+\problem{}
+A torus is formed by revolving a small circle of radius $r$ along the circumference of a bigger circle of
+radius $R$.\\
+Find a parametrization of this torus: rotating the circle $(y-3)^2+z^2 = 1$ on the $yz$-plane about the $z$-axis.\\
+$yz$-平面上、中心在$(y,z) = (3,0)$、半徑為$1$的圓，繞著$z$軸旋轉。
+\begin{equation}
+  R=3,~r=1
+\end{equation}
+由$(y-3)^2+z^2=1$
+\begin{equation}
+  y = 3\pm\sqrt{1-z^2},~z\in[-1,1]
+\end{equation}
+% When rotating about the $z$-axis, the distance from the $z$-axis becomes the radial distance in the $xy$-plane. Thus the outer half gives
+繞$z$軸旋轉時, 距離$z$軸的距離會變成在$xy$平面上的徑向距離\\
+因此外半圓
+\begin{equation}
+  \vec{\bm{r}}_{\text{out}}(z,\theta) = \left<
+    \left(
+      3+\sqrt{1-z^2}
+    \right) \cos\theta,~
+    \left(
+      3+\sqrt{1-z^2}
+    \right) \sin\theta,~
+    z
+  \right>
+\end{equation}
+With domain:
+\begin{equation}
+  z\in[-1,1],~\theta\in[0,2\pi]
+\end{equation}
+內半圓
+\begin{equation}
+  \vec{\bm{r}}_{\text{in}}(z,\theta) = \left<
+    \left(
+      3-\sqrt{1-z^2}
+    \right) \cos\theta,~
+    \left(
+      3-\sqrt{1-z^2}
+    \right) \sin\theta,~
+    z
+  \right>
+\end{equation}
+With domain:
+\begin{equation}
+  z\in[-1,1],~\theta\in[0,2\pi]
+\end{equation}
+而外半圓和內半圓的聯集就是整個torus的參數化方程。
+\end{problems}
+\end{document}
